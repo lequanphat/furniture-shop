@@ -2,12 +2,12 @@
 export default {
   content: [
     './resources/**/*.blade.php',
-    './resources/**/*.js',
+    './resources/**/*.php',
   ],
   theme: {
     extend: {
       colors: {
-        primary: '#2c3e50', 
+        primary: '#2C3A47', 
       },
     },
   },
