@@ -9,11 +9,11 @@
             <label for="email">Email address:</label>
             <input type="text" name="email" id="email" value="{{ old('email') }}" class="mt-2 border-[1px] border-black p-1 block rounded w-[100%] mb-4"> 
             <label for="password">Password:</label>
-            <input type="text" name="password" id="password" value="{{ old('password') }}" class="mt-2 border-[1px] border-black p-1  block rounded w-[100%] mb-4">
+            <input type="password" name="password" id="password" value="{{ old('password') }}" class="mt-2 border-[1px] border-black p-1  block rounded w-[100%] mb-4">
             @if ($errors->any())
                 <p class="text-red-400">*{{ $errors->all()[0] }}</p>
             @endif
-            <button type="submit" class="border-[2px] border-white py-1 px-3 rounded bg-[#0984e3] text-white mt-2 w-[100%]">LOGIN</button>
+            <button type="submit" class="border-[2px] border-white py-1 px-3 rounded bg-[#0984e3] text-white mt-2 w-[100%]">REGISTER</button>
             <p class="mt-4 text-center">You already have an account? <a class="text-[#0984e3]" href="/login">Login</a></p>
         </form></div>
     </div>

@@ -7,7 +7,7 @@
             <label for="email">Email:</label>
             <input type="text" name="email" id="email" value="{{ old('email') }}" class="mt-2 border-[1px] border-black p-1 block rounded w-[100%] mb-4"> 
             <label for="password">Password:</label>
-            <input type="text" name="password" id="password" value="{{ old('password') }}" class="mt-2 border-[1px] border-black p-1  block rounded w-[100%] mb-4">
+            <input type="password" name="password" id="password" value="{{ old('password') }}" class="mt-2 border-[1px] border-black p-1  block rounded w-[100%] mb-4">
             @if ($errors->any())
                 <p class="text-red-400">*{{ $errors->all()[0] }}</p>
             @endif

@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 @section('content')
-<div class="flex item-center justify-center">
+<div class="flex flex-1 item-center justify-center">
     <div>
-        <div class="border-[1px] border-black p-4 mb-5"> <h1 class='text-center font-semibold'>Create Product</h1>
+        <div class="border-[1px] border-black p-4 mb-5"> <h1 class='text-center font-semibold'>Create User</h1>
             <form action="/users/create-user" method="post">
                 @csrf
                 <label for="email">Email:</label>
