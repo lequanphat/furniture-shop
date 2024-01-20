@@ -2,21 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
-
-class UserController extends Controller
+class AuthController extends Controller
 {
     //
-    public function index()
-    {
-        $users = User::all();
-        return view('users.index', compact('users'));
+    public function loginView(){
+        return view('auth.login');
     }
-    public function createUser(Request $request)
+    public function login(Request $request){
+        $user = User::where('email', $request->input('email'))->first();
+        if ($user) {
+            if (Hash::check($request->input('password'), $user->password)) {
+                session(['user' => $user->displayName] );
+                return redirect('/');
+            } else {
+                return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
+            }
+        } else {
+            return back()->withErrors(['email' => 'User not found'])->withInput($request->input());
+        }
+    }
+    public function registerView(){
+        return view('auth.register');
+    }
+    public function register(Request $request)
     {
         $rules = [
             'email' => 'required|email|unique:users,email',
@@ -43,23 +56,22 @@ class UserController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return redirect('/users')
+            return redirect('/register')
                 ->withErrors($validator)
                 ->withInput($request->input());
         }
 
         // If validation passes, create the user
-        User::create([
+        $user = User::create([
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'displayName' => $request->input('displayName')
         ]);
-        return redirect('/users');
+        session(['user' => $user->displayName] );
+        return redirect('/');
     }
-    public function deleteUser(Request $request, string $id)
-    {
-        $user = User::find($id);
-        $user->delete();
-        return redirect('/users');
+    public function logout(){
+        session()->flush();
+        return redirect('/login');
     }
 }
