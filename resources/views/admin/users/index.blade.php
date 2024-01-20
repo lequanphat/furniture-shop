@@ -3,7 +3,7 @@
 <div class="flex flex-1 item-center justify-center">
     <div>
         <div class="border-[1px] border-black p-4 mb-5"> <h1 class='text-center font-semibold'>Create User</h1>
-            <form action="/users/create-user" method="post">
+            <form action="/admin/users/create-user" method="post">
                 @csrf
                 <label for="email">Email:</label>
                 <input type="text" name="email" id="email" value="{{ old('email') }}" class="border-[1px] border-black p-1 block rounded w-[100%] mb-4"> 
@@ -23,6 +23,7 @@
                 <td class="border-[1px] border-black p-2">Email</td>
                 <td class="border-[1px] border-black p-2">Display Name</td>
                 <td class="border-[1px] border-black p-2">CreatedAt</td>
+                <td class="border-[1px] border-black p-2">Role</td>
                 <td class="border-[1px] border-black p-2">...</td>
             </tr>
             @foreach ($users as $item)
@@ -31,8 +32,9 @@
                     <td class="border-[1px] border-black p-2">{{ $item['email'] }}</td>
                     <td class="border-[1px] border-black p-2">{{ $item['displayName'] }}</td>
                     <td class="border-[1px] border-black p-2">{{ $item['created_at'] }}</td>
+                    <td class="border-[1px] border-black p-2">{{ $item->getRoleNames() }}</td>
                     <td class="border-[1px] border-black p-2">
-                        <form action={{ "/users/delete/".$item['id'] }} method="DELETE" class="delete-form">
+                        <form action={{ "/admin/users/delete/".$item['id'] }} method="DELETE" class="delete-form">
                             @csrf
                             @method('DELETE')
                             <button type="submit" onclick="return confirm('Are you sure you want to delete this user?')" class="text-red-500">Delete</button>

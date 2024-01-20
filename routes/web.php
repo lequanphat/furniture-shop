@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -19,11 +20,11 @@ Route::middleware([Authorizate::class])->group(function () {
     Route::get('/', function () {
         return view('dashboard.index');
     });
+    Route::get('/admin', [AdminController::class, 'index']);
 
     // products
     Route::get('admin/products', [ProductController::class, 'index']);
     Route::post('admin/products/create-product', [ProductController::class, 'createProduct']);
-    Route::get('admin/products/{id}', [ProductController::class, 'details']);
     Route::get('admin/products/delete/{id}', [ProductController::class, 'deleteProduct']);
 
 

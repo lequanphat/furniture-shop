@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -14,10 +15,12 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('users.index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
     public function createUser(Request $request)
     {
+
+
         $rules = [
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|max:20',
@@ -43,23 +46,24 @@ class UserController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return redirect('/users')
+            return back()
                 ->withErrors($validator)
                 ->withInput($request->input());
         }
 
         // If validation passes, create the user
-        User::create([
+        $user = User::create([
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'displayName' => $request->input('displayName')
         ]);
-        return redirect('/users');
+        $user->assignRole('admin');
+        return back();
     }
     public function deleteUser(Request $request, string $id)
     {
         $user = User::find($id);
         $user->delete();
-        return redirect('/users');
+        return back();
     }
 }

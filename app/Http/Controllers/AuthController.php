@@ -17,7 +17,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->input('email'))->first();
         if ($user) {
             if (Hash::check($request->input('password'), $user->password)) {
-                session(['user' => $user->displayName] );
+                session(['user' => $user] );
                 return redirect('/');
             } else {
                 return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
@@ -67,7 +67,8 @@ class AuthController extends Controller
             'password' => Hash::make($request->input('password')),
             'displayName' => $request->input('displayName')
         ]);
-        session(['user' => $user->displayName] );
+        $user->assignRole('user');
+        session(['user' => $user] );
         return redirect('/');
     }
     public function logout(){
