@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QuestionController;
@@ -20,14 +21,14 @@ Route::middleware([Authorizate::class])->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::get('logout', [AuthController::class, 'logout']);
 
-    // dashboard
-    Route::get('/', function () {
-        return view('dashboard.index');
-    });
-    Route::get('/admin', [AdminController::class, 'index']);
+    // normal
+    Route::get('/', [PagesController::class, 'index']);
+    Route::get('/classroom', [PagesController::class, 'classroom']);
+    Route::get('/tests', [PagesController::class, 'tests']);
+    Route::get('/test-result', [PagesController::class, 'result']);
 
-    
-
+    // admin
+    Route::get('/admin', [PagesController::class, 'admin']);
 
     // users
     Route::get('admin/users', [UserController::class, 'index']);
