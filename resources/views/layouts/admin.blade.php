@@ -12,8 +12,9 @@
 
         <div class="flex items-center justify-center w-[100vw] h-[100vh]">
             @include('admin.components.navbar')
-            <div class="p-4 flex-1 h-[100%]">
-                @yield('content')
+            <div class="flex-1 h-[100%]">
+                @include('admin.components.header')
+                <div class="p-4">@yield('content')</div>
             </div>
         </div>
     </body>

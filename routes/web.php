@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TestsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authorizate;
 use Illuminate\Support\Facades\Route;
@@ -22,14 +26,26 @@ Route::middleware([Authorizate::class])->group(function () {
     });
     Route::get('/admin', [AdminController::class, 'index']);
 
-    // products
-    Route::get('admin/products', [ProductController::class, 'index']);
-    Route::post('admin/products/create-product', [ProductController::class, 'createProduct']);
-    Route::get('admin/products/delete/{id}', [ProductController::class, 'deleteProduct']);
+    
 
 
     // users
     Route::get('admin/users', [UserController::class, 'index']);
     Route::post('admin/users/create-user', [UserController::class, 'createUser']);
     Route::get('admin/users/delete/{id}', [UserController::class, 'deleteUser']);
+
+
+    // classrooms
+    Route::get('admin/classrooms', [ClassroomController::class, 'index']);
+
+
+    // questions
+    Route::get('admin/questions', [QuestionController::class, 'index']);
+
+    // tests
+    Route::get('admin/tests', [TestsController::class, 'index']);
+
+    // permissions
+    Route::get('admin/permissions', [PermissionsController::class, 'index']);
+
 });

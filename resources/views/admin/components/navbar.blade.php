@@ -1,7 +1,7 @@
 <div class="w-[16%] h-[100%] bg-primary p-4 text-white">
 <div class="flex flex-col justify-between h-[100%]">
     <div class="flex flex-col ">
-        <h1 class="text-white font-semibold text-xl mb-5 ">Admin Site</h1>
+        <h1 class="text-white font-semibold text-xl mb-5 ">English-Tests</h1>
         <ul>
             <li >
                 <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all rounded {{ request()->is('admin') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}"  href="/admin">
@@ -15,20 +15,30 @@
                 </a>
             </li>
             <li >
-                <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all roundedhover:bg-[rgba(255,255,255,0.2)] rounded {{ request()->is('admin/groups') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}" href="/admin/groups">
+                <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all roundedhover:bg-[rgba(255,255,255,0.2)] rounded {{ request()->is('admin/classrooms') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}" href="/admin/classrooms">
                     <div class="w-[14%]"><i class="fas fa-users "></i></div>
                     <span>Classroom</span>
                 </a>
             </li>
+            
             <li >
-                <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all rounded {{ request()->is('admin/products') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}" href="/admin/products">
+                <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all rounded {{ request()->is('admin/questions') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}" href="/admin/questions">
+                    <div class="w-[14%]"><i class="fas fa-question-circle"></i></div>
+                    <span>Questions</span></a>
+            </li>
+            <li >
+                <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all rounded {{ request()->is('admin/tests') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}" href="/admin/tests">
                     <div class="w-[14%]"><i class="fas fa-server"></i></div>
-                    <span>Tests</span></a></li>
+                    <span>Tests</span></a>
+            </li>
             <li >
-                <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all rounded {{ request()->is('admin/secure') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}" href="/admin/secure">
+                <a class="flex items-center p-2 my-2 hover:bg-[rgba(255,255,255,0.2)] transition-all rounded {{ request()->is('admin/permissions') ? 'bg-[rgba(255,255,255,0.2)]' : '' }}" href="/admin/permissions">
                     <div class="w-[14%]"><i class="fas fa-unlock-alt"></i></div>
-                    <span>Secure</span></a></li>
+                    <span>Permissions</span></a>
+            </li>
+           
         </ul>
+       
     </div>
 
     <div class="flex items-center justify-between">
