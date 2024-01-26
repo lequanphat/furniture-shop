@@ -27,4 +27,7 @@ class PagesController extends Controller
     {
         return view('pages.results.index');
     }
+    public function test(){
+        return view('layouts.test');
+    }
 }

@@ -49,4 +49,8 @@ Route::middleware([Authorizate::class])->group(function () {
     // permissions
     Route::get('admin/permissions', [PermissionsController::class, 'index']);
 
+
+    // test
+    Route::get('test', [PagesController::class, 'test']);
+
 });
