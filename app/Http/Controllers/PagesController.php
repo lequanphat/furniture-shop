@@ -15,19 +15,4 @@ class PagesController extends Controller
     {
         return view('admin.dashboard.index');
     }
-    public function classroom()
-    {
-        return view('pages.classrooms.index');
-    }
-    public function tests()
-    {
-        return view('pages.tests.index');
-    }
-    public function result()
-    {
-        return view('pages.results.index');
-    }
-    public function test(){
-        return view('layouts.test');
-    }
 }

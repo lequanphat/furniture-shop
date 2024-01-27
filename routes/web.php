@@ -21,11 +21,8 @@ Route::middleware([Authorizate::class])->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::get('logout', [AuthController::class, 'logout']);
 
-    // normal
+    // user
     Route::get('/', [PagesController::class, 'index']);
-    Route::get('/classroom', [PagesController::class, 'classroom']);
-    Route::get('/tests', [PagesController::class, 'tests']);
-    Route::get('/test-result', [PagesController::class, 'result']);
 
     // admin
     Route::get('/admin', [PagesController::class, 'admin']);
@@ -34,23 +31,4 @@ Route::middleware([Authorizate::class])->group(function () {
     Route::get('admin/users', [UserController::class, 'index']);
     Route::post('admin/users/create-user', [UserController::class, 'createUser']);
     Route::get('admin/users/delete/{id}', [UserController::class, 'deleteUser']);
-
-
-    // classrooms
-    Route::get('admin/classrooms', [ClassroomController::class, 'index']);
-
-
-    // questions
-    Route::get('admin/questions', [QuestionController::class, 'index']);
-
-    // tests
-    Route::get('admin/tests', [TestsController::class, 'index']);
-
-    // permissions
-    Route::get('admin/permissions', [PermissionsController::class, 'index']);
-
-
-    // test
-    Route::get('test', [PagesController::class, 'test']);
-
 });
