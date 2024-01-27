@@ -33,14 +33,16 @@
 
 ## Step 3
 
-Run the application:
+1. **Run database migrations:**
 
-```bash
-php artisan serve
-```
+    ```bash
+    php artisan migrate
+    ```
 
-or
+2. **Run the application:**
 
-```bash
-run
-```
+    ```bash
+    php artisan serve
+    ```
+
+Navigate to the specified URL in your browser to access the application.
