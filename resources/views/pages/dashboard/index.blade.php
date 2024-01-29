@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
-    <div class="bg-[#e8f2ff]">
-        <h1>Xin chào thế giới!!!</h1>
-    </div>
+    @include('components.hero-section')
+    @include('pages.dashboard.product-section')
+    @include('components.why-choose')
+    @include('pages.dashboard.we-help')
+    @include('pages.dashboard.popular-product')
+    @include('pages.dashboard.blog-section')
+    @include('components.slider')
 @endsection

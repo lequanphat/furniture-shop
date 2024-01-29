@@ -1,19 +1,33 @@
-<div class="w-[100vw] bg-[#ecf0f1]">
-    <div class="mx-auto flex w-[80%] items-center justify-between py-2">
-        <h1 class="text-red text-lg font-semibold"><a href="/">LOGO</a></h1>
-        <div class="flex items-center">
-            <ul class="mr-4 flex items-center">
-                <li class="px-2 font-[600] text-[#71869d] hover:text-primary "><a href="/tests">Đề thi online</a></li>
-                <li class="px-2 font-[600] text-[#71869d] hover:text-primary "><a href="/test-result">Kết quả thi</a></li>
-                <li class="px-2 font-[600] text-[#71869d] hover:text-primary "><a href="/classroom">Lớp học của tôi</a></li>
+<!-- Start Header/Navigation -->
+<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+    <div class="container">
+        <a class="navbar-brand" href="/">Furni<span>.</span></a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
+            aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsFurni">
+            <ul class="custom-navbar-nav navbar-nav mb-md-0 mb-2 ms-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li><a class="nav-link" href="/shop">Shop</a></li>
+                <li><a class="nav-link" href="/about">About us</a></li>
+                <li><a class="nav-link" href="/services">Services</a></li>
+                <li><a class="nav-link" href="/blog">Blog</a></li>
+                <li><a class="nav-link" href="/contact">Contact us</a></li>
             </ul>
-            <div class="flex cursor-pointer items-center">
-                <img src="{{ asset('uploads/images/avatar.jpg') }}" alt="avatar"
-                    class="mr-2 h-[32px] w-[32px] rounded-[50%]">
-            </div>
-            <form action="/logout">
-                <button type="submit">Logout</button>
-            </form>
+
+            <ul class="custom-navbar-cta navbar-nav mb-md-0 mb-2 ms-5">
+                <li><a class="nav-link" href="#"><img src="images/user.svg"></a></li>
+                <li><a class="nav-link" href="cart.html"><img src="images/cart.svg"></a></li>
+            </ul>
         </div>
     </div>
-</div>
+
+</nav>
+<!-- End Header/Navigation -->
+

@@ -23,6 +23,11 @@ Route::middleware([Authorizate::class])->group(function () {
 
     // user
     Route::get('/', [PagesController::class, 'index']);
+    Route::get('/shop', [PagesController::class, 'shop']);
+    Route::get('/about', [PagesController::class, 'about']);
+    Route::get('/services', [PagesController::class, 'services']);
+    Route::get('/blog', [PagesController::class, 'blog']);
+    Route::get('/contact', [PagesController::class, 'contact']);
 
     // admin
     Route::get('/admin', [PagesController::class, 'admin']);
