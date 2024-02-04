@@ -3,20 +3,20 @@
 ## Step 1
 
 1. Install Composer
-2. Install Node
+2. Install Xampp
 
 ## Step 2
 
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/lequanphat/project_name
+    git clone https://github.com/lequanphat/furniture_shop.git
     ```
 
 2. **Change to the project directory:**
 
     ```bash
-    cd project_name
+    cd furniture_shop
     ```
 
 3. **Install Composer dependencies:**
