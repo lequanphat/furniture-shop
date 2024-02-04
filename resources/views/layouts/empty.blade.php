@@ -8,7 +8,7 @@
             window.location = "/";
         </script>
     @endif
-    @yield('content')
+    <div class="empty_layout"> @yield('content')</div>
 </body>
 
 </html>

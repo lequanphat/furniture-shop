@@ -5,8 +5,6 @@
     <title>Firnuture</title>
     {{-- icon --}}
     <link rel="shortcut icon" href="favicon.png">
-    {{-- tailwind --}}
-    <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}">
     <!-- Font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     {{-- Bootstrap --}}
@@ -15,4 +13,3 @@
     <link href="{{ asset('css/tiny-slider.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
-
