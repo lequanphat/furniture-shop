@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AlphaSpace;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -18,7 +19,7 @@ class RegisterRequest extends FormRequest
         return [
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|max:20',
-            'displayName' => 'required|alpha_spaces|min:8|max:40',
+            'displayName' => ['required', 'min:8', 'max:40', new AlphaSpace()],
         ];
     }
     public function messages()
@@ -31,16 +32,8 @@ class RegisterRequest extends FormRequest
             'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least 6 characters.',
             'displayName.required' => 'The display name field is required.',
-            'displayName.alpha_spaces' => 'The display name must contain only letters and spaces.',
             'displayName.min' => 'The display must be at least 8 characters.',
             'displayName.max' => 'The display name must not exceed 40 characters.',
         ];
-    }
-    public function withValidator($validator)
-    {
-        // custom validator
-        $validator->addExtension('alpha_spaces', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[\pL\s]+$/u', $value);
-        });
     }
 }
