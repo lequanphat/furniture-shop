@@ -3,10 +3,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="float-left">
-                    <div class="hamburger sidebar-toggle">
-                        <span class="line"></span>
-                        <span class="line"></span>
-                        <span class="line"></span>
+                    <div class="hamburger sidebar-toggle" style="font-size: 20px;">
+                        <i class="ti-menu"></i>
                     </div>
                 </div>
                 <div class="float-right">
@@ -151,7 +149,7 @@
                     </div>
                     <div class="dropdown dib">
                         <div class="header-icon" data-toggle="dropdown">
-                            <span class="user-avatar">Quan Phat
+                            <span class="user-avatar">{{ session('user')->displayName }}
                                 <i class="ti-angle-down f-s-10"></i>
                             </span>
                             <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">
@@ -188,7 +186,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#">
+                                            <a href="/logout">
                                                 <i class="ti-power-off"></i>
                                                 <span>Logout</span>
                                             </a>

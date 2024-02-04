@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -76,5 +77,18 @@ class PagesController extends Controller
             vulputate velit imperdiet dolor tempor tristique.'
         ];
         return view('pages.contact.index', $data);
+    }
+    public function admin_users()
+    {
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
+    }
+    public function admin_user1()
+    {
+        return view('admin.users.user1');
+    }
+    public function admin_user2()
+    {
+        return view('admin.users.user2');
     }
 }

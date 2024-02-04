@@ -11,14 +11,13 @@
                 <li><a class="sidebar-sub-toggle"><i class="ti-bar-chart-alt"></i> Charts <span
                             class="sidebar-collapse-icon ti-angle-down"></span></a>
                     <ul>
-                        <li><a href="/">Flot</a></li>
-                        <li><a href="/">Morris</a></li>
+                        <li><a href="/admin/user2">ChartJS</a></li>
+                        <li><a href="/admin/user2">ChartJS</a></li>
                     </ul>
                 </li>
-                <li><a href="app-event-calender.html"><i class="ti-calendar"></i> Calender </a></li>
-                <li><a href="app-email.html"><i class="ti-email"></i> Email</a></li>
-                <li><a href="/admin/users"><i class="ti-user"></i> Profile</a></li>
-                <li><a href="/admin/users1"><i class="ti-layout-grid2-alt"></i> Widget</a></li>
+                <li><a href="/admin/users"><i class="ti-email"></i> Users</a></li>
+                <li><a href="/admin/user1"><i class="ti-user"></i> User1</a></li>
+                <li><a href="/admin/user2"><i class="ti-layout-grid2-alt"></i> User2</a></li>
                 <li class="label">Features</li>
                 <li><a class="sidebar-sub-toggle"><i class="ti-layout"></i> UI Elements <span
                             class="sidebar-collapse-icon ti-angle-down"></span></a>
@@ -57,6 +56,7 @@
                         <li><a href="/">Editable</a></li>
                     </ul>
                 </li>
+                <li><a href="/logout"><i class="ti-close"></i> Logout</a></li>
             </ul>
         </div>
     </div>

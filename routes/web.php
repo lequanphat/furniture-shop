@@ -27,8 +27,9 @@ Route::middleware([Authorizate::class])->group(function () {
     Route::get('/admin', [PagesController::class, 'admin']);
 
     // users
-    Route::get('/admin/users', [UserController::class, 'index']);
-    Route::get('/admin/users1', [UserController::class, 'user1']);
+    Route::get('/admin/users', [PagesController::class, 'admin_users']);
+    Route::get('/admin/user1', [PagesController::class, 'admin_user1']);
+    Route::get('/admin/user2', [PagesController::class, 'admin_user2']);
     Route::post('admin/users/create-user', [UserController::class, 'createUser']);
     Route::get('admin/users/delete/{id}', [UserController::class, 'deleteUser']);
 });
