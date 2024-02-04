@@ -10,14 +10,16 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
     //
-    public function loginView(){
+    public function loginView()
+    {
         return view('auth.login');
     }
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $user = User::where('email', $request->input('email'))->first();
         if ($user) {
             if (Hash::check($request->input('password'), $user->password)) {
-                session(['user' => $user] );
+                session(['user' => $user]);
                 return redirect('/');
             } else {
                 return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
@@ -26,7 +28,8 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'User not found'])->withInput($request->input());
         }
     }
-    public function registerView(){
+    public function registerView()
+    {
         return view('auth.register');
     }
     public function register(Request $request)
@@ -60,18 +63,19 @@ class AuthController extends Controller
                 ->withErrors($validator)
                 ->withInput($request->input());
         }
-
         // If validation passes, create the user
         $user = User::create([
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'displayName' => $request->input('displayName')
+            'displayName' => $request->input('displayName'),
+            'type' => 'user'
         ]);
-        $user->assignRole('user');
-        session(['user' => $user] );
+        // $user->assignRole('user');
+        session(['user' => $user]);
         return redirect('/');
     }
-    public function logout(){
+    public function logout()
+    {
         session()->flush();
         return redirect('/login');
     }

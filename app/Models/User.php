@@ -9,5 +9,5 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Model
 {
     use HasFactory, HasRoles;
-    protected $fillable = ['email', 'password', 'displayName'];
+    protected $fillable = ['email', 'password', 'displayName', 'type'];
 }

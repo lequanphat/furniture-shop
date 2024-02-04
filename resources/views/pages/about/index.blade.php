@@ -4,10 +4,5 @@
     <!-- Start Why Choose Us Section -->
     @include('components.why-choose')
     <!-- End Why Choose Us Section -->
-
     @include('pages.about.team')
-
-
-
-    
 @endsection

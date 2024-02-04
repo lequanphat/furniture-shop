@@ -4,10 +4,7 @@
 
 <body class="dark">
     @if (session('user') && is_object(session('user')))
-        @if (
-            !in_array(
-                'admin',
-                session('user')->getRoleNames()->toArray()))
+        @if (session('user')->type != 'admin')
             <script>
                 window.location = "/";
             </script>

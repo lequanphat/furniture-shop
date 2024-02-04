@@ -18,8 +18,11 @@
                 <p>Separated they live in.
                     Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.
                 </p>
-                <p class="mb-0"><a href="#" class="more dark">Learn More <span
-                            class="icon-arrow_forward"></span></a></p>
+                <p class="mb-0">
+                    <a href="#" class="more dark">Learn More
+                        <span class="icon-arrow_forward"></span>
+                    </a>
+                </p>
             </div>
             <!-- End Column 1 -->
 
@@ -32,8 +35,10 @@
                 <p>Separated they live in.
                     Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.
                 </p>
-                <p class="mb-0"><a href="#" class="more dark">Learn More <span
-                            class="icon-arrow_forward"></span></a></p>
+                <p class="mb-0">
+                    <a href="#" class="more dark">Learn More <span class="icon-arrow_forward"></span>
+                    </a>
+                </p>
 
             </div>
             <!-- End Column 2 -->
@@ -46,8 +51,10 @@
                 <p>Separated they live in.
                     Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.
                 </p>
-                <p class="mb-0"><a href="#" class="more dark">Learn More <span
-                            class="icon-arrow_forward"></span></a></p>
+                <p class="mb-0"><a href="#" class="more dark">Learn More
+                        <span class="icon-arrow_forward"></span>
+                    </a>
+                </p>
             </div>
             <!-- End Column 3 -->
 
@@ -60,9 +67,11 @@
                 <p>Separated they live in.
                     Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.
                 </p>
-                <p class="mb-0"><a href="#" class="more dark">Learn More <span
-                            class="icon-arrow_forward"></span></a></p>
-
+                <p class="mb-0">
+                    <a href="#" class="more dark">Learn More
+                        <span class="icon-arrow_forward"></span>
+                    </a>
+                </p>
 
             </div>
             <!-- End Column 4 -->

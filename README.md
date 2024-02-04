@@ -25,11 +25,9 @@
     composer install
     ```
 
-4. **Install Node.js dependencies:**
+4. **Create database:**
 
-    ```bash
-    npm install
-    ```
+    Create MySQL Database with name: furniture_shop
 
 ## Step 3
 
