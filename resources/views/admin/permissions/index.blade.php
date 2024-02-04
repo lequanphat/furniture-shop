@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="item-center flex justify-center">
+    <div>
         <h1>Permissions</h1>
     </div>
 @endsection

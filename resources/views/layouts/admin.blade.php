@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-@include('components.head')
+@include('admin.components.head')
 
 <body class="dark">
     @if (session('user') && is_object(session('user')))
@@ -15,13 +15,13 @@
         </script>
     @endif
 
-    <div class="flex h-[100vh] w-[100vw] items-center justify-center">
+    <div>
         @include('admin.components.navbar')
-        <div class="h-[100%] flex-1">
-            @include('admin.components.header')
-            <div class="p-4">@yield('content')</div>
-        </div>
+        @include('admin.components.header')
+        @yield('content')
     </div>
+
+    @include('admin.components.link-script')
 </body>
 
 </html>

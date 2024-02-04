@@ -1,49 +1,233 @@
 @extends('layouts.admin')
 @section('content')
-<div class="flex flex-1 item-center justify-center">
-    <div>
-        <div class="border-[1px] border-black p-4 mb-5"> <h1 class='text-center font-semibold'>Create User</h1>
-            <form action="/admin/users/create-user" method="post">
-                @csrf
-                <label for="email">Email:</label>
-                <input type="text" name="email" id="email" value="{{ old('email') }}" class="border-[1px] border-black p-1 block rounded w-[100%] mb-4"> 
-                <label for="password">Password:</label>
-                <input type="text" name="password" id="password" value="{{ old('password') }}" class="border-[1px] border-black p-1  block rounded w-[100%] mb-4">
-                <label for="displayName">Display name:</label>
-                <input type="text" name="displayName" id="displayName" value="{{ old('displayName') }}" class="border-[1px] border-black p-1  block rounded w-[100%] mb-2">
-                @if ($errors->any())
-                    <p class="text-red-400">*{{ $errors->all()[0] }}</p>
-                @endif
-               
-                <button type="submit" class="border-[2px] border-white py-1 px-3 rounded bg-[#0984e3] text-white mt-2">Submit</button>
-            </form></div>
-        <table>
-            <tr class="border-[1px] border-black bg-[#74b9ff]">
-                <td class="border-[1px] border-black p-2">ID</td>
-                <td class="border-[1px] border-black p-2">Email</td>
-                <td class="border-[1px] border-black p-2">Display Name</td>
-                <td class="border-[1px] border-black p-2">CreatedAt</td>
-                <td class="border-[1px] border-black p-2">Role</td>
-                <td class="border-[1px] border-black p-2">...</td>
-            </tr>
-            @foreach ($users as $item)
-                <tr class="border-[1px] border-blackbg-[#dfe6e9]">
-                    <td class="border-[1px] border-black p-2" class="border-[1px] border-black p-2">{{ $item['id'] }}</td>
-                    <td class="border-[1px] border-black p-2">{{ $item['email'] }}</td>
-                    <td class="border-[1px] border-black p-2">{{ $item['displayName'] }}</td>
-                    <td class="border-[1px] border-black p-2">{{ $item['created_at'] }}</td>
-                    <td class="border-[1px] border-black p-2">{{ $item->getRoleNames() }}</td>
-                    <td class="border-[1px] border-black p-2">
-                        <form action={{ "/admin/users/delete/".$item['id'] }} method="DELETE" class="delete-form">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this user?')" class="text-red-500">Delete</button>
-                            </form>
-                    </td>
-                </tr>
-            @endforeach
-        </table>
+    <div class="content-wrap">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8 p-r-0 title-margin-right">
+                        <div class="page-header">
+                            <div class="page-title">
+                                <h1>Hello, <span>Welcome Here</span></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+                    <div class="col-lg-4 p-l-0 title-margin-left">
+                        <div class="page-header">
+                            <div class="page-title">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Table-Basic</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+                </div>
+                <!-- /# row -->
+                <section id="main-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Table Basic </h4>
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Name</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">1</th>
+                                                    <td>Kolor Tea Shirt For Man</td>
+                                                    <td><span class="badge badge-primary">Sale</span></td>
+                                                    <td>January 22</td>
+                                                    <td class="color-primary">$21.56</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">2</th>
+                                                    <td>Kolor Tea Shirt For Women</td>
+                                                    <td><span class="badge badge-success">Tax</span></td>
+                                                    <td>January 30</td>
+                                                    <td class="color-success">$55.32</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">3</th>
+                                                    <td>Blue Backpack For Baby</td>
+                                                    <td><span class="badge badge-danger">Extended</span></td>
+                                                    <td>January 25</td>
+                                                    <td class="color-danger">$14.85</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Table Striped </h4>
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Name</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">1</th>
+                                                    <td>Kolor Tea Shirt For Man</td>
+                                                    <td><span class="badge badge-primary">Sale</span></td>
+                                                    <td>January 22</td>
+                                                    <td class="color-primary">$21.56</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">2</th>
+                                                    <td>Kolor Tea Shirt For Women</td>
+                                                    <td><span class="badge badge-success">Tax</span></td>
+                                                    <td>January 30</td>
+                                                    <td class="color-success">$55.32</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">3</th>
+                                                    <td>Blue Backpack For Baby</td>
+                                                    <td><span class="badge badge-danger">Extended</span></td>
+                                                    <td>January 25</td>
+                                                    <td class="color-danger">$14.85</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Table Bordered </h4>
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Name</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">1</th>
+                                                    <td>Kolor Tea Shirt For Man</td>
+                                                    <td><span class="badge badge-primary">Sale</span></td>
+                                                    <td>January 22</td>
+                                                    <td class="color-primary">$21.56</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">2</th>
+                                                    <td>Kolor Tea Shirt For Women</td>
+                                                    <td><span class="badge badge-success">Tax</span></td>
+                                                    <td>January 30</td>
+                                                    <td class="color-success">$55.32</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">3</th>
+                                                    <td>Blue Backpack For Baby</td>
+                                                    <td><span class="badge badge-danger">Extended</span></td>
+                                                    <td>January 25</td>
+                                                    <td class="color-danger">$14.85</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Table Hover </h4>
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover ">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Name</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">1</th>
+                                                    <td>Kolor Tea Shirt For Man</td>
+                                                    <td><span class="badge badge-primary">Sale</span></td>
+                                                    <td>January 22</td>
+                                                    <td class="color-primary">$21.56</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">2</th>
+                                                    <td>Kolor Tea Shirt For Women</td>
+                                                    <td><span class="badge badge-success">Tax</span></td>
+                                                    <td>January 30</td>
+                                                    <td class="color-success">$55.32</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">3</th>
+                                                    <td>Blue Backpack For Baby</td>
+                                                    <td><span class="badge badge-danger">Extended</span></td>
+                                                    <td>January 25</td>
+                                                    <td class="color-danger">$14.85</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /# card -->
+                        </div>
+                        <!-- /# column -->
+                    </div>
+                    <!-- /# row -->
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="footer">
+                                <p>2018 © Admin Board. - <a href="#">example.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
-    
 @endsection

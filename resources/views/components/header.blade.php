@@ -22,12 +22,17 @@
             </ul>
 
             <ul class="custom-navbar-cta navbar-nav mb-md-0 mb-2 ms-5">
-                <li><a class="nav-link" href="#"><img src="images/user.svg"></a></li>
-                <li><a class="nav-link" href="cart.html"><img src="images/cart.svg"></a></li>
+                <li><a class="nav-link" href="cart"><img src="images/cart.svg"></a></li>
+                <li class="p-2 user-info">
+                    <ul class="user-details  ">
+                        <li><a href="#">Thông tin tài khoản</a></li>
+                        <li><a href="/logout">Đăng xuất</a></li>
+                    </ul>
+                    <img src="images/user.svg">
+                </li>
             </ul>
         </div>
     </div>
 
 </nav>
 <!-- End Header/Navigation -->
-
