@@ -18,6 +18,14 @@ class PagesController extends Controller
         ];
         return view('pages.dashboard.index', $data);
     }
+    public function login()
+    {
+        return view('auth.login');
+    }
+    public function register()
+    {
+        return view('auth.register');
+    }
     public function admin()
     {
         return view('admin.dashboard.index');

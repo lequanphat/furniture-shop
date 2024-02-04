@@ -10,8 +10,10 @@
                         @endisset
                     </h1>
                     <p class="mb-4">{{ $content }}</p>
-                    <p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#"
-                            class="btn btn-white-outline">Explore</a></p>
+                    <p>
+                        <a href="" class="btn btn-secondary me-2">Shop Now</a>
+                        <a href="#" class="btn btn-white-outline">Explore</a>
+                    </p>
                 </div>
             </div>
             <div class="col-lg-7">
