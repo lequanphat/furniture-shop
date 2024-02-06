@@ -27,10 +27,7 @@ class PagesController extends Controller
     {
         return view('auth.register');
     }
-    public function admin()
-    {
-        return view('admin.dashboard.index');
-    }
+
     public function shop()
     {
         $data = [
@@ -78,17 +75,34 @@ class PagesController extends Controller
         ];
         return view('pages.contact.index', $data);
     }
+    public function admin()
+    {
+        $data = [
+            'page' => 'Dashboard',
+        ];
+        return view('admin.dashboard.index', $data);
+    }
     public function admin_users()
     {
-        $users = User::all();
-        return view('admin.users.index', compact('users'));
+        $data = [
+            'page' => 'Users',
+            'user' => $users = User::all()
+        ];
+
+        return view('admin.users.index', $data);
     }
     public function admin_user1()
     {
-        return view('admin.users.user1');
+        $data = [
+            'page' => 'Users1',
+        ];
+        return view('admin.users.user1', $data);
     }
     public function admin_user2()
     {
-        return view('admin.users.user2');
+        $data = [
+            'page' => 'Users1',
+        ];
+        return view('admin.users.user2', $data);
     }
 }
