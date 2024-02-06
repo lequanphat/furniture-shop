@@ -4,7 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin - Firnuture</title>
 
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="shortcut icon" href="favicon.png">
     <!-- Retina iPad Touch Icon-->
     <link rel="apple-touch-icon" sizes="144x144" href="http://placehold.it/144.png/000/fff">
     <!-- Retina iPhone Touch Icon-->

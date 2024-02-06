@@ -56,7 +56,6 @@
                         <li><a href="/">Editable</a></li>
                     </ul>
                 </li>
-                <li><a href="/logout"><i class="ti-close"></i> Logout</a></li>
             </ul>
         </div>
     </div>
