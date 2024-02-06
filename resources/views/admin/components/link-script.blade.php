@@ -26,7 +26,7 @@
 <script src="{{ asset('assets/js/lib/chart-js/Chart.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/lib/chart-js/chartjs-init.js') }}"></script>
 <!-- scripit init-->
-<script src="assets/js/dashboard2.js"></script>
+<script src="assets/js/dashboard.js"></script>
 <script src="{{ asset('assets/js/lib/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/js/scripts.js') }}"></script>
 <!-- bootstrap -->
