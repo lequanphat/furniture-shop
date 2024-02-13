@@ -23,13 +23,18 @@
 
             <ul class="custom-navbar-cta navbar-nav mb-md-0 mb-2 ms-5">
                 <li><a class="nav-link" href="cart"><img src="images/cart.svg"></a></li>
-                <li class="p-2 user-info">
-                    <ul class="user-details  ">
-                        <li><a href="#">Thông tin tài khoản</a></li>
-                        <li><a href="/logout">Đăng xuất</a></li>
-                    </ul>
-                    <img src="images/user.svg">
-                </li>
+                @if (session('user') && is_object(session('user')))
+                    <li class="p-2 user-info">
+                        <ul class="user-details  ">
+                            <li><a href="#">Thông tin tài khoản</a></li>
+                            <li><a href="/logout">Đăng xuất</a></li>
+                        </ul>
+                        <img src="images/user.svg">
+                    </li>
+                @else
+                    <li><a href="/login" class="my-2 btn btn-secondary px-3 py-1 text-white">Login</a></li>
+                @endif
+
             </ul>
         </div>
     </div>

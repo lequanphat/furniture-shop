@@ -3,15 +3,9 @@
 @include('components.head')
 
 <body>
-    @if (session('user') && is_object(session('user')))
-        @if (session('user')->type != 'user')
-            <script>
-                window.location = "/admin";
-            </script>
-        @endif
-    @else
+    @if (session('user') && is_object(session('user')) && session('user')->type != 'user')
         <script>
-            window.location = "/login";
+            window.location = "/admin";
         </script>
     @endif
     @include('components.header')
