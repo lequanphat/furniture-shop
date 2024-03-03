@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('description')->default('');
             $table->string('color');
             $table->string('size');
-            $table->float('original_price');
+            $table->decimal('original_price', 10, 2);
             $table->unsignedInteger('warranty_month');
             $table->unsignedInteger('quantities');
             $table->boolean('is_deleted')->default(false);

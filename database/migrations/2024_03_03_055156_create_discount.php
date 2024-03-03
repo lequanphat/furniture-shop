@@ -15,8 +15,8 @@ return new class extends Migration
             $table->increments('discount_id');
             $table->string('title');
             $table->string('description')->default('');
-            $table->float('percentage');
-            $table->float('amount');
+            $table->decimal('percentage', 10, 2);
+            $table->decimal('amount', 10, 2);
             $table->date('start_date')->default(now());
             $table->date('end_date');
             $table->boolean('is_active')->default(true);
