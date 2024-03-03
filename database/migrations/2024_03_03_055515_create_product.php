@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('product_id');
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->default('');
             $table->unsignedInteger('category_id');
             $table->foreign('category_id')->references('category_id')->on('categories');
             $table->unsignedInteger('quantities');
             $table->unsignedInteger('brand_id');
             $table->foreign('brand_id')->references('brand_id')->on('brands');
-            $table->boolean('is_deleted');
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

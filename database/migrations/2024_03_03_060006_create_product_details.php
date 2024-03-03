@@ -16,13 +16,13 @@ return new class extends Migration
             $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('product_id')->on('products');
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->default('');
             $table->string('color');
             $table->string('size');
             $table->float('original_price');
             $table->unsignedInteger('warranty_month');
             $table->unsignedInteger('quantities');
-            $table->boolean('is_deleted');
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

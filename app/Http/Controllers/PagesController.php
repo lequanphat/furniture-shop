@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
     //
     public function index()
-
     {
         $data = [
             'title' => 'Modern Interior',
@@ -21,10 +21,16 @@ class PagesController extends Controller
     }
     public function login()
     {
+        if (Auth::check()) {
+            return redirect('/');
+        }
         return view('auth.login');
     }
     public function register()
     {
+        if (Auth::check()) {
+            return redirect('/');
+        }
         return view('auth.register');
     }
 

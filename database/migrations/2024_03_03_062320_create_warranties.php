@@ -15,9 +15,9 @@ return new class extends Migration
             $table->increments('warranty_id');
             $table->unsignedInteger('order_id');
             $table->string('sku');
-            $table->date('start_date');
+            $table->date('start_date')->default(now());
             $table->date('end_date');
-            $table->string('description');
+            $table->string('description')->default('');
             $table->timestamps();
 
             $table->foreign('order_id')->references('order_id')->on('orders');

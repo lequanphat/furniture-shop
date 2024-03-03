@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Warranty extends Model
 {
     use HasFactory;
+    protected $fillable = ['order_id', 'sku', 'start_date', 'end_date', 'description'];
 }

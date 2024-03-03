@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('discounts', function (Blueprint $table) {
             $table->increments('discount_id');
             $table->string('title');
-            $table->string('description');
+            $table->string('description')->default('');
             $table->float('percentage');
             $table->float('amount');
-            $table->date('start_date');
+            $table->date('start_date')->default(now());
             $table->date('end_date');
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
