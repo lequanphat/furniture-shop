@@ -149,7 +149,7 @@
                     </div>
                     <div class="dropdown dib">
                         <div class="header-icon" data-toggle="dropdown">
-                            <span class="user-avatar">User name
+                            <span class="user-avatar">{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}
                                 <i class="ti-angle-down f-s-10"></i>
                             </span>
                             <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">

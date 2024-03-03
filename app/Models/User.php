@@ -12,7 +12,7 @@ class User extends Model implements Authenticatable
     use HasFactory, HasRoles;
 
     protected $primaryKey = 'user_id';
-    protected $fillable = ['email', 'password', 'first_name', 'last_name', 'birth_date', 'gender', 'is_staff', 'is_verified', 'is_active'];
+    protected $fillable = ['email', 'password', 'first_name', 'last_name', 'avatar', 'birth_date', 'gender', 'is_staff', 'is_verified', 'is_active'];
 
     public function getAuthIdentifierName()
     {

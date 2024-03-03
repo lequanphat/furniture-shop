@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class PrivateMiddleware
 {
     /**
      * Handle an incoming request.
@@ -14,7 +16,11 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->is_staff)  return $next($request);
+        if (Auth::check()) {
+            if (Auth::user()->is_staff)
+                return redirect()->route('admin');
+            return $next($request);
+        }
         return redirect()->route('login');
     }
 }

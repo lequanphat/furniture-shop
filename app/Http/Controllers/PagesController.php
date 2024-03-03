@@ -21,16 +21,10 @@ class PagesController extends Controller
     }
     public function login()
     {
-        if (Auth::check()) {
-            return redirect('/');
-        }
         return view('auth.login');
     }
     public function register()
     {
-        if (Auth::check()) {
-            return redirect('/');
-        }
         return view('auth.register');
     }
 

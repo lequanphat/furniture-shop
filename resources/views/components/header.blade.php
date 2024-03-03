@@ -23,7 +23,7 @@
 
             <ul class="custom-navbar-cta navbar-nav mb-md-0 mb-2 ms-5">
                 <li><a class="nav-link" href="cart"><img src="images/cart.svg"></a></li>
-                @if (session('user') && is_object(session('user')))
+                @if (Auth::check())
                     <li class="p-2 user-info">
                         <ul class="user-details  ">
                             <li><a href="#">Thông tin tài khoản</a></li>

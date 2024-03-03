@@ -17,8 +17,10 @@ class AuthController extends Controller
         if ($user) {
             if (Hash::check($request->input('password'), $user->password)) {
                 Auth::login($user);
-                session(['user' => $user]);
-                return redirect('/');
+                if ($user->is_staff)
+                    return redirect('/admin');
+                else
+                    return redirect('/');
             } else {
                 return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
             }
@@ -37,13 +39,11 @@ class AuthController extends Controller
             'last_name' => $request->input('last_name'),
         ]);
         Auth::login($user);
-        session(['user' => $user]);
         return redirect('/');
     }
     public function logout()
     {
         Auth::logout();
-        session()->flush();
         return redirect('/login');
     }
 }
