@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_verify', function (Blueprint $table) {
+        Schema::create('user_verifies', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->primary();
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->string('otp');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_verify');
+        Schema::dropIfExists('user_verifies');
     }
 };

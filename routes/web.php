@@ -15,6 +15,8 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('register', [PagesController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+    Route::get('email-verify/{user_id}', [PagesController::class, 'emailVerify'])->where('id', '[0-9]+');
+    Route::post('email-verify/{user_id}', [AuthController::class, 'verifyAccount'])->where('id', '[0-9]+');
 });
 Route::get('logout', [AuthController::class, 'logout']);
 

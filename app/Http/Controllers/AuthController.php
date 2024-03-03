@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\VerifyAccount;
 use App\Models\User;
+use App\Models\UserVerify;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,11 +19,13 @@ class AuthController extends Controller
         $user = User::where('email', $request->input('email'))->first();
         if ($user) {
             if (Hash::check($request->input('password'), $user->password)) {
-                Auth::login($user);
-                if ($user->is_staff)
-                    return redirect('/admin');
-                else
-                    return redirect('/');
+                if ($user->is_verified) {
+                    Auth::login($user);
+                    if ($user->is_staff)
+                        return redirect('/admin');
+                    else
+                        return redirect('/');
+                } else return back()->withErrors(['password' => 'This account is not verified!'])->withInput($request->input());
             } else {
                 return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
             }
@@ -38,8 +43,30 @@ class AuthController extends Controller
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
         ]);
-        Auth::login($user);
-        return redirect('/');
+        $otp = rand(100000, 999999);
+        $expiredTime = Carbon::now()->addMinutes(5);
+        $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
+        return redirect("/email-verify/" . $user->user_id);
+    }
+    public function verifyAccount(VerifyAccount $request)
+    {
+        $user_id = $request->route('user_id');
+        $user_verify = UserVerify::where('user_id', $user_id)
+            ->where('otp', $request->input('otp'))
+            ->where('expired_time', '>=', now())
+            ->first();
+        if ($user_verify) {
+            $user = User::find($user_id);
+            if ($user) {
+                $user->update([
+                    'is_verified' => true,
+                ]);
+                Auth::login($user);
+                $user_verify->delete();
+                return redirect('/');
+            }
+            return back()->withErrors(['otp' => 'Verify account failed'])->withInput($request->input());
+        } else return back()->withErrors(['otp' => 'Invalid OTP'])->withInput($request->input());
     }
     public function logout()
     {
