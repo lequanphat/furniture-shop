@@ -14,7 +14,7 @@ class AuthMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check()) {
+        if (Auth::check() && !Auth::user()->is_staff) {
             return $next($request);
         }
 
