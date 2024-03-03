@@ -4,8 +4,10 @@
         <h1 class='text-center fs-2'>REGISTER</h1>
         <form action="/register" method="post">
             @csrf
-            <label for="displayName" class="mt-2 ">Display name:</label>
-            <input type="text" name="displayName" id="displayName" value="{{ old('displayName') }}" class="form-control">
+            <label for="first_name" class="mt-2 ">First name:</label>
+            <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" class="form-control">
+            <label for="last_name" class="mt-2 ">Last name:</label>
+            <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" class="form-control">
             <label for="email" class="mt-2">Email:</label>
             <input type="text" name="email" id="email" value="{{ old('email') }}" class="form-control">
             <label for="password" class="mt-2">Password:</label>

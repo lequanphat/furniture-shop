@@ -32,8 +32,8 @@ class AuthController extends Controller
         $user = User::create([
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'displayName' => $request->input('displayName'),
-            'type' => 'user'
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
         ]);
         session(['user' => $user]);
         return redirect('/');

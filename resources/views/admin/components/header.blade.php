@@ -149,7 +149,7 @@
                     </div>
                     <div class="dropdown dib">
                         <div class="header-icon" data-toggle="dropdown">
-                            <span class="user-avatar">{{ session('user')->displayName }}
+                            <span class="user-avatar">User name
                                 <i class="ti-angle-down f-s-10"></i>
                             </span>
                             <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">

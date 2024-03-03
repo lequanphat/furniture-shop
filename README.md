@@ -3,7 +3,7 @@
 ## Step 1
 
 1. Install Composer
-2. Install Xampp
+2. Install Xampp (PHP version >= 8.2.0)
 
 ## Step 2
 

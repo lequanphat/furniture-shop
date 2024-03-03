@@ -3,17 +3,6 @@
 @include('admin.components.head')
 
 <body class="dark">
-    @if (session('user') && is_object(session('user')))
-        @if (session('user')->type != 'admin')
-            <script>
-                window.location = "/";
-            </script>
-        @endif
-    @else
-        <script>
-            window.location = "/login";
-        </script>
-    @endif
 
     <div>
         @include('admin.components.navbar')
@@ -25,7 +14,7 @@
                         <div class="col-lg-8 p-r-0 title-margin-right">
                             <div class="page-header">
                                 <div class="page-title">
-                                    <h1>Hello, Welcome {{ session('user')->displayName }}</h1>
+                                    <h1>Hello, Welcome User</h1>
                                 </div>
                             </div>
                         </div>

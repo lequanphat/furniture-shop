@@ -19,7 +19,8 @@ class RegisterRequest extends FormRequest
         return [
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|max:20',
-            'displayName' => ['required', 'min:8', 'max:40', new AlphaSpace()],
+            'first_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
+            'last_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
         ];
     }
     public function messages()
@@ -31,9 +32,12 @@ class RegisterRequest extends FormRequest
             'email.unique' => 'This email address is already taken.',
             'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least 6 characters.',
-            'displayName.required' => 'The display name field is required.',
-            'displayName.min' => 'The display must be at least 8 characters.',
-            'displayName.max' => 'The display name must not exceed 40 characters.',
+            'first_name.required' => 'First name field is required.',
+            'first_name.min' => 'First name must be at least 8 characters.',
+            'first_name.max' => 'First name must not exceed 20 characters.',
+            'last_name.required' => 'Last name field is required.',
+            'last_name.min' => 'Last must be at least 8 characters.',
+            'last_name.max' => 'Last name must not exceed 20 characters.',
         ];
     }
 }

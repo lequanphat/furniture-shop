@@ -3,17 +3,11 @@
 @include('components.head')
 
 <body>
-    @if (session('user') && is_object(session('user')) && session('user')->type != 'user')
-        <script>
-            window.location = "/admin";
-        </script>
-    @endif
     @include('components.header')
     <div class="">
         @yield('content')
     </div>
     @include('components.footer')
-
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/tiny-slider.js') }}"></script>
