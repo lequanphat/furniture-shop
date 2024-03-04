@@ -9,8 +9,9 @@
             @if ($errors->any())
                 <p class="text-danger m-0">*{{ $errors->all()[0] }}</p>
             @endif
-            <button type="submit" class="btn btn-primary container-fluid mt-4">LOGIN</button>
-            <p class="mt-4 text-center">You didn't receive the code? <a class="text-primary" href="#">Send again</a>
+            <button type="submit" class="btn btn-primary container-fluid mt-4">VERIFY</button>
+            <p class="mt-4 text-center">You didn't receive the code?
+                <a class="text-primary" href="/resend-otp/{{ $user_id }}">Send again</a>
             </p>
         </form>
     </div>
