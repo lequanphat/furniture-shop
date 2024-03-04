@@ -17,14 +17,14 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::get('email-verify/{user_id}', [PagesController::class, 'emailVerify'])->where('id', '[0-9]+');
     Route::post('email-verify/{user_id}', [AuthController::class, 'verifyAccount'])->where('id', '[0-9]+');
+    Route::get('resend-otp/{user_id}', [AuthController::class, 'resendOTP'])->where('id', '[0-9]+');
 });
+
 Route::get('logout', [AuthController::class, 'logout']);
-
-
 
 Route::middleware([PublicMiddleware::class])->group(function () {
     // public api
-    Route::get('/', [PagesController::class, 'index']);
+    Route::get('/', [PagesController::class, 'index'])->name('user');
     Route::get('/shop', [PagesController::class, 'shop']);
     Route::get('/about', [PagesController::class, 'about']);
     Route::get('/services', [PagesController::class, 'services']);
@@ -34,7 +34,6 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
-
 });
 
 Route::middleware([AdminMiddleware::class])->group(function () {

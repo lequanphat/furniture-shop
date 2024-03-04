@@ -46,6 +46,7 @@ class AuthController extends Controller
         $otp = rand(100000, 999999);
         $expiredTime = Carbon::now()->addMinutes(5);
         $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
+        // send mail here
         return redirect("/email-verify/" . $user->user_id);
     }
     public function verifyAccount(VerifyAccount $request)
@@ -67,6 +68,18 @@ class AuthController extends Controller
             }
             return back()->withErrors(['otp' => 'Verify account failed'])->withInput($request->input());
         } else return back()->withErrors(['otp' => 'Invalid OTP'])->withInput($request->input());
+    }
+    public function resendOTP(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        $user_verify = UserVerify::where('user_id', $user_id)->first();
+        if ($user_verify) {
+            $otp = rand(100000, 999999);
+            $expiredTime = Carbon::now()->addMinutes(5);
+            $user_verify->update(['otp' => $otp, 'expired_time' => $expiredTime]);
+            // send mail here
+            return redirect('/email-verify/' . $user_id);
+        } else return back()->withErrors(['otp' => 'Some went wrong!'])->withInput($request->input());
     }
     public function logout()
     {
