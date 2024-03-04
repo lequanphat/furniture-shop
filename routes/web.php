@@ -39,7 +39,18 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
-    Route::get('/admin/users', [PagesController::class, 'admin_users']);
-    Route::get('/admin/user1', [PagesController::class, 'admin_user1']);
-    Route::get('/admin/user2', [PagesController::class, 'admin_user2']);
+    Route::get('/admin/employee', [PagesController::class, 'admin_employee']);
+    Route::get('/admin/customers', [PagesController::class, 'admin_customers']);
+    Route::get('/admin/products', [PagesController::class, 'admin_products']);
+    Route::get('/admin/categories', [PagesController::class, 'admin_categories']);
+    Route::get('/admin/brands', [PagesController::class, 'admin_brands']);
+    Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
+    Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
+    Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
+    Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
+    Route::get('/admin/suppliers', [PagesController::class, 'admin_suppliers']);
+    Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
+    Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
+    Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
+    Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
 });

@@ -88,27 +88,104 @@ class PagesController extends Controller
         ];
         return view('admin.dashboard.index', $data);
     }
-    public function admin_users()
+    public function admin_employee()
     {
         $data = [
-            'page' => 'Users',
+            'page' => 'Employee',
             'user' => $users = User::all()
         ];
 
-        return view('admin.users.index', $data);
+        return view('admin.users.employee', $data);
     }
-    public function admin_user1()
+    public function admin_customers()
     {
         $data = [
-            'page' => 'Users1',
+            'page' => 'Customers',
         ];
-        return view('admin.users.user1', $data);
+        return view('admin.users.customers', $data);
     }
-    public function admin_user2()
+    public function admin_products()
     {
         $data = [
-            'page' => 'Users1',
+            'page' => 'Products',
         ];
-        return view('admin.users.user2', $data);
+        return view('admin.products.index', $data);
+    }
+    public function admin_categories()
+    {
+        $data = [
+            'page' => 'Categories',
+        ];
+        return view('admin.categories.index', $data);
+    }
+    public function admin_brands()
+    {
+        $data = [
+            'page' => 'Brands',
+        ];
+        return view('admin.brands.index', $data);
+    }
+    public function admin_discounts()
+    {
+        $data = [
+            'page' => 'Discounts',
+        ];
+        return view('admin.discounts.index', $data);
+    }
+    public function admin_orders()
+    {
+        $data = [
+            'page' => 'Orders',
+        ];
+        return view('admin.orders.index', $data);
+    }
+    public function admin_warranties()
+    {
+        $data = [
+            'page' => 'Warranties',
+        ];
+        return view('admin.warranties.index', $data);
+    }
+    public function admin_receipts()
+    {
+        $data = [
+            'page' => 'Receipts',
+        ];
+        return view('admin.receipts.index', $data);
+    }
+    public function admin_suppliers()
+    {
+        $data = [
+            'page' => 'Suppliers',
+        ];
+        return view('admin.suppliers.index', $data);
+    }
+    public function admin_permissions()
+    {
+        $data = [
+            'page' => 'Permissions',
+        ];
+        return view('admin.permissions.index', $data);
+    }
+    public function admin_authorization()
+    {
+        $data = [
+            'page' => 'Authorization',
+        ];
+        return view('admin.permissions.authorization', $data);
+    }
+    public function admin_profiles()
+    {
+        $data = [
+            'page' => 'Profiles',
+        ];
+        return view('admin.profiles.index', $data);
+    }
+    public function admin_settings()
+    {
+        $data = [
+            'page' => 'Settings',
+        ];
+        return view('admin.settings.index', $data);
     }
 }
