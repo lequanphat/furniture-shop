@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     //
+    public function login_ui()
+    {
+        return view('auth.login');
+    }
+    public function register_ui()
+    {
+        return view('auth.register');
+    }
+    public function accountVerification_ui(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        return view('auth.email-verify', ['user_id' => $user_id]);
+    }
     public function login(Request $request)
     {
         $user = User::where('email', $request->input('email'))->first();
@@ -49,7 +62,7 @@ class AuthController extends Controller
         // send mail here
         return redirect("/email-verify/" . $user->user_id);
     }
-    public function verifyAccount(VerifyAccount $request)
+    public function accountVerification(VerifyAccount $request)
     {
         $user_id = $request->route('user_id');
         $user_verify = UserVerify::where('user_id', $user_id)

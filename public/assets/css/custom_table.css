@@ -1,0 +1,32 @@
+.dt-button {
+    margin-bottom: 14px;
+}
+#bootstrap-data-table-export_length {
+    margin-bottom: 14px;
+}
+#bootstrap-data-table-export_length label {
+    float: left;
+}
+#bootstrap-data-table-export_length label select{
+    margin: 0 12px;
+}
+#bootstrap-data-table-export_filter {
+    margin-bottom: 14px;
+}
+#bootstrap-data-table-export_filter label {
+    float: right;
+}
+#bootstrap-data-table-export_info {
+    margin-top: 20px;
+    width: 50%;
+}
+#bootstrap-data-table-export_paginate {
+    width: 50%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+#bootstrap-data-table-export_paginate ul.pagination li {
+    margin: 0 12px;
+}

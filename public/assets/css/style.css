@@ -870,7 +870,6 @@ a.dt-button.active:not(.disabled) {
 /*    Search box
 ----------------------*/
 .main .page-header {
-  min-height: 50px;
   margin: 15px 0 5px;
   padding: 0 15px;
   border-bottom: 0;
@@ -888,7 +887,6 @@ a.dt-button.active:not(.disabled) {
   margin: 0;
   padding: 15px;
   background: transparent;
-  float: right;
 }
 .main .page-header .breadcrumb li.active {
   font-family: 'Roboto', sans-serif;
