@@ -29,7 +29,7 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        $user = User::where('email', $request->input('email'))->first();
+        $user = User::where('email', $request->input('email'))->where('is_active', true)->first();
         if ($user) {
             if (Hash::check($request->input('password'), $user->password)) {
                 if ($user->is_verified) {

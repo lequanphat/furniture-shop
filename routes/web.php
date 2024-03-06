@@ -42,10 +42,15 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
 
     // users routes
+    // employee routes
     Route::get('/admin/employee', [UserController::class, 'employee_ui']);
+    Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
+    Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
+    Route::get('/admin/employee/{user_id}/update', [UserController::class, 'update_employee_ui']);
+    // customer routes
     Route::get('/admin/customers', [UserController::class, 'customers_ui']);
 
-    //
+    // *This is only temporary, use the appropriate controller
     Route::get('/admin/products', [PagesController::class, 'admin_products']);
     Route::get('/admin/categories', [PagesController::class, 'admin_categories']);
     Route::get('/admin/brands', [PagesController::class, 'admin_brands']);
