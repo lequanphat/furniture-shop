@@ -61,7 +61,8 @@
                                                 @endisset
                                             </td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->email }}</td>
+                                            {{-- temporary value --}}
+                                            <td>0123123123</td>
 
                                             <td>
                                                 @if ($user->is_active)
