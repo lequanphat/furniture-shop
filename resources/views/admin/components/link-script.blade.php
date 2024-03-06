@@ -28,5 +28,6 @@
 <!-- scripit init-->
 <script src="assets/js/dashboard.js"></script>
 <script src="{{ asset('assets/js/lib/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/lib/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/scripts.js') }}"></script>
 <!-- bootstrap -->

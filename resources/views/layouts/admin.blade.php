@@ -16,7 +16,13 @@
                                 <div class="page-title">
                                     <ol class="breadcrumb p-0">
                                         <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                                        <li class="breadcrumb-item active">{{ $page }}</li>
+                                        @if (isset($page))
+                                            <li class="breadcrumb-item active">{{ $page }}</li>
+                                        @endif
+                                        @if (isset($action))
+                                            <li class="breadcrumb-item active">{{ $action }}</li>
+                                        @endif
+
                                     </ol>
                                 </div>
                             </div>

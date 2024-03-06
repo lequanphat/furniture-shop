@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
@@ -71,7 +69,7 @@ class PagesController extends Controller
     public function admin()
     {
         $data = [
-            'page' => 'Dashboard',
+            'page' => 'Home',
         ];
         return view('admin.dashboard.index', $data);
     }

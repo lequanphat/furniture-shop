@@ -2,15 +2,17 @@
 @section('content')
     <section id="main-content" class="shadow p-3 mb-5 bg-white rounded">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6 ">
+                <h5>The list of Employee</h5>
+            </div>
+            <div class="col-lg-6">
                 <div class="d-flex justify-content-end ">
-                    <button type="button" class="btn btn-primary mr-2">
-                        <span class=" mr-1">ADD</span>
+                    <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <span class=" mr-1">CREATE</span>
                         <i class="ti-plus"></i>
                     </button>
                     <button type="button" class="btn btn-primary mr-2">
-                        <span class=" mr-1">IMPORT</span>
-                        <i class="ti-plus"></i>
+                        <i class="ti-reload"></i>
                     </button>
                 </div>
             </div>
@@ -28,8 +30,9 @@
                                         <th>Avatar</th>
                                         <th>Full name</th>
                                         <th>Gender</th>
-                                        <th>Email</th>
                                         <th>Birth date</th>
+                                        <th>Email</th>
+                                        <th>Phone number</th>
                                         <th>Active</th>
                                         <th>Action</th>
                                     </tr>
@@ -44,20 +47,22 @@
                                             </td>
                                             <td>{{ $user->first_name . ' ' . $user->last_name }}</td>
                                             <td>
-                                                @isset($user->gender)
-                                                    {{ $user->gender }}
+                                                @if ($user->gender)
+                                                    Male
                                                 @else
-                                                    NULL
-                                                @endisset
+                                                    Famale
+                                                @endif
                                             </td>
-                                            <td>{{ $user->email }}</td>
                                             <td>
                                                 @isset($user->birth_date)
                                                     {{ $user->birth_date }}
                                                 @else
-                                                    NULL
+                                                    Unset
                                                 @endisset
                                             </td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->email }}</td>
+
                                             <td>
                                                 @if ($user->is_active)
                                                     <span class="badge badge-success">ACTIVE</span>
@@ -66,12 +71,20 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-info mr-2"><i
-                                                        class="ti-eye"></i></button>
-                                                <button type="button" class="btn btn-warning mr-2"><i
-                                                        class="ti-pencil-alt"></i></button>
-                                                <button type="button" class="btn btn-danger"><i
+                                                <a href="/admin/employee/{{ $user->user_id }}/details" type="button"
+                                                    class="btn btn-info mr-2 px-2 py-1"><i class="ti-eye"></i></a>
+                                                <a href="/admin/employee/{{ $user->user_id }}/update" type="button"
+                                                    class="btn btn-warning mr-2 px-2 py-1"><i class="ti-pencil-alt"></i></a>
+                                                @if ($user->is_active)
+                                                    <button type="button" class="btn btn-danger mr-2 px-2 py-1"><i
+                                                            class="ti-lock"></i></button>
+                                                @else
+                                                    <button type="button" class="btn btn-success mr-2 px-2 py-1"><i
+                                                            class="ti-unlock"></i></button></button>
+                                                @endif
+                                                <button type="button" class="btn btn-danger px-2 py-1"><i
                                                         class="ti-trash"></i></button>
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -86,6 +99,8 @@
             <!-- /# column -->
         </div>
         <!-- /# row -->
+        {{-- Modal --}}
+        @include('admin.users.create_employee_modal')
 
         @include('admin.components.footer')
     </section>
