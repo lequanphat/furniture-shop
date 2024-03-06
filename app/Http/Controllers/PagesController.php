@@ -19,20 +19,7 @@ class PagesController extends Controller
         ];
         return view('pages.dashboard.index', $data);
     }
-    public function login()
-    {
-        return view('auth.login');
-    }
-    public function register()
-    {
-        return view('auth.register');
-    }
 
-    public function emailVerify(Request $request)
-    {
-        $user_id = $request->route('user_id');
-        return view('auth.email-verify', ['user_id' => $user_id]);
-    }
 
     public function shop()
     {
