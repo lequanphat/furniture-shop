@@ -42,6 +42,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
 
     // users routes
+    Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user']);
+    Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user']);
     // employee routes
     Route::get('/admin/employee', [UserController::class, 'employee_ui']);
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);

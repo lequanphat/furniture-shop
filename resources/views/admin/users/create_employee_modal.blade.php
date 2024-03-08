@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -56,6 +56,7 @@
                     <div id="create_employee_response" class="alert ">
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
+                    <button type="reset" class="btn btn-close float-right px-4 mx-1">Reset</button>
                 </form>
             </div>
         </div>

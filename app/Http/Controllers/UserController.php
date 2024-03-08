@@ -40,7 +40,7 @@ class UserController extends Controller
             'is_verified' => 1,
         ];
         $user = User::create($userData);
-        return ['message' => 'Created employee successfully!' , 'user' => $user];
+        return ['message' => 'Created employee successfully!', 'user' => $user];
     }
 
     public function employee_details_ui(Request $request)
@@ -60,5 +60,27 @@ class UserController extends Controller
             'action' => 'Update' . $user_id
         ];
         return view('admin.users.update_employee', $data);
+    }
+    public function ban_user(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        $user = User::find($user_id);
+        if ($user) {
+            $user->update([
+                'is_active' => false,
+            ]);
+        }
+        return redirect('/admin/employee');
+    }
+    public function unban_user(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        $user = User::find($user_id);
+        if ($user) {
+            $user->update([
+                'is_active' => true,
+            ]);
+        }
+        return redirect('/admin/employee');
     }
 }
