@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <section id="main-content" class="shadow p-3 mb-5 bg-white rounded">
+    <section id="main-content" class="shadow p-3 bg-white rounded">
         <div class="row">
             <div class="col-lg-6 ">
                 <h5>The list of Employee</h5>
