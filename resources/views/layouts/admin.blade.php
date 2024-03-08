@@ -3,7 +3,7 @@
 @include('admin.components.head')
 
 <body class="dark">
-
+    @include('admin.components.link-script')
     <div>
         @include('admin.components.navbar')
         @include('admin.components.header')
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    @include('admin.components.link-script')
+
 </body>
 
 </html>

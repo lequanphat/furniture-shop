@@ -37,7 +37,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="employee-table">
                                     @foreach ($users as $user)
                                         <tr>
                                             <td>{{ $user->user_id }}</td>

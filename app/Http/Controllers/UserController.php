@@ -40,7 +40,7 @@ class UserController extends Controller
             'is_verified' => 1,
         ];
         $user = User::create($userData);
-        return redirect('/admin/employee');
+        return ['message' => 'Created employee successfully!' , 'user' => $user];
     }
 
     public function employee_details_ui(Request $request)

@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form goes here -->
-                <form action="/admin/employee/create" method="post">
+                <form id="create-employee-form" action="#" method="dialog">
                     @csrf
                     <div class="mb-3 row">
                         <div class="col-md-6">
@@ -53,26 +53,12 @@
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="address" name="address" required>
                     </div>
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <button type="submit" class="btn btn-primary float-right px-4">Submit</button>
+                    <div id="create_employee_response" class="alert ">
+                    </div>
+                    <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 </div>
-@if ($errors->any())
-    <script>
-        $(document).ready(function() {
-            $('#exampleModal').modal('show');
-        });
-    </script>
-@endif
