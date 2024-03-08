@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateEmployee;
+use App\Models\Address;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    //
     public function customers_ui()
     {
         $data = [
@@ -29,6 +29,7 @@ class UserController extends Controller
     }
     public function create_employee(CreateEmployee $request)
     {
+        // create user
         $userData = [
             'email' => $request->input('email'),
             'password' => Hash::make('123456'), // default password for new employee is 123456
@@ -40,6 +41,18 @@ class UserController extends Controller
             'is_verified' => 1,
         ];
         $user = User::create($userData);
+
+        // create address
+        $addressData = [
+            'user_id' => $user->user_id,
+            'receiver_name' =>  $user->first_name . ' ' . $user->last_name,
+            'address' =>  $request->input('address'),
+            'phone_number' =>  $request->input('phone_number'),
+            'is_default' => 1,
+        ];
+        Address::create($addressData);
+
+        // response
         return ['message' => 'Created employee successfully!', 'user' => $user];
     }
 
@@ -70,6 +83,7 @@ class UserController extends Controller
                 'is_active' => false,
             ]);
         }
+        // response
         return redirect('/admin/employee');
     }
     public function unban_user(Request $request)
@@ -81,6 +95,7 @@ class UserController extends Controller
                 'is_active' => true,
             ]);
         }
+        // response
         return redirect('/admin/employee');
     }
 }
