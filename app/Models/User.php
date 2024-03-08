@@ -10,7 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Model implements Authenticatable
 {
     use HasFactory, HasRoles;
-
+    protected $table = 'users';
     protected $primaryKey = 'user_id';
     protected $fillable = ['email', 'password', 'first_name', 'last_name', 'avatar', 'birth_date', 'gender', 'is_staff', 'is_verified', 'is_active'];
 

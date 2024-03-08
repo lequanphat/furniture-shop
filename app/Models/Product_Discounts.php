@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Product_Discounts extends Model
 {
     use HasFactory;
+    protected $table = 'product_discounts';
     protected $fillable = ['sku', 'discount_id'];
 }
