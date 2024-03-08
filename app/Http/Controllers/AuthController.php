@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePassword;
+use App\Http\Requests\ForgotPassword;
+use App\Http\Requests\OTPVerification;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\VerifyAccount;
 use App\Models\User;
 use App\Models\UserVerify;
 use Carbon\Carbon;
@@ -22,10 +24,23 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
-    public function accountVerification_ui(Request $request)
+    public function forgot_password_ui()
+    {
+        return view('auth.forgot-password');
+    }
+    public function account_verification_ui(Request $request)
     {
         $user_id = $request->route('user_id');
-        return view('auth.email-verify', ['user_id' => $user_id]);
+        return view('auth.account-verification', ['user_id' => $user_id]);
+    }
+    public function forgot_password_verification_ui(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        return view('auth.forgot-password-verification', ['user_id' => $user_id]);
+    }
+    public function change_password_ui()
+    {
+        return view('auth.change-password');
     }
     public function login(Request $request)
     {
@@ -72,9 +87,9 @@ class AuthController extends Controller
         // --->
 
         // response
-        return redirect("/email-verify/" . $user->user_id);
+        return redirect("/account-verification/" . $user->user_id);
     }
-    public function accountVerification(VerifyAccount $request)
+    public function account_verification(OTPVerification $request)
     {
         // check existed account
         $user_id = $request->route('user_id');
@@ -98,7 +113,7 @@ class AuthController extends Controller
             return back()->withErrors(['otp' => 'Verify account failed'])->withInput($request->input());
         } else return back()->withErrors(['otp' => 'Invalid OTP'])->withInput($request->input());
     }
-    public function resendOTP(Request $request)
+    public function resend_otp(Request $request)
     {
         $user_id = $request->route('user_id');
         $user_verify = UserVerify::where('user_id', $user_id)->first();
@@ -109,12 +124,64 @@ class AuthController extends Controller
             $user_verify->update(['otp' => $otp, 'expired_time' => $expiredTime]);
             // send mail here
             // -->
-            return redirect('/email-verify/' . $user_id);
+            return back();
         } else return back()->withErrors(['otp' => 'Some went wrong!'])->withInput($request->input());
     }
     public function logout()
     {
         Auth::logout();
         return redirect('/login');
+    }
+    public function forgot_password(ForgotPassword $request)
+    {
+        // check existed user
+        $user = User::where('email', $request->input('email'))->where('is_active', true)->where('is_verified', true)->first();
+        if ($user) {
+            // generate otp
+            $otp = rand(100000, 999999);
+            $expiredTime = Carbon::now()->addMinutes(5);
+            // create user_verify
+            $user_verify = UserVerify::where('user_id', $user->user_id)->first();
+            if ($user_verify) {
+                $user_verify->update(['otp' => $otp, 'expired_time' => $expiredTime]);
+            } else {
+                $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
+            }
+            // send mail here
+            // --->
+
+            // response
+            return redirect('/forgot-password-verification/' . $user->user_id);
+        }
+        // response
+        return back()->withErrors(['email' => 'Cannot find user with this email.'])->withInput($request->input());
+    }
+    public function forgot_password_verify_code(OTPVerification $request)
+    {
+        // check existed account
+        $user_id = $request->route('user_id');
+        $user_verify = UserVerify::where('user_id', $user_id)
+            ->where('otp', $request->input('otp'))
+            ->where('expired_time', '>=', now())
+            ->first();
+        if ($user_verify) {
+            $user = User::find($user_id);
+            if ($user) {
+                // authenticated
+                Auth::login($user);
+                $user_verify->delete();
+                // response
+                return redirect('/change-password');
+            }
+            return back()->withErrors(['otp' => 'Verify account failed'])->withInput($request->input());
+        } else return back()->withErrors(['otp' => 'Invalid OTP'])->withInput($request->input());
+    }
+    public function change_password(ChangePassword $request)
+    {
+        $user = User::find(Auth::user()->user_id);
+        $user->update([
+            'password' => Hash::make($request->input('password')),
+        ]);
+        return redirect('/');
     }
 }

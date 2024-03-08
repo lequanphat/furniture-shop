@@ -12,13 +12,21 @@ use Illuminate\Support\Facades\Route;
 
 // auth api
 Route::middleware([AuthMiddleware::class])->group(function () {
+    // login
     Route::get('login', [AuthController::class, 'login_ui'])->name('login');
-    Route::get('register', [AuthController::class, 'register_ui'])->name('register');
     Route::post('login', [AuthController::class, 'login']);
+    // register
+    Route::get('register', [AuthController::class, 'register_ui'])->name('register');
     Route::post('register', [AuthController::class, 'register']);
-    Route::get('email-verify/{user_id}', [AuthController::class, 'accountVerification_ui'])->where('id', '[0-9]+');
-    Route::post('email-verify/{user_id}', [AuthController::class, 'accountVerification'])->where('id', '[0-9]+');
-    Route::get('resend-otp/{user_id}', [AuthController::class, 'resendOTP'])->where('id', '[0-9]+');
+    // account verification
+    Route::get('account-verification/{user_id}', [AuthController::class, 'account_verification_ui'])->where('id', '[0-9]+');
+    Route::post('account-verification/{user_id}', [AuthController::class, 'account_verification'])->where('id', '[0-9]+');
+    Route::get('resend-otp/{user_id}', [AuthController::class, 'resend_otp'])->where('id', '[0-9]+');
+    // forgot password
+    Route::get('forgot-password', [AuthController::class, 'forgot_password_ui']);
+    Route::post('forgot-password', [AuthController::class, 'forgot_password']);
+    Route::get('forgot-password-verification/{user_id}', [AuthController::class, 'forgot_password_verification_ui'])->where('id', '[0-9]+');;
+    Route::post('forgot-password-verification/{user_id}', [AuthController::class, 'forgot_password_verify_code'])->where('id', '[0-9]+');;
 });
 
 Route::get('logout', [AuthController::class, 'logout']);
@@ -35,6 +43,8 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
+    Route::get('change-password', [AuthController::class, 'change_password_ui']);
+    Route::post('change-password', [AuthController::class, 'change_password']);
 });
 
 Route::middleware([AdminMiddleware::class])->group(function () {
