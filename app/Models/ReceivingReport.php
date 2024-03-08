@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ReceivingReport extends Model
 {
     use HasFactory;
+    protected $table = 'receiving_reports';
     protected $fillable = ['total_price', 'supplier_id', 'created_by'];
 }
