@@ -908,7 +908,7 @@ textarea {
     align-items: center;
 }
 
-.user-info{
+.user-info {
     position: relative;
 }
 .user-details {
@@ -931,7 +931,7 @@ textarea {
     top: -28px;
     right: 4px;
     border-style: solid;
-    border-width: 15px  14px;
+    border-width: 15px 14px;
     border-color: transparent transparent white transparent;
 }
 .user-details li {
@@ -945,4 +945,8 @@ textarea {
 
 .user-info:hover .user-details {
     display: block;
+}
+
+.border-top-1px {
+    border-top: 1px solid #333;
 }

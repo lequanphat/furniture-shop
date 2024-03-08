@@ -18,10 +18,10 @@ class CreateEmployee extends FormRequest
         // validate here
         return [
             'email' => 'required|email|unique:users,email',
-            'gender' => 'required',
+            'gender' => 'required|in:male,famale',
             'address' => 'required',
-            'birth_date' => 'required',
-            'phone_number' => 'required',
+            'birth_date' => 'required|date',
+            'phone_number' => 'required|string|numeric',
             'first_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
             'last_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
         ];
@@ -43,6 +43,7 @@ class CreateEmployee extends FormRequest
             'address.max' => 'The address field is required.',
             'birth_date.max' => 'The birth date field is required.',
             'phone_number.max' => 'The phone number field is required.',
+            'phone_number.numeric' => 'The phone number only contains number',
         ];
     }
 }
