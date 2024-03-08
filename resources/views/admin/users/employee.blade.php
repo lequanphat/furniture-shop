@@ -7,7 +7,8 @@
             </div>
             <div class="col-lg-6">
                 <div class="d-flex justify-content-end ">
-                    <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal"
+                        data-bs-target="#createEmployeeModal">
                         <span class=" mr-1">CREATE</span>
                         <i class="ti-plus"></i>
                     </button>
@@ -77,11 +78,12 @@
                                                 <a href="/admin/employee/{{ $user->user_id }}/update" type="button"
                                                     class="btn btn-warning mr-2 px-2 py-1"><i class="ti-pencil-alt"></i></a>
                                                 @if ($user->is_active)
-                                                    <button type="button" class="btn btn-danger mr-2 px-2 py-1"><i
-                                                            class="ti-lock"></i></button>
+                                                    <a href="/admin/employee/{{ $user->user_id }}/ban" type="button"
+                                                        class="btn btn-danger mr-2 px-2 py-1"><i class="ti-lock"></i></a>
                                                 @else
-                                                    <button type="button" class="btn btn-success mr-2 px-2 py-1"><i
-                                                            class="ti-unlock"></i></button></button>
+                                                    <a href="/admin/employee/{{ $user->user_id }}/unban" type="button"
+                                                        class="btn btn-success mr-2 px-2 py-1"><i
+                                                            class="ti-unlock"></i></a></button>
                                                 @endif
                                                 <button type="button" class="btn btn-danger px-2 py-1"><i
                                                         class="ti-trash"></i></button>
