@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 
 class PagesController extends Controller
@@ -100,8 +101,9 @@ class PagesController extends Controller
     {
         $data = [
             'page' => 'Categories',
+            'categories'=>Category::all()
         ];
-        return view('admin.categories.index', $data);
+        return view('admin.categories.category', $data);
     }
     public function admin_brands()
     {
