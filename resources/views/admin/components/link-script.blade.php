@@ -5,9 +5,6 @@
 <script src="{{ asset('assets/js/lib/menubar/sidebar.js') }}" defer></script>
 <script src="{{ asset('assets/js/lib/preloader/pace.min.js') }}" defer></script>
 <!-- sidebar -->
-{{-- slide  --}}
-<script src="{{ asset('assets/js/lib/owl-carousel/owl.carousel.min.js') }}" defer></script>
-<script src="{{ asset('assets/js/lib/owl-carousel/owl.carousel-init.js') }}" defer></script>
 {{-- for user1 --}}
 <script src="{{ asset('assets/js/lib/data-table/datatables.min.js') }}" defer></script>
 <script src="{{ asset('assets/js/lib/data-table/dataTables.buttons.min.js') }}" defer></script>
