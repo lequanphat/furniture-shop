@@ -13,7 +13,9 @@ class User extends Model implements Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'user_id';
     protected $fillable = ['email', 'password', 'first_name', 'last_name', 'avatar', 'birth_date', 'gender', 'is_staff', 'is_verified', 'is_active'];
-
+    protected $casts = [
+        'gender' => 'boolean',
+    ];
     public function getAuthIdentifierName()
     {
         return 'user_id';
@@ -42,5 +44,13 @@ class User extends Model implements Authenticatable
     public function getRememberTokenName()
     {
         return 'remember_token';
+    }
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'user_id');
+    }
+    public function default_address()
+    {
+        return $this->hasOne(Address::class, 'user_id')->where('is_default', 1);;
     }
 }

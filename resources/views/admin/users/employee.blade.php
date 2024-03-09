@@ -62,8 +62,7 @@
                                                 @endisset
                                             </td>
                                             <td>{{ $user->email }}</td>
-                                            {{-- temporary value --}}
-                                            <td>0123123123</td>
+                                            <td>{{ $user->default_address->phone_number }}</td>
 
                                             <td>
                                                 @if ($user->is_active)
@@ -82,8 +81,10 @@
                                                     data-last-name="{{ $user->last_name }}"
                                                     data-gender="{{ $user->gender }}"
                                                     data-birth-date="{{ isset($user->birth_date) ? $user->birth_date : '' }}"
-                                                    data-email="{{ $user->email }}" data-phone-number="0123123123"
-                                                    data-address="HCM"><i class="ti-pencil-alt"></i></button>
+                                                    data-email="{{ $user->email }}"
+                                                    data-phone-number="{{ $user->default_address->phone_number }}"
+                                                    data-address="{{ $user->default_address->address }}"><i
+                                                        class="ti-pencil-alt"></i></button>
                                                 @if ($user->is_active)
                                                     <a href="/admin/employee/{{ $user->user_id }}/ban" type="button"
                                                         class="btn btn-danger mr-2 px-2 py-1"><i class="ti-lock"></i></a>

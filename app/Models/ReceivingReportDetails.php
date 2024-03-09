@@ -9,5 +9,6 @@ class ReceivingReportDetails extends Model
 {
     use HasFactory;
     protected $table = 'receiving_report_details';
+    protected $primaryKey = ['receiving_report_id', 'sku'];
     protected $fillable = ['receiving_report_id', 'sku', 'quantities', 'unit_price'];
 }

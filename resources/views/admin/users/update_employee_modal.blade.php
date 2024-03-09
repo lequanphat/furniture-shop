@@ -53,7 +53,7 @@
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="address" name="address" required>
                     </div>
-                    <div id="create_employee_response" class="alert ">
+                    <div id="update_employee_response" class="alert ">
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
                     <button id="js-cancel-update-employee-btn" type="button"
