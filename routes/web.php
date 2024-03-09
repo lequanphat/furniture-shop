@@ -45,6 +45,8 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
     Route::get('change-password', [AuthController::class, 'change_password_ui']);
     Route::post('change-password', [AuthController::class, 'change_password']);
+
+    Route::get('/profile', [PagesController::class, 'profile']);
 });
 
 Route::middleware([AdminMiddleware::class])->group(function () {
