@@ -33,7 +33,9 @@ jQuery.noConflict();
 
         // click show update employee
         $(document).on('click', '.js-update-employee-btn', function () {
+            // show modal
             $('#updateEmployeeModal').modal('show');
+            // assign data
             $('#updateEmployeeModal #updateEmployeeTitle').html(`Update employee - ID ${$(this).data('user-id')}`);
             $('#updateEmployeeModal #email').val($(this).data('email'));
             $('#updateEmployeeModal #email').prop('readonly', true);
@@ -48,11 +50,40 @@ jQuery.noConflict();
             } else {
                 $('#updateEmployeeModal #female').prop('checked', true);
             }
+            // reset response
+            $('#update_employee_response').html('');
+            $('#update_employee_response').removeClass('alert-success alert-danger');
         });
 
         // click cancel employee
         $('#js-cancel-update-employee-btn').click(() => {
             $('#updateEmployeeModal').modal('hide');
+        });
+
+        // update employee
+        $('#update-employee-form').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            console.log({ formData });
+            $.ajax({
+                url: `/admin/employee/update`,
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    console.log({ response });
+                    // Handle the success response
+                    $('#update_employee_response').removeClass('alert-danger');
+                    $('#update_employee_response').addClass('alert-success');
+                    $('#update_employee_response').html(response.message);
+                },
+                error: function (error) {
+                    console.log({ error });
+                    // Handle the error response
+                    $('#update_employee_response').removeClass('alert-success');
+                    $('#update_employee_response').addClass('alert-danger');
+                    $('#update_employee_response').html(error.responseJSON.errors[0]);
+                },
+            });
         });
     });
 })(jQuery);
