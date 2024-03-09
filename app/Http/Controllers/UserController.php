@@ -24,7 +24,10 @@ class UserController extends Controller
     {
         $data = [
             'page' => 'Employee',
-            'users' => User::where('is_staff', 1)->whereNotIn('user_id', [Auth::user()->user_id])->get()
+            'users' => User::where('is_staff', 1)
+                ->whereNotIn('user_id', [Auth::user()->user_id])
+                ->with('default_address')
+                ->get()
         ];
         return view('admin.users.employee', $data);
     }

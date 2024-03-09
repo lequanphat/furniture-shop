@@ -45,4 +45,12 @@ class User extends Model implements Authenticatable
     {
         return 'remember_token';
     }
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'user_id');
+    }
+    public function default_address()
+    {
+        return $this->hasOne(Address::class, 'user_id')->where('is_default', 1);;
+    }
 }
