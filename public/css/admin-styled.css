@@ -1,3 +1,31 @@
+body::-webkit-scrollbar {
+    width: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+body::-webkit-scrollbar-thumb:active {
+    background: #333;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+}
+body {
+    overflow-x: hidden;
+}
+
+/* custom table */
 .dt-button {
     margin-bottom: 14px;
 }
@@ -7,7 +35,7 @@
 #bootstrap-data-table-export_length label {
     float: left;
 }
-#bootstrap-data-table-export_length label select{
+#bootstrap-data-table-export_length label select {
     margin: 0 12px;
 }
 #bootstrap-data-table-export_filter {

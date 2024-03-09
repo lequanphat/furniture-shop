@@ -950,3 +950,31 @@ textarea {
 .border-top-1px {
     border-top: 1px solid #333;
 }
+
+/* custom scrollbar */
+body::-webkit-scrollbar {
+    width: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+body::-webkit-scrollbar-thumb:active {
+    background: #333;
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+}
+body {
+    overflow-x: hidden;
+}

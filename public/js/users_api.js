@@ -1,6 +1,15 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
+        // show create employee modal
+        $('#js-create-employee-btn').click(() => {
+            $('#createEmployeeModal').modal('show');
+            // reset data in form
+            $('#create-employee-form')[0].reset();
+            $('#create_employee_response').html('');
+            $('#create_employee_response').removeClass('alert-success alert-danger');
+        });
+
         // create employee api
         $('#create-employee-form').submit(function (e) {
             e.preventDefault();
@@ -82,6 +91,28 @@ jQuery.noConflict();
                     $('#update_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
+        });
+
+        // click delete employee
+        $(document).on('click', '.js-delete-employee-btn', function () {
+            // show modal
+            $('#deleteEmployeeModal').modal('show');
+            $('#js-delete-employee-confirm-text').html(
+                `Are you sure you want to delete employee ${$(this).data('user-id')} - ${$(this).data(
+                    'first-name',
+                )} ${$(this).data('last-name')}?`,
+            );
+        });
+
+        // cancel delete employee
+        $('#js-cancel-delete-employee').click(() => {
+            $('#deleteEmployeeModal').modal('hide');
+        });
+
+        // delete employee
+        $('#js-delete-employee').click(() => {
+            $('#deleteEmployeeModal').modal('hide');
+            // logic here
         });
     });
 })(jQuery);

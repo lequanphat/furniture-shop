@@ -22,7 +22,6 @@
     <link href="{{ asset('assets/css/lib/helper.css') }}" rel="stylesheet">
     {{-- my style --}}
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/custom_table.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('css/admin-styled.css') }}" rel="stylesheet">
 
 </head>
