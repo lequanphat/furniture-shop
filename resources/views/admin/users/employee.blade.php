@@ -75,8 +75,15 @@
                                             <td>
                                                 <a href="/admin/employee/{{ $user->user_id }}/details" type="button"
                                                     class="btn btn-info mr-2 px-2 py-1"><i class="ti-eye"></i></a>
-                                                <a href="/admin/employee/{{ $user->user_id }}/update" type="button"
-                                                    class="btn btn-warning mr-2 px-2 py-1"><i class="ti-pencil-alt"></i></a>
+                                                <button type="button"
+                                                    class="js-update-employee-btn btn btn-warning mr-2 px-2 py-1"
+                                                    data-user-id="{{ $user->user_id }}"
+                                                    data-first-name="{{ $user->first_name }}"
+                                                    data-last-name="{{ $user->last_name }}"
+                                                    data-gender="{{ $user->gender }}"
+                                                    data-birth-date="{{ isset($user->birth_date) ? $user->birth_date : '' }}"
+                                                    data-email="{{ $user->email }}" data-phone-number="0123123123"
+                                                    data-address="HCM"><i class="ti-pencil-alt"></i></button>
                                                 @if ($user->is_active)
                                                     <a href="/admin/employee/{{ $user->user_id }}/ban" type="button"
                                                         class="btn btn-danger mr-2 px-2 py-1"><i class="ti-lock"></i></a>
@@ -104,6 +111,7 @@
         <!-- /# row -->
         {{-- Modal --}}
         @include('admin.users.create_employee_modal')
+        @include('admin.users.update_employee_modal')
 
         @include('admin.components.footer')
     </section>
