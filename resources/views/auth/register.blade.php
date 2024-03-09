@@ -16,9 +16,7 @@
             <input type="password" name="password" id="password" value="{{ old('password') }}" class="form-control mb-4"
                 required>
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <p>{{ $errors->first() }}</p>
-                </div>
+                <p class="text-danger m-0">*{{ $errors->first() }}</p>
             @endif
             <button type="submit" class="btn btn-primary container-fluid">REGISTER</button>
             <p class="m-0 mt-3 text-center">You have already an account? <a class="text-primary" href="/login">Login</a>

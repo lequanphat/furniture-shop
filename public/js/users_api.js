@@ -10,18 +10,16 @@ jQuery.noConflict();
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    console.log({ response });
                     // Handle the success response
                     $('#create_employee_response').removeClass('alert-danger');
                     $('#create_employee_response').addClass('alert-success');
                     $('#create_employee_response').html(response.message);
                 },
                 error: function (error) {
-                    console.log({ error });
                     // Handle the error response
                     $('#create_employee_response').removeClass('alert-success');
                     $('#create_employee_response').addClass('alert-danger');
-                    $('#create_employee_response').html(error.responseJSON.errors[0]);
+                    $('#create_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });
@@ -81,7 +79,7 @@ jQuery.noConflict();
                     // Handle the error response
                     $('#update_employee_response').removeClass('alert-success');
                     $('#update_employee_response').addClass('alert-danger');
-                    $('#update_employee_response').html(error.responseJSON.errors[0]);
+                    $('#update_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });
