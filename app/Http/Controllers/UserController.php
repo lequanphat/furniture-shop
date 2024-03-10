@@ -19,6 +19,7 @@ class UserController extends Controller
         ];
         return view('admin.users.customers', $data);
     }
+
     public function employee_ui()
     {
         $data = [
@@ -27,6 +28,7 @@ class UserController extends Controller
         ];
         return view('admin.users.employee', $data);
     }
+
     public function create_employee(CreateEmployee $request)
     {
         // create user
@@ -45,9 +47,9 @@ class UserController extends Controller
         // create address
         $addressData = [
             'user_id' => $user->user_id,
-            'receiver_name' =>  $user->first_name . ' ' . $user->last_name,
-            'address' =>  $request->input('address'),
-            'phone_number' =>  $request->input('phone_number'),
+            'receiver_name' => $user->first_name . ' ' . $user->last_name,
+            'address' => $request->input('address'),
+            'phone_number' => $request->input('phone_number'),
             'is_default' => 1,
         ];
         Address::create($addressData);
@@ -65,6 +67,7 @@ class UserController extends Controller
         ];
         return view('admin.users.employee_details', $data);
     }
+
     public function update_employee_ui(Request $request)
     {
         $user_id = $request->route('user_id');
@@ -74,6 +77,7 @@ class UserController extends Controller
         ];
         return view('admin.users.update_employee', $data);
     }
+
     public function ban_user(Request $request)
     {
         $user_id = $request->route('user_id');
@@ -86,6 +90,7 @@ class UserController extends Controller
         // response
         return redirect('/admin/employee');
     }
+
     public function unban_user(Request $request)
     {
         $user_id = $request->route('user_id');

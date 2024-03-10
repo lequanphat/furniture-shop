@@ -40,28 +40,15 @@
 
                                     <tr>
                                         <td>{{ $category->category_id }}</td>
-                                        <td class="d-flex justify-content-center align-items-center">
 
-                                        </td>
                                         <td>{{$category->name}}</td>
                                         <td>
                                             {{$category->description}}
                                         </td>
-                                        <td>
-                                            <!-- @isset($user->birth_date)
-                                                {{ $user->birth_date }}
-                                            @else
-                                                Unset
-
-
-
-
-                                            @endisset -->
-                                            {{$category->index}}
-                                        </td>
+                                        <td> {{$category->index}}</td>
                                         <td>{{$category->parent_id}}</td>
                                         {{-- temporary value --}}
-                                        <td>0123123123</td>
+
 
                                     </tr>
                                 @endforeach

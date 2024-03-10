@@ -72,23 +72,7 @@
                                                     <span class="badge badge-danger">BANNED</span>
                                                 @endif
                                             </td>
-                                            <td>
-                                                <a href="/admin/employee/{{ $user->user_id }}/details" type="button"
-                                                    class="btn btn-info mr-2 px-2 py-1"><i class="ti-eye"></i></a>
-                                                <a href="/admin/employee/{{ $user->user_id }}/update" type="button"
-                                                    class="btn btn-warning mr-2 px-2 py-1"><i class="ti-pencil-alt"></i></a>
-                                                @if ($user->is_active)
-                                                    <a href="/admin/employee/{{ $user->user_id }}/ban" type="button"
-                                                        class="btn btn-danger mr-2 px-2 py-1"><i class="ti-lock"></i></a>
-                                                @else
-                                                    <a href="/admin/employee/{{ $user->user_id }}/unban" type="button"
-                                                        class="btn btn-success mr-2 px-2 py-1"><i
-                                                            class="ti-unlock"></i></a></button>
-                                                @endif
-                                                <button type="button" class="btn btn-danger px-2 py-1"><i
-                                                        class="ti-trash"></i></button>
 
-                                            </td>
                                         </tr>
                                     @endforeach
 
