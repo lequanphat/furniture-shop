@@ -7,8 +7,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="d-flex justify-content-end ">
-                    <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal"
-                        data-bs-target="#createEmployeeModal">
+                    <button id="js-create-employee-btn" type="button" class="btn btn-primary mr-2">
                         <span class=" mr-1">CREATE</span>
                         <i class="ti-plus"></i>
                     </button>
@@ -20,7 +19,6 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-
                 <div class="card">
                     <div class="bootstrap-data-table-panel ">
                         <div class="table-responsive">
@@ -62,8 +60,7 @@
                                                 @endisset
                                             </td>
                                             <td>{{ $user->email }}</td>
-                                            {{-- temporary value --}}
-                                            <td>0123123123</td>
+                                            <td>{{ $user->default_address->phone_number }}</td>
 
                                             <td>
                                                 @if ($user->is_active)
@@ -72,7 +69,40 @@
                                                     <span class="badge badge-danger">BANNED</span>
                                                 @endif
                                             </td>
-
+                                            <td>
+                                                <a href="/admin/employee/{{ $user->user_id }}/details" type="button"
+                                                    class="btn btn-info mr-2 px-2 py-1"><i class="ti-eye"></i></a>
+                                                <button type="button"
+                                                    class="js-update-employee-btn btn btn-warning mr-2 px-2 py-1"
+                                                    data-user-id="{{ $user->user_id }}"
+                                                    data-first-name="{{ $user->first_name }}"
+                                                    data-last-name="{{ $user->last_name }}"
+                                                    data-gender="{{ $user->gender }}"
+                                                    data-birth-date="{{ isset($user->birth_date) ? $user->birth_date : '' }}"
+                                                    data-email="{{ $user->email }}"
+                                                    data-phone-number="{{ $user->default_address->phone_number }}"
+                                                    data-address="{{ $user->default_address->address }}">
+                                                    <i class="ti-pencil-alt"></i>
+                                                </button>
+                                                @if ($user->is_active)
+                                                    <a href="/admin/employee/{{ $user->user_id }}/ban" type="button"
+                                                        class="btn btn-danger mr-2 px-2 py-1">
+                                                        <i class="ti-lock"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="/admin/employee/{{ $user->user_id }}/unban" type="button"
+                                                        class="btn btn-success mr-2 px-2 py-1">
+                                                        <i class="ti-unlock"></i>
+                                                    </a>
+                                                @endif
+                                                <button type="button"
+                                                    class="js-delete-employee-btn btn btn-danger px-2 py-1"
+                                                    data-user-id="{{ $user->user_id }}"
+                                                    data-first-name="{{ $user->first_name }}"
+                                                    data-last-name="{{ $user->last_name }}">
+                                                    <i class="ti-trash"></i>
+                                                </button>
+                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -88,7 +118,11 @@
         <!-- /# row -->
         {{-- Modal --}}
         @include('admin.users.create_employee_modal')
+        @include('admin.users.update_employee_modal')
+        @include('admin.users.delete_employee_confirm')
 
         @include('admin.components.footer')
+
+
     </section>
 @endsection

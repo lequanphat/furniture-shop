@@ -912,10 +912,9 @@ textarea {
     position: relative;
 }
 .user-details {
-    display: none;
     position: absolute;
     right: 0;
-    top: 110%;
+    top: 130%;
     z-index: 999;
     background-color: white;
     color: #333;
@@ -923,7 +922,9 @@ textarea {
     width: 180px;
     padding: 12px 0;
     border-radius: 6px;
-    transition: 1s;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
 }
 .user-details::before {
     content: '';
@@ -939,14 +940,47 @@ textarea {
     padding: 8px 16px;
     cursor: pointer;
 }
+.user-details li a {
+    text-decoration: none;
+}
 .user-details li:hover {
     background: rgba(0, 0, 0, 0.1);
+    color: #3b5d50;
 }
 
 .user-info:hover .user-details {
-    display: block;
+    opacity: 1;
+    visibility: visible;
 }
 
 .border-top-1px {
     border-top: 1px solid #333;
+}
+
+/* custom scrollbar */
+body::-webkit-scrollbar {
+    width: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+body::-webkit-scrollbar-thumb:active {
+    background: #333;
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+}
+body {
+    overflow-x: hidden;
 }

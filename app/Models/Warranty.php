@@ -9,5 +9,6 @@ class Warranty extends Model
 {
     use HasFactory;
     protected $table = 'warranties';
+    protected $primaryKey = 'warranty_id';
     protected $fillable = ['order_id', 'sku', 'start_date', 'end_date', 'description'];
 }

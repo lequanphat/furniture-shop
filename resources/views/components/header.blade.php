@@ -21,15 +21,19 @@
                 <li><a class="nav-link" href="/contact">Contact us</a></li>
             </ul>
 
-            <ul class="custom-navbar-cta navbar-nav mb-md-0 mb-2 ms-5">
-                <li><a class="nav-link" href="cart"><img src="images/cart.svg"></a></li>
+            <ul class="custom-navbar-cta navbar-nav mb-md-0 mb-2 ms-5 d-flex align-items-center">
+                <li>
+                    <a class="nav-link" href="cart"><img src="images/cart.svg"></a>
+                </li>
                 @if (Auth::check())
-                    <li class="p-2 user-info">
+                    <li class="user-info">
+                        <img src="{{ Auth::user()->avatar }}" alt="avatar" class="rounded-circle"
+                            style="width: 32px; height: 32px;" />
                         <ul class="user-details  ">
-                            <li><a href="#">Thông tin tài khoản</a></li>
-                            <li><a href="/logout">Đăng xuất</a></li>
+                            <h6 class="mx-3">{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</h6>
+                            <li><a href="/profile">Thông tin tài khoản</a></li>
+                            <li><a href="/logout" class="text-danger">Đăng xuất</a></li>
                         </ul>
-                        <img src="images/user.svg">
                     </li>
                 @else
                     <li><a href="/login" class="my-2 btn btn-secondary px-3 py-1 text-white">Login</a></li>
