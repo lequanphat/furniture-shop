@@ -67,10 +67,6 @@ class PagesController extends Controller
         ];
         return view('pages.contact.index', $data);
     }
-    public function profile()
-    {
-        return view('pages.profile.index');
-    }
     public function admin()
     {
         $data = [
@@ -105,7 +101,7 @@ class PagesController extends Controller
     {
         $data = [
             'page' => 'Categories',
-            'categories' => Category::all()
+            'categories'=>Category::all()
         ];
         return view('admin.categories.category', $data);
     }

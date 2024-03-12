@@ -66,7 +66,12 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // *This is only temporary, use the appropriate controller
     Route::get('/admin/products', [PagesController::class, 'admin_products']);
-    Route::get('/admin/categories', [PagesController::class, 'admin_categories']);
+    //admin category
+    Route::get('/admin/categories', [\App\Http\Controllers\CategoryController::class, 'category_ui']);
+    Route::get('/admin/categories/create',[\App\Http\Controllers\CategoryController::class,'category_insert']);
+    Route::get('/admin/categories/{category_id}/delete',[\App\Http\Controllers\CategoryController::class,'category_delete']);
+    Route::get('/admin/categories/{category_id}/update',[\App\Http\Controllers\CategoryController::class,'category_update']);
+
     Route::get('/admin/brands', [PagesController::class, 'admin_brands']);
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
@@ -78,3 +83,4 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
 });
+
