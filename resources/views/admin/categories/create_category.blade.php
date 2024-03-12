@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Create Employee</h5>
                 <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
-                        aria-label="Close"><i class="ti-close"></i></button>
+                    aria-label="Close"><i class="ti-close"></i></button>
             </div>
             <div class="modal-body">
                 <!-- Form goes here -->
@@ -23,12 +23,12 @@
                     <div class="mb-3 mx-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="gender" id="male" value="male"
-                                   required>
+                                required>
                             <label class="form-check-label" for="male">Male</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="gender" id="female" value="female"
-                                   required>
+                                required>
                             <label class="form-check-label" for="female">Female</label>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
                     <button id="reset_create_employee_form" type="reset"
-                            class="btn btn-close float-right px-4 mx-1">Reset
+                        class="btn btn-close float-right px-4 mx-1">Reset
                     </button>
                 </form>
             </div>
