@@ -18,7 +18,7 @@ class UpdateEmployee extends FormRequest
         // validate here
         return [
             'email' => 'required|email',
-            'gender' => 'required|in:male,famale',
+            'gender' => 'required',
             'address' => 'required',
             'birth_date' => 'required|date',
             'phone_number' => 'required|string|numeric',
