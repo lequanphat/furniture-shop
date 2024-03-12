@@ -25,6 +25,11 @@ body {
     overflow-x: hidden;
 }
 
+/* custom card */
+.basic-card {
+    box-shadow: none;
+}
+
 /* custom table */
 .dt-button {
     margin-bottom: 14px;
@@ -57,4 +62,16 @@ body {
 }
 #bootstrap-data-table-export_paginate ul.pagination li {
     margin: 0 12px;
+}
+#row-select_wrapper .row {
+    width: 100%;
+}
+#row-select_wrapper .row:nth-child(1) .col-sm-6:nth-child(1) {
+    display: none;
+}
+#row-select_wrapper .row:nth-child(1) #row-select_filter label {
+    justify-content: start !important;
+}
+#row-select_wrapper .row:nth-child(3) {
+    display: none;
 }

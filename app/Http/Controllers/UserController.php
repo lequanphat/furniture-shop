@@ -92,7 +92,7 @@ class UserController extends Controller
             ]);
         }
         // response
-        return redirect('/admin/employee');
+        return back();
     }
 
     public function unban_user(Request $request)
@@ -105,7 +105,7 @@ class UserController extends Controller
             ]);
         }
         // response
-        return redirect('/admin/employee');
+        return back();
     }
 
     public function update_employee(UpdateEmployee $request)
