@@ -23,17 +23,28 @@ class CategoryController extends Controller
 
     public function category_insert(Request $request)
     {
-        $categoryData = [
-            'category_id' => $request->input('category_id'),
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'index' => $request->input('index'),
-            'parent' => $request->input('parent_id'),
+//        $categoryData = [
+//            'category_id' => $request->input('category_id'),
+//            'name' => $request->input('name'),
+//            'description' => $request->input('description'),
+//            'index' => $request->input('index'),
+//            'parent' => $request->input('parent_id'),
+//
+//        ];
+//        $category = Category::create($categoryData);
+//
+//        return ['message' => 'Created Category successfully!', 'user' => $category];
 
-        ];
-        $category = Category::create($categoryData);
 
-        return ['message' => 'Created Category successfully!', 'user' => $category];
+        $category = new Category();
+        $category->category_id = $request->input('category_id');
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        $category->index = $request->input('index');
+        $category->parent = $request->input('parent_id');
+        $category->save();
+
+        return redirect('/admin/categories');
     }
 
     public function category_delete()

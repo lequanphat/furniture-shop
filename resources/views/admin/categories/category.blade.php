@@ -7,14 +7,16 @@
             </div>
             <div class="col-lg-6">
                 <div class="d-flex justify-content-end ">
-                    <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
+                    <button id="js-create-category-btn" type="button" class="btn btn-primary mr-2"
+                    >
                         <span class=" mr-1">CREATE</span>
                         <i class="ti-plus"></i>
                     </button>
                     <button type="button" class="btn btn-primary mr-2">
                         <i class="ti-reload"></i>
                     </button>
+
+
                 </div>
             </div>
         </div>
@@ -63,6 +65,7 @@
             <!-- /# column -->
         </div>
         <h1>This is categories page</h1>
+        @include('admin.categories.create_category')
         @include('admin.components.footer')
     </section>
 @endsection

@@ -29,7 +29,6 @@ class PagesController extends Controller
         ];
         return view('pages.shop.index', $data);
     }
-
     public function about()
 
     {
@@ -41,7 +40,6 @@ class PagesController extends Controller
         ];
         return view('pages.about.index', $data);
     }
-
     public function services()
     {
         $data = [
@@ -51,7 +49,6 @@ class PagesController extends Controller
         ];
         return view('pages.services.index', $data);
     }
-
     public function blog()
     {
         $data = [
@@ -61,7 +58,6 @@ class PagesController extends Controller
         ];
         return view('pages.blog.index', $data);
     }
-
     public function contact()
     {
         $data = [
@@ -71,12 +67,6 @@ class PagesController extends Controller
         ];
         return view('pages.contact.index', $data);
     }
-
-    public function profile()
-    {
-        return view('pages.profile.index');
-    }
-
     public function admin()
     {
         $data = [
@@ -84,7 +74,6 @@ class PagesController extends Controller
         ];
         return view('admin.dashboard.index', $data);
     }
-
     public function admin_employee()
     {
         $data = [
@@ -94,7 +83,6 @@ class PagesController extends Controller
 
         return view('admin.users.employee', $data);
     }
-
     public function admin_customers()
     {
         $data = [
@@ -102,7 +90,6 @@ class PagesController extends Controller
         ];
         return view('admin.users.customers', $data);
     }
-
     public function admin_products()
     {
         $data = [
@@ -110,16 +97,14 @@ class PagesController extends Controller
         ];
         return view('admin.products.index', $data);
     }
-
     public function admin_categories()
     {
         $data = [
             'page' => 'Categories',
-            'categories' => Category::all()
+            'categories'=>Category::all()
         ];
         return view('admin.categories.category', $data);
     }
-
     public function admin_brands()
     {
         $data = [
@@ -127,7 +112,6 @@ class PagesController extends Controller
         ];
         return view('admin.brands.index', $data);
     }
-
     public function admin_discounts()
     {
         $data = [
@@ -135,7 +119,6 @@ class PagesController extends Controller
         ];
         return view('admin.discounts.index', $data);
     }
-
     public function admin_orders()
     {
         $data = [
@@ -143,7 +126,6 @@ class PagesController extends Controller
         ];
         return view('admin.orders.index', $data);
     }
-
     public function admin_warranties()
     {
         $data = [
@@ -151,7 +133,6 @@ class PagesController extends Controller
         ];
         return view('admin.warranties.index', $data);
     }
-
     public function admin_receipts()
     {
         $data = [
@@ -159,7 +140,6 @@ class PagesController extends Controller
         ];
         return view('admin.receipts.index', $data);
     }
-
     public function admin_suppliers()
     {
         $data = [
@@ -167,7 +147,6 @@ class PagesController extends Controller
         ];
         return view('admin.suppliers.index', $data);
     }
-
     public function admin_permissions()
     {
         $data = [
@@ -175,7 +154,6 @@ class PagesController extends Controller
         ];
         return view('admin.permissions.index', $data);
     }
-
     public function admin_authorization()
     {
         $data = [
@@ -183,7 +161,6 @@ class PagesController extends Controller
         ];
         return view('admin.permissions.authorization', $data);
     }
-
     public function admin_profiles()
     {
         $data = [
@@ -191,7 +168,6 @@ class PagesController extends Controller
         ];
         return view('admin.profiles.index', $data);
     }
-
     public function admin_settings()
     {
         $data = [

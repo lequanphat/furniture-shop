@@ -83,3 +83,4 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
 });
+
