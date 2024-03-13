@@ -2,57 +2,38 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Employee</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Create Category </h5>
                 <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
                     aria-label="Close"><i class="ti-close"></i></button>
             </div>
             <div class="modal-body">
                 <!-- Form goes here -->
-                <form id="create-employee-form" action="#" method="dialog">
+                <form id="create-category-form" action="#" method="dialog">
                     @csrf
                     <div class="mb-3 row">
                         <div class="col-md-6">
-                            <label for="first_name" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="last_name" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" required>
-                        </div>
-                    </div>
-                    <div class="mb-3 mx-2">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="male" value="male"
-                                required>
-                            <label class="form-check-label" for="male">Male</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="female" value="female"
-                                required>
-                            <label class="form-check-label" for="female">Female</label>
-                        </div>
-                    </div>
-                    <div class="mb-3 mx-2">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-
-                    </div>
-                    <div class="mb-3 row">
-                        <div class="col-md-6">
-                            <label for="birth_date" class="form-label">Birth Date</label>
-                            <input type="date" class="form-control" id="birth_date" name="birth_date" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="phone_number" class="form-label">Phone number</label>
-                            <input type="number" class="form-control" id="phone_number" name="phone_number" required>
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" name="description" required>
                         </div>
                     </div>
 
                     <div class="mb-3 mx-2">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" required>
+                        <label for="index" class="form-label">Index</label>
+                        <input type="text" class="form-control" id="index" name="index" required>
                     </div>
-                    <div id="create_employee_response" class="alert ">
+                    <div class="mb-3 mx-2">
+
+                        <label for="parent_id" class="form-label">Parent Id</label>
+                        <input type="text" class="form-control" id="parent_id" name="parent_id" required>
+
+
+                    </div>
+
+                    <div id="create_category_response" class="alert ">
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
                     <button id="reset_create_employee_form" type="reset"

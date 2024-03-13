@@ -92,7 +92,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/products', [PagesController::class, 'admin_products']);
     //admin category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
-    Route::get('/admin/categories/create', [CategoryController::class, 'category_insert']);
+    Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
     Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
     Route::get('/admin/categories/{category_id}/update', [CategoryController::class, 'category_update']);
 
