@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCategory;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,37 +15,49 @@ class CategoryController extends Controller
     public function category_ui()
     {
 
+
         $data = [
             'page' => 'Categories',
-            'categories' => Category::all()
+            'categories' => Category::all(),
+            'request'=>'request'
         ];
         return view('admin.categories.category', $data);
     }
 
     public function category_insert(Request $request)
     {
-//        $categoryData = [
-//            'category_id' => $request->input('category_id'),
-//            'name' => $request->input('name'),
-//            'description' => $request->input('description'),
-//            'index' => $request->input('index'),
-//            'parent' => $request->input('parent_id'),
+//        print_r("test Data Throw".$request);
+        print_r("---------".$request);
+
+        $categoryData = [
+
+
+            'name' => Request::input('name'),
+            'description' => Request::input('description'),
+            'index' => Request::input('index'),
+            'parent_id' =>Request::input('parent_id'),
+
+//Test Button Submit ->  Work
+//            'name' => "Test1",
+//            'description' => "Test2",
+//            'index' => "1",
+//            'parent_id' => "1"
+        ];
+
+        $category = Category::create($categoryData);
+        print_r("test-------.".$category);
+        return ['message' => 'Created Category successfully!', 'user' => $category];
+
+
+//        $category = new Category();
+//        $category->category_id = $request->input('category_id');
+//        $category->name = $request->input('name');
+//        $category->description = $request->input('description');
+//        $category->index = $request->input('index');
+//        $category->parent = $request->input('parent_id');
+//        $category->save();
 //
-//        ];
-//        $category = Category::create($categoryData);
-//
-//        return ['message' => 'Created Category successfully!', 'user' => $category];
-
-
-        $category = new Category();
-        $category->category_id = $request->input('category_id');
-        $category->name = $request->input('name');
-        $category->description = $request->input('description');
-        $category->index = $request->input('index');
-        $category->parent = $request->input('parent_id');
-        $category->save();
-
-        return redirect('/admin/categories');
+//        return redirect('/admin/categories');
     }
 
     public function category_delete()
