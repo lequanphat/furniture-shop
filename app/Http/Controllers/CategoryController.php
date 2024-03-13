@@ -12,30 +12,30 @@ class CategoryController extends Controller
 {
     //
 
-    public function category_ui()
+    public function category_ui(Request $request)
     {
 
 
         $data = [
             'page' => 'Categories',
             'categories' => Category::all(),
-            'request'=>'request'
+            'request'=>$request->all()
         ];
         return view('admin.categories.category', $data);
     }
 
-    public function category_insert(Request $request)
+    public function category_insert(CreateCategory $request)
     {
 //        print_r("test Data Throw".$request);
-        print_r("---------".$request);
+//        print_r("---------".$request);
 
         $categoryData = [
 
 
-            'name' => Request::input('name'),
-            'description' => Request::input('description'),
-            'index' => Request::input('index'),
-            'parent_id' =>Request::input('parent_id'),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'index' => $request->input('index'),
+            'parent_id' =>$request->input('parent_id'),
 
 //Test Button Submit ->  Work
 //            'name' => "Test1",

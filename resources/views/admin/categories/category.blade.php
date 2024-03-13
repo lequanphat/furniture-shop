@@ -4,7 +4,9 @@
         <div class="row">
             <div class="col-lg-6 ">
                 <h5>The list of Categories</h5>
+{{print_r($request)}}
             </div>
+
             <div class="col-lg-6">
                 <div class="d-flex justify-content-end ">
                     <button id="js-create-category-btn" type="button" class="btn btn-primary mr-2"
@@ -28,6 +30,7 @@
                         <div class="table-responsive">
                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                 <thead>
+
                                 <tr>
                                     <th>Categor_id</th>
                                     <th>name</th>
@@ -53,6 +56,7 @@
 
 
                                     </tr>
+
                                 @endforeach
 
                                 </tbody>
