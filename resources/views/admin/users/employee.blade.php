@@ -11,8 +11,13 @@
                         <span class=" mr-1">CREATE</span>
                         <i class="ti-plus"></i>
                     </button>
-                    <button type="button" class="btn btn-primary">
-                        <i class="ti-reload"></i>
+                    <button id="js-create-employee-btn" type="button" class="btn btn-primary mr-2">
+                        <span class=" mr-1">CSV</span>
+                        <i class="ti-import"></i>
+                    </button>
+                    <button id="js-create-employee-btn" type="button" class="btn btn-primary mr-2">
+                        <span class=" mr-1">PDF</span>
+                        <i class="ti-file"></i>
                     </button>
                 </div>
             </div>
