@@ -1,14 +1,12 @@
 <!-- Modal -->
-<div class="modal fade" id="createEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal modal-blur fade" id="modal-simple" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Employee</h5>
-                <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
-                        aria-label="Close"><i class="ti-close"></i></button>
+                <h5 class="modal-title">Create employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Form goes here -->
                 <form id="create-employee-form" action="#" method="dialog">
                     @csrf
                     <div class="mb-3 row">
@@ -24,12 +22,12 @@
                     <div class="mb-3 mx-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="gender" id="male" value="male"
-                                   required>
+                                required>
                             <label class="form-check-label" for="male">Male</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="gender" id="female" value="female"
-                                   required>
+                                required>
                             <label class="form-check-label" for="female">Female</label>
                         </div>
                     </div>
@@ -53,13 +51,11 @@
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="address" name="address" required>
                     </div>
-                    <div id="create_employee_response" class="alert ">
-                    </div>
-                    <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
-                    <button id="reset_create_employee_form" type="reset"
-                            class="btn btn-close float-right px-4 mx-1">Reset
-                    </button>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>
