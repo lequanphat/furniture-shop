@@ -70,7 +70,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/categories', [\App\Http\Controllers\CategoryController::class, 'category_ui']);
     Route::post('/admin/categories/create',[\App\Http\Controllers\CategoryController::class,'category_insert']);
     Route::get('/admin/categories/{category_id}/delete',[\App\Http\Controllers\CategoryController::class,'category_delete']);
-    Route::get('/admin/categories/{category_id}/update',[\App\Http\Controllers\CategoryController::class,'category_update']);
+    Route::post('/admin/categories/update',[\App\Http\Controllers\CategoryController::class,'category_update']);
 
     Route::get('/admin/brands', [PagesController::class, 'admin_brands']);
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);

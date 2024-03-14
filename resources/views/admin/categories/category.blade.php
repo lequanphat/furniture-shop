@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-6 ">
                 <h5>The list of Categories</h5>
-{{print_r($request)}}
+                {{--{{print_r($request)}}--}}
             </div>
 
             <div class="col-lg-6">
@@ -37,6 +37,7 @@
                                     <th>description</th>
                                     <th>index</th>
                                     <th>parent_id</th>
+                                    <th> Action</th>
 
                                 </tr>
                                 </thead>
@@ -53,7 +54,21 @@
                                         <td> {{$category->index}}</td>
                                         <td>{{$category->parent_id}}</td>
                                         {{-- temporary value --}}
+                                        <td>
+                                            <button type="button"
+                                                    class="js-update-category-btn btn btn-warning mr-2 px-2 py-1"
 
+                                                    data-category-id="{{ $category->category_id }}"
+
+                                                    data-name="{{ $category->name }}"
+                                                    data-description="{{ $category->description }}"
+                                                    data-index="{{ $category->index }}"
+                                                    data-parent-id="{{ $category->parent_id }}">
+
+                                                <i class="ti-pencil-alt"></i>
+                                            </button>
+
+                                        </td>
 
                                     </tr>
 
@@ -70,6 +85,8 @@
         </div>
         <h1>This is categories page</h1>
         @include('admin.categories.create_category')
+        @include('admin.categories.update_category')
         @include('admin.components.footer')
+
     </section>
 @endsection

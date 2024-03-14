@@ -20,4 +20,5 @@
 <script src="{{ asset('assets/js/lib/bootstrap.bundle.min.js') }}" defer></script>
 <script src="{{ asset('assets/js/scripts.js') }}" defer></script>
 <script src="{{ asset('js/users_api.js') }}" defer></script>
+<script src="{{ asset('js/category_api.js') }}" defer></script>
 <!-- bootstrap -->

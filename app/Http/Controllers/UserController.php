@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateEmployee;
 use App\Http\Requests\UpdateEmployee;
 use App\Models\Address;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -119,6 +120,7 @@ class UserController extends Controller
                 'gender' => ($request->input('gender') == 'male'),
                 'birth_date' => $request->input('birth_date'),
             ]);
+
             $address = Address::where('user_id', $user->user_id)->where('is_default', 1)->first();
             if ($address) {
                 $address->update([
