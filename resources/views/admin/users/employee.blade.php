@@ -75,7 +75,12 @@
                                                         style="background-image: url({{ $user->avatar }})"></span>
                                                     <div class="flex-fill">
                                                         <div class="font-weight-medium">
-                                                            {{ $user->first_name . ' ' . $user->last_name }}</div>
+                                                            {{ $user->first_name . ' ' . $user->last_name }}
+                                                            @if ($user->created_at->diffInDays() < 7)
+                                                                <span
+                                                                    class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                            @endif
+                                                        </div>
                                                         <div class="text-muted"><a href="#"
                                                                 class="text-reset">{{ $user->email }}</a></div>
                                                     </div>
@@ -142,11 +147,10 @@
                                                         height="24" viewBox="0 0 24 24" stroke-width="2"
                                                         stroke="currentColor" fill="none" stroke-linecap="round"
                                                         stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path
-                                                            d="M11.35 17.39l-4.35 2.61v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v6" />
-                                                        <path
-                                                            d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" />
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4">
+                                                        </path>
+                                                        <path d="M13.5 6.5l4 4"></path>
                                                     </svg>
                                                 </a>
                                                 <a href="#" class="btn p-2">

@@ -76,7 +76,12 @@
                                                         style="background-image: url({{ $user->avatar }})"></span>
                                                     <div class="flex-fill">
                                                         <div class="font-weight-medium">
-                                                            {{ $user->first_name . ' ' . $user->last_name }}</div>
+                                                            {{ $user->first_name . ' ' . $user->last_name }}
+                                                            @if ($user->created_at->diffInDays() < 7)
+                                                                <span
+                                                                    class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                            @endif
+                                                        </div>
                                                         <div class="text-muted"><a href="#"
                                                                 class="text-reset">{{ $user->email }}</a></div>
                                                     </div>
