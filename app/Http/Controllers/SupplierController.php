@@ -15,10 +15,8 @@ class SupplierController extends Controller
     public function index()
     {
         
-        $Suppliers = Supplier::all();
-        $currentPage = Paginator::resolveCurrentPage();
-        $perPage = 10;
-        $Suppliers = $Suppliers->slice(($currentPage - 1) * $perPage, $perPage);
+        $Suppliers = Supplier::query()
+        ->paginate(5);
         return view("admin.Suppliers.index", compact("Suppliers"),$this->data);
     }
     public function search(Request $request)
@@ -27,7 +25,8 @@ class SupplierController extends Controller
         $Suppliers = Supplier::query()
         ->where('name','like','%'.$search.'%')
         ->OrWhere('Supplier_id',$search)
-        ->paginate(10);
+        ->orWhere('phone_number','like','%',$search)
+        ->paginate(5);
         return view("admin.Suppliers.index", compact("Suppliers"),$this->data);
     }
     //form
@@ -59,25 +58,28 @@ class SupplierController extends Controller
         $validatedData = $request ->validate([
             "name"=> "required|max:255",
             "description" => "required",
-            "index"=> "nullable|integer",
+            'address'=>"required",
+            'phone_number' => "required|min:10|max:10",
         ]);
         $validatedData['index'] = $validatedData["index"] ?? 0; // default is 0
         $Supplier = Supplier::create($validatedData);
         return redirect()->route('Suppliers.index', $Supplier->id)->with('success','');
     }
-    public function update(Request $request,Supplier $Supplier)
+    public function update(Request $request)
     {
-        $Supplier = Supplier::where('Supplier_id', $Supplier->id)->first();
+        $id = $request->route('id');
+        $Supplier = Supplier::where('Supplier_id', $id)->first();
         if(!$Supplier){
             abort(404);
         }
         $validatedData = $request ->validate([
             "name"=> "required|max:255",
             "description" => "required",
-            "index"=> "nullable|integer",
+            'address'=>"required",
+            'phone_number' => 'required|min:10|max:10',
         ]);
         $validatedData['index'] = $validatedData["index"] ?? 0;// default is 0
-        $Supplier ->update($validatedData);
-        return redirect()->route('Suppliers.index', $Supplier->id)->with('success','');
+        $Supplier->update($validatedData);
+        return redirect()->route('Suppliers.show', $Supplier->id)->with('success','');
     }
 }

@@ -18,9 +18,16 @@
         @enderror
     </div>
     <div class="form-group">
-        <label for="index">Index :</label>
-        <input type="number" name="index" id="index" class="form-control" value="{{old('name')}}">
-        @error('index')
+        <label for="address">Address :</label>
+        <input type="text" name="address" id="address" class="form-control" value="{{old('address')}}">
+        @error('address')
+            <div class="text-danger">{{$message}}</div>
+        @enderror
+    </div>
+    <div class="form-group">
+        <label for="phone_number">Phone :</label>
+        <input type="text" name="phone_number" id="phone_number" class="form-control" value="{{old('phone_number')}}">
+        @error('phone_number')
             <div class="text-danger">{{$message}}</div>
         @enderror
     </div>

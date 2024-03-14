@@ -48,15 +48,15 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/brands', [BrandController::class,'store'])->name('brands.store');
     Route::get('/admin/brands/{id}/show', [BrandController::class,'show'])->name('brands.show');
     Route::get('/admin/brands/{id}/edit', [BrandController::class,'edit'])->name('brands.edit');
-    Route::put('/admin/brands/edit/{id}', [BrandController::class,'update'])->name('brands.update');
+    Route::put('/admin/brands/{id}', [BrandController::class,'update'])->name('brands.update');
 //supplier
-Route::get('/admin/Suppliers', [SupplierController::class, 'index'])->name('Suppliers.index');
-Route::get('/admin/Suppliers/search', [SupplierController::class, 'search'])->name('Suppliers.search');
-Route::get('/admin/Suppliers/create', [SupplierController::class,'create'])->name('Suppliers.create');
-Route::post('/admin/Suppliers', [SupplierController::class,'store'])->name('Suppliers.store');
-Route::get('/admin/Suppliers/{id}/show', [SupplierController::class,'show'])->name('Suppliers.show');
-Route::get('/admin/Suppliers/{id}/edit', [SupplierController::class,'edit'])->name('Suppliers.edit');
-Route::put('/admin/Suppliers/edit/{id}', [SupplierController::class,'update'])->name('Suppliers.update');
+Route::get('/admin/suppliers', [SupplierController::class, 'index'])->name('Suppliers.index');
+Route::get('/admin/suppliers/search', [SupplierController::class, 'search'])->name('Suppliers.search');
+Route::get('/admin/suppliers/create', [SupplierController::class,'create'])->name('Suppliers.create');
+Route::post('/admin/suppliers', [SupplierController::class,'store'])->name('Suppliers.store');
+Route::get('/admin/suppliers/{id}/show', [SupplierController::class,'show'])->name('Suppliers.show');
+Route::get('/admin/suppliers/{id}/edit', [SupplierController::class,'edit'])->name('Suppliers.edit');
+Route::put('/admin/suppliers/{id}', [SupplierController::class,'update'])->name('Suppliers.update');
 //
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
     Route::get('/admin/employee', [PagesController::class, 'admin_employee']);
@@ -68,7 +68,6 @@ Route::put('/admin/Suppliers/edit/{id}', [SupplierController::class,'update'])->
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
-    Route::get('/admin/suppliers', [PagesController::class, 'admin_suppliers']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
