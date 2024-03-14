@@ -16,6 +16,7 @@
     <div class="page">
         @include('admin.components.navbar')
         <div class="page-wrapper">
+            @include('admin.components.header')
             @yield('content')
 
         </div>

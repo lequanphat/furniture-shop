@@ -9,7 +9,7 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Admin Dashboard
+                        Employee Management
                     </h2>
                 </div>
                 <!-- Page title actions -->
@@ -51,100 +51,130 @@
     <div class="page-body">
         <div class="container-xl">
             <div class="row row-deck row-cards">
-                <div class="col-lg-12">
-                    <div class="card basic-card">
-                        <div class="bootstrap-data-table-panel ">
-                            <div class="table-responsive">
-                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
-                                    <thead>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Gender</th>
+                                        <th>Birth date</th>
+                                        <th>Contact</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($users as $user)
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Avatar</th>
-                                            <th>Full name</th>
-                                            <th>Gender</th>
-                                            <th>Birth date</th>
-                                            <th>Email</th>
-                                            <th>Phone number</th>
-                                            <th>Active</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="employee-table">
-                                        @foreach ($users as $user)
-                                            <tr>
-                                                <td>{{ $user->user_id }}</td>
-                                                <td class="d-flex justify-content-center align-items-center">
-                                                    <img src="{{ $user->avatar }}" alt="avatar" class="rounded-circle"
-                                                        style="width: 40px; height: 40px;">
-                                                </td>
-                                                <td>{{ $user->first_name . ' ' . $user->last_name }}</td>
-                                                <td>
+
+                                            <td>
+                                                <div class="d-flex py-1 align-items-center">
+                                                    <span class="avatar me-2"
+                                                        style="background-image: url({{ $user->avatar }})"></span>
+                                                    <div class="flex-fill">
+                                                        <div class="font-weight-medium">
+                                                            {{ $user->first_name . ' ' . $user->last_name }}
+                                                            @if ($user->created_at->diffInDays() < 7)
+                                                                <span
+                                                                    class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="text-muted"><a href="#"
+                                                                class="text-reset">{{ $user->email }}</a></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
                                                     @if ($user->gender)
                                                         Male
                                                     @else
                                                         Famale
                                                     @endif
-                                                </td>
-                                                <td>
-                                                    @isset($user->birth_date)
-                                                        {{ $user->birth_date }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @isset($user->birth_date)
+                                                    {{ $user->birth_date }}
+                                                @else
+                                                    Unset
+                                                @endisset
+                                            </td>
+                                            <td class="text-muted">
+                                                <div>
+                                                    @if (isset($user->default_address->phone_number))
+                                                        {{ $user->default_address->phone_number }}
                                                     @else
                                                         Unset
-                                                    @endisset
-                                                </td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>{{ $user->default_address->phone_number }}</td>
-
-                                                <td>
-                                                    @if ($user->is_active)
-                                                        <span class="badge badge-success">ACTIVE</span>
-                                                    @else
-                                                        <span class="badge badge-danger">BANNED</span>
                                                     @endif
-                                                </td>
-                                                <td>
-                                                    <a href="/admin/employee/{{ $user->user_id }}/details" type="button"
-                                                        class="btn btn-info mr-2 px-2 py-1"><i class="ti-eye"></i></a>
-                                                    <button type="button"
-                                                        class="js-update-employee-btn btn btn-warning mr-2 px-2 py-1"
-                                                        data-user-id="{{ $user->user_id }}"
-                                                        data-first-name="{{ $user->first_name }}"
-                                                        data-last-name="{{ $user->last_name }}"
-                                                        data-gender="{{ $user->gender }}"
-                                                        data-birth-date="{{ isset($user->birth_date) ? $user->birth_date : '' }}"
-                                                        data-email="{{ $user->email }}"
-                                                        data-phone-number="{{ $user->default_address->phone_number }}"
-                                                        data-address="{{ $user->default_address->address }}">
-                                                        <i class="ti-pencil-alt"></i>
-                                                    </button>
-                                                    @if ($user->is_active)
-                                                        <a href="/admin/employee/{{ $user->user_id }}/ban" type="button"
-                                                            class="btn btn-danger mr-2 px-2 py-1">
-                                                            <i class="ti-lock"></i>
-                                                        </a>
+                                                </div>
+                                                <div>
+                                                    @if (isset($user->default_address->address))
+                                                        {{ $user->default_address->address }}
                                                     @else
-                                                        <a href="/admin/employee/{{ $user->user_id }}/unban" type="button"
-                                                            class="btn btn-success mr-2 px-2 py-1">
-                                                            <i class="ti-unlock"></i>
-                                                        </a>
+                                                        Unset
                                                     @endif
-                                                    <button type="button"
-                                                        class="js-delete-employee-btn btn btn-danger px-2 py-1"
-                                                        data-user-id="{{ $user->user_id }}"
-                                                        data-first-name="{{ $user->first_name }}"
-                                                        data-last-name="{{ $user->last_name }}">
-                                                        <i class="ti-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if (isset($user->is_active))
+                                                    <span class="badge bg-success me-1"></span> Active
+                                                @else
+                                                    <span class="badge bg-danger me-1"></span> Blocked
+                                                @endif
 
-                                    </tbody>
-                                </table>
-                            </div>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn p-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+                                                        <path d="M4 16v2a2 2 0 0 0 2 2h2" />
+                                                        <path d="M16 4h2a2 2 0 0 1 2 2v2" />
+                                                        <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
+                                                        <path d="M7 12c3.333 -4.667 6.667 -4.667 10 0" />
+                                                        <path d="M7 12c3.333 4.667 6.667 4.667 10 0" />
+                                                        <path d="M12 12h-.01" />
+                                                    </svg>
+                                                </a>
+                                                <a href="#" class="btn p-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4">
+                                                        </path>
+                                                        <path d="M13.5 6.5l4 4"></path>
+                                                    </svg>
+                                                </a>
+                                                <a href="#" class="btn p-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M3 3l18 18" />
+                                                        <path d="M4 7h3m4 0h9" />
+                                                        <path d="M10 11l0 6" />
+                                                        <path d="M14 14l0 3" />
+                                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l.077 -.923" />
+                                                        <path d="M18.384 14.373l.616 -7.373" />
+                                                        <path d="M9 5v-1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                    </svg>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <!-- /# card -->
                 </div>
             </div>
         </div>
@@ -155,5 +185,4 @@
     @include('admin.users.create_employee_modal')
     @include('admin.users.update_employee_modal')
     @include('admin.users.delete_employee_confirm')
-   
 @endsection
