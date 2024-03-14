@@ -129,46 +129,13 @@
                                             </td>
                                             <td>
                                                 <a href="#" class="btn p-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
-                                                        <path d="M4 16v2a2 2 0 0 0 2 2h2" />
-                                                        <path d="M16 4h2a2 2 0 0 1 2 2v2" />
-                                                        <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
-                                                        <path d="M7 12c3.333 -4.667 6.667 -4.667 10 0" />
-                                                        <path d="M7 12c3.333 4.667 6.667 4.667 10 0" />
-                                                        <path d="M12 12h-.01" />
-                                                    </svg>
+                                                    <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
                                                 </a>
                                                 <a href="#" class="btn p-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path
-                                                            d="M11.35 17.39l-4.35 2.61v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v6" />
-                                                        <path
-                                                            d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" />
-                                                    </svg>
+                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </a>
                                                 <a href="#" class="btn p-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M3 3l18 18" />
-                                                        <path d="M4 7h3m4 0h9" />
-                                                        <path d="M10 11l0 6" />
-                                                        <path d="M14 14l0 3" />
-                                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l.077 -.923" />
-                                                        <path d="M18.384 14.373l.616 -7.373" />
-                                                        <path d="M9 5v-1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                                    </svg>
+                                                    <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
                                                 </a>
                                             </td>
                                         </tr>
