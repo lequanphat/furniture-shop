@@ -3,7 +3,7 @@
     <section id="main-content" class="shadow p-3 bg-white rounded">
         <div class="row">
             <div class="col-lg-6 ">
-                <h5>The list of Employee</h5>
+                <h5>The list of Customer</h5>
             </div>
             <div class="col-lg-6">
                 <div class="d-flex justify-content-end ">
@@ -11,19 +11,23 @@
                         <span class=" mr-1">CREATE</span>
                         <i class="ti-plus"></i>
                     </button>
-                    <button type="button" class="btn btn-primary mr-2">
-                        <i class="ti-reload"></i>
+                    <button id="js-create-employee-btn" type="button" class="btn btn-primary mr-2">
+                        <span class=" mr-1">CSV</span>
+                        <i class="ti-import"></i>
+                    </button>
+                    <button id="js-create-employee-btn" type="button" class="btn btn-primary mr-2">
+                        <span class=" mr-1">PDF</span>
+                        <i class="ti-file"></i>
                     </button>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-
-                <div class="card">
-                    <div class="bootstrap-data-table-panel ">
+                <div class="card basic-card">
+                    <div class="bootstrap-data-table-panel">
                         <div class="table-responsive">
-                            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                            <table id="row-select" class="display table table-borderd table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -61,8 +65,13 @@
                                                 @endisset
                                             </td>
                                             <td>{{ $user->email }}</td>
-                                            {{-- temporary value --}}
-                                            <td>0123123123</td>
+                                            <td>
+                                                @if (isset($user->default_address->phone_number))
+                                                    {{ $user->default_address->phone_number }}
+                                                @else
+                                                    Unset
+                                                @endif
+                                            </td>
 
                                             <td>
                                                 @if ($user->is_active)
@@ -74,23 +83,22 @@
                                             <td>
                                                 <a href="/admin/employee/{{ $user->user_id }}/details" type="button"
                                                     class="btn btn-info mr-2 px-2 py-1"><i class="ti-eye"></i></a>
-                                                <a href="/admin/employee/{{ $user->user_id }}/update" type="button"
-                                                    class="btn btn-warning mr-2 px-2 py-1"><i class="ti-pencil-alt"></i></a>
                                                 @if ($user->is_active)
-                                                    <button type="button" class="btn btn-danger mr-2 px-2 py-1"><i
-                                                            class="ti-lock"></i></button>
+                                                    <a href="/admin/employee/{{ $user->user_id }}/ban" type="button"
+                                                        class="btn btn-danger mr-2 px-2 py-1">
+                                                        <i class="ti-lock"></i>
+                                                    </a>
                                                 @else
-                                                    <button type="button" class="btn btn-success mr-2 px-2 py-1"><i
-                                                            class="ti-unlock"></i></button></button>
+                                                    <a href="/admin/employee/{{ $user->user_id }}/unban" type="button"
+                                                        class="btn btn-success mr-2 px-2 py-1">
+                                                        <i class="ti-unlock"></i>
+                                                    </a>
                                                 @endif
-                                                <button type="button" class="btn btn-danger px-2 py-1"><i
-                                                        class="ti-trash"></i></button>
-
                                             </td>
                                         </tr>
                                     @endforeach
-
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -100,6 +108,7 @@
             <!-- /# column -->
         </div>
         <!-- /# row -->
+
         {{-- Modal --}}
         @include('admin.users.create_employee_modal')
 
