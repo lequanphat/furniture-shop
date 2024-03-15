@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <h1>Tạo mới Brand</h1>
+<button onclick="history.back()" type="button" class="btn btn-primary">Quay lại</button>
 <form action="{{ route('brands.store') }}"  method="POST">
     @csrf
     <div class="form-group">

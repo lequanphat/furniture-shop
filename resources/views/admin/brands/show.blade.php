@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <h1>Brand detail</h1>
-    <a href="{{ route('brands.edit', $brand->brand_id) }}" class="btn btn-warning">Sửa</a></td>
+    <a href="{{ route('brands.index', $brand->brand_id) }}" class="btn btn-warning">Sửa</a></td>
     <form>
         <div class="form-group">
             <label for="id"> Mã Brand</label>

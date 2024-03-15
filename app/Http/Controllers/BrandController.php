@@ -76,7 +76,7 @@ class BrandController extends Controller
             "index"=> "nullable|integer",
         ]);
         $validatedData['index'] = $validatedData["index"] ?? 0;// default is 0
-        $brand->update($validatedData);
-        return redirect()->route('brands.show', $brand->id)->with('success','');
+        $brand::where('brand_id',$id)->update($validatedData);
+        return redirect()->route('brands.show', $brand->brand_id)->with('success','');
     }
 }

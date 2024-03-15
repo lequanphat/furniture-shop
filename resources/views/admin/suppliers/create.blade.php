@@ -1,7 +1,8 @@
 @extends('layouts.admin')
 @section('content')
-<h1>Tạo mới Supplier</h1>
-<form action="{{ route('Suppliers.store') }}"  method="POST">
+<h1>Tạo mới supplier</h1>
+<button onclick="history.back()" type="button" class="btn btn-primary">Quay lại</button>
+<form action="{{ route('suppliers.store') }}"  method="POST">
     @csrf
     <div class="form-group">
         <label for="name">Tên :</label>

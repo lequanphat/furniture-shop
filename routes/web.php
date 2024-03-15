@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\supplierController;
 use App\Http\Controllers\PagesController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
@@ -48,15 +48,15 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/brands', [BrandController::class,'store'])->name('brands.store');
     Route::get('/admin/brands/{id}/show', [BrandController::class,'show'])->name('brands.show');
     Route::get('/admin/brands/{id}/edit', [BrandController::class,'edit'])->name('brands.edit');
-    Route::put('/admin/brands/{id}', [BrandController::class,'update'])->name('brands.update');
+    Route::get('/admin/brands/{id}', [BrandController::class,'update'])->name('brands.update');
 //supplier
-Route::get('/admin/suppliers', [SupplierController::class, 'index'])->name('Suppliers.index');
-Route::get('/admin/suppliers/search', [SupplierController::class, 'search'])->name('Suppliers.search');
-Route::get('/admin/suppliers/create', [SupplierController::class,'create'])->name('Suppliers.create');
-Route::post('/admin/suppliers', [SupplierController::class,'store'])->name('Suppliers.store');
-Route::get('/admin/suppliers/{id}/show', [SupplierController::class,'show'])->name('Suppliers.show');
-Route::get('/admin/suppliers/{id}/edit', [SupplierController::class,'edit'])->name('Suppliers.edit');
-Route::put('/admin/suppliers/{id}', [SupplierController::class,'update'])->name('Suppliers.update');
+Route::get('/admin/suppliers', [supplierController::class, 'index'])->name('suppliers.index');
+Route::get('/admin/suppliers/search', [supplierController::class, 'search'])->name('suppliers.search');
+Route::get('/admin/suppliers/create', [supplierController::class,'create'])->name('suppliers.create');
+Route::post('/admin/suppliers', [supplierController::class,'store'])->name('suppliers.store');
+Route::get('/admin/suppliers/{id}/show', [supplierController::class,'show'])->name('suppliers.show');
+Route::get('/admin/suppliers/{id}/edit', [supplierController::class,'edit'])->name('suppliers.edit');
+Route::get('/admin/suppliers/{id}', [supplierController::class,'update'])->name('suppliers.update');
 //
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
     Route::get('/admin/employee', [PagesController::class, 'admin_employee']);
