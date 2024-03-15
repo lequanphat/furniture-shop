@@ -58,6 +58,7 @@
                             <table class="table table-vcenter card-table">
                                 <thead>
                                     <tr>
+                                        <td>ID</td>
                                         <th>User</th>
                                         <th>Gender</th>
                                         <th>Birth date</th>
@@ -69,7 +70,7 @@
                                 <tbody>
                                     @foreach ($users as $user)
                                         <tr>
-
+                                            <td>{{ $user->user_id }}</td>
                                             <td>
                                                 <div class="d-flex py-1 align-items-center">
                                                     <span class="avatar me-2"

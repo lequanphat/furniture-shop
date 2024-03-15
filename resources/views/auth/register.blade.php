@@ -7,12 +7,12 @@
             <div class="mb-3">
                 <label class="form-label">First name</label>
                 <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" class="form-control"
-                    placeholder="Enter name">
+                    placeholder="Cristiano">
             </div>
             <div class="mb-3">
                 <label class="form-label">Last name</label>
                 <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" class="form-control"
-                    placeholder="Enter name">
+                    placeholder="Ronaldo">
             </div>
             <div class="mb-3">
                 <label class="form-label">Email address</label>
