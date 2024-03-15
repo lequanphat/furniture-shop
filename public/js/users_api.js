@@ -3,7 +3,7 @@ jQuery.noConflict();
     $(document).ready(function () {
         // show create employee modal
         $('#js-create-employee-btn').click(() => {
-            $('#createEmployeeModal').modal('show');
+            $('#createCategoryModal').modal('show');
             // reset data in form
             $('#create-employee-form')[0].reset();
             $('#create_employee_response').html('');
