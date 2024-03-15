@@ -28,8 +28,7 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     // forgot password
     Route::get('forgot-password', [AuthController::class, 'forgot_password_ui']);
     Route::post('forgot-password', [AuthController::class, 'forgot_password']);
-    Route::get('forgot-password-verification/{user_id}', [AuthController::class, 'forgot_password_verification_ui'])->where('id', '[0-9]+');;
-    Route::post('forgot-password-verification/{user_id}', [AuthController::class, 'forgot_password_verify_code'])->where('id', '[0-9]+');;
+    Route::get('forgot-password-verification', [AuthController::class, 'forgot_password_verification_ui'])->where('id', '[0-9]+');;
 });
 
 Route::get('logout', [AuthController::class, 'logout']);
@@ -46,8 +45,6 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
-    Route::get('change-password', [AuthController::class, 'change_password_ui']);
-    Route::post('change-password', [AuthController::class, 'change_password']);
 
     Route::get('/profile', [PagesController::class, 'profile']);
 });
