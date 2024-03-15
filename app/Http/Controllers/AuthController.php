@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Validator;
 
 class AuthController extends Controller
 {
@@ -31,7 +32,8 @@ class AuthController extends Controller
     public function account_verification_ui(Request $request)
     {
         $user_id = $request->route('user_id');
-        return view('auth.account-verification', ['user_id' => $user_id]);
+        $user = User::find($user_id);
+        return view('auth.account-verification', ['user' => $user]);
     }
     public function forgot_password_verification_ui(Request $request)
     {
@@ -67,23 +69,50 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         // If RegisterRequest passes, create the user
-        $user = User::create([
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-        ]);
-        // generate otp
-        $otp = rand(100000, 999999);
-        $expiredTime = Carbon::now()->addMinutes(5);
+        $user = User::where('email', $request->input('email'))->first();
 
-        // create user_verify
-        $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
-        // send mail here
-        // --->
+        if ($user) {
+            if ($user->is_verified) {
+                return back()->withErrors(['email' => 'This email already exists.'])->withInput($request->input());
+            }
+            $user->update([
+                'password' => Hash::make($request->input('password')),
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+            ]);
+            // generate otp
+            $otp = rand(100000, 999999);
+            $expiredTime = Carbon::now()->addMinutes(5);
+            $user_verify = UserVerify::where('user_id', $user->user_id)->first();
+            if ($user_verify) {
+                $user_verify->update(['otp' => $otp, 'expired_time' => $expiredTime]);
+            } else {
+                $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
+            }
+            // send mail here
+            // --->
 
-        // response
-        return redirect("/account-verification/" . $user->user_id);
+            // response
+            return redirect("/account-verification/" . $user->user_id);
+        } else {
+            $user = User::create([
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+            ]);
+            // generate otp
+            $otp = rand(100000, 999999);
+            $expiredTime = Carbon::now()->addMinutes(5);
+
+            // create user_verify
+            $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
+            // send mail here
+            // --->
+
+            // response
+            return redirect("/account-verification/" . $user->user_id);
+        }
     }
     public function account_verification(OTPVerification $request)
     {
@@ -106,9 +135,13 @@ class AuthController extends Controller
                 // response
                 return redirect('/');
             }
-            return back()->withErrors(['otp' => 'Verify account failed'])->withInput($request->input());
-        } else return back()->withErrors(['otp' => 'Invalid OTP'])->withInput($request->input());
+            abort(500, 'User not found.');
+            // ...
+        }
+        abort(500, 'Invalid Code.');
     }
+
+
     public function resend_otp(Request $request)
     {
         $user_id = $request->route('user_id');

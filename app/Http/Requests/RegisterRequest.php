@@ -17,7 +17,7 @@ class RegisterRequest extends FormRequest
     {
         // validate here
         return [
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             'password' => 'required|min:6|max:20',
             'first_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
             'last_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
@@ -29,7 +29,6 @@ class RegisterRequest extends FormRequest
         return [
             'email.required' => 'The email field is required.',
             'email.email' => 'Please enter a valid email address.',
-            'email.unique' => 'This email address is already taken.',
             'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least 6 characters.',
             'first_name.required' => 'First name field is required.',

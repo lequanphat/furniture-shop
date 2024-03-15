@@ -1,6 +1,13 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
+        // account verify form
+        $('#account-verify-form').submit(function (e) {
+            e.preventDefault();
+            console.log('====================================');
+            console.log('account-verify-form');
+            console.log('====================================');
+        });
         // create employee api
         $('#create-employee-form').submit(function (e) {
             e.preventDefault();
