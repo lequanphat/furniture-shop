@@ -5,8 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Furniture - Sign in</title>
     <!-- CSS files -->
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler.min.css') }}">
     <style>
         @import url('https://rsms.me/inter/inter.css');
