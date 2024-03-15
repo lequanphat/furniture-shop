@@ -12,8 +12,8 @@
         <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item d-none d-md-flex me-3">
                 <div class="btn-list">
-                    <a href="https://github.com/tabler/tabler" class="btn" target="_blank" rel="noreferrer">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
+                    <a href="https://github.com/lequanphat/furniture_shop" class="btn" target="_blank"
+                        rel="noreferrer">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -23,8 +23,8 @@
                         </svg>
                         Source code
                     </a>
-                    <a href="https://github.com/sponsors/codecalm" class="btn" target="_blank" rel="noreferrer">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                    <a href="https://github.com/lequanphat/furniture_shop" class="btn" target="_blank"
+                        rel="noreferrer">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink" width="24" height="24"
                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -38,7 +38,6 @@
             <div class="d-none d-md-flex">
                 <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
                     data-bs-toggle="tooltip" data-bs-placement="bottom">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -48,7 +47,6 @@
                 </a>
                 <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode"
                     data-bs-toggle="tooltip" data-bs-placement="bottom">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -61,7 +59,6 @@
                 <div class="nav-item dropdown d-none d-md-flex me-3">
                     <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1"
                         aria-label="Show notifications">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -78,9 +75,6 @@
                                 <h3 class="card-title">Last updates</h3>
                             </div>
                             <div class="list-group list-group-flush list-group-hoverable">
-                                
-                                
-                                
                             </div>
                         </div>
                     </div>
@@ -101,7 +95,7 @@
                     <a href="#" class="dropdown-item">Feedback</a>
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item">Settings</a>
-                    <a href="/logout" class="dropdown-item">Logout</a>
+                    <a href="/logout" class="dropdown-item text-danger">Logout</a>
                 </div>
             </div>
         </div>

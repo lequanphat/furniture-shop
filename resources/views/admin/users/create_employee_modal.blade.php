@@ -1,14 +1,15 @@
 <!-- Modal -->
-<div class="modal modal-blur fade" id="modal-simple" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="create-employee-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create New Employee</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="create-employee-form" action="#" method="dialog">
-                    @csrf
+        <form id="create-employee-form" action="#" method="dialog">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Employee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
                     <div class="mb-3 row">
                         <div class="col-md-6">
                             <label for="first_name" class="form-label">First Name</label>
@@ -51,18 +52,19 @@
                                 placeholder="0123123123" required>
                         </div>
                     </div>
-
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="address" name="address"
                             placeholder="203 An Dương Vương, phường 01, quận 5, TP.HCM" required>
                     </div>
-                </form>
+                    <div id="create_employee_response" class="alert m-0 d-none"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn me-auto">Reset</button>
+                    <button id="js-create-employee-btn" type="submit" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>

@@ -3,6 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Dashboard</title>
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     <!-- CSS files -->
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler.min.css') }}">
     <style>
