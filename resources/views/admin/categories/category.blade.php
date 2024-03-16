@@ -70,6 +70,23 @@
                                             <td> {{ $category->index }}</td>
                                             <td>{{ $category->parent_id }}</td>
                                             {{-- temporary value --}}
+                                            <td>
+                                                <button type="button"
+                                                        data-bs-target="#update-category-modal"
+                                                        data-bs-toggle="modal"
+                                                        class="js-update-category-btn"
+
+                                                        data-category-id="{{ $category->category_id }}"
+
+                                                        data-name="{{ $category->name }}"
+                                                        data-description="{{ $category->description }}"
+                                                        data-index="{{ $category->index }}"
+                                                        data-parent-id="{{ $category->parent_id }}">
+
+                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                </button>
+
+                                            </td>
 
 
                                         </tr>
@@ -86,6 +103,7 @@
         </div>
         <h1>This is categories page</h1>
         @include('admin.categories.create_category')
+        @include('admin.categories.update_category')
         @include('admin.components.footer')
     </section>
 @endsection

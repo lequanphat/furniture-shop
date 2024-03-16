@@ -1,4 +1,4 @@
-<div class="modal fade" id="UpdateCategoryModal" tabindex="-1" aria-labelledby="updateCateTitle" aria-hidden="true">
+<div class="modal fade" id="update-category-modal" tabindex="-1" aria-labelledby="updateCateTitle" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

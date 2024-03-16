@@ -31,17 +31,17 @@ jQuery.noConflict();
             });
         });
 
-        $(document).on('click', '.js-update-category-btn', function () {
+        $('.js-update-category-btn').on('click', function () {
             // show modal
-            $('#UpdateCategoryModal').modal('show');
+            // $('#update-category-modal').modal('show');
             // assign data
-            $('#UpdateCategoryModal #updateCateTitle').html(`Update category - ID ${$(this).data('category-id')}`);
+            $('#update-category-modal #updateCateTitle').html(`Update category - ID ${$(this).data('category-id')}`);
 
-            $('#UpdateCategoryModal #category_id').val($(this).data('category-id'));
-            $('#UpdateCategoryModal #name').val($(this).data('name'));
-          $('#UpdateCategoryModal #description').val($(this).data('description'));
-          $('#UpdateCategoryModal #index').val($(this).data('index'));
-          $('#UpdateCategoryModal #parent_id' ).val($(this).data('parent-id'))
+            $('#update-category-modal #category_id').val($(this).data('category-id'));
+            $('#update-category-modal #name').val($(this).data('name'));
+            $('#update-category-modal #description').val($(this).data('description'));
+            $('#update-category-modal #index').val($(this).data('index'));
+            $('#update-category-modal #parent_id' ).val($(this).data('parent-id'))
 
 
 
