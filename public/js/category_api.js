@@ -39,11 +39,9 @@ jQuery.noConflict();
 
             $('#UpdateCategoryModal #category_id').val($(this).data('category-id'));
             $('#UpdateCategoryModal #name').val($(this).data('name'));
-          $('#UpdateCategoryModal #description').val($(this).data('description'));
-          $('#UpdateCategoryModal #index').val($(this).data('index'));
-          $('#UpdateCategoryModal #parent_id' ).val($(this).data('parent-id'))
-
-
+            $('#UpdateCategoryModal #description').val($(this).data('description'));
+            $('#UpdateCategoryModal #index').val($(this).data('index'));
+            $('#UpdateCategoryModal #parent_id').val($(this).data('parent-id'));
 
             $('#update_employee_response').html('');
             $('#update_employee_response').removeClass('alert-success alert-danger');
@@ -80,7 +78,6 @@ jQuery.noConflict();
                 },
             });
         });
-
 
         $('#reset_create_employee_form').click(() => {
             $('#create_category_response').html('');
