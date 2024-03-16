@@ -27,32 +27,20 @@ class CategoryController extends Controller
 
     public function category_insert(CreateCategory $request)
     {
-//        print_r("test Data Throw".$request);
-//        print_r("---------".$request);
 
         $categoryData = [
-
-
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'index' => $request->input('index'),
             'parent_id' => $request->input('parent_id'),
-
-
         ];
-
         $category = Category::create($categoryData);
-        print_r("test-------." . $category);
-        return ['message' => 'Created Category successfully!', 'user' => $category];
-
-
-//
+        return ['message' => 'Created Category successfully!', 'category' => $category];
     }
 
     public function category_delete()
 
     {
-
     }
 
     public function category_update(Request $request)
@@ -66,11 +54,7 @@ class CategoryController extends Controller
                 'parent_id' => $request->input('parent_id'),
 
             ]);
-            // response
-            return "say_hello";
+            return ['message' => 'Updated Category successfully!', 'category' => $cate];
         }
     }
-
-
-
 }

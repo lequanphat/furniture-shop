@@ -88,7 +88,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
     Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
-    Route::post('/admin/categories/{category_id}/update', [CategoryController::class, 'category_update']);
+    Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
 
     // *This is only temporary, use the appropriate controller
     Route::get('/admin/products', [PagesController::class, 'admin_products']);

@@ -38,9 +38,6 @@
                     <div id="update_category_response" class="alert ">
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
-                    <button id="reset_create_employee_form" type="reset"
-                        class="btn btn-close float-right px-4 mx-1">Reset
-                    </button>
                 </form>
             </div>
         </div>
