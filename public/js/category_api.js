@@ -31,20 +31,17 @@ jQuery.noConflict();
             });
         });
 
-        $(document).on('click', '.js-update-category-btn', function () {
-            // show modal
-            $('#UpdateCategoryModal').modal('show');
-            // assign data
-            $('#UpdateCategoryModal #updateCateTitle').html(`Update category - ID ${$(this).data('category-id')}`);
-
-            $('#UpdateCategoryModal #category_id').val($(this).data('category-id'));
-            $('#UpdateCategoryModal #name').val($(this).data('name'));
-            $('#UpdateCategoryModal #description').val($(this).data('description'));
-            $('#UpdateCategoryModal #index').val($(this).data('index'));
-            $('#UpdateCategoryModal #parent_id').val($(this).data('parent-id'));
-
-            $('#update_employee_response').html('');
-            $('#update_employee_response').removeClass('alert-success alert-danger');
+        // click show update employee
+        $('#UpdateCategoryModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+            modal.find('#updateCateTitle').html('Update Category - ' + button.data('category-id'));
+            modal.find('#category_id').val(button.data('category-id'));
+            modal.find('#name').val(button.data('name'));
+            modal.find('#description').val(button.data('description'));
+            modal.find('#index').val(button.data('index'));
+            modal.find('#phone_number ').val(button.data('phone-number'));
+            modal.find('#parent_id').val(button.data('parent-id'));
         });
 
         // click cancel employee
