@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCategory;
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,37 +13,64 @@ class CategoryController extends Controller
 {
     //
 
-    public function category_ui()
+    public function category_ui(Request $request)
     {
 
 
         $data = [
             'page' => 'Categories',
             'categories' => Category::all(),
-            'request' => 'request'
+            'request' => $request->all()
         ];
         return view('admin.categories.category', $data);
     }
 
-    public function category_insert(Request $request)
+    public function category_insert(CreateCategory $request)
     {
+//        print_r("test Data Throw".$request);
+//        print_r("---------".$request);
+
         $categoryData = [
+
+
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'index' => $request->input('index'),
             'parent_id' => $request->input('parent_id'),
+
+
         ];
 
         $category = Category::create($categoryData);
+        print_r("test-------." . $category);
         return ['message' => 'Created Category successfully!', 'user' => $category];
+
+
+//
     }
 
     public function category_delete()
 
     {
+
     }
 
-    public function category_update()
+    public function category_update(Request $request)
     {
+        $cate = Category::where('category_id', $request->input('category_id'))->first();
+        if ($cate) {
+            $cate->update([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'index' => $request->input('index'),
+                'parent_id' => $request->input('parent_id'),
+
+            ]);
+            // response
+            return "say_hello";
+        }
     }
+
+
+
 }
