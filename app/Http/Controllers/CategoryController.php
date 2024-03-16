@@ -42,7 +42,19 @@ class CategoryController extends Controller
     {
     }
 
-    public function category_update()
+    public function category_update(Request $request)
     {
+        $cate = Category::where('category_id', $request->input('category_id'))->first();
+        if ($cate) {
+            $cate->update([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'index' => $request->input('index'),
+                'parent_id' => $request->input('parent_id'),
+
+            ]);
+            // response
+            return "say_hello";
+        }
     }
 }
