@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="updateCateTitle">Update_Category </h5>
                 <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
-                        aria-label="Close"><i class="ti-close"></i></button>
+                    aria-label="Close"><i class="ti-close"></i></button>
             </div>
             <div class="modal-body">
                 <!-- Form goes here -->
@@ -39,7 +39,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
                     <button id="reset_create_employee_form" type="reset"
-                            class="btn btn-close float-right px-4 mx-1">Reset
+                        class="btn btn-close float-right px-4 mx-1">Reset
                     </button>
                 </form>
             </div>

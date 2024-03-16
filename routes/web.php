@@ -84,13 +84,15 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/Suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('Suppliers.edit');
     Route::put('/admin/Suppliers/edit/{id}', [SupplierController::class, 'update'])->name('Suppliers.update');
 
-    // *This is only temporary, use the appropriate controller
-    Route::get('/admin/products', [PagesController::class, 'admin_products']);
     //admin category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
     Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
     Route::post('/admin/categories/{category_id}/update', [CategoryController::class, 'category_update']);
+
+    // *This is only temporary, use the appropriate controller
+    Route::get('/admin/products', [PagesController::class, 'admin_products']);
+
 
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
