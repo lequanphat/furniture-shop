@@ -54,6 +54,9 @@ jQuery.noConflict();
             $('#updateEmployeeModal').modal('hide');
         });
 
+
+
+
         // update employee
         $('#update-category-form').submit(function (e) {
             e.preventDefault();
@@ -86,5 +89,43 @@ jQuery.noConflict();
             $('#create_category_response').html('');
             $('#create_category_response').removeClass('alert-success alert-danger');
         });
+
+        //delete category
+
+
+        $('#js-delete-category').on('click', function () {
+            $('#delete-category-modal #id_delete_category_want').val($(this).data('category-id'));
+            e.preventDefault();
+            var formData = $(this).serialize();
+            console.log({ formData });
+            // console.log()
+
+            $.ajax({
+                url: `/admin/categories/delete`,
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    console.log({ response });
+                    // Handle the success response
+                    $('#update_category_response').removeClass('alert-danger');
+                    $('#update_category_response').addClass('alert-success');
+                    $('#update_category_response').html(response.message);
+                },
+                error: function (error) {
+                    console.log({ error });
+                    // Handle the error response
+                    $('#update_category_response').removeClass('alert-success');
+                    $('#update_category_response').addClass('alert-danger');
+                    // $('#update_category_response').html(Object.values(error.responseJSON.errors)[0][0]);
+                },
+            });
+        });
+
+        // click cancel employee
+        $('#js-cancel-delete-category').click(() => {
+            $('#delete-category-modal').modal('hide');
+        });
+
+
     });
 })(jQuery);

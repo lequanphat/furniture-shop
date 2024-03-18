@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCategory;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -37,9 +38,17 @@ class CategoryController extends Controller
         return ['message' => 'Created Category successfully!', 'user' => $category];
     }
 
-    public function category_delete()
+    public function category_delete(Request $request)
 
     {
+
+        $find_in_Product=Product::find($request->input('category_id'))->first();
+        $cate = Category::where('category_id', $request->input('category_id'))->first();
+        if (!$find_in_Product->has($request->input('category_id')))
+        {
+
+                          $cate->delete();
+        }
     }
 
     public function category_update(Request $request)

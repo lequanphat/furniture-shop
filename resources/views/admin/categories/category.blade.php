@@ -49,48 +49,54 @@
                         <div class="table-responsive">
                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                 <thead>
-                                    <tr>
-                                        <th>Categor_id</th>
-                                        <th>name</th>
-                                        <th>description</th>
-                                        <th>index</th>
-                                        <th>parent_id</th>
+                                <tr>
+                                    <th>Categor_id</th>
+                                    <th>name</th>
+                                    <th>description</th>
+                                    <th>index</th>
+                                    <th>parent_id</th>
 
-                                    </tr>
+                                </tr>
                                 </thead>
                                 <tbody id="employee-table">
-                                    @foreach ($categories as $category)
-                                        <tr>
-                                            <td>{{ $category->category_id }}</td>
+                                @foreach ($categories as $category)
+                                    <tr>
+                                        <td>{{ $category->category_id }}</td>
 
-                                            <td>{{ $category->name }}</td>
-                                            <td>
-                                                {{ $category->description }}
-                                            </td>
-                                            <td> {{ $category->index }}</td>
-                                            <td>{{ $category->parent_id }}</td>
-                                            {{-- temporary value --}}
-                                            <td>
-                                                <button type="button"
-                                                        data-bs-target="#update-category-modal"
-                                                        data-bs-toggle="modal"
-                                                        class="js-update-category-btn"
+                                        <td>{{ $category->name }}</td>
+                                        <td>
+                                            {{ $category->description }}
+                                        </td>
+                                        <td> {{ $category->index }}</td>
+                                        <td>{{ $category->parent_id }}</td>
+                                        {{-- temporary value --}}
+                                        <td>
+                                            <button type="button"
+                                                    data-bs-target="#update-category-modal"
+                                                    data-bs-toggle="modal"
+                                                    class="js-update-category-btn"
 
-                                                        data-category-id="{{ $category->category_id }}"
+                                                    data-category-id="{{ $category->category_id }}"
 
-                                                        data-name="{{ $category->name }}"
-                                                        data-description="{{ $category->description }}"
-                                                        data-index="{{ $category->index }}"
-                                                        data-parent-id="{{ $category->parent_id }}">
+                                                    data-name="{{ $category->name }}"
+                                                    data-description="{{ $category->description }}"
+                                                    data-index="{{ $category->index }}"
+                                                    data-parent-id="{{ $category->parent_id }}">
 
-                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                </button>
+                                                <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                            </button>
+                                            <a href="#" class=" .js-delete-category-btn btn p-2"
+                                               data-bs-target="#delete-category-modal"
+                                               data-bs-toggle="modal"
+                                               data-category-id = "{{$category->category_id}}}"
+                                            >
+                                                <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
+                                            </a>
+                                        </td>
 
-                                            </td>
 
-
-                                        </tr>
-                                    @endforeach
+                                    </tr>
+                                @endforeach
 
                                 </tbody>
                             </table>
@@ -104,6 +110,8 @@
         <h1>This is categories page</h1>
         @include('admin.categories.create_category')
         @include('admin.categories.update_category')
+        @include('admin.categories.delete_confirm')
+
         @include('admin.components.footer')
     </section>
 @endsection
