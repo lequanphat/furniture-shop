@@ -85,13 +85,15 @@
 
                                                 <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                             </button>
-                                            <a href="#" class=" .js-delete-category-btn btn p-2"
-                                               data-bs-target="#delete-category-modal"
-                                               data-bs-toggle="modal"
-                                               data-category-id = "{{$category->category_id}}}"
-                                            >
-                                                <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
-                                            </a>
+{{--                                            <button href="#" class="js-delete-category-btn btn p-2"--}}
+{{--                                               data-bs-target="#delete-category-modal"--}}
+{{--                                               data-bs-toggle="modal"--}}
+{{--                                               data-category-id = "{{$category->category_id}}"--}}
+{{--                                            >--}}
+{{--                                                <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />--}}
+{{--                                            </button>--}}
+
+                                        <td><a href = '/admin/categories/delete/{{ $category->category_id }}'>Delete</a></td>
                                         </td>
 
 

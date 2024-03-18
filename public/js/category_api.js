@@ -1,7 +1,7 @@
 jQuery.noConflict();
 
-(function ($) {
-    $(document).ready(function () {
+(function($) {
+    $(document).ready(function() {
         $('#js-create-category-btn').click(() => {
             $('#createEmployeeModal').modal('show');
             $('#create-category-form')[0].reset();
@@ -9,20 +9,20 @@ jQuery.noConflict();
             // $('#create_category_response').removeClass('alert-success alert-danger');
         });
 
-        $('#create-category-form').submit(function (e) {
+        $('#create-category-form').submit(function(e) {
             e.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
                 url: '/admin/categories/create',
                 type: 'POST',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     $('#create_category_response').removeClass('alert-danger');
                     $('#create_category_response').addClass('alert-success');
                     $('#create_category_response').html(response.message);
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(error);
                     $('#create_employee_response').removeClass('alert-success');
                     $('#create_employee_response').addClass('alert-danger');
@@ -31,7 +31,7 @@ jQuery.noConflict();
             });
         });
 
-        $('.js-update-category-btn').on('click', function () {
+        $('.js-update-category-btn').on('click', function() {
             // show modal
             // $('#update-category-modal').modal('show');
             // assign data
@@ -41,8 +41,7 @@ jQuery.noConflict();
             $('#update-category-modal #name').val($(this).data('name'));
             $('#update-category-modal #description').val($(this).data('description'));
             $('#update-category-modal #index').val($(this).data('index'));
-            $('#update-category-modal #parent_id' ).val($(this).data('parent-id'))
-
+            $('#update-category-modal #parent_id').val($(this).data('parent-id'));
 
 
             $('#update_employee_response').html('');
@@ -55,10 +54,8 @@ jQuery.noConflict();
         });
 
 
-
-
         // update employee
-        $('#update-category-form').submit(function (e) {
+        $('#update-category-form').submit(function(e) {
             e.preventDefault();
             var formData = $(this).serialize();
             console.log({ formData });
@@ -67,14 +64,14 @@ jQuery.noConflict();
                 url: `/admin/categories/update`,
                 type: 'POST',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log({ response });
                     // Handle the success response
                     $('#update_category_response').removeClass('alert-danger');
                     $('#update_category_response').addClass('alert-success');
                     $('#update_category_response').html(response.message);
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log({ error });
                     // Handle the error response
                     $('#update_category_response').removeClass('alert-success');
@@ -92,34 +89,66 @@ jQuery.noConflict();
 
         //delete category
 
+        //
+        // $('#js-delete-category').on('click', function() {
+        //     // $('#id_delete_category_want').val($(this).data('category-id'));
+        //     var categoryId = $(this).data('category-id');
+        //
+        //     // Confirm deletion with the user (optional but recommended)
+        //     if (confirm('Are you sure you want to delete this category?')) {
+        //         $.ajax({
+        //             url: '/admin/categories/delete/' + categoryId, // Replace with your actual URL endpoint
+        //             type: 'DELETE',
+        //
+        //
+        //         });
+        //     }
+        // });
 
-        $('#js-delete-category').on('click', function () {
-            $('#delete-category-modal #id_delete_category_want').val($(this).data('category-id'));
-            e.preventDefault();
-            var formData = $(this).serialize();
-            console.log({ formData });
-            // console.log()
+        $('.js-delete-category-btn').on('click', function() {
+            // show modal
+            // $('#update-category-modal').modal('show');
+            // assign data
+            // $('#update-category-modal #updateCateTitle').html(`Update category - ID ${$(this).data('category-id')}`);
 
-            $.ajax({
-                url: `/admin/categories/delete`,
-                type: 'POST',
-                data: formData,
-                success: function (response) {
-                    console.log({ response });
-                    // Handle the success response
-                    $('#update_category_response').removeClass('alert-danger');
-                    $('#update_category_response').addClass('alert-success');
-                    $('#update_category_response').html(response.message);
-                },
-                error: function (error) {
-                    console.log({ error });
-                    // Handle the error response
-                    $('#update_category_response').removeClass('alert-success');
-                    $('#update_category_response').addClass('alert-danger');
-                    // $('#update_category_response').html(Object.values(error.responseJSON.errors)[0][0]);
-                },
-            });
+            $('#delete-category-modal #category_id').val($(this).data('category-id'));
+
+
+            $('#update_employee_response').html('');
+            $('#update_employee_response').removeClass('alert-success alert-danger');
         });
+
+        $('#delete-category-form').submit(
+            function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                console.log({ formData });
+                $('#delete-category-modal #category_id').val($(this).data('category-id'));
+                var categoryId = $(this).data('category-id');
+                // console.log()
+                $.ajax({
+                    url: '/admin/categories/delete',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        console.log({ response });
+                        // Handle the success response
+                        $('#update_category_response').removeClass('alert-danger');
+                        $('#update_category_response').addClass('alert-success');
+                        $('#update_category_response').html(response.message);
+                    },
+                    error: function(error) {
+                        console.log({ error });
+                        // Handle the error response
+                        $('#update_category_response').removeClass('alert-success');
+                        $('#update_category_response').addClass('alert-danger');
+                        // $('#update_category_response').html(Object.values(error.responseJSON.errors)[0][0]);
+                    },
+                });
+
+            },
+        );
+
 
         // click cancel employee
         $('#js-cancel-delete-category').click(() => {

@@ -38,17 +38,23 @@ class CategoryController extends Controller
         return ['message' => 'Created Category successfully!', 'user' => $category];
     }
 
-    public function category_delete(Request $request)
+    public function category_delete($id)
 
     {
+//
+//        $find_in_Product = Product::find($id)->first();
+//        $cate = Category::where('category_id', $id)->first();
+//        if (!$find_in_Product->has($id)) {
+//
+//            $cate->delete();
+//        }
+        Category::find($id)->delete();
+        $product = Category::findOrFail($id);
 
-        $find_in_Product=Product::find($request->input('category_id'))->first();
-        $cate = Category::where('category_id', $request->input('category_id'))->first();
-        if (!$find_in_Product->has($request->input('category_id')))
-        {
+        $product->delete();
 
-                          $cate->delete();
-        }
+        echo "Record deleted successfully.<br/>";
+
     }
 
     public function category_update(Request $request)
