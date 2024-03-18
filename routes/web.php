@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
@@ -90,8 +91,15 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
 
+
+
+    //admin product
+    Route::get('/admin/products', [ProductController::class, 'index']);
+    Route::get('/admin/products/create', [ProductController::class, 'create_ui']);
+
+
     // *This is only temporary, use the appropriate controller
-    Route::get('/admin/products', [PagesController::class, 'admin_products']);
+
 
 
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);

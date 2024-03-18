@@ -143,6 +143,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-end my-2">{{ $users->render('common.pagination') }}</div>
                         </div>
                     </div>
                 </div>
