@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         $data = [
             'page' => 'Customers',
-            'users' => User::where('is_staff', 0)->get()
+            'users' => User::where('is_staff', 0)->paginate(4) // for testing
         ];
         return view('admin.users.customers', $data);
     }
@@ -29,7 +29,7 @@ class UserController extends Controller
             'users' => User::where('is_staff', 1)
                 ->whereNotIn('user_id', [Auth::user()->user_id])
                 ->with('default_address')
-                ->get()
+                ->paginate(4) // for testing
         ];
         return view('admin.users.employee', $data);
     }
