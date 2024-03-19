@@ -43,7 +43,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // check user exists
-        $user = User::where('email', $request->input('email'))->where('is_active', true)->where('is_deleted', false)->first();
+        $user = User::where('email', $request->input('email'))->where('is_active', true)->first();
         if ($user) {
             // check password
             if (Hash::check($request->input('password'), $user->password)) {
