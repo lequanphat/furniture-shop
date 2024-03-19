@@ -3,9 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
@@ -77,13 +77,13 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
     Route::put('/admin/brands/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
     //supplier
-    Route::get('/admin/Suppliers', [SupplierController::class, 'index'])->name('Suppliers.index');
-    Route::get('/admin/Suppliers/search', [SupplierController::class, 'search'])->name('Suppliers.search');
-    Route::get('/admin/Suppliers/create', [SupplierController::class, 'create'])->name('Suppliers.create');
-    Route::post('/admin/Suppliers', [SupplierController::class, 'store'])->name('Suppliers.store');
-    Route::get('/admin/Suppliers/{id}/show', [SupplierController::class, 'show'])->name('Suppliers.show');
-    Route::get('/admin/Suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('Suppliers.edit');
-    Route::put('/admin/Suppliers/edit/{id}', [SupplierController::class, 'update'])->name('Suppliers.update');
+    Route::get('/admin/suppliers', [supplierController::class, 'index'])->name('suppliers.index');
+    Route::get('/admin/suppliers/search', [supplierController::class, 'search'])->name('suppliers.search');
+    Route::get('/admin/suppliers/create', [supplierController::class, 'create'])->name('suppliers.create');
+    Route::post('/admin/suppliers', [supplierController::class, 'store'])->name('suppliers.store');
+    Route::get('/admin/suppliers/{id}/show', [supplierController::class, 'show'])->name('suppliers.show');
+    Route::get('/admin/suppliers/{id}/edit', [supplierController::class, 'edit'])->name('suppliers.edit');
+    Route::get('/admin/suppliers/{id}', [supplierController::class, 'update'])->name('suppliers.update');
 
     //admin category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
@@ -101,12 +101,10 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // *This is only temporary, use the appropriate controller
 
 
-
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
-    Route::get('/admin/suppliers', [PagesController::class, 'admin_suppliers']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);

@@ -13,13 +13,11 @@ class BrandController extends Controller
     ];
     //index
     public function index()
-    {
+    {   
         
-        $brands = Brand::all();
-        $currentPage = Paginator::resolveCurrentPage();
-        $perPage = 10;
-        $brands = $brands->slice(($currentPage - 1) * $perPage, $perPage);
-        return view("admin.brands.index", compact("brands"),$this->data);
+        $brands = Brand::query()
+        ->paginate(5);
+        return view("admin.brands.index", compact('brands'),$this->data);
     }
     public function search(Request $request)
     {
@@ -27,7 +25,7 @@ class BrandController extends Controller
         $brands = Brand::query()
         ->where('name','like','%'.$search.'%')
         ->OrWhere('brand_id',$search)
-        ->paginate(10);
+        ->paginate(5);
         return view("admin.brands.index", compact("brands"),$this->data);
     }
     //form
@@ -67,7 +65,8 @@ class BrandController extends Controller
     }
     public function update(Request $request,Brand $brand)
     {
-        $brand = Brand::where('brand_id', $brand->id)->first();
+        $id = $request->route('id');
+        $brand = Brand::where('brand_id', $id)->first();
         if(!$brand){
             abort(404);
         }
@@ -77,7 +76,7 @@ class BrandController extends Controller
             "index"=> "nullable|integer",
         ]);
         $validatedData['index'] = $validatedData["index"] ?? 0;// default is 0
-        $brand ->update($validatedData);
-        return redirect()->route('brands.index', $brand->id)->with('success','');
+        $brand::where('brand_id',$id)->update($validatedData);
+        return redirect()->route('brands.show', $brand->brand_id)->with('success','');
     }
 }
