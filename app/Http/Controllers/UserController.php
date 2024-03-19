@@ -29,7 +29,7 @@ class UserController extends Controller
             'users' => User::where('is_staff', 1)
                 ->whereNotIn('user_id', [Auth::user()->user_id])
                 ->with('default_address')
-                ->paginate(4) // for testing
+                ->paginate(1) // for testing
         ];
         return view('admin.users.employee', $data);
     }
