@@ -41,19 +41,19 @@ class CategoryController extends Controller
     public function category_delete($id)
 
     {
-//
-//        $find_in_Product = Product::find($id)->first();
-//        $cate = Category::where('category_id', $id)->first();
-//        if (!$find_in_Product->has($id)) {
-//
-//            $cate->delete();
-//        }
-        Category::find($id)->delete();
-        $product = Category::findOrFail($id);
 
-        $product->delete();
 
-        echo "Record deleted successfully.<br/>";
+        if (Product::where('id', $id)->exists()) {
+            return " Khong The Xoa";
+        } else {
+            Category::find($id)->delete();
+            $product = Category::findOrFail($id);
+
+            $product->delete();
+            return " Xoa Thanh cong";
+
+        }
+
 
     }
 
