@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         $data = [
             'page' => 'Customers',
-            'users' => User::where('is_staff', 0)->paginate(4) // for testing
+            'users' => User::where('is_staff', 0)->paginate(6) // 6 elements per page
         ];
         return view('admin.users.customers', $data);
     }
@@ -29,7 +29,7 @@ class UserController extends Controller
             'users' => User::where('is_staff', 1)
                 ->whereNotIn('user_id', [Auth::user()->user_id])
                 ->with('default_address')
-                ->paginate(4) // for testing
+                ->paginate(6) // 6 elements per page
         ];
         return view('admin.users.employee', $data);
     }
@@ -68,7 +68,7 @@ class UserController extends Controller
         $user_id = $request->route('user_id');
         $data = [
             'page' => 'Employee',
-            'action' => 'Details' . $user_id
+            'user' => User::where('user_id', $user_id)->with('default_address')->first(),
         ];
         return view('admin.users.employee_details', $data);
     }

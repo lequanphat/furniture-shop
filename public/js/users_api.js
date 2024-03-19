@@ -11,18 +11,12 @@ jQuery.noConflict();
                 data: formData,
                 success: function (response) {
                     // Handle the success response
-                    console.log('====================================');
-                    console.log({ response });
-                    console.log('====================================');
                     $('#create_employee_response').removeClass('alert-danger d-none');
                     $('#create_employee_response').addClass('alert-success');
                     $('#create_employee_response').html(response.message);
                 },
                 error: function (error) {
                     // Handle the error response
-                    console.log('====================================');
-                    console.log({ error });
-                    console.log('====================================');
                     $('#create_employee_response').removeClass('alert-successs d-none');
                     $('#create_employee_response').addClass('alert-danger');
                     $('#create_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
@@ -79,25 +73,62 @@ jQuery.noConflict();
         });
 
         // click delete employee
-        $(document).on('click', '.js-delete-employee-btn', function () {
-            // show modal
-            $('#deleteEmployeeModal').modal('show');
-            $('#js-delete-employee-confirm-text').html(
-                `Are you sure you want to delete employee ${$(this).data('user-id')} - ${$(this).data(
-                    'first-name',
-                )} ${$(this).data('last-name')}?`,
-            );
+        $('#delete-employee-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var userId = button.data('user-id');
+            var modal = $(this);
+            modal.find('.modal-footer button.btn-danger').data('user-id', userId);
         });
-
-        // cancel delete employee
-        $('#js-cancel-delete-employee').click(() => {
-            $('#deleteEmployeeModal').modal('hide');
+        // click restore employee
+        $('#restore-employee-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var userId = button.data('user-id');
+            var modal = $(this);
+            modal.find('.modal-footer button.btn').data('user-id', userId);
         });
-
-        // delete employee
-        $('#js-delete-employee').click(() => {
-            $('#deleteEmployeeModal').modal('hide');
-            // logic here
+        // delete user
+        $('#delete-employee-modal').on('click', '.modal-footer button.btn-danger', function (e) {
+            var userId = $(this).data('user-id');
+            console.log(userId);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: `/admin/employee/${userId}/ban`,
+                type: 'GET',
+                success: function (response) {
+                    var link = $('#js-employee-table a[data-user-id="' + userId + '"]');
+                    // update status
+                    var statusCell = link.closest('tr').find('td').eq(5);
+                    // update action
+                    statusCell.html('<span class="badge bg-danger me-1"></span> Blocked');
+                    var actionCell = link.closest('tr').find('td').eq(6);
+                    actionCell.find('a:last').html(`temp`);
+                },
+                error: function (error) {
+                    console.log({ error });
+                },
+            });
+        });
+        // restore user
+        $('#restore-employee-modal').on('click', '.modal-footer button.btn-primary', function (e) {
+            var userId = $(this).data('user-id');
+            console.log(userId);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: `/admin/employee/${userId}/unban`,
+                type: 'GET',
+                success: function (response) {
+                    var link = $('#js-employee-table a[data-user-id="' + userId + '"]');
+                    var statusCell = link.closest('tr').find('td').eq(5);
+                    statusCell.html('<span class="badge bg-success me-1"></span> Active');
+                },
+                error: function (error) {
+                    console.log({ error });
+                },
+            });
         });
     });
 })(jQuery);
