@@ -5,6 +5,7 @@
         <input type="text" name="keyword" id="keyword" placeholder="Tìm kiếm Brand">
         <button type="submit">Tìm kiếm</button>
         </form>
+        <a class="btn btn-primary" href="{{route('brands.create')}}" class>Tạo</a>
         <table class="table">
             <thead>
             <tr>
@@ -23,7 +24,6 @@
                         <td>{{$brand->index}}</td>
                    
                         <td><a href="{{ route('brands.show', $brand->brand_id) }}" class="btn btn-warning">Xem</a>
-                        <a href="{{ route('brands.edit', $brand->brand_id) }}" class="btn btn-warning">Sửa</a></td>
     </tr>
     @endforeach
     @else
@@ -31,7 +31,8 @@
     @endif
             </tbody>
         </table>
-        <a class="btn btn-primary" href="{{route('brands.create')}}" class>Tạo</a>
+        {{ $brands->links() }}
+</select>
         @include('admin.components.footer')
     </section>
 @endsection

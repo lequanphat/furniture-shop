@@ -1,37 +1,39 @@
 @extends('layouts.admin')
 @section('content')
     <section id="main-content">
-        <form action="{{route('Suppliers.search')}}" method="GET">
-        <input type="text" name="keyword" id="keyword" placeholder="Tìm kiếm Supplier">
+        <form action="{{route('suppliers.search')}}" method="GET">
+        <input type="text" name="keyword" id="keyword" placeholder="Tìm kiếm supplier" >
         <button type="submit">Tìm kiếm</button>
         </form>
+        <a class="btn btn-primary" href="{{route('suppliers.create')}}" class>Tạo</a>
         <table class="table">
             <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Index</th>
-                <th><th>
+                <th>address</th>
+                <th>phone<th>
+                    <th><th>
             </tr>
             </thead>
             <tbody>
-            @if (isset($Suppliers) && count($Suppliers) > 0)
-    @foreach ($Suppliers as $Supplier)
+            @if (isset($suppliers) && count($suppliers) > 0)
+    @foreach ($suppliers as $supplier)
     <tr>
-                        <td>{{$Supplier->Supplier_id}}</td>
-                        <td>{{$Supplier->name}}</td>
-                        <td>{{$Supplier->index}}</td>
-                   
-                        <td><a href="{{ route('Suppliers.show', $Supplier->Supplier_id) }}" class="btn btn-warning">Xem</a>
-                        <a href="{{ route('Suppliers.edit', $Supplier->Supplier_id) }}" class="btn btn-warning">Sửa</a></td>
+                        <td>{{$supplier->supplier_id}}</td>
+                        <td>{{$supplier->name}}</td>
+                        <td>{{$supplier->address}}</td>
+                        <td>{{$supplier->phone_number}}</td>
+                        <td><a href="{{ route('suppliers.show', $supplier->supplier_id) }}" class="btn btn-warning">Xem</a>
+                       </td>
     </tr>
     @endforeach
     @else
-    <p>Không có Supplier nào.</p>
+    <p>Không có supplier nào.</p>
     @endif
             </tbody>
         </table>
-        <a class="btn btn-primary" href="{{route('Suppliers.create')}}" class>Tạo</a>
+        {{ $suppliers->links() }}
         @include('admin.components.footer')
     </section>
 @endsection
