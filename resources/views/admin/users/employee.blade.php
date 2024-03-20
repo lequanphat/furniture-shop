@@ -54,7 +54,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="table-responsive">
-                            <table id="js-employee-table" class="table table-vcenter card-table">
+                            <table class="js-user-table table table-vcenter card-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -144,13 +144,13 @@
                                                 </a>
                                                 @if ($user->is_active)
                                                     <a href="#" class="btn p-2" data-bs-toggle="modal"
-                                                        data-bs-target="#delete-employee-modal"
+                                                        data-bs-target="#delete-user-modal"
                                                         data-user-id="{{ $user->user_id }}">
                                                         <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
                                                     </a>
                                                 @else
                                                     <a href="#" class="btn p-2" data-bs-toggle="modal"
-                                                        data-bs-target="#restore-employee-modal"
+                                                        data-bs-target="#restore-user-modal"
                                                         data-user-id="{{ $user->user_id }}">
                                                         <img src="{{ asset('svg/key.svg') }}" style="width: 18px;" />
                                                     </a>
@@ -170,80 +170,13 @@
         @include('admin.components.footer')
     </div>
 
+
+
+
     {{-- Modal --}}
-
-    {{-- Delete confirm --}}
-    <div class="modal modal-blur fade" id="delete-employee-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="modal-title">Are you sure?</div>
-                    <div>If deleted, users will not be able to access the system, but data will still be stored.</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link link-secondary me-auto"
-                        data-bs-dismiss="modal">Cancel</button>
-
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Yes, delete this user</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- Restore confirm --}}
-    <div class="modal modal-blur fade" id="restore-employee-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="modal-title">Are you sure?</div>
-                    <div>If restored, users will be able to access the system again.</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link link-secondary me-auto"
-                        data-bs-dismiss="modal">Cancel</button>
-
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Yes, restore this
-                        user</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- Modal success notify --}}
-    <div class="modal modal-blur fade" id="delete-employee-success-modal" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <div class="modal-status bg-success"></div>
-                <div class="modal-body text-center py-4">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/circle-check -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24"
-                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                        <path d="M9 12l2 2l4 -4" />
-                    </svg>
-                    <h3>Payment succedeed</h3>
-                    <div class="text-muted">Your payment of $290 has been successfully submitted. Your invoice has been
-                        sent to support@tabler.io.</div>
-                </div>
-                <div class="modal-footer">
-                    <div class="w-100">
-                        <div class="row">
-                            <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
-                                    Go to dashboard
-                                </a></div>
-                            <div class="col"><a href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
-                                    View invoice
-                                </a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @include('admin.users.create_employee_modal')
     @include('admin.users.update_employee_modal')
-    @include('admin.users.delete_employee_confirm')
+    @include('admin.users.delete_confirm_modal')
+    @include('admin.users.restore_confirm_modal')
+    @include('admin.users.success_notify_modal')
 @endsection

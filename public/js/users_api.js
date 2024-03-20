@@ -73,21 +73,21 @@ jQuery.noConflict();
         });
 
         // click delete employee
-        $('#delete-employee-modal').on('show.bs.modal', function (event) {
+        $('#delete-user-modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var userId = button.data('user-id');
             var modal = $(this);
             modal.find('.modal-footer button.btn-danger').data('user-id', userId);
         });
         // click restore employee
-        $('#restore-employee-modal').on('show.bs.modal', function (event) {
+        $('#restore-user-modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var userId = button.data('user-id');
             var modal = $(this);
             modal.find('.modal-footer button.btn').data('user-id', userId);
         });
         // delete user
-        $('#delete-employee-modal').on('click', '.modal-footer button.btn-danger', function (e) {
+        $('#delete-user-modal').on('click', '.modal-footer button.btn-danger', function (e) {
             var userId = $(this).data('user-id');
             console.log(userId);
             $.ajax({
@@ -97,13 +97,21 @@ jQuery.noConflict();
                 url: `/admin/employee/${userId}/ban`,
                 type: 'GET',
                 success: function (response) {
-                    var link = $('#js-employee-table a[data-user-id="' + userId + '"]');
+                    var link = $('.js-user-table a[data-user-id="' + userId + '"]');
                     // update status
                     var statusCell = link.closest('tr').find('td').eq(5);
-                    // update action
                     statusCell.html('<span class="badge bg-danger me-1"></span> Blocked');
+                    // update action
                     var actionCell = link.closest('tr').find('td').eq(6);
-                    actionCell.find('a:last').html(`temp`);
+                    actionCell.find('a:last').remove();
+
+                    // show success modal
+                    $('#success-notify-modal').addClass('show');
+                    $('#success-notify-modal').attr('style', 'display: block;');
+                    $('#success-notify-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#success-title').html('Deleted User Successfully');
+                    $('#success-desc').html('This user can not be able to access the system.');
                 },
                 error: function (error) {
                     console.log({ error });
@@ -111,7 +119,7 @@ jQuery.noConflict();
             });
         });
         // restore user
-        $('#restore-employee-modal').on('click', '.modal-footer button.btn-primary', function (e) {
+        $('#restore-user-modal').on('click', '.modal-footer button.btn-primary', function (e) {
             var userId = $(this).data('user-id');
             console.log(userId);
             $.ajax({
@@ -121,14 +129,31 @@ jQuery.noConflict();
                 url: `/admin/employee/${userId}/unban`,
                 type: 'GET',
                 success: function (response) {
-                    var link = $('#js-employee-table a[data-user-id="' + userId + '"]');
+                    var link = $('.js-user-table a[data-user-id="' + userId + '"]');
+                    // update status
                     var statusCell = link.closest('tr').find('td').eq(5);
                     statusCell.html('<span class="badge bg-success me-1"></span> Active');
+                    // update action
+                    var actionCell = link.closest('tr').find('td').eq(6);
+                    actionCell.find('a:last').remove();
+                    // show success modal
+                    $('#success-notify-modal').addClass('show');
+                    $('#success-notify-modal').attr('style', 'display: block;');
+                    $('#success-notify-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#success-title').html('Restored User Successfully');
+                    $('#success-desc').html('This user can be able to access the system again.');
                 },
                 error: function (error) {
                     console.log({ error });
                 },
             });
+        });
+        $('.js-close-success-modal').click(function () {
+            $('#success-notify-modal').removeClass('show');
+            $('#success-notify-modal').attr('style', 'display: none;');
+            $('#success-notify-modal').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
         });
     });
 })(jQuery);

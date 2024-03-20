@@ -72,7 +72,15 @@ class UserController extends Controller
         ];
         return view('admin.users.employee_details', $data);
     }
-
+    public function customer_details_ui(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        $data = [
+            'page' => 'Customers',
+            'user' => User::where('user_id', $user_id)->with('default_address')->first(),
+        ];
+        return view('admin.users.customer_details', $data);
+    }
     public function update_employee_ui(Request $request)
     {
         $user_id = $request->route('user_id');

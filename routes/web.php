@@ -67,6 +67,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
     // customer routes
     Route::get('/admin/customers', [UserController::class, 'customers_ui']);
+    Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
 
     //brand
     Route::get('/admin/brands', [BrandController::class, 'index'])->name('brands.index');
