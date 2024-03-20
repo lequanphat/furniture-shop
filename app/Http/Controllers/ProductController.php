@@ -6,6 +6,7 @@ use App\Http\Requests\CreateProduct;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -37,5 +38,12 @@ class ProductController extends Controller
             'quantities' => 0,
         ]);
         return  $product;
+    }
+    public function details()
+    {
+        $data = [
+            'page' => 'Product Details',
+        ];
+        return  view('admin.products.product_details', $data);;
     }
 }
