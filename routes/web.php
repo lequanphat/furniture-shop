@@ -97,6 +97,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //admin product
     Route::get('/admin/products', [ProductController::class, 'index']);
     Route::get('/admin/products/create', [ProductController::class, 'create_ui']);
+    Route::post('/admin/products/create', [ProductController::class, 'create']);
 
 
     // *This is only temporary, use the appropriate controller

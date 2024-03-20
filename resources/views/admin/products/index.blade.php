@@ -44,7 +44,7 @@
                             <table class="table table-vcenter card-table">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>#</th>
                                         <th>Product</th>
                                         <th>Price</th>
                                         <th>Quantities</th>
@@ -54,7 +54,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    @foreach ($products as $product)
+                                        <tr>
+                                            <td>{{ $product->product_id }}</td>
+                                            <td>{{ $product->name }}</td>
+                                            <td>Null</td>
+                                            <td>{{ $product->quantities }}</td>
+                                            <td>{{ $product->brand->name }}</td>
+                                            <td>{{ $product->category->name }}</td>
+                                            <td>Null</td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
