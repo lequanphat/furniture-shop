@@ -45,26 +45,24 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
-
     Route::get('/profile', [PagesController::class, 'profile']);
 });
-
 
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
 
     // users routes
-    Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user']);
-    Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user']);
+    Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user'])->name('users.ban');
+    Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user'])->name('users.unban');
     // employee routes
-    Route::get('/admin/employee', [UserController::class, 'employee_ui']);
+    Route::get('/admin/employee', [UserController::class, 'employee_ui'])->name('employee.index');
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
-    Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
+    Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui'])->name('employee.details');
     Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
     // customer routes
-    Route::get('/admin/customers', [UserController::class, 'customers_ui']);
-    Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
+    Route::get('/admin/customers', [UserController::class, 'customers_ui'])->name('customers.index');
+    Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui'])->name('customers.details');;
 
     //brand
     Route::get('/admin/brands', [BrandController::class, 'index'])->name('brands.index');
@@ -74,6 +72,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/brands/{id}/show', [BrandController::class, 'show'])->name('brands.show');
     Route::get('/admin/brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
     Route::put('/admin/brands/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
+
     //supplier
     Route::get('/admin/suppliers', [supplierController::class, 'index'])->name('suppliers.index');
     Route::get('/admin/suppliers/search', [supplierController::class, 'search'])->name('suppliers.search');
@@ -90,11 +89,14 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
 
     //admin product
-    Route::get('/admin/products', [ProductController::class, 'index']);
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/admin/products/create', [ProductController::class, 'create_ui']);
     Route::post('/admin/products/create', [ProductController::class, 'create']);
-    Route::get('/admin/products/{product_id}/details', [ProductController::class, 'details']);
-
+    Route::get('/admin/products/{product_id}/details', [ProductController::class, 'details'])->name('products.details');
+    Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
+    Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
+    Route::get('/admin/products/{product_id}/create-details', [ProductController::class, 'create_product_details_ui'])->name('products.create_product_details_ui');
+    Route::post('/admin/products/{product_id}/create-details', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
 
     // *This is only temporary, use the appropriate controller
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
