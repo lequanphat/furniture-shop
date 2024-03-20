@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateDetailedProduct;
 use App\Http\Requests\CreateProduct;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductDetail;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -70,8 +72,7 @@ class ProductController extends Controller
         $data = [
             'page' => 'Product Details',
             'product' => Product::with('category', 'brand')->find($product_id),
-            'categories' => Category::all(),
-            'brands' => Brand::all(),
+            'detaild_products' => ProductDetail::where('product_id', $product_id)->paginate(6) // 6 elements per page
         ];
         return  view('admin.products.product_details', $data);
     }
@@ -82,6 +83,22 @@ class ProductController extends Controller
             'page' => 'Create Product Details',
             'product' => Product::with('category', 'brand')->find($product_id),
         ];
-        return  view('admin.products.create_product_details', $data);
+        return view('admin.products.create_product_details', $data);
+    }
+    public function create_detailed_product(CreateDetailedProduct $request)
+    {
+        $product_id = $request->route('product_id');
+        $product = ProductDetail::create([
+            'product_id' => $product_id,
+            'sku' => $request->input('sku'),
+            'name' => $request->input('name'),
+            'color' => $request->input('color'),
+            'size' => $request->input('size'),
+            'original_price' => $request->input('original_price'),
+            'warranty_month' => $request->input('warranty_month'),
+            'description' => $request->input('description'),
+            'quantities' => 0
+        ]);
+        return back()->with('message', 'Detailed product created successfully!');
     }
 }

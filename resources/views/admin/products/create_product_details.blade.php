@@ -27,29 +27,53 @@
         <div class="container-xl">
             <div class="row row-deck row-cards">
                 <div class="col-12">
-                    <form id="create-detailed-product-form" action="#" method="POST" class="card">
+                    <form id="create-detailed-product-form"
+                        action="{{ route('products.create_detailed_product', $product->product_id) }}" method="POST"
+                        class="card">
+                        @csrf
                         <div class="card-body">
                             <div class="row row-cards">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="sku" class="form-label">SKU</label>
+                                        <input id="sku" name="sku" type="text" class="form-control"
+                                            placeholder="123123123" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Detailed Name</label>
                                         <input id="name" name="name" type="text" class="form-control"
                                             placeholder="High quality plastic chairs - Blue - Small" value="">
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="coder" class="form-label">Color</label>
                                         <input id="color" name="color" type="color"
                                             class="form-control form-control-color" value="#206bc4"
-                                            title="Choose your color">
+                                            title="Choose your color" style="width: 100%">
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="size" class="form-label">Size</label>
                                         <input id="size" name="size" type="text" class="form-control"
                                             placeholder="255cm x 255cm x 125cm" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="original_price" class="form-label">Original Price</label>
+                                        <input id="original_price" name="original_price" type="number" class="form-control"
+                                            placeholder="1200000" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="warranty_month" class="form-label">Warranty Month</label>
+                                        <input id="warranty_month" name="warranty_month" type="text" class="form-control"
+                                            placeholder="6" value="">
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -83,6 +107,17 @@
                                         <textarea id="editor" name="description"></textarea>
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    @if ($errors->any())
+                                        <p class="text-danger m-0">*{{ $errors->first() }}</p>
+                                    @endif
+                                    @if (session('message'))
+                                        <div class="alert alert-success">
+                                            {{ session('message') }}
+                                        </div>
+                                    @endif
+                                </div>
+
                             </div>
                         </div>
                         <div class="card-footer text-end">

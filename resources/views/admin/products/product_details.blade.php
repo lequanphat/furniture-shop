@@ -43,17 +43,44 @@
                             <table class="js-user-table table table-vcenter card-table">
                                 <thead>
                                     <tr>
-                                        <th>Product</th>
+                                        <th>Name</th>
+                                        <th>SKU</th>
                                         <th>Price</th>
-                                        <th>Quantities</th>
-                                        <th>Brand</th>
-                                        <th>Category</th>
+                                        <th>Color</th>
+                                        <th>Size</th>
+                                        <th>Warranty month</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($detaild_products as $detaild_product)
+                                        <tr>
+                                            <td>{{ $detaild_product->name }}</td>
+                                            <td>{{ $detaild_product->sku }}</td>
+                                            <td>{{ number_format($detaild_product->original_price, 0, '.', ',') }}đ</td>
+                                            <td>
+                                                <div class="col-auto rounded"
+                                                    style="background: {{ $detaild_product->color }}; width: 20px; height: 20px;">
+                                                </div>
+                                            </td>
+                                            <td>{{ $detaild_product->size }}</td>
+                                            <td>{{ $detaild_product->warranty_month }}</td>
+                                            <td><a href="#" class="btn p-2">
+                                                    <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
+                                                </a>
+                                                <a href="#" class="btn p-2">
+                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                </a>
+                                                <a href="#" class="btn p-2">
+                                                    <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-end my-2">
+                                {{ $detaild_products->render('common.pagination') }}</div>
                         </div>
                     </div>
                 </div>

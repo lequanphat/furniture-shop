@@ -45,8 +45,9 @@ jQuery.noConflict();
         });
 
         $('#create-detailed-product-form').submit(function (e) {
-            e.preventDefault();
-            console.log('create');
+            // e.preventDefault();
+            var formData = $(this).serialize();
+            console.log({ formData });
         });
     });
 })(jQuery);

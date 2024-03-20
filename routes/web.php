@@ -96,6 +96,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
     Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
     Route::get('/admin/products/{product_id}/create-details', [ProductController::class, 'create_product_details_ui'])->name('products.create_product_details_ui');
+    Route::post('/admin/products/{product_id}/create-details', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
 
     // *This is only temporary, use the appropriate controller
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
