@@ -13,7 +13,6 @@ use App\Http\Middleware\PrivateMiddleware;
 use App\Http\Middleware\PublicMiddleware;
 use Illuminate\Support\Facades\Route;
 
-
 // auth api
 Route::middleware([AuthMiddleware::class])->group(function () {
     // login
@@ -53,8 +52,6 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
-
-
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
 
     // users routes
@@ -92,17 +89,14 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
 
-
-
     //admin product
     Route::get('/admin/products', [ProductController::class, 'index']);
     Route::get('/admin/products/create', [ProductController::class, 'create_ui']);
     Route::post('/admin/products/create', [ProductController::class, 'create']);
+    Route::get('/admin/products/{product_id}/details', [ProductController::class, 'details']);
 
 
     // *This is only temporary, use the appropriate controller
-
-
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
