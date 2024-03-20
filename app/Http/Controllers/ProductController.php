@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductDetail;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -88,7 +89,7 @@ class ProductController extends Controller
     public function create_detailed_product(CreateDetailedProduct $request)
     {
         $product_id = $request->route('product_id');
-        $product = ProductDetail::create([
+        $detailed_product = ProductDetail::create([
             'product_id' => $product_id,
             'sku' => $request->input('sku'),
             'name' => $request->input('name'),
@@ -99,6 +100,6 @@ class ProductController extends Controller
             'description' => $request->input('description'),
             'quantities' => 0
         ]);
-        return back()->with('message', 'Detailed product created successfully!');
+        return $detailed_product;
     }
 }
