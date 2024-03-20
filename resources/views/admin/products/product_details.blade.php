@@ -9,18 +9,17 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Product Details
+                        Details List
                     </h2>
                 </div>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <span class="d-none d-sm-inline">
-                            <a href="#" class="btn">
-                                New view
-                            </a>
+                            <a href="{{ route('products.index') }}" class="btn">Back</a>
                         </span>
-                        <a href="/admin/products/create" class="btn btn-primary d-none d-sm-inline-block">
+                        <a href="{{ route('products.create_product_details_ui', $product->product_id) }}"
+                            class="btn btn-primary d-none d-sm-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -28,7 +27,7 @@
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Create new product
+                            Create new instance
                         </a>
                     </div>
                 </div>
@@ -41,7 +40,20 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="table-responsive">
-
+                            <table class="js-user-table table table-vcenter card-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantities</th>
+                                        <th>Brand</th>
+                                        <th>Category</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

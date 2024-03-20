@@ -58,15 +58,25 @@
                                         <tr>
                                             <td>{{ $product->product_id }}</td>
                                             <td>{{ $product->name }}</td>
-                                            <td>Null</td>
+                                            <td>69.000đ</td>
                                             <td>{{ $product->quantities }}</td>
                                             <td>{{ $product->brand->name }}</td>
                                             <td>{{ $product->category->name }}</td>
-                                            <td>Null</td>
+                                            <td>
+                                                <a href="{{ route('products.details', $product->product_id) }}"
+                                                    class="btn p-2">
+                                                    <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
+                                                </a>
+                                                <a href="{{ route('products.update_ui', $product->product_id) }}"
+                                                    class="btn p-2">
+                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                </a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-end my-2">{{ $products->render('common.pagination') }}</div>
                         </div>
                     </div>
                 </div>

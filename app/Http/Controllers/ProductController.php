@@ -15,7 +15,7 @@ class ProductController extends Controller
     {
         $data = [
             'page' => 'Products',
-            'products' => Product::with('category', 'brand')->get()
+            'products' => Product::with('category', 'brand')->paginate(6) // 6 elements per page
         ];
         return view('admin.products.index', $data);
     }
@@ -39,11 +39,49 @@ class ProductController extends Controller
         ]);
         return  $product;
     }
-    public function details()
+    public function update_ui(Request $request)
     {
+        $product_id = $request->route('product_id');
         $data = [
             'page' => 'Product Details',
+            'product' => Product::with('category', 'brand')->find($product_id),
+            'categories' => Category::all(),
+            'brands' => Brand::all(),
         ];
-        return  view('admin.products.product_details', $data);;
+        return  view('admin.products.update', $data);;
+    }
+    public function update(CreateProduct $request)
+    {
+        $product_id = $request->route('product_id');
+        $product = Product::find($product_id);
+        if ($product) {
+            $product->update([
+                'name' => $request->input('title'),
+                'category_id' => $request->input('category'),
+                'brand_id' => $request->input('brand'),
+                'description' => $request->input('description'),
+            ]);
+        }
+        return back()->with('message', 'Product updated successfully!');
+    }
+    public function details(Request $request)
+    {
+        $product_id = $request->route('product_id');
+        $data = [
+            'page' => 'Product Details',
+            'product' => Product::with('category', 'brand')->find($product_id),
+            'categories' => Category::all(),
+            'brands' => Brand::all(),
+        ];
+        return  view('admin.products.product_details', $data);
+    }
+    public function create_product_details_ui(Request $request)
+    {
+        $product_id = $request->route('product_id');
+        $data = [
+            'page' => 'Create Product Details',
+            'product' => Product::with('category', 'brand')->find($product_id),
+        ];
+        return  view('admin.products.create_product_details', $data);
     }
 }
