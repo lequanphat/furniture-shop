@@ -9,7 +9,7 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Employee Details
+                        Customer Details
                     </h2>
                 </div>
             </div>
@@ -62,13 +62,13 @@
                                 <div class="col-6">
                                     <label class="form-label required">Phone number</label>
                                     <input type="text" class="form-control" autocomplete="off"
-                                        value="{{ $user->default_address->phone_number }}" />
+                                        value="{{ isset($user->default_address->phone_number) ? $user->default_address->phone_number : '' }}" />
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label required">Address</label>
                                 <input type="text" class="form-control" autocomplete="off"
-                                    value="{{ $user->default_address->address }}" />
+                                    value="{{ isset($user->default_address->address) ? $user->default_address->address : '' }}" />
                             </div>
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </fieldset>
