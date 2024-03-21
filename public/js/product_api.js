@@ -21,15 +21,11 @@ jQuery.noConflict();
                 },
             });
         });
-
-        var selectedFiles = [];
-
         $('#image-picker').change(function (event) {
             if (event.target.files && event.target.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    $('#preview-list')
-                        .append(`<div class="col-md-3 col-sm-4 position-relative" data-index="${event.target.files[0].name}">
+                    $('#preview-list').append(`<div class="col-md-3 col-sm-4 position-relative">
                     <a data-fslightbox="gallery" href="#">
                         <div 
                             class="img-responsive img-responsive-1x1 rounded-3 border"
@@ -39,21 +35,17 @@ jQuery.noConflict();
                     <button type="button" class="js-remove-image bg-white btn-close position-absolute" style="top: 3%; right: 5%;"></button>
                 </div>`);
                 };
-                selectedFiles.push(event.target.files[0]);
                 reader.readAsDataURL(event.target.files[0]);
-                console.log(selectedFiles);
+                console.log({ image: event.target.files[0] });
             }
         });
 
         $('#preview-list').on('click', '.js-remove-image', function (e) {
-            var parent = $(this).parent();
-            var name = parent.data('index');
-            selectedFiles = selectedFiles.filter((file) => file.name !== name);
-            console.log(selectedFiles);
-            parent.remove();
+            $(this).parent().remove();
         });
 
         $('#create-detailed-product-form').submit(function (e) {
+<<<<<<< HEAD
             e.preventDefault();
             var form = this;
             var formDataImages = new FormData(form);
@@ -77,6 +69,11 @@ jQuery.noConflict();
                     $('#js-error').text('* ' + error.responseJSON.message);
                 },
             });
+=======
+            // e.preventDefault();
+            var formData = $(this).serialize();
+            console.log({ formData });
+>>>>>>> parent of 1fdb17e... upload images - detailed product #139
         });
     });
 })(jQuery);

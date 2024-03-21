@@ -56,7 +56,7 @@
                                     @foreach ($detaild_products as $detaild_product)
                                         <tr>
                                             <td>{{ $detaild_product->name }}</td>
-                                            <td>#{{ $detaild_product->sku }}</td>
+                                            <td>{{ $detaild_product->sku }}</td>
                                             <td>{{ number_format($detaild_product->original_price, 0, '.', ',') }}đ</td>
                                             <td>
                                                 <div class="col-auto rounded"

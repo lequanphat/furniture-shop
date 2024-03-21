@@ -8,8 +8,11 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductDetail;
+<<<<<<< HEAD
 use App\Models\ProductImage;
 use Illuminate\Database\Eloquent\Casts\Json;
+=======
+>>>>>>> parent of 1fdb17e... upload images - detailed product #139
 use Illuminate\Http\Request;
 use Illuminate\Support\Js;
 use Nette\Utils\Arrays;
@@ -94,6 +97,7 @@ class ProductController extends Controller
     public function create_detailed_product(CreateDetailedProduct $request)
     {
         $product_id = $request->route('product_id');
+<<<<<<< HEAD
         // $detailed_product = ProductDetail::create([
         //     'product_id' => $product_id,
         //     'sku' => $request->input('sku'),
@@ -112,5 +116,19 @@ class ProductController extends Controller
         // }
         // return $detailed_product;
         return ['request' => $request->all(), 'images' => $images];
+=======
+        $product = ProductDetail::create([
+            'product_id' => $product_id,
+            'sku' => $request->input('sku'),
+            'name' => $request->input('name'),
+            'color' => $request->input('color'),
+            'size' => $request->input('size'),
+            'original_price' => $request->input('original_price'),
+            'warranty_month' => $request->input('warranty_month'),
+            'description' => $request->input('description'),
+            'quantities' => 0
+        ]);
+        return back()->with('message', 'Detailed product created successfully!');
+>>>>>>> parent of 1fdb17e... upload images - detailed product #139
     }
 }
