@@ -22,7 +22,6 @@ class CreateDetailedProduct extends FormRequest
             'size' => 'required',
             'original_price' => 'required',
             'warranty_month' => 'required',
-            'description' => 'required',
         ];
     }
     public function messages()
@@ -36,7 +35,6 @@ class CreateDetailedProduct extends FormRequest
             'size.required' => 'The size field is required.',
             'original_price.required' => 'The original price field is required.',
             'warranty_month.required' => 'The warranty month field is required.',
-            'description.required' => 'The description field is required.',
         ];
     }
 }
