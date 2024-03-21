@@ -45,11 +45,9 @@ jQuery.noConflict();
         });
 
         $('#create-detailed-product-form').submit(function (e) {
-<<<<<<< HEAD
             e.preventDefault();
             var form = this;
             var formDataImages = new FormData(form);
-            formDataImages.append('images', selectedFiles);
             $.ajax({
                 url: $(form).attr('action'),
                 type: 'POST',
@@ -69,11 +67,6 @@ jQuery.noConflict();
                     $('#js-error').text('* ' + error.responseJSON.message);
                 },
             });
-=======
-            // e.preventDefault();
-            var formData = $(this).serialize();
-            console.log({ formData });
->>>>>>> parent of 1fdb17e... upload images - detailed product #139
         });
     });
 })(jQuery);

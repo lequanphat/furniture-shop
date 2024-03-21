@@ -76,7 +76,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-end my-2">{{ $products->render('common.pagination') }}</div>
+                            <div class="d-flex justify-content-end my-2">{{ $products->render('common.pagination') }}
+                            </div>
                         </div>
                     </div>
                 </div>

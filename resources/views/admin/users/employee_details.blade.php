@@ -12,16 +12,6 @@
                         Employee Details
                     </h2>
                 </div>
-                <div class="col-auto ms-auto d-print-none">
-                    <div class="btn-list">
-                        <span class="d-none d-sm-inline">
-                            <a href="{{ route('employee.index') }}" class="btn">
-                                Back
-                            </a>
-                        </span>
-
-                    </div>
-                </div>
             </div>
         </div>
     </div>
