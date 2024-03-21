@@ -57,7 +57,21 @@
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>{{ $product->product_id }}</td>
-                                            <td>{{ $product->name }}</td>
+                                            <td>
+                                                <div class="d-flex py-1 align-items-center">
+                                                    <span class="avatar me-2"
+                                                        style="background-image: url({{ asset('images/couch.png') }}); width: 60px; height: 60px;"></span>
+                                                    <div class="flex-fill">
+                                                        <div class="font-weight-medium">
+                                                            {{ $product->name }}
+                                                        </div>
+                                                        <div class="text-muted">
+                                                            <a href="{{ route('products.details', $product->product_id) }}"
+                                                                class="text-reset">6 details</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
                                             <td>69.000đ</td>
                                             <td>{{ $product->quantities }}</td>
                                             <td>{{ $product->brand->name }}</td>

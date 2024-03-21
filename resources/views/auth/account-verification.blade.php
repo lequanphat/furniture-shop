@@ -51,7 +51,7 @@
                     <a href="/login" class="btn w-100">
                         Cancel
                     </a>
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit" class="btn btn-success w-100">
                         Verify
                     </button>
                 </div>

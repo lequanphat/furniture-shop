@@ -84,13 +84,16 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/suppliers/{id}/edit', [supplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/admin/suppliers/{id}', [supplierController::class, 'update'])->name('suppliers.update');
 
-    //admin category
+    // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
-    Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
+    // Route::post('/admin/categories', [CategoryController::class, 'category_insert']); for create
+    Route::get('/admin/categories/delete/{id}', [CategoryController::class, 'category_delete']);
+    // Route::delete('/admin/categories/{id}', [CategoryController::class, 'category_delete']); for delete
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
+    // Route::patch('/admin/categories/{id}', [CategoryController::class, 'category_delete']); for update
 
-    //admin product
+    // product
     Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
     Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');

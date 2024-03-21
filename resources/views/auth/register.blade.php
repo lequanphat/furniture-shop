@@ -43,7 +43,7 @@
                 <p class="text-danger m-0">*{{ $errors->first() }}</p>
             @endif
             <div class="form-footer">
-                <button type="submit" class="btn btn-primary w-100">Create new account</button>
+                <button type="submit" class="btn btn-success w-100">Create new account</button>
             </div>
         </div>
     </form>

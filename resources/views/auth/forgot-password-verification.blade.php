@@ -6,7 +6,7 @@
             <p class="text-muted mb-4">Please check your email to receive the new password provided, use the new password to
                 log in and change your password.</p>
             <div class="form-footer">
-                <a href="/login" class="btn btn-primary w-100">
+                <a href="/login" class="btn btn-success w-100">
                     Back to Login
                 </a>
             </div>
