@@ -94,7 +94,9 @@
                                                         <path d="M5 12l14 0" />
                                                     </svg>
                                                 </label>
-                                                <input class="d-none" type="file" id="image-picker" accept="image/*">
+                                                <input class="d-none" type="file" id="image-picker" accept="image/*"
+                                                    multiple>
+                                                
                                             </div>
                                         </div>
                                     </div>

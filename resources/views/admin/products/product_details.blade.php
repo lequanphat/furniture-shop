@@ -46,7 +46,6 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>SKU</th>
                                         <th>Price</th>
                                         <th>Color</th>
                                         <th>Size</th>
@@ -57,8 +56,22 @@
                                 <tbody>
                                     @foreach ($detaild_products as $detaild_product)
                                         <tr>
-                                            <td>{{ $detaild_product->name }}</td>
-                                            <td>{{ $detaild_product->sku }}</td>
+                                            <td>
+                                                <div class="d-flex py-1 align-items-center">
+                                                    <span class="avatar me-2"
+                                                        style="background-image: url({{ asset('storage/' . $detaild_product->images->first()->url) }}); width: 80px; height: 80px;"></span>
+                                                    <div class="flex-fill">
+                                                        <div class="font-weight-medium">
+                                                            <h3 class="m-0">{{ $detaild_product->name }}</h3>
+                                                        </div>
+                                                        <div class="text-muted">
+                                                            <a href="#"
+                                                                class="text-reset">#{{ $detaild_product->sku }}</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
                                             <td>{{ number_format($detaild_product->original_price, 0, '.', ',') }}đ</td>
                                             <td>
                                                 <div class="col-auto rounded"

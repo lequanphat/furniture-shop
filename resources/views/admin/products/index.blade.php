@@ -44,7 +44,6 @@
                             <table class="table table-vcenter card-table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
                                         <th>Product</th>
                                         <th>Price</th>
                                         <th>Quantities</th>
@@ -56,18 +55,18 @@
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
-                                            <td>{{ $product->product_id }}</td>
                                             <td>
                                                 <div class="d-flex py-1 align-items-center">
                                                     <span class="avatar me-2"
-                                                        style="background-image: url({{ asset('images/couch.png') }}); width: 60px; height: 60px;"></span>
+                                                        style="background-image: url({{ asset('storage/' . $product->detailed_products->first()->images->first()->url) }}); width: 80px; height: 80px;"></span>
                                                     <div class="flex-fill">
                                                         <div class="font-weight-medium">
-                                                            {{ $product->name }}
+                                                            <h3 class="m-0">{{ $product->name }}</h3>
                                                         </div>
                                                         <div class="text-muted">
                                                             <a href="{{ route('products.details', $product->product_id) }}"
-                                                                class="text-reset">6 details</a>
+                                                                class="text-reset">{{ $product->detailed_products->count() }}
+                                                                detailed products</a>
                                                         </div>
                                                     </div>
                                                 </div>

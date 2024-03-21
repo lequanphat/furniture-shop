@@ -21,48 +21,61 @@ jQuery.noConflict();
                 },
             });
         });
+
+        var selectedFiles = [];
         $('#image-picker').change(function (event) {
-            if (event.target.files && event.target.files[0]) {
+            var files = event.target.files;
+            // Handle the file preview
+            for (var i = 0; i < files.length; i++) {
+                selectedFiles.push(files[i]);
                 var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#preview-list').append(`<div class="col-md-3 col-sm-4 position-relative">
-                    <a data-fslightbox="gallery" href="#">
-                        <div 
-                            class="img-responsive img-responsive-1x1 rounded-3 border"
-                            style="background-image: url(${e.target.result})">
-                        </div>
-                    </a>
-                    <button type="button" class="js-remove-image bg-white btn-close position-absolute" style="top: 3%; right: 5%;"></button>
-                </div>`);
-                };
-                reader.readAsDataURL(event.target.files[0]);
-                console.log({ image: event.target.files[0] });
+                reader.onload = (function (file) {
+                    return function (e) {
+                        $('#preview-list').append(`<div class="col-md-3 col-sm-4 position-relative">
+                            <a data-fslightbox="gallery" href="#">
+                                <div 
+                                    class="img-responsive img-responsive-1x1 rounded-3 border"
+                                    style="background-image: url(${e.target.result})" >
+                                </div>
+                            </a>
+                            
+                            <button data-filename="${file.name}" type="button" class="js-remove-image bg-white btn-close position-absolute" style="top: 3%; right: 5%;"></button>
+                        </div>`);
+                    };
+                })(files[i]);
+                reader.readAsDataURL(files[i]);
             }
+            console.log({ selectedFiles });
         });
 
         $('#preview-list').on('click', '.js-remove-image', function (e) {
+            var filename = $(this).data('filename');
+            selectedFiles = selectedFiles.filter((file) => file.name !== filename);
+            console.log({ selectedFiles });
             $(this).parent().remove();
         });
 
         $('#create-detailed-product-form').submit(function (e) {
             e.preventDefault();
-            var form = this;
-            var formDataImages = new FormData(form);
+            const form = this;
+            const formData = new FormData(form);
+            selectedFiles.forEach(function (file, index) {
+                formData.append('image' + index, file);
+            });
             $.ajax({
                 url: $(form).attr('action'),
                 type: 'POST',
-                data: formDataImages,
-                processData: false, // Uncomment this line
-                contentType: false, // Uncomment this line
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
                 success: function (response) {
-                    console.log('====================================');
-                    console.log({ response });
-                    console.log('====================================');
+                    window.location.href = '/admin/products';
                 },
                 error: function (error) {
-                    console.log('====================================');
                     console.log(error);
-                    console.log('====================================');
                     $('#js-error').removeClass('d-none');
                     $('#js-error').text('* ' + error.responseJSON.message);
                 },
