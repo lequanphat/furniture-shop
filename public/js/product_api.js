@@ -27,6 +27,7 @@ jQuery.noConflict();
             var files = event.target.files;
             // Handle the file preview
             for (var i = 0; i < files.length; i++) {
+                if (i >= 4) break;
                 selectedFiles.push(files[i]);
                 var reader = new FileReader();
                 reader.onload = (function (file) {
@@ -45,7 +46,9 @@ jQuery.noConflict();
                 })(files[i]);
                 reader.readAsDataURL(files[i]);
             }
-            console.log({ selectedFiles });
+            if (selectedFiles.length >= 4) {
+                $('#image-picker').attr('disabled', true);
+            }
         });
 
         $('#preview-list').on('click', '.js-remove-image', function (e) {
@@ -53,6 +56,9 @@ jQuery.noConflict();
             selectedFiles = selectedFiles.filter((file) => file.name !== filename);
             console.log({ selectedFiles });
             $(this).parent().remove();
+            if (selectedFiles.length < 4) {
+                $('#image-picker').attr('disabled', false);
+            }
         });
 
         $('#create-detailed-product-form').submit(function (e) {
@@ -75,7 +81,6 @@ jQuery.noConflict();
                     window.location.href = '/admin/products';
                 },
                 error: function (error) {
-                    console.log(error);
                     $('#js-error').removeClass('d-none');
                     $('#js-error').text('* ' + error.responseJSON.message);
                 },
