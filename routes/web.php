@@ -68,21 +68,15 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
 
     //brand
-    Route::get('/admin/brands', [BrandController::class, 'index'])->name('brands.index');
-    Route::get('/admin/brands/search', [BrandController::class, 'search'])->name('brands.search');
-    Route::get('/admin/brands/create', [BrandController::class, 'create'])->name('brands.create');
-    Route::post('/admin/brands', [BrandController::class, 'store'])->name('brands.store');
-    Route::get('/admin/brands/{id}/show', [BrandController::class, 'show'])->name('brands.show');
-    Route::get('/admin/brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::put('/admin/brands/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
+    Route::get('/admin/brands', [BrandController::class, 'brand_search_ui'])->name('brands.search');
+    Route::post('/admin/brands/create', [BrandController::class, 'brand_create'])->name('brands.create');
+    Route::put('/admin/brands/update', [BrandController::class, 'brand_update'])->name('brands.edit');
     //supplier
-    Route::get('/admin/suppliers', [supplierController::class, 'index'])->name('suppliers.index');
-    Route::get('/admin/suppliers/search', [supplierController::class, 'search'])->name('suppliers.search');
-    Route::get('/admin/suppliers/create', [supplierController::class, 'create'])->name('suppliers.create');
-    Route::post('/admin/suppliers', [supplierController::class, 'store'])->name('suppliers.store');
-    Route::get('/admin/suppliers/{id}/show', [supplierController::class, 'show'])->name('suppliers.show');
-    Route::get('/admin/suppliers/{id}/edit', [supplierController::class, 'edit'])->name('suppliers.edit');
-    Route::get('/admin/suppliers/{id}', [supplierController::class, 'update'])->name('suppliers.update');
+    Route::get('/admin/suppliers', [SupplierController::class, 'supplier_ui'])->name('suppliers.index');
+    Route::get('/admin/suppliers', [SupplierController::class, 'supplier_search_ui'])->name('suppliers.search');
+    Route::post('/admin/suppliers/create', [SupplierController::class,'supplier_create']);
+    Route::put('/admin/suppliers/update', [SupplierController::class,'supplier_update'])->name('suppliers.edit');
 
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
