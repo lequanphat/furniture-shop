@@ -22,7 +22,7 @@ class CategoryController extends Controller
             'categories' => Category::all(),
             'request' => 'request'
         ];
-        return view('admin.categories.category', $data);
+                    return view('admin.categories.category', $data);
     }
 
     public function category_insert(Request $request)

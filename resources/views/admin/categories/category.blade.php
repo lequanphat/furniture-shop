@@ -81,7 +81,7 @@
                                             {{-- temporary value --}}
                                             <td>
                                                 <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
-                                                    data-bs-toggle="modal" data-bs-target="#UpdateCategoryModal"
+                                                    data-bs-toggle="modal" data-bs-target="#update-category-modal"
                                                     data-category-id="{{ $category->category_id }}"
                                                     data-name="{{ $category->name }}"
                                                     data-description="{{ $category->description }}"
