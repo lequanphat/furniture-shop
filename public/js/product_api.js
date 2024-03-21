@@ -57,9 +57,7 @@ jQuery.noConflict();
             e.preventDefault();
             var form = this;
             var formDataImages = new FormData(form);
-            selectedFiles.forEach((file, index) => {
-                formDataImages.append('image' + index, file);
-            });
+            formDataImages.append('images', selectedFiles);
             $.ajax({
                 url: $(form).attr('action'),
                 type: 'POST',

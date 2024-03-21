@@ -9,7 +9,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\ProductImage;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Js;
+use Nette\Utils\Arrays;
+use PhpParser\Node\Expr\Cast\Array_;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class ProductController extends Controller
 {
@@ -89,17 +94,23 @@ class ProductController extends Controller
     public function create_detailed_product(CreateDetailedProduct $request)
     {
         $product_id = $request->route('product_id');
-        $detailed_product = ProductDetail::create([
-            'product_id' => $product_id,
-            'sku' => $request->input('sku'),
-            'name' => $request->input('name'),
-            'color' => $request->input('color'),
-            'size' => $request->input('size'),
-            'original_price' => $request->input('original_price'),
-            'warranty_month' => $request->input('warranty_month'),
-            'description' => $request->input('description'),
-            'quantities' => 0
-        ]);
-        return $detailed_product;
+        // $detailed_product = ProductDetail::create([
+        //     'product_id' => $product_id,
+        //     'sku' => $request->input('sku'),
+        //     'name' => $request->input('name'),
+        //     'color' => $request->input('color'),
+        //     'size' => $request->input('size'),
+        //     'original_price' => $request->input('original_price'),
+        //     'warranty_month' => $request->input('warranty_month'),
+        //     'description' => $request->input('description') ?? '',
+        //     'quantities' => 0
+        // ]);
+
+        $images = $request->input('images');
+        // foreach ($images as $image) {
+        //     $image->store('uploads', 'public');
+        // }
+        // return $detailed_product;
+        return ['request' => $request->all(), 'images' => $images];
     }
 }
