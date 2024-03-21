@@ -9,16 +9,18 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Details List
+                        Product Details
                     </h2>
                 </div>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <span class="d-none d-sm-inline">
-                            <a href="{{ route('products.index') }}" class="btn">Back</a>
+                            <a href="{{ route('products.index') }}" class="btn">
+                                Back
+                            </a>
                         </span>
-                        <a href="{{ route('products.create_product_details_ui', $product->product_id) }}"
+                        <a href="{{ route('products.create_detailed_product_ui', $product->product_id) }}"
                             class="btn btn-primary d-none d-sm-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -56,7 +58,7 @@
                                     @foreach ($detaild_products as $detaild_product)
                                         <tr>
                                             <td>{{ $detaild_product->name }}</td>
-                                            <td>#{{ $detaild_product->sku }}</td>
+                                            <td>{{ $detaild_product->sku }}</td>
                                             <td>{{ number_format($detaild_product->original_price, 0, '.', ',') }}đ</td>
                                             <td>
                                                 <div class="col-auto rounded"

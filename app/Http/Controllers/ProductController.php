@@ -8,13 +8,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductDetail;
-use App\Models\ProductImage;
-use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
-use Illuminate\Support\Js;
-use Nette\Utils\Arrays;
-use PhpParser\Node\Expr\Cast\Array_;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class ProductController extends Controller
 {
@@ -82,7 +76,7 @@ class ProductController extends Controller
         ];
         return  view('admin.products.product_details', $data);
     }
-    public function create_product_details_ui(Request $request)
+    public function create_detailed_product_ui(Request $request)
     {
         $product_id = $request->route('product_id');
         $data = [

@@ -29,22 +29,22 @@
                                             placeholder="High quality plastic tables and chairs" value="">
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-4">
-                                    <div class="mb-3">
-                                        <label for="brand" class="form-label">Brand</label>
-                                        <select id="brand" name="brand" class="form-control form-select">
-                                            @foreach ($brands as $brand)
-                                                <option value="{{ $brand->brand_id }}">{{ $brand->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="col-sm-6 col-md-3">
                                     <div class="mb-3">
                                         <label for="category" class="form-label">Category</label>
                                         <select id="category" name="category" class="form-control form-select">
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->category_id }}">{{ $category->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="mb-3">
+                                        <label for="brand" class="form-label">Brand</label>
+                                        <select id="brand" name="brand" class="form-control form-select">
+                                            @foreach ($brands as $brand)
+                                                <option value="{{ $brand->brand_id }}">{{ $brand->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
         Schema::create('product_details', function (Blueprint $table) {
             $table->string('sku')->primary();
             $table->unsignedInteger('product_id');
@@ -20,7 +19,7 @@ return new class extends Migration
             $table->string('description')->default('');
             $table->string('color');
             $table->string('size');
-            $table->decimal('original_price', 12, 2);
+            $table->decimal('original_price', 10, 2);
             $table->unsignedInteger('warranty_month');
             $table->unsignedInteger('quantities');
             $table->boolean('is_deleted')->default(false);
@@ -33,7 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
         Schema::dropIfExists('product_details');
     }
 };
