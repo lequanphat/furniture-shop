@@ -155,7 +155,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>tras
         </div>
         @include('admin.components.footer')
     </div>

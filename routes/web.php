@@ -3,15 +3,15 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\PagesController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PagesController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\PrivateMiddleware;
 use App\Http\Middleware\PublicMiddleware;
 use Illuminate\Support\Facades\Route;
+
 
 // auth api
 Route::middleware([AuthMiddleware::class])->group(function () {
@@ -45,24 +45,27 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
+
     Route::get('/profile', [PagesController::class, 'profile']);
 });
 
+
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
+
+
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
 
     // users routes
-    Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user'])->name('users.ban');
-    Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user'])->name('users.unban');
+    Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user']);
+    Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user']);
     // employee routes
-    Route::get('/admin/employee', [UserController::class, 'employee_ui'])->name('employee.index');
+    Route::get('/admin/employee', [UserController::class, 'employee_ui']);
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
-    Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui'])->name('employee.details');
+    Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
     Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
     // customer routes
-    Route::get('/admin/customers', [UserController::class, 'customers_ui'])->name('customers.index');
-    Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui'])->name('customers.details');;
+    Route::get('/admin/customers', [UserController::class, 'customers_ui']);
 
     //brand
     Route::get('/admin/brands', [BrandController::class, 'index'])->name('brands.index');
@@ -72,37 +75,35 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/brands/{id}/show', [BrandController::class, 'show'])->name('brands.show');
     Route::get('/admin/brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
     Route::put('/admin/brands/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
-
     //supplier
-    Route::get('/admin/suppliers', [supplierController::class, 'index'])->name('suppliers.index');
-    Route::get('/admin/suppliers/search', [supplierController::class, 'search'])->name('suppliers.search');
-    Route::get('/admin/suppliers/create', [supplierController::class, 'create'])->name('suppliers.create');
-    Route::post('/admin/suppliers', [supplierController::class, 'store'])->name('suppliers.store');
-    Route::get('/admin/suppliers/{id}/show', [supplierController::class, 'show'])->name('suppliers.show');
-    Route::get('/admin/suppliers/{id}/edit', [supplierController::class, 'edit'])->name('suppliers.edit');
-    Route::get('/admin/suppliers/{id}', [supplierController::class, 'update'])->name('suppliers.update');
+    Route::get('/admin/Suppliers', [SupplierController::class, 'index'])->name('Suppliers.index');
+    Route::get('/admin/Suppliers/search', [SupplierController::class, 'search'])->name('Suppliers.search');
+    Route::get('/admin/Suppliers/create', [SupplierController::class, 'create'])->name('Suppliers.create');
+    Route::post('/admin/Suppliers', [SupplierController::class, 'store'])->name('Suppliers.store');
+    Route::get('/admin/Suppliers/{id}/show', [SupplierController::class, 'show'])->name('Suppliers.show');
+    Route::get('/admin/Suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('Suppliers.edit');
+    Route::put('/admin/Suppliers/edit/{id}', [SupplierController::class, 'update'])->name('Suppliers.update');
 
+    // *This is only temporary, use the appropriate controller
+    Route::get('/admin/products', [PagesController::class, 'admin_products']);
     //admin category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
-    Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
+//
+    Route::get('/admin/categories/delete/{id}',[CategoryController::class,'category_delete']);
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
 
-    //admin product
-    Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/admin/products/create', [ProductController::class, 'create_ui']);
-    Route::post('/admin/products/create', [ProductController::class, 'create']);
-    Route::get('/admin/products/{product_id}/details', [ProductController::class, 'details'])->name('products.details');
-    Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
-    Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
-    Route::get('/admin/products/{product_id}/create-details', [ProductController::class, 'create_product_details_ui'])->name('products.create_product_details_ui');
-    Route::post('/admin/products/{product_id}/create-details', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
-
-    // *This is only temporary, use the appropriate controller
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
-    Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
+
+    //Receipt
+    Route::get('/admin/receipts', [\App\Http\Controllers\ReceiptsController::class, 'index']);
+
+
+
+
+    Route::get('/admin/suppliers', [PagesController::class, 'admin_suppliers']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
