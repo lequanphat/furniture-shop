@@ -43,9 +43,10 @@ class CategoryController extends Controller
     {
 
 
-        if (Product::where('id', $id)->exists()) {
+        if (Product::where('category_id', $id)->exists()) {
             return " Khong The Xoa";
         } else {
+
             Category::find($id)->delete();
             $product = Category::findOrFail($id);
 
