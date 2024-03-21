@@ -114,4 +114,13 @@ class ProductController extends Controller
 
         return back()->with('message', 'Product details created successfully!');
     }
+    public function detailed_product_details(Request $request)
+    {
+        $sku = $request->route('sku');
+        $data = [
+            'page' => 'Product Details',
+            'detailed_product' => ProductDetail::with('images')->find($sku),
+        ];
+        return  view('admin.products.detailed_product_details', $data);
+    }
 }
