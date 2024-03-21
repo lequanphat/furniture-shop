@@ -75,8 +75,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //supplier
     Route::get('/admin/suppliers', [SupplierController::class, 'supplier_ui'])->name('suppliers.index');
     Route::get('/admin/suppliers', [SupplierController::class, 'supplier_search_ui'])->name('suppliers.search');
-    Route::post('/admin/suppliers/create', [SupplierController::class,'supplier_create']);
-    Route::put('/admin/suppliers/update', [SupplierController::class,'supplier_update'])->name('suppliers.edit');
+    Route::post('/admin/suppliers/create', [SupplierController::class, 'supplier_create']);
+    Route::put('/admin/suppliers/update', [SupplierController::class, 'supplier_update'])->name('suppliers.edit');
 
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
@@ -96,6 +96,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
     Route::get('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product_ui'])->name('products.create_detailed_product_ui');
     Route::post('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
+    Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
 
     // receipts
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);

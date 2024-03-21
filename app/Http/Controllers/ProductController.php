@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductDetail;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -17,7 +18,7 @@ class ProductController extends Controller
     {
         $data = [
             'page' => 'Products',
-            'products' => Product::with('category', 'brand')->paginate(6) // 6 elements per page
+            'products' => Product::with('category', 'brand', 'detailed_products.images')->paginate(6) // 6 elements per page
         ];
         return view('admin.products.index', $data);
     }
@@ -72,7 +73,7 @@ class ProductController extends Controller
         $data = [
             'page' => 'Product Details',
             'product' => Product::with('category', 'brand')->find($product_id),
-            'detaild_products' => ProductDetail::where('product_id', $product_id)->paginate(6) // 6 elements per page
+            'detaild_products' => ProductDetail::where('product_id', $product_id)->with('images')->paginate(6) // 6 elements per page
         ];
         return  view('admin.products.product_details', $data);
     }
@@ -85,26 +86,41 @@ class ProductController extends Controller
         ];
         return view('admin.products.create_product_details', $data);
     }
-    public function create_detailed_product(CreateDetailedProduct $request)
+    // CreateDetailedProduct
+    public function create_detailed_product(Request $request)
     {
         $product_id = $request->route('product_id');
-        // $detailed_product = ProductDetail::create([
-        //     'product_id' => $product_id,
-        //     'sku' => $request->input('sku'),
-        //     'name' => $request->input('name'),
-        //     'color' => $request->input('color'),
-        //     'size' => $request->input('size'),
-        //     'original_price' => $request->input('original_price'),
-        //     'warranty_month' => $request->input('warranty_month'),
-        //     'description' => $request->input('description') ?? '',
-        //     'quantities' => 0
-        // ]);
+        $detailed_product = ProductDetail::create([
+            'product_id' => $product_id,
+            'sku' => $request->input('sku'),
+            'name' => $request->input('name'),
+            'color' => $request->input('color'),
+            'size' => $request->input('size'),
+            'original_price' => $request->input('original_price'),
+            'warranty_month' => $request->input('warranty_month'),
+            'description' => $request->input('description') ?? '',
+            'quantities' => 0
+        ]);
+        $count = 0;
+        while ($request->hasFile('image' . $count)) {
+            $file = $request->file('image' . $count);
+            $path = $file->store('uploads/images', 'public');
+            ProductImage::create([
+                'sku' => $request->input('sku'),
+                'url' => $path
+            ]);
+            $count++;
+        }
 
-        $images = $request->input('images');
-        // foreach ($images as $image) {
-        //     $image->store('uploads', 'public');
-        // }
-        // return $detailed_product;
-        return ['request' => $request->all(), 'images' => $images];
+        return back()->with('message', 'Product details created successfully!');
+    }
+    public function detailed_product_details(Request $request)
+    {
+        $sku = $request->route('sku');
+        $data = [
+            'page' => 'Product Details',
+            'detailed_product' => ProductDetail::with('images')->find($sku),
+        ];
+        return  view('admin.products.detailed_product_details', $data);
     }
 }
