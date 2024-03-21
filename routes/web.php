@@ -89,16 +89,20 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //admin category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
-//    Route::delete('/admin/categories/delete', [CategoryController::class, 'category_delete']);
-//    Route::delete('/admin/categories/delete', [CategoryController::class, 'category_delete'])->name('delete.category');
-//    Route::delete('/admin/categories/delete', [CategoryController::class,'category_delete'])->name('categories.delete');
+//
     Route::get('/admin/categories/delete/{id}',[CategoryController::class,'category_delete']);
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
 
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
-    Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
+
+    //Receipt
+    Route::get('/admin/receipts', [\App\Http\Controllers\ReceiptsController::class, 'index']);
+
+
+
+
     Route::get('/admin/suppliers', [PagesController::class, 'admin_suppliers']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
