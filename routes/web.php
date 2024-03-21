@@ -89,20 +89,18 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //admin category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
-//
-    Route::get('/admin/categories/delete/{id}',[CategoryController::class,'category_delete']);
+    Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
+<<<<<<<<< Temporary merge branch 1
+    Route::post('/admin/categories/{category_id}/update', [CategoryController::class, 'category_update']);
+
+=========
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
+>>>>>>>>> Temporary merge branch 2
 
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
-
-    //Receipt
-    Route::get('/admin/receipts', [\App\Http\Controllers\ReceiptsController::class, 'index']);
-
-
-
-
+    Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
     Route::get('/admin/suppliers', [PagesController::class, 'admin_suppliers']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);

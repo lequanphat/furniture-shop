@@ -22,7 +22,7 @@
                                 placeholder="Ronaldo" required>
                         </div>
                     </div>
-                    <div class="mb-3 mx-2">
+                    <div class="mb-3">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="gender" id="male" value="male"
                                 required>

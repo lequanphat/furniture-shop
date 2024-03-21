@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateEmployee;
 use App\Http\Requests\UpdateEmployee;
 use App\Models\Address;
-use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +16,7 @@ class UserController extends Controller
     {
         $data = [
             'page' => 'Customers',
-            'users' => User::where('is_staff', 0)->get()
+            'users' => User::where('is_staff', 0)->paginate(6) // 6 elements per page
         ];
         return view('admin.users.customers', $data);
     }
@@ -29,7 +28,7 @@ class UserController extends Controller
             'users' => User::where('is_staff', 1)
                 ->whereNotIn('user_id', [Auth::user()->user_id])
                 ->with('default_address')
-                ->get()
+                ->paginate(6) // 6 elements per page
         ];
         return view('admin.users.employee', $data);
     }
@@ -68,11 +67,19 @@ class UserController extends Controller
         $user_id = $request->route('user_id');
         $data = [
             'page' => 'Employee',
-            'action' => 'Details' . $user_id
+            'user' => User::where('user_id', $user_id)->with('default_address')->first(),
         ];
         return view('admin.users.employee_details', $data);
     }
-
+    public function customer_details_ui(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        $data = [
+            'page' => 'Customers',
+            'user' => User::where('user_id', $user_id)->with('default_address')->first(),
+        ];
+        return view('admin.users.customer_details', $data);
+    }
     public function update_employee_ui(Request $request)
     {
         $user_id = $request->route('user_id');

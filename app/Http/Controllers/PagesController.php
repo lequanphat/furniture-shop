@@ -94,13 +94,6 @@ class PagesController extends Controller
         ];
         return view('admin.users.customers', $data);
     }
-    public function admin_products()
-    {
-        $data = [
-            'page' => 'Products',
-        ];
-        return view('admin.products.index', $data);
-    }
     public function admin_categories()
     {
         $data = [

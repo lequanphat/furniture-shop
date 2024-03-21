@@ -1,15 +1,6 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        // show create employee modal
-        $('#js-create-employee-btn').click(() => {
-            $('#createCategoryModal').modal('show');
-            // reset data in form
-            $('#create-employee-form')[0].reset();
-            $('#create_employee_response').html('');
-            $('#create_employee_response').removeClass('alert-success alert-danger');
-        });
-
         // create employee api
         $('#create-employee-form').submit(function (e) {
             e.preventDefault();
@@ -20,51 +11,39 @@ jQuery.noConflict();
                 data: formData,
                 success: function (response) {
                     // Handle the success response
-                    $('#create_employee_response').removeClass('alert-danger');
+                    $('#create_employee_response').removeClass('alert-danger d-none');
                     $('#create_employee_response').addClass('alert-success');
                     $('#create_employee_response').html(response.message);
                 },
                 error: function (error) {
                     // Handle the error response
-                    $('#create_employee_response').removeClass('alert-success');
+                    $('#create_employee_response').removeClass('alert-successs d-none');
                     $('#create_employee_response').addClass('alert-danger');
                     $('#create_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });
         // reset create employee form
-        $('#reset_create_employee_form').click(() => {
+        $('#create-employee-form').on('reset', function () {
             $('#create_employee_response').html('');
             $('#create_employee_response').removeClass('alert-success alert-danger');
+            $('#create_employee_response').addClass('d-none');
         });
 
         // click show update employee
-        $(document).on('click', '.js-update-employee-btn', function () {
-            // show modal
-            $('#updateEmployeeModal').modal('show');
-            // assign data
-            $('#updateEmployeeModal #updateEmployeeTitle').html(`Update employee - ID ${$(this).data('user-id')}`);
-            $('#updateEmployeeModal #email').val($(this).data('email'));
-            $('#updateEmployeeModal #email').prop('readonly', true);
-            $('#updateEmployeeModal #first_name').val($(this).data('first-name'));
-            $('#updateEmployeeModal #last_name').val($(this).data('last-name'));
-            $('#updateEmployeeModal #phone_number').val($(this).data('phone-number'));
-            $('#updateEmployeeModal #birth_date').val($(this).data('birth-date'));
-            $('#updateEmployeeModal #gender').val($(this).data('gender'));
-            $('#updateEmployeeModal #address').val($(this).data('address'));
-            if ($(this).data('gender')) {
-                $('#updateEmployeeModal #male').prop('checked', true);
-            } else {
-                $('#updateEmployeeModal #female').prop('checked', true);
-            }
-            // reset response
-            $('#update_employee_response').html('');
-            $('#update_employee_response').removeClass('alert-success alert-danger');
-        });
-
-        // click cancel employee
-        $('#js-cancel-update-employee-btn').click(() => {
-            $('#updateEmployeeModal').modal('hide');
+        $('#update-employee-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+            modal.find('#update-employee-title').html('Update Employee - ' + button.data('user-id'));
+            modal.find('#first_name').val(button.data('first-name'));
+            modal.find('#last_name').val(button.data('last-name'));
+            modal.find('#email ').val(button.data('email'));
+            modal.find('#email ').attr('readonly', true);
+            modal.find('#address ').val(button.data('address'));
+            modal.find('#phone_number ').val(button.data('phone-number'));
+            modal.find('#birth_date ').val(button.data('birth-date'));
+            if (button.data('gender')) modal.find('#male ').prop('checked', true);
+            else modal.find('#female ').prop('checked', true);
         });
 
         // update employee
@@ -79,14 +58,14 @@ jQuery.noConflict();
                 success: function (response) {
                     console.log({ response });
                     // Handle the success response
-                    $('#update_employee_response').removeClass('alert-danger');
+                    $('#update_employee_response').removeClass('alert-successs d-none');
                     $('#update_employee_response').addClass('alert-success');
-                    $('#update_employee_response').html(response.message);
+                    $('#update_employee_response').html(Object.values(response.message));
                 },
                 error: function (error) {
                     console.log({ error });
                     // Handle the error response
-                    $('#update_employee_response').removeClass('alert-success');
+                    $('#update_employee_response').removeClass('alert-success d-none');
                     $('#update_employee_response').addClass('alert-danger');
                     $('#update_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
@@ -94,25 +73,87 @@ jQuery.noConflict();
         });
 
         // click delete employee
-        $(document).on('click', '.js-delete-employee-btn', function () {
-            // show modal
-            $('#deleteEmployeeModal').modal('show');
-            $('#js-delete-employee-confirm-text').html(
-                `Are you sure you want to delete employee ${$(this).data('user-id')} - ${$(this).data(
-                    'first-name',
-                )} ${$(this).data('last-name')}?`,
-            );
+        $('#delete-user-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var userId = button.data('user-id');
+            var modal = $(this);
+            modal.find('.modal-footer button.btn-danger').data('user-id', userId);
         });
-
-        // cancel delete employee
-        $('#js-cancel-delete-employee').click(() => {
-            $('#deleteEmployeeModal').modal('hide');
+        // click restore employee
+        $('#restore-user-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var userId = button.data('user-id');
+            var modal = $(this);
+            modal.find('.modal-footer button.btn').data('user-id', userId);
         });
+        // delete user
+        $('#delete-user-modal').on('click', '.modal-footer button.btn-danger', function (e) {
+            var userId = $(this).data('user-id');
+            console.log(userId);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: `/admin/employee/${userId}/ban`,
+                type: 'GET',
+                success: function (response) {
+                    var link = $('.js-user-table a[data-user-id="' + userId + '"]');
+                    // update status
+                    var statusCell = link.closest('tr').find('td').eq(5);
+                    statusCell.html('<span class="badge bg-danger me-1"></span> Blocked');
+                    // update action
+                    var actionCell = link.closest('tr').find('td').eq(6);
+                    actionCell.find('a:last').remove();
 
-        // delete employee
-        $('#js-delete-employee').click(() => {
-            $('#deleteEmployeeModal').modal('hide');
-            // logic here
+                    // show success modal
+                    $('#success-notify-modal').addClass('show');
+                    $('#success-notify-modal').attr('style', 'display: block;');
+                    $('#success-notify-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#success-title').html('Deleted User Successfully');
+                    $('#success-desc').html('This user can not be able to access the system.');
+                },
+                error: function (error) {
+                    console.log({ error });
+                },
+            });
+        });
+        // restore user
+        $('#restore-user-modal').on('click', '.modal-footer button.btn-primary', function (e) {
+            var userId = $(this).data('user-id');
+            console.log(userId);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: `/admin/employee/${userId}/unban`,
+                type: 'GET',
+                success: function (response) {
+                    var link = $('.js-user-table a[data-user-id="' + userId + '"]');
+                    // update status
+                    var statusCell = link.closest('tr').find('td').eq(5);
+                    statusCell.html('<span class="badge bg-success me-1"></span> Active');
+                    // update action
+                    var actionCell = link.closest('tr').find('td').eq(6);
+                    actionCell.find('a:last').remove();
+                    // show success modal
+                    $('#success-notify-modal').addClass('show');
+                    $('#success-notify-modal').attr('style', 'display: block;');
+                    $('#success-notify-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#success-title').html('Restored User Successfully');
+                    $('#success-desc').html('This user can be able to access the system again.');
+                },
+                error: function (error) {
+                    console.log({ error });
+                },
+            });
+        });
+        $('.js-close-success-modal').click(function () {
+            $('#success-notify-modal').removeClass('show');
+            $('#success-notify-modal').attr('style', 'display: none;');
+            $('#success-notify-modal').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
         });
     });
 })(jQuery);

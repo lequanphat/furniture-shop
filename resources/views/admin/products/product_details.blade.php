@@ -9,18 +9,17 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Products Management
+                        Details List
                     </h2>
                 </div>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <span class="d-none d-sm-inline">
-                            <a href="#" class="btn">
-                                New view
-                            </a>
+                            <a href="{{ route('products.index') }}" class="btn">Back</a>
                         </span>
-                        <a href="/admin/products/create" class="btn btn-primary d-none d-sm-inline-block">
+                        <a href="{{ route('products.create_product_details_ui', $product->product_id) }}"
+                            class="btn btn-primary d-none d-sm-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -28,7 +27,7 @@
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Create new product
+                            Create new instance
                         </a>
                     </div>
                 </div>
@@ -41,42 +40,47 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="table-responsive">
-                            <table class="table table-vcenter card-table">
+                            <table class="js-user-table table table-vcenter card-table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Product</th>
+                                        <th>Name</th>
+                                        <th>SKU</th>
                                         <th>Price</th>
-                                        <th>Quantities</th>
-                                        <th>Brand</th>
-                                        <th>Category</th>
+                                        <th>Color</th>
+                                        <th>Size</th>
+                                        <th>Warranty month</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($products as $product)
+                                    @foreach ($detaild_products as $detaild_product)
                                         <tr>
-                                            <td>{{ $product->product_id }}</td>
-                                            <td>{{ $product->name }}</td>
-                                            <td>69.000đ</td>
-                                            <td>{{ $product->quantities }}</td>
-                                            <td>{{ $product->brand->name }}</td>
-                                            <td>{{ $product->category->name }}</td>
+                                            <td>{{ $detaild_product->name }}</td>
+                                            <td>#{{ $detaild_product->sku }}</td>
+                                            <td>{{ number_format($detaild_product->original_price, 0, '.', ',') }}đ</td>
                                             <td>
-                                                <a href="{{ route('products.details', $product->product_id) }}"
-                                                    class="btn p-2">
+                                                <div class="col-auto rounded"
+                                                    style="background: {{ $detaild_product->color }}; width: 20px; height: 20px;">
+                                                </div>
+                                            </td>
+                                            <td>{{ $detaild_product->size }}</td>
+                                            <td>{{ $detaild_product->warranty_month }}</td>
+                                            <td><a href="#" class="btn p-2">
                                                     <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
                                                 </a>
-                                                <a href="{{ route('products.update_ui', $product->product_id) }}"
-                                                    class="btn p-2">
+                                                <a href="#" class="btn p-2">
                                                     <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                </a>
+                                                <a href="#" class="btn p-2">
+                                                    <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
                                                 </a>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-end my-2">{{ $products->render('common.pagination') }}</div>
+                            <div class="d-flex justify-content-end my-2">
+                                {{ $detaild_products->render('common.pagination') }}</div>
                         </div>
                     </div>
                 </div>

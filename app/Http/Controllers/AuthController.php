@@ -70,7 +70,6 @@ class AuthController extends Controller
     {
         // If RegisterRequest passes, create the user
         $user = User::where('email', $request->input('email'))->first();
-
         if ($user) {
             if ($user->is_verified) {
                 return back()->withErrors(['email' => 'This email already exists.'])->withInput($request->input());
@@ -140,7 +139,6 @@ class AuthController extends Controller
         }
         abort(500, 'Invalid Code.');
     }
-
 
     public function resend_otp(Request $request)
     {
