@@ -84,7 +84,7 @@
                                             <th>Quantities</th>
                                             <th>Color</th>
                                             <th>Size</th>
-                                            <th>Warranty month</th>
+                                            <th>Warranty</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -122,7 +122,7 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ $detaild_product->size }}</td>
-                                                <td>{{ $detaild_product->warranty_month }}</td>
+                                                <td>{{ $detaild_product->warranty_month }} Months</td>
                                                 <td><a href="{{ route('products.detailed_product_details', ['product_id' => $product->product_id, 'sku' => $detaild_product->sku]) }}"
                                                         class="btn p-2">
                                                         <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
@@ -130,9 +130,6 @@
                                                     <a href="{{ route('products.update_detailed_product_ui', ['product_id' => $product->product_id, 'sku' => $detaild_product->sku]) }}"
                                                         class="btn p-2">
                                                         <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                    </a>
-                                                    <a href="#" class="btn p-2">
-                                                        <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
                                                     </a>
                                                 </td>
                                             </tr>
