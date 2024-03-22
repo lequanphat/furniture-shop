@@ -9,7 +9,7 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Create Product Details
+                        Create Detailed Product
                     </h2>
                 </div>
                 <!-- Page title actions -->
@@ -72,7 +72,7 @@
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="warranty_month" class="form-label">Warranty Month</label>
-                                        <input id="warranty_month" name="warranty_month" type="text" class="form-control"
+                                        <input id="warranty_month" name="warranty_month" type="number" class="form-control"
                                             placeholder="6" value="">
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
                                                 </label>
                                                 <input class="d-none" type="file" id="image-picker" accept="image/*"
                                                     multiple>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -110,14 +110,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    @if ($errors->any())
-                                        <p class="text-danger m-0">*{{ $errors->first() }}</p>
-                                    @endif
-                                    @if (session('message'))
-                                        <div class="alert alert-success">
-                                            {{ session('message') }}
-                                        </div>
-                                    @endif
+                                    <div id="js-error" class="alert alert-danger d-none">
+                                    </div>
                                 </div>
 
                             </div>

@@ -12,6 +12,16 @@
                         Create Product
                     </h2>
                 </div>
+                <!-- Page title actions -->
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        <span class="d-none d-sm-inline">
+                            <a href="{{ route('products.index') }}" class="btn">
+                                Back
+                            </a>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -53,6 +63,10 @@
                                     <div class="mb-3 mb-0">
                                         <label class="form-label">Description</label>
                                         <textarea id="editor" name="description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div id="js-error" class="alert alert-danger d-none">
                                     </div>
                                 </div>
                             </div>

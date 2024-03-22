@@ -9,7 +9,7 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Detailed Product Details
+                        Update Detailed Product
                     </h2>
                 </div>
                 <!-- Page title actions -->
@@ -27,7 +27,11 @@
         <div class="container-xl">
             <div class="row row-deck row-cards">
                 <div class="col-12">
-                    <div class="card">
+                    <form id="update-detailed-product-form"
+                        action="{{ route('products.update_detailed_product', ['product_id' => $detailed_product->product_id, 'sku' => $detailed_product->sku]) }}"
+                        method="POST" class="card">
+                        @csrf
+                        @method('PATCH')
                         <div class="card-body">
                             <div class="row row-cards">
                                 <div class="col-md-3">
@@ -41,7 +45,7 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Detailed Name</label>
                                         <input id="name" name="name" type="text" class="form-control"
-                                            value="{{ $detailed_product->name }}" readonly>
+                                            value="{{ $detailed_product->name }}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -49,42 +53,66 @@
                                         <label for="coder" class="form-label">Color</label>
                                         <input id="color" name="color" type="color"
                                             class="form-control form-control-color" value="{{ $detailed_product->color }}"
-                                            style="width: 100%" readonly>
+                                            style="width: 100%">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="size" class="form-label">Size</label>
                                         <input id="size" name="size" type="text" class="form-control"
-                                            value="{{ $detailed_product->size }}" readonly>
+                                            value="{{ $detailed_product->size }}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="original_price" class="form-label">Original Price</label>
                                         <input id="original_price" name="original_price" type="number" class="form-control"
-                                            value="{{ $detailed_product->original_price }}" readonly>
+                                            value="{{ $detailed_product->original_price }}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="warranty_month" class="form-label">Warranty Month</label>
-                                        <input id="warranty_month" name="warranty_month" type="text" class="form-control"
-                                            value="{{ $detailed_product->warranty_month }}" readonly>
+                                        <input id="warranty_month" name="warranty_month" type="number" class="form-control"
+                                            value="{{ $detailed_product->warranty_month }}">
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="title" class="form-label">Upload images</label>
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-center"
+                                                style="width: 80px; height: 80px;">
+                                                <label for="image-picker"
+                                                    class="d-flex align-items-center justify-content-center rounded-circle border"
+                                                    style="width: 100%; height: 100%; background-color: #f8f9fa; cursor: pointer; border-style: dashed;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="50"
+                                                        height="50" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M12 5l0 14" />
+                                                        <path d="M5 12l14 0" />
+                                                    </svg>
+                                                </label>
+                                                <input class="d-none" type="file" id="image-picker" accept="image/*"
+                                                    multiple>
+
+                                            </div>
+                                        </div>
                                     </div>
                                     <div id="preview-list" class="row g-2 g-md-3">
                                         @foreach ($detailed_product->images as $image)
-                                            <div class="col-md-3 col-sm-4">
+                                            <div class="col-md-3 col-sm-4 position-relative">
                                                 <a data-fslightbox="gallery" href="#">
                                                     <div class="img-responsive img-responsive-1x1 rounded-3 border"
                                                         style="background-image: url({{ asset('storage/' . $image->url) }})">
                                                     </div>
                                                 </a>
+
+                                                <button type="button"
+                                                    class="js-remove-image bg-white btn-close position-absolute"
+                                                    style="top: 3%; right: 5%;"></button>
                                             </div>
                                         @endforeach
 
@@ -93,31 +121,19 @@
                                 <div class="col-md-12">
                                     <div class="mb-3 mb-0">
                                         <label class="form-label">Detailed description</label>
-                                        <textarea id="editor" name="description" readonly>{{ $detailed_product->description }}</textarea>
+                                        <textarea id="editor" name="description">{{ $detailed_product->description }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div id="js-error" class="alert alert-danger d-none">
+                                    <div id="js-response-message" class="alert d-none">
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="card-footer text-end">
-                            <a href="{{ route('products.update_detailed_product_ui', ['product_id' => $detailed_product->product_id, 'sku' => $detailed_product->sku]) }}"
-                                class="btn btn-primary d-none d-sm-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                                    <path d="M13.5 6.5l4 4" />
-                                </svg>
-                                Update Product
-                            </a>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

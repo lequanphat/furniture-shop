@@ -81,9 +81,10 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Price</th>
+                                            <th>Quantities</th>
                                             <th>Color</th>
                                             <th>Size</th>
-                                            <th>Warranty month</th>
+                                            <th>Warranty</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -93,10 +94,17 @@
                                                 <td>
                                                     <div class="d-flex py-1 align-items-center">
                                                         <span class="avatar me-2"
-                                                            style="background-image: url({{ asset('storage/' . $detaild_product->images->first()->url) }}); width: 80px; height: 80px;"></span>
+                                                            style="background-image: url(@if (isset($detaild_product->images->first()->url)) {{ asset('storage/' . $detaild_product->images->first()->url) }} @endif); width: 80px; height: 80px;">
+                                                        </span>
                                                         <div class="flex-fill">
                                                             <div class="font-weight-medium">
-                                                                <h3 class="m-0">{{ $detaild_product->name }}</h3>
+                                                                <h3 class="m-0">{{ $detaild_product->name }}
+                                                                    @if ($detaild_product->created_at->diffInDays() < 7)
+                                                                        <span
+                                                                            class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
+                                                                        </span>
+                                                                    @endif
+                                                                </h3>
                                                             </div>
                                                             <div class="text-muted">
                                                                 <a href="#"
@@ -107,22 +115,21 @@
 
                                                 </td>
                                                 <td>{{ number_format($detaild_product->original_price, 0, '.', ',') }}đ</td>
+                                                <td>{{ $detaild_product->quantities }}</td>
                                                 <td>
                                                     <div class="col-auto rounded"
                                                         style="background: {{ $detaild_product->color }}; width: 20px; height: 20px;">
                                                     </div>
                                                 </td>
                                                 <td>{{ $detaild_product->size }}</td>
-                                                <td>{{ $detaild_product->warranty_month }}</td>
+                                                <td>{{ $detaild_product->warranty_month }} Months</td>
                                                 <td><a href="{{ route('products.detailed_product_details', ['product_id' => $product->product_id, 'sku' => $detaild_product->sku]) }}"
                                                         class="btn p-2">
                                                         <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
                                                     </a>
-                                                    <a href="#" class="btn p-2">
+                                                    <a href="{{ route('products.update_detailed_product_ui', ['product_id' => $product->product_id, 'sku' => $detaild_product->sku]) }}"
+                                                        class="btn p-2">
                                                         <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                    </a>
-                                                    <a href="#" class="btn p-2">
-                                                        <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
                                                     </a>
                                                 </td>
                                             </tr>

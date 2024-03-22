@@ -5,7 +5,6 @@ jQuery.noConflict();
             e.preventDefault();
             var formData = $(this).serialize();
             formData += `&description=${CKEDITOR.instances.editor.getData()}`;
-            console.log({ formData });
             $.ajax({
                 url: `/admin/products/create`,
                 type: 'POST',
@@ -17,11 +16,13 @@ jQuery.noConflict();
                     window.location.href = '/admin/products';
                 },
                 error: function (error) {
-                    console.log({ error });
+                    $('#js-error').removeClass('d-none');
+                    $('#js-error').text(error.responseJSON.message);
                 },
             });
         });
 
+        // for create detailed product
         var selectedFiles = [];
         $('#image-picker').change(function (event) {
             var files = event.target.files;
@@ -65,6 +66,9 @@ jQuery.noConflict();
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
+            // add description to form data
+            formData.append('description', CKEDITOR.instances.editor.getData());
+            // add images to form data
             selectedFiles.forEach(function (file, index) {
                 formData.append('image' + index, file);
             });
@@ -82,7 +86,36 @@ jQuery.noConflict();
                 },
                 error: function (error) {
                     $('#js-error').removeClass('d-none');
-                    $('#js-error').text('* ' + error.responseJSON.message);
+                    $('#js-error').text(error.responseJSON.message);
+                },
+            });
+        });
+
+        // for update detailed product
+        $('#update-detailed-product-form').submit(function (e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            // add description to form data
+            formData.append('description', CKEDITOR.instances.editor.getData());
+            $.ajax({
+                url: $(form).attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    $('#js-response-message').removeClass('d-none');
+                    $('#js-response-message').addClass('alert-success');
+                    $('#js-response-message').text(response.message);
+                },
+                error: function (error) {
+                    $('#js-response-message').removeClass('d-none');
+                    $('#js-response-message').addClass('alert-danger');
+                    $('#js-response-message').text(error.responseJSON.message);
                 },
             });
         });
