@@ -22,6 +22,7 @@ jQuery.noConflict();
             });
         });
 
+        // for create detailed product
         var selectedFiles = [];
         $('#image-picker').change(function (event) {
             var files = event.target.files;
@@ -65,6 +66,7 @@ jQuery.noConflict();
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
+            formData.append('description', CKEDITOR.instances.editor.getData());
             selectedFiles.forEach(function (file, index) {
                 formData.append('image' + index, file);
             });
@@ -83,6 +85,32 @@ jQuery.noConflict();
                 error: function (error) {
                     $('#js-error').removeClass('d-none');
                     $('#js-error').text('* ' + error.responseJSON.message);
+                },
+            });
+        });
+
+        // for update detailed product
+        $('#update-detailed-product-form').submit(function (e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            $.ajax({
+                url: $(form).attr('action'),
+                type: 'PATCH',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    console.log('====================================');
+                    console.log(response);
+                    console.log('====================================');
+                },
+                error: function (error) {
+                    $('#js-error').removeClass('d-none');
+                    $('#js-error').text(error.responseJSON.message);
                 },
             });
         });

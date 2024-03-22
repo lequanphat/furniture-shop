@@ -45,7 +45,7 @@
                                 <thead>
                                     <tr>
                                         <th>Product</th>
-                                        <th>Price</th>
+                                        <th>Average Price</th>
                                         <th>Quantities</th>
                                         <th>Brand</th>
                                         <th>Category</th>
@@ -57,8 +57,17 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex py-1 align-items-center">
+                                                    @php
+                                                        $imageUrl = null;
+                                                        foreach ($product->detailed_products as $detailed_product) {
+                                                            if ($image = $detailed_product->images->first()) {
+                                                                $imageUrl = asset('storage/' . $image->url);
+                                                                break;
+                                                            }
+                                                        }
+                                                    @endphp
                                                     <span class="avatar me-2"
-                                                        style="background-image: url({{ asset('storage/' . $product->detailed_products->first()->images->first()->url) }}); width: 80px; height: 80px;"></span>
+                                                        style="background-image: url({{ $imageUrl }}); width: 80px; height: 80px;"></span>
                                                     <div class="flex-fill">
                                                         <div class="font-weight-medium">
                                                             <h3 class="m-0">{{ $product->name }}</h3>
@@ -71,8 +80,9 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>69.000đ</td>
-                                            <td>{{ $product->quantities }}</td>
+                                            <td>{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
+                                            </td>
+                                            <td>{{ $product->detailed_products->sum('quantities') }}</td>
                                             <td>{{ $product->brand->name }}</td>
                                             <td>{{ $product->category->name }}</td>
                                             <td>

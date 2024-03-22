@@ -123,4 +123,17 @@ class ProductController extends Controller
         ];
         return  view('admin.products.detailed_product_details', $data);
     }
+    public function  update_detailed_product_ui(Request $request)
+    {
+        $sku = $request->route('sku');
+        $data = [
+            'page' => 'Update Detailed Product',
+            'detailed_product' => ProductDetail::with('images')->find($sku),
+        ];
+        return  view('admin.products.update_product_details', $data);
+    }
+    public function  update_detailed_product(Request $request)
+    {
+        return  $request->all();
+    }
 }
