@@ -1,8 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-
-    
-
     <!-- Page header -->
     <div class="page-header d-print-none">
         <div class="container-xl">
@@ -328,6 +325,7 @@
                         </div>
                     </div>
                 </div>
+                {{-- End col --}}
                 <div class="col-lg-6">
                     <div class="row row-cards">
                         <div class="col-12">
@@ -373,8 +371,10 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-            @include('admin.components.footer')
+            {{-- End col --}}
         </div>
-    @endsection
+        {{-- End row --}}
+        @include('admin.components.footer')
+    </div>
+@endsection
