@@ -112,7 +112,7 @@ class ProductController extends Controller
             $count++;
         }
 
-        return back()->with('message', 'Product details created successfully!');
+        return ['detailed_product' => $detailed_product];
     }
     public function detailed_product_details(Request $request)
     {
@@ -145,6 +145,20 @@ class ProductController extends Controller
             'description' => $request->input('description') ?? '',
         ]);
         // handle images update here
+        $old_images =  explode(',', $request->input('old_images'));
+        ProductImage::where('sku', $sku)
+            ->whereNotIn('product_image_id', $old_images)
+            ->delete();
+        $count = 0;
+        while ($request->hasFile('image' . $count)) {
+            $file = $request->file('image' . $count);
+            $path = $file->store('uploads/images', 'public');
+            ProductImage::create([
+                'sku' => $request->input('sku'),
+                'url' => $path
+            ]);
+            $count++;
+        }
         return ['message' => 'Product details updated successfully!'];
     }
 }

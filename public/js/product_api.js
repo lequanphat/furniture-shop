@@ -41,7 +41,9 @@ jQuery.noConflict();
                                 </div>
                             </a>
                             
-                            <button data-file-id="${file.lastModified}" type="button" class="js-remove-image bg-white btn-close position-absolute" style="top: 3%; right: 5%;"></button>
+                            <button data-file-id="${file.lastModified}" type="button" 
+                            class="js-remove-image bg-white btn-close position-absolute" 
+                            style="top: 3%; right: 5%;"></button>
                         </div>`);
                     };
                 })(files[i]);
@@ -85,7 +87,7 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    window.location.href = '/admin/products';
+                    window.location.href = `/admin/products/${response.detailed_product.product_id}`;
                 },
                 error: function (error) {
                     $('#js-error').removeClass('d-none');
@@ -95,12 +97,78 @@ jQuery.noConflict();
         });
 
         // for update detailed product
+        var updateSelectedFiles = [];
+        var oldSelectedFile = [];
+
+        var count = $('#update-preview-list').children().length;
+        for (var i = 0; i < count; i++) {
+            oldSelectedFile.push($('#update-preview-list').children().eq(i).data('file-id'));
+        }
+
+        $('#update-image-picker').change(function (event) {
+            var files = event.target.files;
+            // Handle the file preview
+            for (var i = 0; i < files.length; i++) {
+                if (updateSelectedFiles.length + oldSelectedFile.length >= 4) break;
+                updateSelectedFiles.push(files[i]);
+                var reader = new FileReader();
+                reader.onload = (function (file) {
+                    return function (e) {
+                        $('#update-preview-list').append(`<div class="col-md-3 col-sm-4 position-relative">
+                            <a data-fslightbox="gallery" href="#">
+                                <div 
+                                    class="img-responsive img-responsive-1x1 rounded-3 border"
+                                    style="background-image: url(${e.target.result})" >
+                                </div>
+                            </a>
+                            
+                            <button data-file-id="${file.lastModified}" type="button" 
+                            class="js-remove-image bg-white btn-close position-absolute" 
+                            style="top: 3%; right: 5%;"></button>
+                        </div>`);
+                    };
+                })(files[i]);
+                reader.readAsDataURL(files[i]);
+            }
+            console.log({ updateSelectedFiles, oldSelectedFile });
+            if (updateSelectedFiles.length + oldSelectedFile.length >= 4) {
+                $('#update-image-picker').attr('disabled', true);
+            }
+        });
+
+        $('#update-preview-list').on('click', '.js-remove-image', function (e) {
+            // handle for new files
+            var lastModified = $(this).data('file-id');
+            updateSelectedFiles = updateSelectedFiles.filter((file) => {
+                $(`button[data-file-id="${lastModified}"]`).parent().remove();
+                return file.lastModified !== lastModified;
+            });
+            $(this).parent().remove();
+
+            // handle for old files
+            var file_id = $(this).parent().data('file-id');
+            oldSelectedFile = oldSelectedFile.filter((item) => {
+                return item !== file_id;
+            });
+
+            if (updateSelectedFiles.length + oldSelectedFile.length < 4) {
+                $('#update-image-picker').attr('disabled', false);
+            }
+            console.log({ updateSelectedFiles, oldSelectedFile });
+        });
+
         $('#update-detailed-product-form').submit(function (e) {
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
             // add description to form data
             formData.append('description', CKEDITOR.instances.editor.getData());
+            // add images to form data
+            updateSelectedFiles.forEach(function (file, index) {
+                formData.append('image' + index, file);
+            });
+            formData.append('old_images', oldSelectedFile);
+
             $.ajax({
                 url: $(form).attr('action'),
                 type: 'POST',
@@ -111,6 +179,9 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
+                    console.log('====================================');
+                    console.log(response);
+                    console.log('====================================');
                     $('#js-response-message').removeClass('d-none');
                     $('#js-response-message').addClass('alert-success');
                     $('#js-response-message').text(response.message);

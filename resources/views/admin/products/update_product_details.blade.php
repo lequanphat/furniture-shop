@@ -83,7 +83,7 @@
                                         <div class="col-12">
                                             <div class="d-flex align-items-center justify-content-center"
                                                 style="width: 80px; height: 80px;">
-                                                <label for="image-picker"
+                                                <label for="update-image-picker"
                                                     class="d-flex align-items-center justify-content-center rounded-circle border"
                                                     style="width: 100%; height: 100%; background-color: #f8f9fa; cursor: pointer; border-style: dashed;">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="50"
@@ -95,16 +95,17 @@
                                                         <path d="M5 12l14 0" />
                                                     </svg>
                                                 </label>
-                                                <input class="d-none" type="file" id="image-picker" accept="image/*"
-                                                    multiple>
+                                                <input class="d-none" type="file" id="update-image-picker"
+                                                    accept="image/*" multiple>
 
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="preview-list" class="row g-2 g-md-3">
+                                    <div id="update-preview-list" class="row g-2 g-md-3">
                                         @foreach ($detailed_product->images as $image)
-                                            <div class="col-md-3 col-sm-4 position-relative">
-                                                <a data-fslightbox="gallery" href="#">
+                                            <div class="col-md-3 col-sm-4 position-relative"
+                                                data-file-id="{{ $image->product_image_id }}">
+                                                <a data-fslightbox="gallery" href="{{ asset('storage/' . $image->url) }}">
                                                     <div class="img-responsive img-responsive-1x1 rounded-3 border"
                                                         style="background-image: url({{ asset('storage/' . $image->url) }})">
                                                     </div>
