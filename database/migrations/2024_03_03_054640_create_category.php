@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('category_id');
             $table->string('name');
-            $table->string('description')->default('');
+            $table->text('description')->default('');
             $table->integer('index')->default(0);
             $table->unsignedInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('category_id')->on('categories');
