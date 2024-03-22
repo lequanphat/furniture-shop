@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('discounts', function (Blueprint $table) {
             $table->increments('discount_id');
             $table->string('title');
-            $table->string('description')->default('');
+            $table->text('description')->default('');
             $table->decimal('percentage', 10, 2);
             $table->decimal('amount', 10, 2);
             $table->date('start_date')->default(now());

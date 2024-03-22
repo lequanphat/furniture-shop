@@ -1,6 +1,5 @@
-<header class="navbar navbar-expand-md d-print-none">
+<header class="navbar navbar-expand-md d-print-none d-lg-block d-md-none d-sm-none d-none">
     <div class="container-xl">
-
         <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item d-none d-md-flex me-3">
                 <div class="btn-list">
