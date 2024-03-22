@@ -73,7 +73,7 @@
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="warranty_month" class="form-label">Warranty Month</label>
-                                        <input id="warranty_month" name="warranty_month" type="text" class="form-control"
+                                        <input id="warranty_month" name="warranty_month" type="number" class="form-control"
                                             value="{{ $detailed_product->warranty_month }}">
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div id="js-error" class="alert alert-danger d-none">
+                                    <div id="js-response-message" class="alert d-none">
                                     </div>
                                 </div>
                             </div>

@@ -72,7 +72,7 @@
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="warranty_month" class="form-label">Warranty Month</label>
-                                        <input id="warranty_month" name="warranty_month" type="text" class="form-control"
+                                        <input id="warranty_month" name="warranty_month" type="number" class="form-control"
                                             placeholder="6" value="">
                                     </div>
                                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateDetailedProduct;
 use App\Http\Requests\CreateProduct;
+use App\Http\Requests\UpdateDetailedProduct;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -131,8 +132,19 @@ class ProductController extends Controller
         ];
         return  view('admin.products.update_product_details', $data);
     }
-    public function  update_detailed_product(Request $request)
+    public function  update_detailed_product(UpdateDetailedProduct $request)
     {
-        return $request->input('sku');
+        $sku = $request->route('sku');
+        $detailed_product = ProductDetail::find($sku);
+        $detailed_product->update([
+            'name' => $request->input('name'),
+            'color' => $request->input('color'),
+            'size' => $request->input('size'),
+            'original_price' => $request->input('original_price'),
+            'warranty_month' => $request->input('warranty_month'),
+            'description' => $request->input('description') ?? '',
+        ]);
+        // handle images update here
+        return ['message' => 'Product details updated successfully!'];
     }
 }

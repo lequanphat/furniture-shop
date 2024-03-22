@@ -100,7 +100,7 @@ jQuery.noConflict();
             formData.append('description', CKEDITOR.instances.editor.getData());
             $.ajax({
                 url: $(form).attr('action'),
-                type: 'PATCH',
+                type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -108,13 +108,14 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    console.log('====================================');
-                    console.log(response);
-                    console.log('====================================');
+                    $('#js-response-message').removeClass('d-none');
+                    $('#js-response-message').addClass('alert-success');
+                    $('#js-response-message').text(response.message);
                 },
                 error: function (error) {
-                    $('#js-error').removeClass('d-none');
-                    $('#js-error').text(error.responseJSON.message);
+                    $('#js-response-message').removeClass('d-none');
+                    $('#js-response-message').addClass('alert-danger');
+                    $('#js-response-message').text(error.responseJSON.message);
                 },
             });
         });
