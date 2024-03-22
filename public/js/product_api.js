@@ -5,7 +5,6 @@ jQuery.noConflict();
             e.preventDefault();
             var formData = $(this).serialize();
             formData += `&description=${CKEDITOR.instances.editor.getData()}`;
-            console.log({ formData });
             $.ajax({
                 url: `/admin/products/create`,
                 type: 'POST',
@@ -17,7 +16,8 @@ jQuery.noConflict();
                     window.location.href = '/admin/products';
                 },
                 error: function (error) {
-                    console.log({ error });
+                    $('#js-error').removeClass('d-none');
+                    $('#js-error').text(error.responseJSON.message);
                 },
             });
         });
@@ -66,7 +66,9 @@ jQuery.noConflict();
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
+            // add description to form data
             formData.append('description', CKEDITOR.instances.editor.getData());
+            // add images to form data
             selectedFiles.forEach(function (file, index) {
                 formData.append('image' + index, file);
             });
@@ -84,7 +86,7 @@ jQuery.noConflict();
                 },
                 error: function (error) {
                     $('#js-error').removeClass('d-none');
-                    $('#js-error').text('* ' + error.responseJSON.message);
+                    $('#js-error').text(error.responseJSON.message);
                 },
             });
         });
@@ -94,6 +96,8 @@ jQuery.noConflict();
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
+            // add description to form data
+            formData.append('description', CKEDITOR.instances.editor.getData());
             $.ajax({
                 url: $(form).attr('action'),
                 type: 'PATCH',

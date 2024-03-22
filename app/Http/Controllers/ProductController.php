@@ -86,8 +86,7 @@ class ProductController extends Controller
         ];
         return view('admin.products.create_product_details', $data);
     }
-    // CreateDetailedProduct
-    public function create_detailed_product(Request $request)
+    public function create_detailed_product(CreateDetailedProduct $request)
     {
         $product_id = $request->route('product_id');
         $detailed_product = ProductDetail::create([
@@ -134,6 +133,6 @@ class ProductController extends Controller
     }
     public function  update_detailed_product(Request $request)
     {
-        return  $request->all();
+        return $request->input('sku');
     }
 }

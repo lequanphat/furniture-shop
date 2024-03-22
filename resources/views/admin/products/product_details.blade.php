@@ -98,7 +98,13 @@
                                                         </span>
                                                         <div class="flex-fill">
                                                             <div class="font-weight-medium">
-                                                                <h3 class="m-0">{{ $detaild_product->name }}</h3>
+                                                                <h3 class="m-0">{{ $detaild_product->name }}
+                                                                    @if ($detaild_product->created_at->diffInDays() < 7)
+                                                                        <span
+                                                                            class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
+                                                                        </span>
+                                                                    @endif
+                                                                </h3>
                                                             </div>
                                                             <div class="text-muted">
                                                                 <a href="#"

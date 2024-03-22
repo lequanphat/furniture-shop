@@ -125,10 +125,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="js-error alert alert-error d-none">
+                                    <div id="js-error" class="alert alert-danger d-none">
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="card-footer text-end">
