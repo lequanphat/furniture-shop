@@ -172,4 +172,9 @@ class PagesController extends Controller
         ];
         return view('admin.settings.index', $data);
     }
+
+    public function change_password()
+    {
+        return view('auth.change-password');
+    }
 }
