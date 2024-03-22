@@ -28,7 +28,7 @@ jQuery.noConflict();
             var files = event.target.files;
             // Handle the file preview
             for (var i = 0; i < files.length; i++) {
-                if (i >= 4) break;
+                if (selectedFiles.length >= 4) break;
                 selectedFiles.push(files[i]);
                 var reader = new FileReader();
                 reader.onload = (function (file) {
@@ -41,21 +41,24 @@ jQuery.noConflict();
                                 </div>
                             </a>
                             
-                            <button data-filename="${file.name}" type="button" class="js-remove-image bg-white btn-close position-absolute" style="top: 3%; right: 5%;"></button>
+                            <button data-file-id="${file.lastModified}" type="button" class="js-remove-image bg-white btn-close position-absolute" style="top: 3%; right: 5%;"></button>
                         </div>`);
                     };
                 })(files[i]);
                 reader.readAsDataURL(files[i]);
             }
+            console.log({ selectedFiles });
             if (selectedFiles.length >= 4) {
                 $('#image-picker').attr('disabled', true);
             }
         });
 
         $('#preview-list').on('click', '.js-remove-image', function (e) {
-            var filename = $(this).data('filename');
-            selectedFiles = selectedFiles.filter((file) => file.name !== filename);
-            console.log({ selectedFiles });
+            var lastModified = $(this).data('file-id');
+            selectedFiles = selectedFiles.filter((file) => {
+                $(`button[data-file-id="${lastModified}"]`).parent().remove();
+                return file.lastModified !== lastModified;
+            });
             $(this).parent().remove();
             if (selectedFiles.length < 4) {
                 $('#image-picker').attr('disabled', false);

@@ -18,6 +18,7 @@ class ChangePassword extends FormRequest
         // validate here
         return [
             'password' => 'required|min:6|max:20',
+            'new_password' => 'required|min:6|max:20|different:password',
         ];
     }
     public function messages()
@@ -27,6 +28,10 @@ class ChangePassword extends FormRequest
             'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least 6 characters.',
             'password.max' => 'The password must not exceed 20 characters.',
+            'new_password.required' => 'The new password field is required.',
+            'new_password.min' => 'The new password must be at least 6 characters.',
+            'new_password.max' => 'The new password must not exceed 20 characters.',
+            'new_password.different' => 'The new password must be different with the password.',
         ];
     }
 }

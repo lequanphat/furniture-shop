@@ -193,9 +193,12 @@ class AuthController extends Controller
     public function change_password(ChangePassword $request)
     {
         $user = User::find(Auth::user()->user_id);
-        $user->update([
-            'password' => Hash::make($request->input('password')),
-        ]);
-        return redirect('/');
+        if (Hash::check($request->input('password'), $user->password)) {
+            $user->update([
+                'password' => Hash::make($request->input('new_password')),
+            ]);
+            return redirect('/');
+        }
+        return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
     }
 }

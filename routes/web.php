@@ -54,6 +54,8 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
+    Route::get('/change-password', [PagesController::class, 'change_password'])->name('change_password_ui');
+    Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
 
     // users routes
     Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user']);
