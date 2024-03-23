@@ -2,72 +2,9 @@
 @section('content')
     {{-- Mini cart --}}
     @include('components.mini-cart')
-    <div class="slider-area">
-        <div class="slider-active swiper-container">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="intro-section slider-height-1 slider-content-center bg-img single-animation-wrap slider-bg-color-1"
-                        style="background-image:url({{ asset('images/slider/slider-bg-1.jpg') }})">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="slider-content-1 slider-animated-1">
-                                        <h3 class="animated">new arrival</h3>
-                                        <h1 class="animated">Summer <br>Collection</h1>
-                                        <div class="slider-btn btn-hover">
-                                            <a href="/products/1" class="btn animated">
-                                                Shop Now <i class=" ti-arrow-right "></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="hero-slider-img-1 slider-animated-1">
-                                        <img class="animated animated-slider-img-1"
-                                            src="{{ asset('images/slider/slider-img-1.png') }}" alt="">
-                                        <div class="product-offer animated">
-                                            <h5>30% <span>Off</span></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="intro-section slider-height-1 slider-content-center bg-img single-animation-wrap slider-bg-color-1"
-                        style="background-image:url({{ asset('images/slider/slider-bg-1.jpg') }})">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="slider-content-1 slider-animated-1">
-                                        <h3 class="animated">new arrival</h3>
-                                        <h1 class="animated">Summer <br>Collection</h1>
-                                        <div class="slider-btn btn-hover">
-                                            <a href="/products/1" class="btn animated">
-                                                Shop Now <i class=" ti-arrow-right "></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="hero-slider-img-1 slider-animated-1">
-                                        <img class="animated animated-slider-img-1"
-                                            src="{{ asset('images/slider/slider-img-1-2.png') }}" alt="">
-                                        <div class="product-offer animated">
-                                            <h5>30% <span>Off</span></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="home-slider-prev main-slider-nav"><i class="fa fa-angle-left"></i></div>
-                <div class="home-slider-next main-slider-nav"><i class="fa fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
+    {{-- Slider --}}
+    @include('pages.dashboard.slider')
+
     <div class="banner-area pt-100 pb-70">
         <div class="container">
             <div class="row">
