@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
@@ -83,8 +84,17 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/suppliers/{id}/edit', [supplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/admin/suppliers/{id}', [supplierController::class, 'update'])->name('suppliers.update');
 
+    //admin order
+    //các thành phần cơ bản của route | Route::methods('url',[ClassController,'function']); | (function bên trong file Controller)
+    //Route::get('/admin/orders', [OrderController::class,'index'])->name('orders.index');//mũi tên này là đặt tên cho route
+
+
+    Route::get('/admin/orders/index', [OrderController::class,'index']);
+
+    //Route này sẽ gọi qua cái view ở /admin/orders, với việc xử lý sẽ ở file OrderController, trong hàm là index
+
     //admin category
-    Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
+    Route::get('/admin/categories', [CategoryController::class, 'category_ui']);//hàm của controller
     Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
     Route::get('/admin/categories/{category_id}/delete', [CategoryController::class, 'category_delete']);
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
