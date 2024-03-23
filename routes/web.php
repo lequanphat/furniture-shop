@@ -39,15 +39,16 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/', [PagesController::class, 'index'])->name('user');
     Route::get('/shop', [PagesController::class, 'shop']);
     Route::get('/about', [PagesController::class, 'about']);
-    Route::get('/services', [PagesController::class, 'services']);
-    Route::get('/blog', [PagesController::class, 'blog']);
     Route::get('/contact', [PagesController::class, 'contact']);
+    Route::get('/products/{product_id}', [PagesController::class, 'product_details']);
+    Route::get('/cart', [PagesController::class, 'cart']);
+    Route::get('/checkout', [PagesController::class, 'checkout']);
 });
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
 
-    Route::get('/profile', [PagesController::class, 'profile']);
+    Route::get('/account', [PagesController::class, 'account']);
 });
 
 
