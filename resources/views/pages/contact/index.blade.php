@@ -1,67 +1,10 @@
 @extends('layouts.app')
 @section('content')
-    <!-- mini cart start -->
-    <div class="sidebar-cart-active">
-        <div class="sidebar-cart-all">
-            <a class="cart-close" href="#"><i class="pe-7s-close"></i></a>
-            <div class="cart-content">
-                <h3>Shopping Cart</h3>
-                <ul>
-                    <li>
-                        <div class="cart-img">
-                            <a href="#"><img src="{{ asset('images/cart/cart-1.jpg') }}" alt=""></a>
-                        </div>
-                        <div class="cart-title">
-                            <h4><a href="#">Stylish Swing Chair</a></h4>
-                            <span> 1 × $49.00 </span>
-                        </div>
-                        <div class="cart-delete">
-                            <a href="#">×</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="cart-img">
-                            <a href="#"><img src="{{ asset('images/cart/cart-2.jpg') }}" alt=""></a>
-                        </div>
-                        <div class="cart-title">
-                            <h4><a href="#">Modern Chairs</a></h4>
-                            <span> 1 × $49.00 </span>
-                        </div>
-                        <div class="cart-delete">
-                            <a href="#">×</a>
-                        </div>
-                    </li>
-                </ul>
-                <div class="cart-total">
-                    <h4>Subtotal: <span>$170.00</span></h4>
-                </div>
-                <div class="cart-btn btn-hover">
-                    <a class="theme-color" href="cart.html">view cart</a>
-                </div>
-                <div class="checkout-btn btn-hover">
-                    <a class="theme-color" href="checkout.html">checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="breadcrumb-area bg-gray-4 breadcrumb-padding-1">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <h2 data-aos="fade-up" data-aos-delay="200">Contact Us</h2>
-                <ul data-aos="fade-up" data-aos-delay="400">
-                    <li><a href="index.html">Home</a></li>
-                    <li><i class="ti-angle-right"></i></li>
-                    <li>Contact Us</li>
-                </ul>
-            </div>
-        </div>
-        <div class="breadcrumb-img-1">
-            <img src="{{ asset('images/banner/breadcrumb-1.png') }}" alt="">
-        </div>
-        <div class="breadcrumb-img-2">
-            <img src="{{ asset('images/banner/breadcrumb-2.png') }}" alt="">
-        </div>
-    </div>
+     {{-- Mini cart --}}
+     @include('components.mini-cart')
+    {{-- Head banner --}}
+    @include('components.head-banner')
+    
     <div class="contact-form-area pt-90 pb-100">
         <div class="container">
             <div class="section-title-4 text-center mb-55" data-aos="fade-up" data-aos-delay="200">

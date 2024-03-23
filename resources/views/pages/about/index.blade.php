@@ -1,67 +1,10 @@
 @extends('layouts.app')
 @section('content')
-    <!-- mini cart start -->
-    <div class="sidebar-cart-active">
-        <div class="sidebar-cart-all">
-            <a class="cart-close" href="#"><i class="pe-7s-close"></i></a>
-            <div class="cart-content">
-                <h3>Shopping Cart</h3>
-                <ul>
-                    <li>
-                        <div class="cart-img">
-                            <a href="#"><img src="{{ asset('images/cart/cart-1.jpg') }}" alt="" /></a>
-                        </div>
-                        <div class="cart-title">
-                            <h4><a href="#">Stylish Swing Chair</a></h4>
-                            <span> 1 × $49.00 </span>
-                        </div>
-                        <div class="cart-delete">
-                            <a href="#">×</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="cart-img">
-                            <a href="#"><img src="{{ asset('images/cart/cart-2.jpg') }}" alt="" /></a>
-                        </div>
-                        <div class="cart-title">
-                            <h4><a href="#">Modern Chairs</a></h4>
-                            <span> 1 × $49.00 </span>
-                        </div>
-                        <div class="cart-delete">
-                            <a href="#">×</a>
-                        </div>
-                    </li>
-                </ul>
-                <div class="cart-total">
-                    <h4>Subtotal: <span>$170.00</span></h4>
-                </div>
-                <div class="cart-btn btn-hover">
-                    <a class="theme-color" href="cart.html">view cart</a>
-                </div>
-                <div class="checkout-btn btn-hover">
-                    <a class="theme-color" href="checkout.html">checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="breadcrumb-area bg-gray-4 breadcrumb-padding-1">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <h2 data-aos="fade-up" data-aos-delay="200">About Us</h2>
-                <ul data-aos="fade-up" data-aos-delay="400">
-                    <li><a href="index.html">Home</a></li>
-                    <li><i class="ti-angle-right"></i></li>
-                    <li>About Us</li>
-                </ul>
-            </div>
-        </div>
-        <div class="breadcrumb-img-1" data-aos="fade-right" data-aos-delay="200">
-            <img src="{{ asset('images/banner/breadcrumb-1.png') }}" alt="" />
-        </div>
-        <div class="breadcrumb-img-2" data-aos="fade-left" data-aos-delay="200">
-            <img src="{{ asset('images/banner/breadcrumb-2.png') }}" alt="" />
-        </div>
-    </div>
+    {{-- Mini cart --}}
+    @include('components.mini-cart')
+    {{-- Head banner --}}
+    @include('components.head-banner')
+
     <div class="about-us-area pt-100 pb-100">
         <div class="container">
             <div class="row align-items-center flex-row-reverse">
@@ -94,92 +37,10 @@
             </div>
         </div>
     </div>
-    <div class="banner-area pb-100">
-        <div class="bg-img bg-padding-2" style="background-image: url({{ asset('images/bg/bg-2.png') }})">
-            <div class="container">
-                <div class="banner-content-5 banner-content-5-static">
-                    <span data-aos="fade-up" data-aos-delay="200">Up To 40% Off</span>
-                    <h1 data-aos="fade-up" data-aos-delay="400">
-                        New Furniture <br />Sofa Set
-                    </h1>
-                    <div class="btn-style-3 btn-hover" data-aos="fade-up" data-aos-delay="600">
-                        <a class="btn border-radius-none" href="product-details.html">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="testimonial-area pb-100">
-        <div class="container">
-            <div class="section-title-2 st-border-center text-center mb-75" data-aos="fade-up" data-aos-delay="200">
-                <h2>Testimonial</h2>
-            </div>
-            <div class="testimonial-active swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="single-testimonial" data-aos="fade-up" data-aos-delay="200">
-                            <div class="testimonial-img">
-                                <img src="{{ asset('images/testimonial/client-1.png') }}" alt="" />
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectet adipisicing elit, sed
-                                do eiusmod tempo incididunt ut labore et dolore.
-                            </p>
-                            <div class="testimonial-info">
-                                <h4>Amrita Sha</h4>
-                                <span> Our Client.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="single-testimonial" data-aos="fade-up" data-aos-delay="400">
-                            <div class="testimonial-img">
-                                <img src="{{ asset('images/testimonial/client-2.png') }}" alt="" />
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectet adipisicing elit, sed
-                                do eiusmod tempo incididunt ut labore et dolore.
-                            </p>
-                            <div class="testimonial-info">
-                                <h4>Andi Lane</h4>
-                                <span> Designer.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="single-testimonial" data-aos="fade-up" data-aos-delay="600">
-                            <div class="testimonial-img">
-                                <img src="{{ asset('images/testimonial/client-1.png') }}" alt="" />
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectet adipisicing elit, sed
-                                do eiusmod tempo incididunt ut labore et dolore.
-                            </p>
-                            <div class="testimonial-info">
-                                <h4>Ted Ellison</h4>
-                                <span> Developer.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="single-testimonial">
-                            <div class="testimonial-img">
-                                <img src="{{ asset('images/testimonial/client-2.png') }}" alt="" />
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectet adipisicing elit, sed
-                                do eiusmod tempo incididunt ut labore et dolore.
-                            </p>
-                            <div class="testimonial-info">
-                                <h4>Aliah Pitts</h4>
-                                <span> Customer.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{-- Banner --}}
+    @include('pages.about.banner')
+    {{-- Testimonial --}}
+    @include('pages.about.testimonial')
     <div class="funfact-area bg-img pt-100 pb-70" style="background-image: url(assets/images/bg/bg-4.png)">
         <div class="container">
             <div class="row">
@@ -222,48 +83,8 @@
             </div>
         </div>
     </div>
-    <div class="team-area pt-100 pb-70">
-        <div class="container">
-            <div class="section-title-2 st-border-center text-center mb-75" data-aos="fade-up" data-aos-delay="200">
-                <h2>Our Staff</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-12">
-                    <div class="single-team-wrap text-center mb-30" data-aos="fade-up" data-aos-delay="200">
-                        <img src="{{ asset('images/team/team-1.png') }}" alt="" />
-                        <div class="team-info-position">
-                            <div class="team-info">
-                                <h3>Kari Rasmus</h3>
-                                <span>Sales Man</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-12">
-                    <div class="single-team-wrap text-center mb-30" data-aos="fade-up" data-aos-delay="400">
-                        <img src="{{ asset('images/team/team-2.png') }}" alt="" />
-                        <div class="team-info-position">
-                            <div class="team-info">
-                                <h3>Kari Rasmus</h3>
-                                <span>Sales Man</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-12">
-                    <div class="single-team-wrap text-center mb-30" data-aos="fade-up" data-aos-delay="600">
-                        <img src="{{ asset('images/team/team-3.png') }}" alt="" />
-                        <div class="team-info-position">
-                            <div class="team-info">
-                                <h3>Kari Rasmus</h3>
-                                <span>Sales Man</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{-- Our staff --}}
+    @include('pages.about.our-staff')
     <div class="subscribe-area pb-100">
         <div class="container">
             <div class="section-title-3 text-center mb-55" data-aos="fade-up" data-aos-delay="200">

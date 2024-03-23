@@ -1,67 +1,9 @@
 @extends('layouts.app')
 @section('content')
-    <!-- mini cart start -->
-    <div class="sidebar-cart-active">
-        <div class="sidebar-cart-all">
-            <a class="cart-close" href="#"><i class="pe-7s-close"></i></a>
-            <div class="cart-content">
-                <h3>Shopping Cart</h3>
-                <ul>
-                    <li>
-                        <div class="cart-img">
-                            <a href="#"><img src="{{ asset('images/cart/cart-1.jpg') }}" alt=""></a>
-                        </div>
-                        <div class="cart-title">
-                            <h4><a href="#">Stylish Swing Chair</a></h4>
-                            <span> 1 × $49.00 </span>
-                        </div>
-                        <div class="cart-delete">
-                            <a href="#">×</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="cart-img">
-                            <a href="#"><img src="{{ asset('images/cart/cart-2.jpg') }}" alt=""></a>
-                        </div>
-                        <div class="cart-title">
-                            <h4><a href="#">Modern Chairs</a></h4>
-                            <span> 1 × $49.00 </span>
-                        </div>
-                        <div class="cart-delete">
-                            <a href="#">×</a>
-                        </div>
-                    </li>
-                </ul>
-                <div class="cart-total">
-                    <h4>Subtotal: <span>$170.00</span></h4>
-                </div>
-                <div class="cart-btn btn-hover">
-                    <a class="theme-color" href="cart.html">view cart</a>
-                </div>
-                <div class="checkout-btn btn-hover">
-                    <a class="theme-color" href="checkout.html">checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="breadcrumb-area bg-gray-4 breadcrumb-padding-1">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <h2 data-aos="fade-up" data-aos-delay="200">Shop</h2>
-                <ul data-aos="fade-up" data-aos-delay="400">
-                    <li><a href="index.html">Home</a></li>
-                    <li><i class="ti-angle-right"></i></li>
-                    <li>Shop Sidebar</li>
-                </ul>
-            </div>
-        </div>
-        <div class="breadcrumb-img-1" data-aos="fade-right" data-aos-delay="200">
-            <img src="{{ asset('images/banner/breadcrumb-1.png') }}" alt="">
-        </div>
-        <div class="breadcrumb-img-2" data-aos="fade-left" data-aos-delay="200">
-            <img src="{{ asset('images/banner/breadcrumb-2.png') }}" alt="">
-        </div>
-    </div>
+    {{-- Mini cart --}}
+    @include('components.mini-cart')
+    @include('components.head-banner')
+
     <div class="shop-area shop-page-responsive pt-100 pb-100">
         <div class="container">
             <div class="row flex-row-reverse">
@@ -94,15 +36,15 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-5.png') }}" alt="">
                                                 </a>
                                                 <div class="product-badge badge-top badge-right badge-pink">
                                                     <span>-10%</span>
                                                 </div>
                                                 <div class="product-action-wrap">
-                                                    <button class="product-action-btn-1" title="Wishlist"><i
-                                                            class="pe-7s-like"></i></button>
+                                                    <a href="/products/1" class="product-action-btn-1" title="Wishlist"><i
+                                                            class="pe-7s-like"></i></a>
                                                     <button class="product-action-btn-1" title="Quick View"
                                                         data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                         <i class="pe-7s-look"></i>
@@ -114,7 +56,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">Interior moderno render</a></h3>
+                                                <h3><a href="/products/1">Interior moderno render</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$25.89 </span>
                                                     <span class="new-price">$20.25 </span>
@@ -125,7 +67,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="400">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-6.png') }}" alt="">
                                                 </a>
                                                 <div class="product-action-wrap">
@@ -142,7 +84,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">Stylish Dining Chair</a></h3>
+                                                <h3><a href="/products/1">Stylish Dining Chair</a></h3>
                                                 <div class="product-price">
                                                     <span>$50.25 </span>
                                                 </div>
@@ -152,7 +94,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="600">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-7.png') }}" alt="">
                                                 </a>
                                                 <div class="product-badge badge-top badge-right badge-pink">
@@ -172,7 +114,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">Round Standard Chair</a></h3>
+                                                <h3><a href="/products/1">Round Standard Chair</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$45.00 </span>
                                                     <span class="new-price">$40.00 </span>
@@ -183,7 +125,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="800">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-4.png') }}" alt="">
                                                 </a>
                                                 <div class="product-action-wrap">
@@ -200,7 +142,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">Stylish Swing Chair</a></h3>
+                                                <h3><a href="/products/1">Stylish Swing Chair</a></h3>
                                                 <div class="product-price">
                                                     <span>$30.25 </span>
                                                 </div>
@@ -210,7 +152,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-8.png') }}" alt="">
                                                 </a>
                                                 <div class="product-badge badge-top badge-right badge-pink">
@@ -230,7 +172,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">Modern Swivel Chair</a></h3>
+                                                <h3><a href="/products/1">Modern Swivel Chair</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$25.89 </span>
                                                     <span class="new-price">$20.25 </span>
@@ -241,7 +183,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="400">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-2.png') }}" alt="">
                                                 </a>
                                                 <div class="product-action-wrap">
@@ -258,7 +200,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">New Modern Sofa Set</a></h3>
+                                                <h3><a href="/products/1">New Modern Sofa Set</a></h3>
                                                 <div class="product-price">
                                                     <span>$50.25 </span>
                                                 </div>
@@ -268,9 +210,8 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="600">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
-                                                    <img src="{{ asset('images/product/product-3.png') }}"
-                                                        alt="">
+                                                <a href="/products/1">
+                                                    <img src="{{ asset('images/product/product-3.png') }}" alt="">
                                                 </a>
                                                 <div class="product-badge badge-top badge-right badge-pink">
                                                     <span>-10%</span>
@@ -289,7 +230,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">Easy Modern Chair</a></h3>
+                                                <h3><a href="/products/1">Easy Modern Chair</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$45.00 </span>
                                                     <span class="new-price">$40.00 </span>
@@ -300,9 +241,8 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="800">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
-                                                    <img src="{{ asset('images/product/product-9.png') }}"
-                                                        alt="">
+                                                <a href="/products/1">
+                                                    <img src="{{ asset('images/product/product-9.png') }}" alt="">
                                                 </a>
                                                 <div class="product-action-wrap">
                                                     <button class="product-action-btn-1" title="Wishlist"><i
@@ -318,7 +258,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">Modern Lounge Chairs</a></h3>
+                                                <h3><a href="/products/1">Modern Lounge Chairs</a></h3>
                                                 <div class="product-price">
                                                     <span>$30.25 </span>
                                                 </div>
@@ -328,9 +268,8 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="1000">
                                             <div class="product-img img-zoom mb-25">
-                                                <a href="product-details.html">
-                                                    <img src="{{ asset('images/product/product-1.png') }}"
-                                                        alt="">
+                                                <a href="/products/1">
+                                                    <img src="{{ asset('images/product/product-1.png') }}" alt="">
                                                 </a>
                                                 <div class="product-badge badge-top badge-right badge-pink">
                                                     <span>-10%</span>
@@ -349,7 +288,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="product-details.html">New Modern Sofa Set</a></h3>
+                                                <h3><a href="/products/1">New Modern Sofa Set</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$25.89 </span>
                                                     <span class="new-price">$20.25 </span>
@@ -373,7 +312,7 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-sm-5">
                                             <div class="product-list-img">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-5.png') }}"
                                                         alt="Product Style">
                                                 </a>
@@ -390,7 +329,7 @@
                                         </div>
                                         <div class="col-lg-8 col-sm-7">
                                             <div class="shop-list-content">
-                                                <h3><a href="product-details.html">Interior moderno render</a></h3>
+                                                <h3><a href="/products/1">Interior moderno render</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$70.89 </span>
                                                     <span class="new-price">$55.25 </span>
@@ -420,7 +359,7 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-sm-5">
                                             <div class="product-list-img">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-7.png') }}"
                                                         alt="Product Style">
                                                 </a>
@@ -434,7 +373,7 @@
                                         </div>
                                         <div class="col-lg-8 col-sm-7">
                                             <div class="shop-list-content">
-                                                <h3><a href="product-details.html">Round Standard Chair</a></h3>
+                                                <h3><a href="/products/1">Round Standard Chair</a></h3>
                                                 <div class="product-price">
                                                     <span>$50.25 </span>
                                                 </div>
@@ -463,7 +402,7 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-sm-5">
                                             <div class="product-list-img">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-4.png') }}"
                                                         alt="Product Style">
                                                 </a>
@@ -480,7 +419,7 @@
                                         </div>
                                         <div class="col-lg-8 col-sm-7">
                                             <div class="shop-list-content">
-                                                <h3><a href="product-details.html">Stylish Swing Chair</a></h3>
+                                                <h3><a href="/products/1">Stylish Swing Chair</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$80.89 </span>
                                                     <span class="new-price">$60.25 </span>
@@ -510,7 +449,7 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-sm-5">
                                             <div class="product-list-img">
-                                                <a href="product-details.html">
+                                                <a href="/products/1">
                                                     <img src="{{ asset('images/product/product-8.png') }}"
                                                         alt="Product Style">
                                                 </a>
@@ -527,7 +466,7 @@
                                         </div>
                                         <div class="col-lg-8 col-sm-7">
                                             <div class="shop-list-content">
-                                                <h3><a href="product-details.html">Modern Swivel Chair</a></h3>
+                                                <h3><a href="/products/1">Modern Swivel Chair</a></h3>
                                                 <div class="product-price">
                                                     <span class="old-price">$45.89 </span>
                                                     <span class="new-price">$30.25 </span>
