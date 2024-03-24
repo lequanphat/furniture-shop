@@ -2,36 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RequestsAddress;
 use Illuminate\Http\Request;
 use App\Models\Address;
 
 class AddressController extends Controller
 {
-    public function update_address(Request $request)
+    public function update_address(RequestsAddress $request)
     {
         $id= $request->input('address_id');
-        $user_id=$request->route('id');
+
         $address=Address::find($id);
         if($address)
         {
-           
+            $user_id=$address->user_id;
             $default=$request->input('is_default');
-            if($address->is_default==1&&$default==0)
+            if($address->is_default!=$default)
             {
-                return back()->withErrors(['is_default' => 'Must have 1 default address card'])->withInput($request->input());
-            }
-            if($address->is_default==0&&$default==1)
-            {
-                $defaultaddress = Address::where('user_id', $user_id)->where('is_default', 1)->first();
-                $defaultaddress->update([
-                    'is_default'=>0,
-                ]);
+                if($default==true)
+                {
+                    $defaultaddress = Address::where('user_id', $user_id)->where('is_default', 1)->first();   
+                    $defaultaddress->update([
+                        'is_default'=>false,
+                    ]);
+                    $address->update([
+                        'is_default'=>true,
+                    ]);
+                }
+                else
+                {
+                    $message = 'Need 1 default card ';
+                    abort(400,$message);
+                }
             }
             $address->update([
                 'receiver_name'=>$request->input('receiver_name'),
                 'address'=>$request->input("address"),
                 'phone_number'=>$request->input('phone_number'),
-                'is_default'=>$default,
             ]);
             return ['message' => 'Updateted address  successfully!', 'address' => $address];
         }
@@ -39,16 +46,17 @@ class AddressController extends Controller
     public function address_user(Request $request)
     {
         $user_id=$request->route('user_id');
-        return Address::where('user_id', $user_id)->get();
+        return Address::where('user_id', $user_id)
+        ->orderBy('is_default','desc')->get();
     }
-    public function create_address(Request $request)
+    public function create_address(RequestsAddress $request)
     {
         $address=Address::create([
             'receiver_name'=>$request->input('receiver_name'),
             'address'=>$request->input("address"),
             'phone_number'=>$request->input('phone_number'),
-            'is_default'=>$request->input('is_default'),
-            'user_id'=>$request->route('user_id'),
+            'is_default'=>0,
+            'user_id'=> $request->input("user_id"),
         ]);
         return ['message' => 'Created address  successfully!', 'address' => $address];
     }

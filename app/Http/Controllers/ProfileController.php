@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateCustomer;
 use App\Http\Requests\UpdateEmployee;
 use Illuminate\Http\Request;
 use app\Models\User;
@@ -68,7 +69,9 @@ class ProfileController extends Controller
     }
     public function update_customer(Request $request)
     {
-        
+        $new_request= new UpdateCustomer( $request->all() );
+        $result=$this->user_controller->update_customer($new_request);
+        return $result;
     }
 
 }

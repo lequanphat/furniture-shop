@@ -32,6 +32,7 @@
         <script src="{{ asset('js/plugins/ajax-mail.js') }}"></script>
         <!-- Main JS -->
         <script src="{{ asset('js/main.js') }}"></script>
+        <script src="{{asset('js/profile_api.js')}}"></script>
     </div>
     @include('components.footer')
 </body>

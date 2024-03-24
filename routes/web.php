@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
@@ -48,9 +49,12 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
-
+    //account
     Route::get('/account/{user_id}', [ProfileController::class, 'customer_ui'])->name('my_account');
-
+    Route::post('/account/profile/update',[ProfileController::class, 'update_customer']);
+    //address_card
+    Route::post('/account/profile/addresscard/update',[AddressController::class, 'update_address']);
+    Route::post('/account/profile/addresscard/create',[AddressController::class, 'create_address']);
 });
 
 
