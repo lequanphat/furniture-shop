@@ -18,13 +18,13 @@ class CreateOrder extends FormRequest
         return [
             'totalPrice' =>'required',
             'paid'=> 'required',
-            'customer'=> 'required|exists:users,user_id',
             'status' => 'required',
-            'created_by'=> 'required|exists:users,user_id',
-            'created_at' => 'required',
-            'recipient_name' => 'required',
+            'receiver_name' => 'required',
             'address' => 'required',
             'phone_number'=> 'required',
+            'customer_id'=> 'required|exists:users,user_id',
+            'employee_id'=> 'required|exists:users,user_id',
+
         ];
     }
     public function messages()
@@ -33,15 +33,14 @@ class CreateOrder extends FormRequest
         return [
             'totalPrice.required'=> 'The total price field is required',
             'paid.required' => 'Paid money field is required',
-            'customer.required'=> 'The customer field is required',
-            'customer.exists'=> 'The customer doesnt exist',
             'status.required'=> 'The status field is required',
-            'created_by.required'=> 'The employee field is required',
-            'created_by.exists'=> 'The employee doesnt exist',
-            'created_at.required' => 'The create at field is required',
-            'recipient_name.required' => 'The recipient field is required',
+            'receiver_name.required' => 'The customer name field is required',
             'address.required' => 'The address field is required',
             'phone_number.required'=> 'The phone number field is required',
+            'customer_id.required'=> 'The customer field is required',
+            'customer_id.exists'=> 'The customer doesnt exist',
+            'employee_id.required'=> 'The employee field is required',
+            'employee_id.exists'=> 'The employee doesnt exist',
         ];
     }
 }

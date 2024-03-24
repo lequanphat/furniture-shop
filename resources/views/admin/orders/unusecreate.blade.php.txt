@@ -1,0 +1,115 @@
+@extends('layouts.admin')
+@section('content')
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <!-- Page pre-title -->
+                    <div class="page-pretitle">
+                        Overview
+                    </div>
+                    <h2 class="page-title">
+                        Create Product
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row row-deck row-cards">
+                <div class="col-12">
+                    <!--form tạo -->
+                    <form id="create-order-form" action="#" method="post" class="card">
+                        @csrf
+                        <div class="card-body">
+                            <div class="row row-cards">
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="totalPrice" class="form-label">Total price</label>
+                                        <input id="totalPrice" name="totalPrice" type="number" class="form-control"
+                                            placeholder="Enter the price money " value="" min="0" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="paid" class="form-label">Paid yet ?</label>
+                                        <select id="paid" name="paid" class="form-control form-select">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="stastus" class="form-label">Status</label>
+                                        <input id="status" name="status" type="number" class="form-control"
+                                            placeholder="Enter status" value="" maxlength="10" min="0" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="receiver_name" class="form-label">Receiver name</label>
+                                        <input id="receiver_name" name="receiver_name" type="text" class="form-control"
+                                            placeholder="Enter name" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Receiver address</label>
+                                        <input id="address" name="address" type="text" class="form-control"
+                                            placeholder="Enter address" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="phone_number" class="form-label">Receiver phone number</label>
+                                        <input id="phone_number" name="phone_number" type="tel" class="form-control"
+                                            placeholder="Enter phone number" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="customer_id" class="form-label">Customer</label>
+                                        <select id="customer_id" name="customer_id" class="form-control form-select">
+                                            @foreach ($customer_and_employee as $customer_id)
+                                                <option value="{{ $customer_id->user_id }}">{{ $customer_id->email }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="employee_id" class="form-label">Created by</label>
+                                        <select id="employee_id" name="employee_id" class="form-control form-select">
+                                            @foreach ($customer_and_employee as $employee_id)
+                                                <option value="{{ $employee_id->user_id }}">{{ $employee_id->email }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="submit" class="btn btn-primary">Create Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @include('admin.components.footer')
+    </div>
+    {{-- Modal --}}
+    <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('editor');
+    </script>
+@endsection
