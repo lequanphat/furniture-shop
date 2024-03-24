@@ -9,9 +9,11 @@ use app\Models\User;
 class ProfileController extends Controller
 {
     private $user_controller;
-    public function __construct(UserController $user_controller)
+    private $address_controller;
+    public function __construct(UserController $user_controller,AddressController $address_controller)
     {
         $this->user_controller = $user_controller;
+        $this->address_controller=$address_controller;
     }
     //
     public function user_ui(Request $request)
@@ -31,11 +33,13 @@ class ProfileController extends Controller
     {
         $user_id = $request->route('user_id');
         $user = User::where('user_id', $user_id)->first();
+        $listaddress=$this->address_controller-> address_user($request);
         if($user)
         {
             $data = [
                 'page' => 'Profile',
-                'user' => $user
+                'user' => $user,
+                'address_cards'=>$listaddress 
             ];
         }
         return view("pages.account.profile",$data);

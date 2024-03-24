@@ -65,8 +65,6 @@ const idemployees = ["first_name", "last_name","gender","birth_date","phone_numb
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
-            formData.append('avatar', imageData);
-            console.log({ formData });
             $.ajax({
                 url: `/admin/profile`,
                 type: 'POST',
@@ -79,18 +77,19 @@ const idemployees = ["first_name", "last_name","gender","birth_date","phone_numb
                 success: function (response) {
                     console.log({ response });
                     // Handle the success response
-                    $('#update_employee_response').removeClass('alert-successs d-none');
-                    $('#update_employee_response').addClass('alert-success');
-                    $('#update_employee_response').html(Object.values(response.message));
+                    $('#update_customer_response').removeClass('alert-successs d-none');
+                    $('#update_customer_response').addClass('alert-success');
+                    $('#update_customer_response').html(Object.values(response.message));
                 },
                 error: function (error) {
                     console.log({ error });
                     // Handle the error response
-                    $('#update_employee_response').removeClass('alert-success d-none');
-                    $('#update_employee_response').addClass('alert-danger');
-                    $('#update_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
+                    $('#update_customer_response').removeClass('alert-success d-none');
+                    $('#update_customer_response').addClass('alert-danger');
+                    $('#update_customer_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });
+        
     });
 })(jQuery); 

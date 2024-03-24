@@ -75,14 +75,26 @@
                                     <div class="tab-pane fade" id="address-edit" role="tabpanel">
                                         <div class="myaccount-content">
                                             <h3>Billing Address</h3>
+                                            @foreach($address_cards as $address)
                                             <address>
-                                                <p><strong>Alex Tuntuni</strong></p>
-                                                <p>1355 Market St, Suite 900 <br>
-                                                    San Francisco, CA 94103</p>
-                                                <p>Mobile: (123) 456-7890</p>
+                                                @if($address->is_default)
+                                                <p> Default address<p>
+                                                @endif
+                                                <p><strong>{{$address->receiver_name}}</strong></p>
+                                                <p>{{$address->address}}</p>
+                                                <p>{{$address->phone_number}}</p>
                                             </address>
-                                            <a href="#" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit
+                                            <a href="#" class="check-btn sqr-btn " 
+                                            data-bs-toggle="modal" data-bs-target="#UpdateAddressModal" 
+                                                    data-address-id="{{$address->address_id}}"
+                                                    data-receiver-name="{{ $address->receiver_name }}"
+                                                    data-address="{{ $address->address }}"
+                                                    data-phone-number="{{ $address->phone_number }}"
+                                                    data-is-default="{{ $address->is_default}}">
+                                            <i class="fa fa-edit"></i> Edit
                                                 Address</a>
+                                                <h3></h3>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <!-- Single Tab Content End -->
