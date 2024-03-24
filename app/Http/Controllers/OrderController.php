@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrder;
 use App\Models\Order;
+use App\Models\User;
 
 
 use Illuminate\Http\Request;
@@ -23,6 +24,16 @@ class OrderController extends Controller
             //lưu ý chữ orders bên trái này sẽ là biến để sử dụng ở view
         ];
         return view('admin.orders.index', $data);//return về view với mớ data để nạp vô bảng
+    }
+
+    //dùng để nạp dữ liệu chọn vào các ô trong trang tạo
+    public function create_ui()
+    {
+        $data = [
+            'page' => 'Create Product',
+            'customer_and_employee' => User::all()
+        ];
+        return view('admin.orders.create', $data);
     }
 }
 

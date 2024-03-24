@@ -21,7 +21,7 @@
                             </a>
 
                         </span>
-                        <a href="#" class="btn btn-primary d-none d-sm-inline-block">
+                        <a href="/admin/orders/create" class="btn btn-primary d-none d-sm-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -49,6 +49,11 @@
                                         <th>Total Price</th>
                                         <th>Paid</th>
                                         <th>Status</th>
+                                        <th>Receiver name</th>
+                                        <th>Address</th>
+                                        <th>Number</th>
+                                        <th>Customer ID</th>
+                                        <th>Created by employee</th>
                                     </tr>
                                 </thead>
                                 <tbody id ="employee-table">
@@ -62,6 +67,11 @@
                                             <td>{{ $order->total_price }}</td>
                                             <td>{{ $order->is_paid }}</td>
                                             <td>{{ $order->status }}</td>
+                                            <td>{{ $order->receiver_name }}</td>
+                                            <td>{{ $order->address }}</td>
+                                            <td>{{ $order->phone_number }}</td>
+                                            <td>{{ $order->customer_id }}</td>
+                                            <td>{{ $order->created_by }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
