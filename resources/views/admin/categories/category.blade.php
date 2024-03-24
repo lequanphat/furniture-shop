@@ -21,11 +21,11 @@
                             </a>
                         </span>
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                            data-bs-target="#modal-simple">
+                           data-bs-target="#modal-simple">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
+                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
@@ -33,11 +33,11 @@
                             Create new category
                         </a>
                         <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal"
-                            data-bs-target="#modal-report" aria-label="Create new report">
+                           data-bs-target="#modal-report" aria-label="Create new report">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
+                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
@@ -57,41 +57,46 @@
                             <table class="table table-vcenter card-table">
                                 <thead>
 
-                                    <tr>
-                                        <th>Categor_id</th>
-                                        <th>name</th>
-                                        <th>description</th>
-                                        <th>index</th>
-                                        <th>parent_id</th>
-                                        <th> Action</th>
+                                <tr>
+                                    <th>Categor_id</th>
+                                    <th>name</th>
+                                    <th>description</th>
+                                    <th>index</th>
+                                    <th>parent_id</th>
+                                    <th> Action</th>
 
-                                    </tr>
+                                </tr>
                                 </thead>
                                 <tbody id="employee-table">
-                                    @foreach ($categories as $category)
-                                        <tr>
-                                            <td>{{ $category->category_id }}</td>
+                                @foreach ($categories as $category)
+                                    <tr>
+                                        <td>{{ $category->category_id }}</td>
 
-                                            <td>{{ $category->name }}</td>
-                                            <td>
-                                                {{ $category->description }}
-                                            </td>
-                                            <td> {{ $category->index }}</td>
-                                            <td>{{ $category->parent_id }}</td>
-                                            {{-- temporary value --}}
-                                            <td>
-                                                <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
-                                                    data-bs-toggle="modal" data-bs-target="#UpdateCategoryModal"
+                                        <td>{{ $category->name }}</td>
+                                        <td>
+                                            {{ $category->description }}
+                                        </td>
+                                        <td> {{ $category->index }}</td>
+                                        <td>{{ $category->parent_id }}</td>
+                                        {{-- temporary value --}}
+                                        <td>
+                                            <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
+                                                    data-bs-toggle="modal" data-bs-target="#update-category-modal"
                                                     data-category-id="{{ $category->category_id }}"
                                                     data-name="{{ $category->name }}"
                                                     data-description="{{ $category->description }}"
                                                     data-index="{{ $category->index }}"
                                                     data-parent-id="{{ $category->parent_id }}">
-                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                </button>
+                                                <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                            </button>
+                                            <a
+                                                href='/admin/categories/delete/{{ $category->category_id }}'
+                                            >
+                                                <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
+                                            </a>
+                                        </td>
 
-                                            </td>
-                                    @endforeach
+                                @endforeach
 
                                 </tbody>
                             </table>
@@ -100,8 +105,8 @@
                                 <li class="page-item disabled">
                                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                            stroke-linecap="round" stroke-linejoin="round">
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M15 6l-6 6l6 6" />
                                         </svg>
@@ -117,8 +122,8 @@
                                     <a class="page-link" href="#">
                                         next
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                             fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M9 6l6 6l-6 6" />
                                         </svg>

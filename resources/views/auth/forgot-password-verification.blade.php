@@ -6,9 +6,14 @@
             <p class="text-muted mb-4">Please check your email to receive the new password provided, use the new password to
                 log in and change your password.</p>
             <div class="form-footer">
-                <a href="/login" class="btn btn-primary w-100">
-                    Back to Login
-                </a>
+                <div class="btn-list flex-nowrap">
+                    <a href="/login" class="btn w-100">
+                        Back to Login
+                    </a>
+                    <a href="mailto:" class="btn btn-success w-100">
+                        Open Mail
+                    </a>
+                </div>
             </div>
         </div>
     </div>

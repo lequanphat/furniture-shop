@@ -3,80 +3,66 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
 use App\Models\Brand;
+use App\Http\Requests\CreateBrand;
 
 class BrandController extends Controller
 {
-    public $data = [
-        'page' => 'Brands',
-    ];
-    //index
-    public function index()
-    {   
-        
-        $brands = Brand::query()
-        ->paginate(5);
-        return view("admin.brands.index", compact('brands'),$this->data);
-    }
-    public function search(Request $request)
+
+    public function brand_ui(Request $request)
     {
-        $search = $request->input('keyword');
-        $brands = Brand::query()
-        ->where('name','like','%'.$search.'%')
-        ->OrWhere('brand_id',$search)
-        ->paginate(5);
-        return view("admin.brands.index", compact("brands"),$this->data);
+        $data = [
+            'page' => 'Brands',
+            'brands' =>  Brand::query()
+                ->paginate(5),
+        ];
+        return view('admin.brands.brand', $data);
     }
-    //form
-    public function create()
+    public function brand_search_ui(Request $request)
     {
-        return view("admin.brands.create",$this->data);
+
+        $search = $request->input('search');
+        $data = [
+            'page' => 'Brands',
+            'brands' =>  Brand::where('name', 'LIKE', '%' . $search . '%')
+                ->paginate(5),
+            'search' => $search,
+        ];
+        return view('admin.brands.brand', $data);
     }
-    public function edit(Request $request)
+    public function update_brand_ui(Request $request)
     {
-        $id = $request->route('id');
-        $brand = Brand::where('brand_id', $id)->first();
-        if(!$brand){
+
+        $brand_id = $request->route('brand_id');
+        $data = [
+            'page' => 'Brands',
+            'action' => 'Update' . $brand_id
+        ];
+        return view('admin.brands.update_brand', $data);
+    }
+    public function brand_create(CreateBrand $request)
+    {
+        $brandData = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'index' => $request->input('index'),
+        ];
+        $brand = Brand::create($brandData);
+        return ['message' => 'Created brand successfully!', 'brand' => $brand];
+    }
+    public function brand_update(Request $request)
+    {
+        $brand = brand::where('brand_id', $request->input('brand_id'))->first();
+        if ($brand) {
+            $brand->update([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'index' => $request->input('index'),
+
+            ]);
+            return ['message' => 'Updated brand successfully!', 'brand' => $brand];
+        } else {
             abort(404);
         }
-        return view("admin.brands.edit", compact('brand'),$this->data);
-    }
-    public function show(Request $request)
-    {
-        $id = $request->route('id');
-        $brand = Brand::where('brand_id', $id)->first();
-        if(!$brand){
-            abort(404);
-        }
-        return view("admin.brands.show", compact("brand"),$this->data);
-    }
-    //Repositories
-    public function store(Request $request)
-    {
-        $validatedData = $request ->validate([
-            "name"=> "required|max:255",
-            "description" => "required",
-            "index"=> "nullable|integer",
-        ]);
-        $validatedData['index'] = $validatedData["index"] ?? 0; // default is 0
-        $brand = Brand::create($validatedData);
-        return redirect()->route('brands.index', $brand->id)->with('success','');
-    }
-    public function update(Request $request,Brand $brand)
-    {
-        $id = $request->route('id');
-        $brand = Brand::where('brand_id', $id)->first();
-        if(!$brand){
-            abort(404);
-        }
-        $validatedData = $request ->validate([
-            "name"=> "required|max:255",
-            "description" => "required",
-            "index"=> "nullable|integer",
-        ]);
-        $validatedData['index'] = $validatedData["index"] ?? 0;// default is 0
-        $brand::where('brand_id',$id)->update($validatedData);
-        return redirect()->route('brands.show', $brand->brand_id)->with('success','');
     }
 }

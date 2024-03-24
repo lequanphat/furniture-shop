@@ -14,7 +14,7 @@
                 <p class="text-danger m-0">*{{ $errors->first() }}</p>
             @endif
             <div class="form-footer">
-                <button type="submit" class="btn btn-primary w-100">
+                <button type="submit" class="btn btn-success w-100">
                     <!-- Download SVG icon from http://tabler-icons.io/i/mail -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"

@@ -20,7 +20,7 @@
                                 New view
                             </a>
                         </span>
-                        <a href="/admin/products/create" class="btn btn-primary d-none d-sm-inline-block">
+                        <a href="{{ route('products.create') }}" class="btn btn-primary d-none d-sm-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -44,9 +44,8 @@
                             <table class="table table-vcenter card-table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
                                         <th>Product</th>
-                                        <th>Price</th>
+                                        <th>Average Price</th>
                                         <th>Quantities</th>
                                         <th>Brand</th>
                                         <th>Category</th>
@@ -56,17 +55,58 @@
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
-                                            <td>{{ $product->product_id }}</td>
-                                            <td>{{ $product->name }}</td>
-                                            <td>Null</td>
-                                            <td>{{ $product->quantities }}</td>
+                                            <td>
+                                                <div class="d-flex py-1 align-items-center">
+                                                    @php
+                                                        $imageUrl = null;
+                                                        foreach ($product->detailed_products as $detailed_product) {
+                                                            if ($image = $detailed_product->images->first()) {
+                                                                $imageUrl = asset('storage/' . $image->url);
+                                                                break;
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    <span class="avatar me-2"
+                                                        style="background-image: url({{ $imageUrl }}); width: 80px; height: 80px;"></span>
+                                                    <div class="flex-fill">
+                                                        <div class="font-weight-medium">
+                                                            <h3 class="m-0">{{ $product->name }}
+                                                                @if ($product->created_at->diffInDays() < 7)
+                                                                    <span
+                                                                        class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
+                                                                    </span>
+                                                                @endif
+                                                            </h3>
+                                                        </div>
+                                                        <div class="text-muted">
+                                                            <a href="{{ route('products.details', $product->product_id) }}"
+                                                                class="text-reset">{{ $product->detailed_products->count() }}
+                                                                detailed products</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
+                                            </td>
+                                            <td>{{ $product->detailed_products->sum('quantities') }}</td>
                                             <td>{{ $product->brand->name }}</td>
                                             <td>{{ $product->category->name }}</td>
-                                            <td>Null</td>
+                                            <td>
+                                                <a href="{{ route('products.details', $product->product_id) }}"
+                                                    class="btn p-2">
+                                                    <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
+                                                </a>
+                                                <a href="{{ route('products.update_ui', $product->product_id) }}"
+                                                    class="btn p-2">
+                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                </a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-end my-2">{{ $products->render('common.pagination') }}
+                            </div>
                         </div>
                     </div>
                 </div>

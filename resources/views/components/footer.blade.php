@@ -1,111 +1,70 @@
-<!-- Start Footer Section -->
-<footer class="footer-section">
-    <div class="container relative">
-
-        <div class="sofa-img">
-            <img src="images/sofa.png" alt="Image" class="img-fluid">
-        </div>
-
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="subscription-form">
-                    <h3 class="d-flex align-items-center"><span class="me-1"><img src="images/envelope-outline.svg"
-                                alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
-
-                    <form action="#" class="row g-3">
-                        <div class="col-auto">
-                            <input type="text" class="form-control" placeholder="Enter your name">
+<footer class="footer-area">
+    <div class="bg-gray-2">
+        <div class="container">
+            <div class="footer-top pt-80 pb-35">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="footer-widget footer-about mb-40">
+                            <div class="footer-logo">
+                                <a href="/"><img src="{{ asset('images/logo/logo.png') }}" alt="logo"></a>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, cons adipi elit, sed do eiusmod tempor incididunt ut
+                                aliqua.</p>
+                            <div class="payment-img">
+                                <a href="#"><img src="{{ asset('images/icon-img/payment.png') }}"
+                                        alt="logo"></a>
+                            </div>
                         </div>
-                        <div class="col-auto">
-                            <input type="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="footer-widget footer-widget-margin-1 footer-list mb-40">
+                            <h3 class="footer-title">Information</h3>
+                            <ul>
+                                <li><a href="/about">About Us</a></li>
+                                <li><a href="#">Delivery Information</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Terms & Conditions</a></li>
+                                <li><a href="#">Customer Service</a></li>
+                            </ul>
                         </div>
-                        <div class="col-auto">
-                            <button class="btn btn-primary">
-                                <span class="fa fa-paper-plane"></span>
-                            </button>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-6 col-12">
+                        <div class="footer-widget footer-list mb-40">
+                            <h3 class="footer-title">My Accound</h3>
+                            <ul>
+                                <li><a href="/account">My Account</a></li>
+                                <li><a href="#">Order History</a></li>
+                                <li><a href="#">Wish List</a></li>
+                                <li><a href="#">Newsletter</a></li>
+                                <li><a href="#">Order History</a></li>
+                            </ul>
                         </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row g-5 mb-5">
-            <div class="col-lg-4">
-                <div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
-                <p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus
-                    malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.
-                    Pellentesque habitant</p>
-
-                <ul class="list-unstyled custom-social">
-                    <li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
-                    <li><a href="#"><span class="fa fa-brands fa-twitter"></span></a></li>
-                    <li><a href="#"><span class="fa fa-brands fa-instagram"></span></a></li>
-                    <li><a href="#"><span class="fa fa-brands fa-linkedin"></span></a></li>
-                </ul>
-            </div>
-
-            <div class="col-lg-8">
-                <div class="row links-wrap">
-                    <div class="col-6 col-sm-6 col-md-3">
-                        <ul class="list-unstyled">
-                            <li><a href="#">About us</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact us</a></li>
-                        </ul>
                     </div>
-
-                    <div class="col-6 col-sm-6 col-md-3">
-                        <ul class="list-unstyled">
-                            <li><a href="#">Support</a></li>
-                            <li><a href="#">Knowledge base</a></li>
-                            <li><a href="#">Live chat</a></li>
-                        </ul>
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                        <div class="footer-widget footer-widget-margin-2 footer-address mb-40">
+                            <h3 class="footer-title">Get in touch</h3>
+                            <ul>
+                                <li><span>Address: </span>203 An Duong Vuong, ward 03, district 5, Ho Chi Minh City</li>
+                                <li><span>Telephone Enquiry:</span> (012) 345 6789</li>
+                                <li><span>Email: </span>lequanphat3579@gmail.com</li>
+                            </ul>
+                            <div class="open-time">
+                                <p>Open : <span>8:00 AM</span> - Close : <span>18:00 PM</span></p>
+                                <p>All days</p>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="col-6 col-sm-6 col-md-3">
-                        <ul class="list-unstyled">
-                            <li><a href="#">Jobs</a></li>
-                            <li><a href="#">Our team</a></li>
-                            <li><a href="#">Leadership</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-6 col-sm-6 col-md-3">
-                        <ul class="list-unstyled">
-                            <li><a href="#">Nordic Chair</a></li>
-                            <li><a href="#">Kruzo Aero</a></li>
-                            <li><a href="#">Ergonomic Chair</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="border-top copyright">
-            <div class="row pt-4">
-                <div class="col-lg-6">
-                    <p class="mb-2 text-center text-lg-start">Copyright &copy;
-                        <script>
-                            document.write(new Date().getFullYear());
-                        </script>. All Rights Reserved. &mdash; Designed with love by <a
-                            href="https://untree.co">Untree.co</a> Distributed By <a
-                            hreff="https://themewagon.com">ThemeWagon</a>
-                        <!-- License information: https://untree.co/license/ -->
-                    </p>
-                </div>
-
-                <div class="col-lg-6 text-center text-lg-end">
-                    <ul class="list-unstyled d-inline-flex ms-auto">
-                        <li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
+    <div class="bg-gray-3">
+        <div class="container">
+            <div class="footer-bottom copyright text-center bg-gray-3">
+                <p>Copyright ©2022 All rights reserved | Made with <i class="fa fa-heart"></i> by <a
+                        href="https://github.com/lequanphat">
+                        Quanphat</a>.</p>
+            </div>
+        </div>
+    </div>
 </footer>
-
-<!-- End Footer Section -->
