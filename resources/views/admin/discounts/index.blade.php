@@ -85,6 +85,7 @@
                                             <td>{{ $discount_item->discount_id }}</td>
 
                                             <td>{{ $discount_item->title }}</td>
+                                            <td>{{ $discount_item->discription }}</td>
                                             <td>
                                                 {{ $discount_item->percentage }}
                                             </td>
@@ -151,8 +152,7 @@
                 </div>
             </div>
             @include('admin.discounts.CreateDiscount')
-            @include('admin.categories.create_category')
-            @include('admin.categories.update_category')
+
             @include('admin.components.footer')
         </div>
 
