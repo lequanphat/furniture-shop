@@ -51,10 +51,10 @@
                                                                 }
                                                             }
                                                         @endphp
-                                                        <img src="{{ $imageUrl }}" alt="">
+                                                        <img src="{{ $imageUrl }}" alt="" style="height: 275px">
                                                     </a>
                                                     <div class="product-badge badge-top badge-right badge-pink">
-                                                        <span>-10%</span>
+                                                        <span>-{{ rand(0, 70) }}%</span>
                                                     </div>
                                                     <div class="product-action-wrap">
                                                         <a href="/products/{{ $product->product_id }}"
@@ -75,8 +75,14 @@
                                                             href="/products/{{ $product->product_id }}">{{ $product->name }}</a>
                                                     </h3>
                                                     <div class="product-price">
-                                                        <span class="old-price">$25.89 </span>
-                                                        <span class="new-price">$20.25 </span>
+                                                        <span class="old-price">
+                                                            $1000
+                                                        </span>
+                                                        <span class="new-price">
+                                                            @if (isset($product->detailed_products->first()->original_price))
+                                                                {{ number_format($product->detailed_products->first()->original_price, 0, '.', ',') }}đ
+                                                            @endif
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -137,9 +143,7 @@
                                                         <i class=" ti-star"></i>
                                                         <i class=" ti-star"></i>
                                                     </div>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipic it, sed do eiusmod
-                                                        tempor
-                                                        labor incididunt ut et dolore magna aliqua.</p>
+                                                    <div>{!! $product->description !!}</div>
                                                     <div class="product-list-action">
                                                         <button class="product-action-btn-3" title="Add to cart"><i
                                                                 class="pe-7s-cart"></i></button>
