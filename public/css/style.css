@@ -9033,6 +9033,11 @@ textarea {
 .sidebar-widget .sidebar-list-style.sidebar-widget-color ul li a.orange:before {
     background-color: #ffba00;
 }
+.sidebar-list-style input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
 
 .sidebar-widget .sidebar-widget-tag a {
     color: #575757;
