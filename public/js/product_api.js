@@ -13,7 +13,7 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    window.location.href = '/admin/products';
+                    window.location.href = `/admin/products/${response.product_id}`;
                 },
                 error: function (error) {
                     $('#js-error').removeClass('d-none');

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\User;
+use App\Models\Product;
 
 class PagesController extends Controller
 {
@@ -21,12 +20,21 @@ class PagesController extends Controller
     {
         $data = [
             'page' => 'Shop',
+            'products' => Product::with(
+                'category',
+                'brand',
+                'detailed_products.images'
+            )->where('is_deleted', false)->paginate(9) // 9 elements per page
         ];
         return view('pages.shop.index', $data);
     }
     public function product_details()
     {
-        $data = ['page' => 'Product Details'];
+        $product_id = request()->route('product_id');
+        $data = [
+            'page' => 'Product Details',
+            'product' => Product::with('category', 'brand', 'detailed_products.images')->where('is_deleted', false)->find($product_id),
+        ];
         return view('pages.product_details.index', $data);
     }
     public function cart()
