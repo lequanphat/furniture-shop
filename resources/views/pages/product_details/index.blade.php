@@ -55,7 +55,8 @@
                         <h2>{{ $product->name }}</h2>
                         <div class="product-details-price">
                             <span class="old-price">$25.89 </span>
-                            <span class="new-price">$20.25</span>
+                            <span
+                                class="new-price">{{ number_format($product->detailed_products->first()->original_price, 0, '.', ',') }}đ</span>
                         </div>
                         <div class="product-details-review">
                             <div class="product-rating">
@@ -67,16 +68,18 @@
                             </div>
                             <span>( 1 Customer Review )</span>
                         </div>
-                        <div class="product-color product-color-active product-details-color">
-                            <span>Color :</span>
-                            <ul>
-                                @foreach ($product->detailed_products as $detailed_product)
-                                    <li><a title="Pink" class="@if ($loop->first) active @endif"
-                                            href="#" style="background-color: {{ $detailed_product->color }}"></a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                        {{-- temporary custom  --}}
+                        <div class="d-flex my-4 " style="flex-wrap: wrap;">
+                            @foreach ($product->detailed_products as $detailed_product)
+                                <div class="d-flex p-2 me-3 mb-3" style="align-items: center; border: 1px solid #aaa;">
+                                    <div class="me-2"
+                                        style="width: 20px; height:20px; background-color: {{ $detailed_product->color }}">
+                                    </div>
+                                    <span>{{ $detailed_product->size }}</span>
+                                </div>
+                            @endforeach
                         </div>
+                        {{--  temporary custom --}}
                         <div class="product-details-action-wrap">
                             <div class="product-quality">
                                 <input class="cart-plus-minus-box input-text qty text" name="qtybutton" value="1">
@@ -127,14 +130,7 @@
             <div class="tab-content">
                 <div id="des-details1" class="tab-pane active">
                     <div class="product-description-content text-center">
-                        <p data-aos="fade-up" data-aos-delay="200">Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercita ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                        <p data-aos="fade-up" data-aos-delay="400">Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum. Sed ut per unde omnis iste natus error
-                            sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo</p>
+                        <div data-aos="fade-up" data-aos-delay="400">{!! $product->detailed_products->first()->description !!}</div>
                     </div>
                 </div>
                 <div id="des-details2" class="tab-pane">
@@ -143,7 +139,7 @@
                             <tbody>
                                 <tr>
                                     <td class="width1">Brands</td>
-                                    <td>Airi, Brand, Draven, Skudmart, Yena</td>
+                                    <td>{{ $product->brand->name }}</td>
                                 </tr>
                                 <tr>
                                     <td class="width1">Color</td>
@@ -151,7 +147,7 @@
                                 </tr>
                                 <tr>
                                     <td class="width1">Size</td>
-                                    <td>L, M, S, XL, XXL</td>
+                                    <td>{{ $product->detailed_products->first()->size }}</td>
                                 </tr>
                             </tbody>
                         </table>

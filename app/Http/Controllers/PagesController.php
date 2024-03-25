@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 
 class PagesController extends Controller
@@ -20,6 +21,7 @@ class PagesController extends Controller
     {
         $data = [
             'page' => 'Shop',
+            'categories' => Category::all(),
             'products' => Product::with(
                 'category',
                 'brand',
