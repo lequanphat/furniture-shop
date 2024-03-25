@@ -13,6 +13,7 @@
 
 <body>
     <script src="{{ asset('vendor/tabler/tabler.min.js') }}" defer></script>
+    <div id="asset" data-asset="{{ asset('') }}"></div>
     <div class="page">
         @include('admin.components.navbar')
         <div class="page-wrapper">

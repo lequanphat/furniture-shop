@@ -14,36 +14,14 @@
                         <div class="product-details-small-img-wrap">
                             <div class="swiper-container product-details-small-img-slider-1 pd-small-img-style">
                                 <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-1.png') }}"
-                                                alt="Product Thumnail">
+                                    @foreach ($product->detailed_products as $detailed_product)
+                                        <div class="swiper-slide">
+                                            <div class="product-details-small-img">
+                                                <img src="{{ asset('storage/' . $detailed_product->images->first()->url) }}"
+                                                    alt="Product Thumnail">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-2.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-3.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-4.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-5.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="pd-prev pd-nav-style"> <i class="ti-angle-up"></i></div>
@@ -51,83 +29,30 @@
                         </div>
                         <div class="swiper-container product-details-big-img-slider-1 pd-big-img-style">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-1.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-1.png') }}"
-                                                    alt="">
+                                @foreach ($product->detailed_products as $detailed_product)
+                                    <div class="swiper-slide">
+                                        <div class="easyzoom-style">
+                                            <div class="easyzoom easyzoom--overlay">
+                                                <a href="{{ asset('storage/' . $detailed_product->images->first()->url) }}">
+                                                    <img src="{{ asset('storage/' . $detailed_product->images->first()->url) }}"
+                                                        alt="">
+                                                </a>
+                                            </div>
+                                            <a class="easyzoom-pop-up img-popup"
+                                                href="{{ asset('storage/' . $detailed_product->images->first()->url) }}">
+                                                <i class="pe-7s-search"></i>
                                             </a>
                                         </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-1.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
                                     </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-2.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-2.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-2.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-3.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-3.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-3.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-4.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-4.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-4.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-5.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-5.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-5.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                                @endforeach
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="product-details-content" data-aos="fade-up" data-aos-delay="400">
-                        <h2>New Modern Chair</h2>
+                        <h2>{{ $product->name }}</h2>
                         <div class="product-details-price">
                             <span class="old-price">$25.89 </span>
                             <span class="new-price">$20.25</span>
@@ -145,9 +70,11 @@
                         <div class="product-color product-color-active product-details-color">
                             <span>Color :</span>
                             <ul>
-                                <li><a title="Pink" class="pink" href="#">pink</a></li>
-                                <li><a title="Yellow" class="active yellow" href="#">yellow</a></li>
-                                <li><a title="Purple" class="purple" href="#">purple</a></li>
+                                @foreach ($product->detailed_products as $detailed_product)
+                                    <li><a title="Pink" class="@if ($loop->first) active @endif"
+                                            href="#" style="background-color: {{ $detailed_product->color }}"></a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                         <div class="product-details-action-wrap">
@@ -166,11 +93,10 @@
                         </div>
                         <div class="product-details-meta">
                             <ul>
-                                <li><span class="title">SKU:</span> Ch-256xl</li>
+                                <li><span class="title">SKU:</span> {{ $product->detailed_products->first()->sku }}</li>
                                 <li><span class="title">Category:</span>
                                     <ul>
-                                        <li><a href="#">Office</a>,</li>
-                                        <li><a href="#">Home</a></li>
+                                        <li><a href="#">{{ $product->category->name }}</a></li>
                                     </ul>
                                 </li>
                                 <li><span class="title">Tags:</span>

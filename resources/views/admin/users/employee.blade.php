@@ -66,7 +66,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="employee-table-body">
                                     @foreach ($users as $user)
                                         <tr>
                                             <td>{{ $user->user_id }}</td>
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                 </div>
-            </div>tras
+            </div>
         </div>
         @include('admin.components.footer')
     </div>
