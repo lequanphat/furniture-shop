@@ -43,6 +43,7 @@ class UserController extends Controller
             'last_name' => $request->input('last_name'),
             'gender' => ($request->input('gender') == 'male'),
             'birth_date' => $request->input('birth_date'),
+            'avatar' => '/storage/defaults/default_avatar.jpg',
             'is_staff' => 1,
             'is_verified' => 1,
         ];
@@ -56,10 +57,10 @@ class UserController extends Controller
             'phone_number' => $request->input('phone_number'),
             'is_default' => 1,
         ];
-        Address::create($addressData);
+        $address = Address::create($addressData);
 
         // response
-        return ['message' => 'Created employee successfully!', 'user' => $user];
+        return ['message' => 'Created employee successfully!', 'user' => $user, 'address' => $address];
     }
 
     public function employee_details_ui(Request $request)
@@ -135,7 +136,7 @@ class UserController extends Controller
                     'phone_number' => $request->input('phone_number'),
                 ]);
                 // response
-                return ['message' => 'Updateted employee successfully!', 'user' => $user];
+                return ['message' => 'Updateted employee successfully!', 'user' => $user, 'address' => $address];
             }
             return back()->withErrors(['address' => 'Address not found.'])->withInput($request->input());
         }
