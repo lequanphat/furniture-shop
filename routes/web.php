@@ -43,6 +43,7 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/products/{product_id}', [PagesController::class, 'product_details']);
     Route::get('/cart', [PagesController::class, 'cart']);
     Route::get('/checkout', [PagesController::class, 'checkout']);
+    Route::get('/products', [ProductController::class, 'get_products']);
 });
 
 Route::middleware([PrivateMiddleware::class])->group(function () {

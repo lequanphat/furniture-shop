@@ -15,7 +15,9 @@
                     <div class="shop-topbar-wrapper mb-40">
                         <div class="shop-topbar-left">
                             <div class="showing-item">
-                                <span>Showing 1–12 of 60 results</span>
+                                <span>
+                                    {{ 'Showing ' . $products->currentPage() * 9 - 8 . ' - ' . $products->currentPage() * 9 . ' of ' . $products->total() . ' results' }}
+                                </span>
                             </div>
                         </div>
                         <div class="shop-topbar-right">
@@ -36,7 +38,7 @@
                     <div class="shop-bottom-area">
                         <div class="tab-content jump">
                             <div id="shop-1" class="tab-pane active">
-                                <div class="row">
+                                <div id="product-list" class="row">
                                     @foreach ($products as $product)
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                             <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
@@ -92,10 +94,14 @@
                                 </div>
                                 <div class="pagination-style-1" data-aos="fade-up" data-aos-delay="200">
                                     <ul>
-                                        <li><a class="active" href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a class="next" href="#"><i class=" ti-angle-double-right "></i></a>
+
+                                        @for ($i = 1; $i <= $products->lastPage(); $i++)
+                                            <li>
+                                                <a class="pagination-item
+                                                    {{ $retVal = $i == $products->currentPage() ? 'active' : '' }}"
+                                                    href="">{{ $i }}</a>
+                                            </li>
+                                        @endfor
                                         </li>
                                     </ul>
                                 </div>
@@ -160,9 +166,9 @@
 
                                 <div class="pagination-style-1">
                                     <ul>
-                                        <li><a class="active" href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
+                                        <li><a class="active" href="?page=1">1</a></li>
+                                        <li><a href="?page=2">2</a></li>
+                                        <li><a href="?page=3">3</a></li>
                                         <li><a class="next" href="#"><i class=" ti-angle-double-right "></i></a>
                                         </li>
                                     </ul>

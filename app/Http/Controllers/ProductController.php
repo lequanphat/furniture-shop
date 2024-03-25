@@ -161,4 +161,15 @@ class ProductController extends Controller
         }
         return ['message' => 'Product details updated successfully!'];
     }
+
+    public function get_products()
+    {
+        $products =  Product::with(
+            'category',
+            'brand',
+            'detailed_products.images'
+        )->where('is_deleted', false)->paginate(9);
+
+        return response()->json($products);
+    }
 }
