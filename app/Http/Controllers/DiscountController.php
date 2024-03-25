@@ -18,7 +18,7 @@ class DiscountController extends Controller
             'discounts' => Discount::all(),
 //            'request' => 'request'
         ];
-        return view('admin.discounts.index',$data);
+        return view('admin.discounts.discountUI',$data);
     }
 
     /**
