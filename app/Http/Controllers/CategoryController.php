@@ -25,6 +25,12 @@ class CategoryController extends Controller
                     return view('admin.categories.category', $data);
     }
 
+    public function category_ui_1()
+    {
+
+
+        return "say hello";
+    }
     public function category_insert(Request $request)
     {
         $categoryData = [

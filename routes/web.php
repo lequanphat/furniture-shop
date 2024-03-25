@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -107,7 +108,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
 
     // *This is only temporary, use the appropriate controller
-    Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
+    Route::get('/admin/discounts', [DiscountController::class, 'index']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
@@ -115,4 +116,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
+
+    Route::get('/admin/catetest', [CategoryController::class, 'category_ui_1']);
+
 });
