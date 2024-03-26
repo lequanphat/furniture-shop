@@ -26,7 +26,8 @@
                 <div class="container-xl">
                     <div class="row row-deck row-cards">
                         <div class="col-12">
-                            <form id="create-product-form" action="#" method="POST" class="card">
+                            <form id="create-discount-form" action="/admin/discounts/create" method="POST" >
+                                @csrf
                                 <div class="card-body">
                                     <div class="row row-cards">
                                         <div class="col-sm-6 col-md-4">
@@ -48,8 +49,8 @@
                                             <div class="mb-3">
                                                 <label for="active" class="form-label">is active</label>
                                                 <select id="active" name="active" class="form-control form-select">
-                                                    <option> On</option>
-                                                    <option> Off</option>
+                                                    <option value="1"> On</option>
+                                                    <option value="2"> Off</option>
                                                 </select>
                                             </div>
                                         </div>

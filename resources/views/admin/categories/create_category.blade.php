@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form goes here -->
-                <form id="create-category-form" action="#" method="dialog">
+                <form id="create-category-form" action="/admin/discounts/create"  method="POST">
                     @csrf
                     <div class="mb-3 row">
                         <div class="col-md-6">

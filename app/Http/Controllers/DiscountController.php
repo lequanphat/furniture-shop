@@ -18,15 +18,35 @@ class DiscountController extends Controller
             'discounts' => Discount::all(),
 //            'request' => 'request'
         ];
-        return view('admin.discounts.discountUI',$data);
+        return view('admin.discounts.discountUI', $data);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+
+
+        $DiscountData =
+            [
+                'title' => $request->input('title'),
+                'amount' => $request->input('amount'),
+                'is_active' => $request->input('active'),
+                'start_date' => $request->input('startdate'),
+
+                'end_date' => $request->input('enddate'),
+                'percentage' => $request->input('percentage'),
+                'description' => $request->input('description')
+
+
+            ];
+        $Discount = Discount::create($DiscountData);
+//print_r($request);
+        return "Success";
+
+
     }
 
     /**

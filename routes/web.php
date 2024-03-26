@@ -109,7 +109,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // *This is only temporary, use the appropriate controller
     Route::get('/admin/discounts', [DiscountController::class, 'index']);
-//Route::post('')
+Route::post('/admin/discounts/create',[DiscountController::class,'create'] );
+
 
 
 
