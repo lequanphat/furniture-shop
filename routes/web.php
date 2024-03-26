@@ -86,10 +86,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //các thành phần cơ bản của route | Route::methods('url',[ClassController,'function']); | (function bên trong file Controller)
     //Route::get('/admin/orders', [OrderController::class,'index'])->name('orders.index');//mũi tên này là đặt tên cho route
     //Route này sẽ gọi qua cái view ở /admin/orders, với việc xử lý sẽ ở file OrderController, trong hàm là index
-    Route::get('/admin/orders', [OrderController::class,'index'])->name('orders.index');
-    //Route::get('/admin/orders/create', [OrderController::class,'create_ui']);
-    //Route::post('/admin/orders/create', [OrderController::class,'create']);
-    Route::post('/admin/orders/create_order', [OrderController::class, 'order_create'])->name('orders.create');
+    Route::get('/admin/orders', [OrderController::class,'index']);
+    Route::post('/admin/orders/create', [OrderController::class, 'order_create']);
+    Route::put('/admin/orders/update', [OrderController::class,'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
 
 
     // category

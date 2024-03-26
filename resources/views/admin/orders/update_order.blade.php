@@ -1,19 +1,27 @@
-<div class="modal fade" id="order-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="UpdateOrderModal" tabindex="-1" aria-labelledby="updateOrderTitle" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Order</h5>
+                <h5 class="modal-title" id="updateOrderTitle">Update_order </h5> <!--id updateOrderTitle sẽ được gửi từ hàm js có id UpdateOrderModal-->
                 <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
                     aria-label="Close"><i class="ti-close"></i></button>
             </div>
             <div class="modal-body">
 
-
-                <!-- Form đây, khi nhấn tạo form, gửi dữ liệu qua file order_api.js, ở hàm có id giống id form -->
-                <form id="create-order-form" action="#" method="dialog">
+                <!-- Form -->
+                <form id="update-order-form" action="#" method="dialog">
                     @csrf
                     <div class="card-body">
                         <div class="row row-cards">
+
+                            <!--ở đây khác create là có thêm ô id-->
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="order_id" class="form-label">Order ID</label>
+                                    <input id="order_id" name="order_id" type="number" class="form-control" readonly><!--readonly ko cho thay đổi-->
+                                </div>
+                            </div>
+
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="totalPrice" class="form-label">Total price</label>
@@ -90,10 +98,9 @@
 
 
 
-                    <div id="create_order_response" class="alert ">
+                    <div id="update_order_response" class="alert ">
                     </div>
-                    <button type="submit" class="btn btn-primary float-right px-4 mx-2">Create!!!</button>
-
+                    <button type="submit" class="btn btn-primary float-right px-4 mx-2">Update</button>
                 </form>
             </div>
         </div>
