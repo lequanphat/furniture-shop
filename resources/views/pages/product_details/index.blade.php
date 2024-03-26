@@ -17,7 +17,7 @@
                                     @foreach ($product->detailed_products as $detailed_product)
                                         <div class="swiper-slide">
                                             <div class="product-details-small-img">
-                                                <img src="{{ asset('storage/' . $detailed_product->images->first()->url) }}"
+                                                <img src="{{ $detailed_product->images->first()->url }}"
                                                     alt="Product Thumnail">
                                             </div>
                                         </div>
@@ -33,13 +33,12 @@
                                     <div class="swiper-slide">
                                         <div class="easyzoom-style">
                                             <div class="easyzoom easyzoom--overlay">
-                                                <a href="{{ asset('storage/' . $detailed_product->images->first()->url) }}">
-                                                    <img src="{{ asset('storage/' . $detailed_product->images->first()->url) }}"
-                                                        alt="">
+                                                <a href="{{ $detailed_product->images->first()->url }}">
+                                                    <img src="{{ $detailed_product->images->first()->url }}" alt="">
                                                 </a>
                                             </div>
                                             <a class="easyzoom-pop-up img-popup"
-                                                href="{{ asset('storage/' . $detailed_product->images->first()->url) }}">
+                                                href="{{ $detailed_product->images->first()->url }}">
                                                 <i class="pe-7s-search"></i>
                                             </a>
                                         </div>
