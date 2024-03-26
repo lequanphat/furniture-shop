@@ -48,7 +48,7 @@
                                                             $imageUrl = asset('images/product/product-5.png');
                                                             foreach ($product->detailed_products as $detailed_product) {
                                                                 if ($image = $detailed_product->images->first()) {
-                                                                    $imageUrl = asset('storage/' . $image->url);
+                                                                    $imageUrl = $image->url;
                                                                     break;
                                                                 }
                                                             }
@@ -117,7 +117,7 @@
                                                             $imageUrl = asset('images/product/product-5.png');
                                                             foreach ($product->detailed_products as $detailed_product) {
                                                                 if ($image = $detailed_product->images->first()) {
-                                                                    $imageUrl = asset('storage/' . $image->url);
+                                                                    $imageUrl = $image->url;
                                                                     break;
                                                                 }
                                                             }

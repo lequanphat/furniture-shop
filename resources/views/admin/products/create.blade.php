@@ -60,29 +60,71 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="mb-3 mb-0">
-                                        <label class="form-label">Description</label>
-                                        <textarea id="editor" name="description"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div id="js-error" class="alert alert-danger d-none">
+                                    <div class="mb-3">
+                                        <div class="form-label">Select multiple states</div>
+                                        <select name="tags" type="text" class="form-select" id="select-states"
+                                            value="" multiple>
+                                            @foreach ($tags as $tag)
+                                                <option value="{{ $tag->tag_id }}">{{ $tag->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-3 mb-0">
+                                    <label class="form-label">Description</label>
+                                    <textarea id="editor" name="description"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div id="js-error" class="alert alert-danger d-none">
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-footer text-end">
-                            <button type="submit" class="btn btn-primary">Create Product</button>
-                        </div>
-                    </form>
                 </div>
+                <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">Create Product</button>
+                </div>
+                </form>
             </div>
         </div>
-        @include('admin.components.footer')
+    </div>
+    @include('admin.components.footer')
     </div>
     {{-- Modal --}}
     <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
+    <script src="{{ asset('vendor/tom-select/dist/js/tom-select.base.min.js') }}"></script>
     <script>
         CKEDITOR.replace('editor');
+    </script>
+    <script>
+        // @formatter:off
+        document.addEventListener("DOMContentLoaded", function() {
+            var el;
+            window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
+                copyClassesToDropdown: false,
+                dropdownParent: 'body',
+                controlInput: '<input>',
+                render: {
+                    item: function(data, escape) {
+                        if (data.customProperties) {
+                            return '<div><span class="dropdown-item-indicator">' + data
+                                .customProperties + '</span>' + escape(data.text) + '</div>';
+                        }
+                        return '<div>' + escape(data.text) + '</div>';
+                    },
+                    option: function(data, escape) {
+                        if (data.customProperties) {
+                            return '<div><span class="dropdown-item-indicator">' + data
+                                .customProperties + '</span>' + escape(data.text) + '</div>';
+                        }
+                        return '<div>' + escape(data.text) + '</div>';
+                    },
+                },
+            }));
+        });
+        // @formatter:on
     </script>
 @endsection

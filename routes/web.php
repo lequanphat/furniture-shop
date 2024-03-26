@@ -4,11 +4,13 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
@@ -52,10 +54,10 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
     //account
     Route::get('/account/{user_id}', [ProfileController::class, 'customer_ui'])->name('my_account');
-    Route::post('/account/profile/update',[ProfileController::class, 'update_customer']);
+    Route::post('/account/profile/update', [ProfileController::class, 'update_customer']);
     //address_card
-    Route::post('/account/profile/addresscard/update',[AddressController::class, 'update_address']);
-    Route::post('/account/profile/addresscard/create',[AddressController::class, 'create_address']);
+    Route::post('/account/profile/addresscard/update', [AddressController::class, 'update_address']);
+    Route::post('/account/profile/addresscard/create', [AddressController::class, 'create_address']);
 });
 
 
@@ -97,6 +99,16 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
     // Route::patch('/admin/categories/{id}', [CategoryController::class, 'category_delete']); for update
 
+
+    // tag
+    Route::get('/admin/tags', [TagController::class, 'index'])->name('tags.index');
+    Route::post('/admin/tags', [TagController::class, 'create'])->name('tags.create');
+
+
+    // color
+    Route::get('/admin/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::post('/admin/colors', [ColorController::class, 'create'])->name('colors.create');
+
     // product
     Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
@@ -113,9 +125,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // receipts
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
 
-        //profile
-        Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
-        Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
+    //profile
+    Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
+    Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
     // *This is only temporary, use the appropriate controller
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);

@@ -93,7 +93,7 @@
 
                                     <div class="col-md-6">
                                         <label for="phone_number" class="form-label">Phone number</label>
-                                        <input type="number" class="form-control" id="phone_number" name="phone_number"
+                                        <input type="phone" class="form-control" id="phone_number" name="phone_number"
                                             readonly
                                             value="@if (isset($user->default_address->phone_number)) {{ $user->default_address->phone_number }} @endif"
                                             placeholder="0123123123">

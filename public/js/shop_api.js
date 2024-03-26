@@ -72,4 +72,15 @@ jQuery(document).ready(function () {
             },
         });
     });
+
+    $('.detailed-product-tag').click(function () {
+        const index = $(this).data('index');
+        const sku = $(this).data('sku');
+
+        $('.js-product-name').addClass('d-none');
+        $(`.js-product-name.${index}`).removeClass('d-none');
+        $('.js-product-price').addClass('d-none');
+        $(`.js-product-price.${index}`).removeClass('d-none');
+        $(`.js-product-sku`).html(`SKU: ${sku}`);
+    });
 });
