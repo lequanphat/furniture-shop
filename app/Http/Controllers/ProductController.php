@@ -104,7 +104,7 @@ class ProductController extends Controller
         $count = 0;
         while ($request->hasFile('image' . $count)) {
             $file = $request->file('image' . $count);
-            $path = $file->store('uploads/images', 'public');
+            $path = config('app.url') . 'storage/' . $file->store('uploads/images', 'public');
             ProductImage::create([
                 'sku' => $request->input('sku'),
                 'url' => $path
@@ -152,7 +152,7 @@ class ProductController extends Controller
         $count = 0;
         while ($request->hasFile('image' . $count)) {
             $file = $request->file('image' . $count);
-            $path = config('url') . 'storage/' . $file->store('uploads/images', 'public');
+            $path = config('app.url') . 'storage/' . $file->store('uploads/images', 'public');
             ProductImage::create([
                 'sku' => $request->input('sku'),
                 'url' => $path

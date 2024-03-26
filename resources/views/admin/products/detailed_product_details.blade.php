@@ -82,7 +82,7 @@
                                             <div class="col-md-3 col-sm-4">
                                                 <a data-fslightbox="gallery" href="#">
                                                     <div class="img-responsive img-responsive-1x1 rounded-3 border"
-                                                        style="background-image: url({{ asset('storage/' . $image->url) }})">
+                                                        style="background-image: url({{ $image->url }})">
                                                     </div>
                                                 </a>
                                             </div>

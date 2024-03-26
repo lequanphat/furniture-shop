@@ -94,7 +94,7 @@
                                                 <td>
                                                     <div class="d-flex py-1 align-items-center">
                                                         <span class="avatar me-2"
-                                                            style="background-image: url(@if (isset($detaild_product->images->first()->url)) {{ asset('storage/' . $detaild_product->images->first()->url) }} @endif); width: 80px; height: 80px;">
+                                                            style="background-image: url(@if (isset($detaild_product->images->first()->url)) {{ $detaild_product->images->first()->url }} @endif); width: 80px; height: 80px;">
                                                         </span>
                                                         <div class="flex-fill">
                                                             <div class="font-weight-medium">

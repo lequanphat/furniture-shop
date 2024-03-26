@@ -105,9 +105,9 @@
                                         @foreach ($detailed_product->images as $image)
                                             <div class="col-md-3 col-sm-4 position-relative"
                                                 data-file-id="{{ $image->product_image_id }}">
-                                                <a data-fslightbox="gallery" href="{{ asset('storage/' . $image->url) }}">
+                                                <a data-fslightbox="gallery" href="{{ $image->url }}">
                                                     <div class="img-responsive img-responsive-1x1 rounded-3 border"
-                                                        style="background-image: url({{ asset('storage/' . $image->url) }})">
+                                                        style="background-image: url({{ $image->url }})">
                                                     </div>
                                                 </a>
 
