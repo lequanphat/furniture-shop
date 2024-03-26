@@ -34,6 +34,7 @@
         <!-- Main JS -->
         <script src="{{ asset('js/main.js') }}"></script>
         <script src="{{ asset('js/shop_api.js') }}"></script>
+        <script src="{{ asset('js/profile_api.js') }}"></script>
     </div>
     @include('components.footer')
 </body>
