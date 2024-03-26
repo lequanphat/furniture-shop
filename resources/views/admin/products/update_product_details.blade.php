@@ -50,10 +50,21 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <label for="coder" class="form-label">Color</label>
-                                        <input id="color" name="color" type="color"
-                                            class="form-control form-control-color" value="{{ $detailed_product->color }}"
-                                            style="width: 100%">
+                                        <label class="form-label">Color</label>
+                                        <div class="row g-2">
+                                            @foreach ($colors as $color)
+                                                <div class="col-auto">
+                                                    <label class="form-colorinput">
+                                                        <input name="color_id" type="radio" value="{{ $color->color_id }}"
+                                                            class="form-colorinput-input"
+                                                            @if ($color->color_id == $detailed_product->color_id) @checked(true) @endif />
+                                                        <span class="form-colorinput-color"
+                                                            style="background-color: {{ $color->code }}"
+                                                            title="{{ $color->name }}"></span>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">

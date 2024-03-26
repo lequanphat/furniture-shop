@@ -4,11 +4,13 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
@@ -96,6 +98,16 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // Route::delete('/admin/categories/{id}', [CategoryController::class, 'category_delete']); for delete
     Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
     // Route::patch('/admin/categories/{id}', [CategoryController::class, 'category_delete']); for update
+
+
+    // tag
+    Route::get('/admin/tags', [TagController::class, 'index'])->name('tags.index');
+    Route::post('/admin/tags', [TagController::class, 'create'])->name('tags.create');
+
+
+    // color
+    Route::get('/admin/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::post('/admin/colors', [ColorController::class, 'create'])->name('colors.create');
 
     // product
     Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');

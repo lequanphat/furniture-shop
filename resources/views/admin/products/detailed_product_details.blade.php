@@ -46,10 +46,19 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <label for="coder" class="form-label">Color</label>
-                                        <input id="color" name="color" type="color"
-                                            class="form-control form-control-color" value="{{ $detailed_product->color }}"
-                                            style="width: 100%" readonly>
+                                        <label class="form-label">Color</label>
+                                        <div class="row g-2">
+                                            <div class="col-auto">
+                                                <label class="form-colorinput">
+                                                    <input name="color_id" type="radio"
+                                                        value="{{ $detailed_product->color->color_id }}"
+                                                        class="form-colorinput-input" readonly />
+                                                    <span class="form-colorinput-color"
+                                                        style="background-color: {{ $detailed_product->color->code }}"
+                                                        title="{{ $detailed_product->color->name }}"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">

@@ -51,11 +51,22 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="product-details-content" data-aos="fade-up" data-aos-delay="400">
-                        <h2>{{ $product->name }}</h2>
+                        @foreach ($product->detailed_products as $detailed_product)
+                            <h2 class="js-product-name {{ $loop->index }} @if ($loop->first) active @else d-none @endif"
+                                data-id="{{ $detailed_product->sku }}">
+                                {{ $detailed_product->name }}
+                            </h2>
+                        @endforeach
+
                         <div class="product-details-price">
                             <span class="old-price">$25.89 </span>
-                            <span
-                                class="new-price">{{ number_format($product->detailed_products->first()->original_price, 0, '.', ',') }}đ</span>
+                            @foreach ($product->detailed_products as $detailed_product)
+                                <span
+                                    class="js-product-price {{ $loop->index }} new-price  @if ($loop->first) active @else d-none @endif">
+                                    {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
+                                </span>
+                            @endforeach
+
                         </div>
                         <div class="product-details-review">
                             <div class="product-rating">
@@ -70,11 +81,14 @@
                         {{-- temporary custom  --}}
                         <div class="d-flex my-4 " style="flex-wrap: wrap;">
                             @foreach ($product->detailed_products as $detailed_product)
-                                <div class="d-flex p-2 me-3 mb-3" style="align-items: center; border: 1px solid #aaa;">
+                                <div class="disable detailed-product-tag d-flex p-2 me-3 mb-3"
+                                    style="align-items: center; border: 1px solid #aaa;" data-index="{{ $loop->index }}"
+                                    data-sku="{{ $detailed_product->sku }}">
                                     <div class="me-2"
                                         style="width: 20px; height:20px; background-color: {{ $detailed_product->color }}">
                                     </div>
                                     <span>{{ $detailed_product->size }}</span>
+                                    <span>({{ $detailed_product->quantities }})</span>
                                 </div>
                             @endforeach
                         </div>
@@ -87,33 +101,20 @@
                                 <a href="#">Add to cart</a>
                             </div>
                             <div class="single-product-wishlist">
-                                <a title="Wishlist" href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                <span>(12 products available)</span>
                             </div>
-                            <div class="single-product-compare">
-                                <a title="Compare" href="#"><i class="pe-7s-shuffle"></i></a>
-                            </div>
+
                         </div>
                         <div class="product-details-meta">
                             <ul>
-                                <li><span class="title">SKU:</span> {{ $product->detailed_products->first()->sku }}</li>
+                                <li class="js-product-sku"><span class="title">SKU:</span>
+                                    {{ $product->detailed_products->first()->sku }}</li>
                                 <li><span class="title">Category:</span>
                                     <ul>
                                         <li><a href="#">{{ $product->category->name }}</a></li>
                                     </ul>
                                 </li>
-                                <li><span class="title">Tags:</span>
-                                    <ul class="tag">
-                                        <li><a href="#">Furniture</a></li>
-                                    </ul>
-                                </li>
                             </ul>
-                        </div>
-                        <div class="social-icon-style-4">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-dribbble"></i></a>
-                            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
