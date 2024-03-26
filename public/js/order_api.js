@@ -17,13 +17,13 @@ jQuery.noConflict();
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    console.log(response);
+                    console.log(response); alert("success");
                     $('#create_order_response').removeClass('alert-danger');
                     $('#create_order_response').addClass('alert-success');
                     $('#create_order_response').html(response.message);
                 },
                 error: function (error) {
-                    console.log(error);
+                    console.log(error);     alert("fail");
                     $('#create_order_response').removeClass('alert-success');
                     $('#create_order_response').addClass('alert-danger');
                     $('#create_order_response').html(Object.values(error.responseJSON.errors)[0][0]);

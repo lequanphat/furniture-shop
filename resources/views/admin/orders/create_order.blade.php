@@ -7,7 +7,6 @@
                     aria-label="Close"><i class="ti-close"></i></button>
             </div>
             <div class="modal-body">
-
                 <!-- Form đây -->
                 <form id="create-order-form" action="#" method="dialog">
                     @csrf

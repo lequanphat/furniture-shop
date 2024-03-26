@@ -89,7 +89,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/orders', [OrderController::class,'index'])->name('orders.index');
     //Route::get('/admin/orders/create', [OrderController::class,'create_ui']);
     //Route::post('/admin/orders/create', [OrderController::class,'create']);
-    Route::post('/admin/orders/create', [OrderController::class, 'order_create'])->name('orders.create');
+    Route::post('/admin/orders/create_order', [OrderController::class, 'order_create'])->name('orders.create');
 
 
     // category
