@@ -22,7 +22,7 @@ class CreateColor extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|unique:colors,name|max:20|min:3',
             'code' => 'required',
         ];
     }
@@ -32,8 +32,11 @@ class CreateColor extends FormRequest
     {
 
         return  [
-            'name.required' => 'The color name is required',
-            'code.required' => 'The color code is required',
+            'name.required' => 'The color name is required.',
+            'name.unique' => 'The color name have already existed.',
+            'name.max' => 'The color name must not exceed 20 characters.',
+            'name.min' => 'The color name must be at least 3 characters.',
+            'code.required' => 'The color code is required.',
         ];
     }
 }

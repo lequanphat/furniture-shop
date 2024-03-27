@@ -53,7 +53,7 @@
                                     @endif
                                     <tr>
                                         <td>{{ $tag->tag_id }}</td>
-                                        <td><span class="badge bg-cyan-lt">{{ $tag->name }}</span>
+                                        <td><span class="badge bg-cyan-lt">#{{ $tag->name }}</span>
                                             @if ($tag->created_at->diffInDays() < 7)
                                                 <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
                                                 </span>
@@ -95,7 +95,7 @@
                                     @endif
                                     <tr>
                                         <td>{{ $tag->tag_id }}</td>
-                                        <td><span class="badge bg-cyan-lt">{{ $tag->name }}</span>
+                                        <td><span class="badge bg-cyan-lt">#{{ $tag->name }}</span>
                                             @if ($tag->created_at->diffInDays() < 7)
                                                 <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
                                                 </span>
@@ -129,4 +129,5 @@
 {{-- Modal --}}
 @include('admin.tags.create_tag_modal')
 @include('admin.tags.update_tag_modal')
+@include('admin.tags.error_delete_modal')
 @endsection

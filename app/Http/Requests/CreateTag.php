@@ -22,7 +22,7 @@ class CreateTag extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|unique:tags,name|max:20|min:3',
         ];
     }
 
@@ -31,7 +31,10 @@ class CreateTag extends FormRequest
     {
 
         return  [
-            'name.required' => 'The tag name is required',
+            'name.required' => 'The tag name is required.',
+            'name.unique' => 'The tag name have already existed.',
+            'name.max' => 'The tag name must not exceed 20 characters.',
+            'name.min' => 'The tag name must be at least 3 characters.',
         ];
     }
 }

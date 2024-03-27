@@ -3,6 +3,12 @@ jQuery.noConflict();
     $(document).ready(function () {
         const data_asset = $('#asset').attr('data-asset');
         // create tag
+
+        $('#create-tag-modal').on('show.bs.modal', function (event) {
+            $('#create-tag-form')[0].reset();
+            $('#create_response').addClass('d-none');
+        });
+
         $('#create-tag-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
@@ -131,14 +137,20 @@ jQuery.noConflict();
                 },
                 error: function (error) {
                     // show error modal
-                    console.log(error);
-                    // $('#error-delete-modal').addClass('show');
-                    // $('#error-delete-modal').attr('style', 'display: block;');
-                    // $('#error-delete-modal').removeAttr('aria-hidden');
-                    // $('body').append('<div class="modal-backdrop fade show"></div>');
-                    // $('#error-message').html(Object.values(error.responseJSON.message));
+                    $('#error-delete-modal').addClass('show');
+                    $('#error-delete-modal').attr('style', 'display: block;');
+                    $('#error-delete-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#error-message').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
+        });
+        //  close error modal
+        $('.js-close-error-modal').click(function () {
+            $('#error-delete-modal').removeClass('show');
+            $('#error-delete-modal').attr('style', 'display: none;');
+            $('#error-delete-modal').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
         });
     });
 })(jQuery);

@@ -156,7 +156,7 @@ jQuery.noConflict();
                     $('#error-delete-modal').attr('style', 'display: block;');
                     $('#error-delete-modal').removeAttr('aria-hidden');
                     $('body').append('<div class="modal-backdrop fade show"></div>');
-                    $('#error-message').html(Object.values(error.responseJSON.message));
+                    $('#error-message').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });
