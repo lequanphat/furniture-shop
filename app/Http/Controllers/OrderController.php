@@ -17,8 +17,7 @@ class OrderController extends Controller
     {
         $data = [               //nhãn gồm có tên trang là orders, dòng 2 là dữ liệu nạp từ model
             'page' => 'Orders ', //đặt tên cho pages
-            'orders' =>  Order::query()->paginate(10),     //hàm query cho phân trang
-
+            'orders' =>  Order::paginate(10),     //hàm query cho phân trang
             'customer_and_employee' => User::all() //dùng để nạp dữ liệu chọn vào các ô trong trang tạo
             //Đây là dòng query, lấy toàn bộ dữ liệu database trong order
             //lưu ý chữ orders bên trái này sẽ là biến để sử dụng ở view
