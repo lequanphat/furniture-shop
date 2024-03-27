@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 
 class PagesController extends Controller
@@ -22,6 +23,7 @@ class PagesController extends Controller
         $data = [
             'page' => 'Shop',
             'categories' => Category::all(),
+            'colors' => Color::all(),
             'products' => Product::with(
                 'category',
                 'brand',
@@ -35,7 +37,7 @@ class PagesController extends Controller
         $product_id = request()->route('product_id');
         $data = [
             'page' => 'Product Details',
-            'product' => Product::with('category', 'brand', 'detailed_products.images')->where('is_deleted', false)->find($product_id),
+            'product' => Product::with('category', 'brand', 'detailed_products.images', 'detailed_products.color')->where('is_deleted', false)->find($product_id),
         ];
         return view('pages.product_details.index', $data);
     }

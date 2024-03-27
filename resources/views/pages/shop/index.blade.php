@@ -213,9 +213,35 @@
                                 <ul>
                                     <li><a href="#">All <span><input type="checkbox" checked></span></a></li>
                                     @foreach ($categories as $category)
-                                        <li><a href="#">{{ $category->name }} <span><input
-                                                        type="checkbox"></span></a></li>
+                                        <li><a>{{ $category->name }} <span>
+                                                    <input type="checkbox"></span></a></li>
                                     @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
+                            data-aos-delay="200">
+                            <div class="sidebar-widget-title mb-25">
+                                <h3>Choose Colour</h3>
+                            </div>
+                            <div class="sidebar-widget-color sidebar-list-style">
+                                <ul>
+                                    <li><a class="black">All <span><input type="checkbox" checked></span></a>
+                                    </li>
+                                    @foreach ($colors as $color)
+                                        <li><a class="black">
+                                                <div class="d-flex">
+                                                    <div class="color" style="background-color: {{ $color->code }}">
+                                                    </div>
+                                                    {{ $color->name }}
+                                                </div>
+                                                <span>
+                                                    <input type="checkbox">
+                                                </span>
+                                            </a></li>
+                                    @endforeach
+
+
                                 </ul>
                             </div>
                         </div>
@@ -224,7 +250,7 @@
                                 <h3>Tags</h3>
                             </div>
                             <div class="sidebar-widget-tag">
-                                <a href="#">All, </a>
+                                <a>All, </a>
                                 @foreach ($categories as $category)
                                     <a href="#">{{ $category->name }}</a>
                                 @endforeach

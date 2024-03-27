@@ -82,5 +82,11 @@ jQuery(document).ready(function () {
         $('.js-product-price').addClass('d-none');
         $(`.js-product-price.${index}`).removeClass('d-none');
         $(`.js-product-sku`).html(`SKU: ${sku}`);
+
+        $('.js-images-list').addClass('d-none');
+        $(`.js-images-list.${index}`).removeClass('d-none');
+
+        $('.js-images-preview').addClass('d-none');
+        $(`.js-images-preview.${index}`).removeClass('d-none');
     });
 });
