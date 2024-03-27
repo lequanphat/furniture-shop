@@ -5,7 +5,7 @@ jQuery.noConflict();
             e.preventDefault();
             var formData = $(this).serialize();
             formData += `&description=${CKEDITOR.instances.editor.getData()}&tags=${JSON.stringify(
-                $('#select-states').val(),
+                $('#select-tags').val(),
             )}`;
             $.ajax({
                 url: `/admin/products/create`,
@@ -15,17 +15,42 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    console.log('====================================');
-                    console.log(response);
-                    console.log('====================================');
-                    // window.location.href = `/admin/products/${response.product.product_id}`;
+                    window.location.href = `/admin/products/${response.product.product_id}`;
                 },
                 error: function (error) {
-                    console.log('====================================');
-                    console.log(error);
-                    console.log('====================================');
                     $('#js-error').removeClass('d-none');
                     $('#js-error').text(error.responseJSON.message);
+                },
+            });
+        });
+
+        // update product
+        $('#update-product-form').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            formData += `&description=${CKEDITOR.instances.editor.getData()}&tags=${JSON.stringify(
+                $('#select-tags').val(),
+            )}`;
+            const product_id = $('#update-product-form').data('id');
+            $.ajax({
+                url: `/admin/products/${product_id}/update`,
+                type: 'PATCH',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    $('#js-response').removeClass('d-none');
+                    $('#js-response').addClass('alert-success');
+                    $('#js-response').removeClass('alert-danger');
+                    $('#js-response').html(response.message);
+                },
+                error: function (error) {
+                    console.log(error);
+                    $('#js-response').removeClass('d-none');
+                    $('#js-response').removeClass('alert-success');
+                    $('#js-response').addClass('alert-danger');
+                    $('#js-response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });

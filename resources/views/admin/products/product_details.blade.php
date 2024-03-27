@@ -64,7 +64,14 @@
                                             value="{{ $product->category->name }}" readonly>
                                     </div>
                                 </div>
-
+                                <div class="col-12">
+                                    <div class="badges-list">
+                                        <span class="">Tag: </span>
+                                        @foreach ($product->product_tags as $product_tag)
+                                            <span class="badge bg-cyan-lt">#{{ $product_tag->tag->name }}</span>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
                 </div>

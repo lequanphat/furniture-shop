@@ -49,10 +49,18 @@ class TagController extends Controller
     {
         $tag_id = $request->route('tag_id');
         $tag = Tag::find($tag_id);
+
         if ($tag) {
-            $tag->delete();
-            return ['message' => 'Deleted tag successfully!'];
+            if ($tag->product_tags->count() > 0) {
+                $message = 'Cannot delete this tag because it is being used in some products.';
+                return response()->json(['errors' => ['message' => [$message]]], 400);
+            } else {
+                $tag->delete();
+                return ['message' => 'Delete tag successfully!'];
+            }
         }
+
+
         abort(400, 'Cannot find this tag.');
     }
 }
