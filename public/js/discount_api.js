@@ -1,22 +1,19 @@
 jQuery.noConflict();
 
-(function($) {
-    $(document).ready(function() {
-
-
-        $('#create-discount-form').submit(function(e) {
+(function ($) {
+    $(document).ready(function () {
+        $('#create-discount-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
                 url: '/admin/discounts/create',
                 type: 'POST',
                 data: formData,
-
             });
         });
 
-        $('.js-update-discount-btn').on('click', function() {
-            $('#modal-discount-update #discount_id').val($(this).data('discount-id'))
+        $('.js-update-discount-btn').on('click', function () {
+            $('#modal-discount-update #discount_id').val($(this).data('discount-id'));
             $('#modal-discount-update #title').val($(this).data('title'));
             $('#modal-discount-update #editor').val($(this).data('description'));
             $('#modal-discount-update #amount').val($(this).data('amount'));
@@ -26,19 +23,14 @@ jQuery.noConflict();
             $('#modal-discount-update #active').val($(this).data('is-active'));
         });
 
-
-
-        $('#Update-discount-form').submit(function(e)
-        {
+        $('#Update-discount-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
                 url: '/admin/discounts/update',
                 type: 'PATCH',
                 data: formData,
-
             });
-        })
-
+        });
     });
 })(jQuery);

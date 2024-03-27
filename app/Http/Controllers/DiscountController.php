@@ -16,7 +16,7 @@ class DiscountController extends Controller
         $data = [
             'page' => 'Discount Site',
             'discounts' => Discount::all(),
-//            'request' => 'request'
+            //            'request' => 'request'
         ];
         return view('admin.discounts.discountUI', $data);
     }
@@ -35,18 +35,13 @@ class DiscountController extends Controller
                 'amount' => $request->input('amount'),
                 'is_active' => $request->input('active'),
                 'start_date' => $request->input('startdate'),
-
                 'end_date' => $request->input('enddate'),
                 'percentage' => $request->input('percentage'),
                 'description' => $request->input('description')
-
-
             ];
         $Discount = Discount::create($DiscountData);
-//print_r($request);
+        //print_r($request);
         return "Success";
-
-
     }
 
     /**
