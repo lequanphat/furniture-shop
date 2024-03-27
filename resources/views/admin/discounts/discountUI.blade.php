@@ -122,6 +122,8 @@
 
                                                 >
                                                     <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
+
+
                                                 </button>
                                             </td>
 

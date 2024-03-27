@@ -7,9 +7,9 @@
             </div>
             <div class="modal-body ">
 
-                <form id="delete-d-form" action="#" method="dialog">
+                <form action="ad" id="delete-discount-form" action="#" method="dialog">
                     @csrf
-                    <input type="text" class="form-control" id="category_id" name="category_id">
+                    <input type="text" class="form-control" id="discount_id" name="discount_id">
                     <div class="mb-3 row">
 
 
