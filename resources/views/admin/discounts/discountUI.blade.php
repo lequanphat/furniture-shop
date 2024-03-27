@@ -101,7 +101,7 @@
                                             {{-- temporary value --}}
                                             <td>
                                                 <button
-                                                    href="#" class="btn btn-primary d-none d-sm-inline-block  js-update-discount-btn" data-bs-toggle="modal"
+                                             class="btn btn-primary d-none d-sm-inline-block  js-update-discount-btn" data-bs-toggle="modal"
                                                     data-bs-target="#modal-discount-update"
 
                                                     data-discount-id="{{ $discount_item->discount_id }}"
