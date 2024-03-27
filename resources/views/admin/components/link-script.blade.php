@@ -6,5 +6,7 @@
 <script src="{{ asset('js/product_api.js') }}" defer></script>
 <script src="{{ asset('js/brand_api.js') }}" defer></script>
 <script src="{{ asset('js/supplier_api.js') }}" defer></script>
+<script src="{{ asset('js/order_api.js') }}" defer></script>
+
 <script src="{{ asset('js/tag_api.js') }}" defer></script>
 <script src="{{ asset('js/color_api.js') }}" defer></script>
