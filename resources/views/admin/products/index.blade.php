@@ -86,9 +86,15 @@
                                                     </div>
                                                 </div>
                                             </td>
+
+                                            <td>69.000đ</td>
+
+                                            <td>{{ $product->quantities }}</td>
+
                                             <td>{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
                                             </td>
                                             <td>{{ $product->detailed_products->sum('quantities') }}</td>
+
                                             <td>{{ $product->brand->name }}</td>
                                             <td>{{ $product->category->name }}</td>
                                             <td>

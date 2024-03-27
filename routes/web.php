@@ -8,6 +8,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
@@ -139,12 +140,25 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
     // *This is only temporary, use the appropriate controller
+
+    Route::get('/admin/discounts', [DiscountController::class, 'index']);
+Route::post('/admin/discounts/create',[DiscountController::class,'create'] );
+
+    Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
+
+
+    Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
+
     Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     //Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
+
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
+
+    Route::get('/admin/catetest', [CategoryController::class, 'category_ui_1']);
+
 });
