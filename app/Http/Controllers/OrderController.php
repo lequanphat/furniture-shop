@@ -17,10 +17,12 @@ class OrderController extends Controller
     {
         $data = [               //nhãn gồm có tên trang là orders, dòng 2 là dữ liệu nạp từ model
             'page' => 'Orders ', //đặt tên cho pages
-            'orders_table' => Order::all(),
+            //'orders_table' => Order::all(),                   //đây là hàm query cũ
+            'orders_table' =>  Order::query()->paginate(10),     //hàm query cho phân trang
+
             'customer_and_employee' => User::all()//dùng để nạp dữ liệu chọn vào các ô trong trang tạo
             //Đây là dòng query, lấy toàn bộ dữ liệu database trong order
-            //lưu ý chữ orders bên trái này sẽ là biến để sử dụng ở view
+            //lưu ý chữ orders_table bên trái này sẽ là biến để sử dụng ở view
         ];
         return view('admin.orders.index', $data);//return về view với mớ data để nạp vô bảng
     }

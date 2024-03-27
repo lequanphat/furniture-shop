@@ -111,6 +111,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <!--Phân trang-->
+                            <div class="d-flex justify-content-end my-2">{{ $orders_table->render('common.pagination') }}</div>
                         </div>
                     </div>
                 </div>
