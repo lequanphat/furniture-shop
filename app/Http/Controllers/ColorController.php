@@ -32,6 +32,12 @@ class ColorController extends Controller
         $color_id = $request->route('color_id');
         $color = Color::find($color_id);
         if ($color) {
+            // check if the color name is already existed
+            $check_color = Color::where('name', $request->input('name'))->where('color_id', '<>', $color_id)->first();
+            if ($check_color) {
+                return response()->json(['errors' => ['message' => ['The color name have already existed.']]], 400);
+            }
+            // update the color
             $color->name = $request->input('name');
             $color->code = $request->input('code');
             $color->save();
@@ -44,11 +50,11 @@ class ColorController extends Controller
         $color = Color::find($color_id);
         if ($color->detailed_products->count() > 0) {
             $message = 'Cannot delete color because it is associated with one or more product details.';
-            abort(400, $message);
+            return response()->json(['errors' => ['message' => [$message]]], 400);
         } else {
             $color->delete();
             return ['message' => 'Delete color successfully!'];
         }
-        abort(400, 'Cannot find this color.');
+        return response()->json(['errors' => ['message' => ['Cannot find this color.']]], 400);
     }
 }

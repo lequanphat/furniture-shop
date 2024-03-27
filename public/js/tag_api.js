@@ -3,6 +3,12 @@ jQuery.noConflict();
     $(document).ready(function () {
         const data_asset = $('#asset').attr('data-asset');
         // create tag
+
+        $('#create-tag-modal').on('show.bs.modal', function (event) {
+            $('#create-tag-form')[0].reset();
+            $('#create_response').addClass('d-none');
+        });
+
         $('#create-tag-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
