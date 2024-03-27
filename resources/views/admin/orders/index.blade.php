@@ -15,6 +15,7 @@
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
+
                         <span class="d-none d-sm-inline">
                             <a href="#" class="btn">
                                 New view
@@ -93,7 +94,7 @@
                                                     id UpdateOrderModal có 2 liên quan:
                                                         1/Nó mở form update order lên
                                                         2/Nó truyền dữ liệu data dưới đây qua 1 hàm js có cùng id để show dữ liệu lên cái form-->
-                                                <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
+                                                <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1" title="Update"
                                                     data-bs-toggle="modal" data-bs-target="#UpdateOrderModal"
                                                     data-order-id="{{ $order->order_id }}"
                                                     data-total-price="{{ $order->total_price}}"
