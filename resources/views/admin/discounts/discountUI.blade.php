@@ -101,7 +101,8 @@
                                             {{-- temporary value --}}
                                             <td>
                                                 <button
-                                             class="btn btn-primary d-none d-sm-inline-block  js-update-discount-btn" data-bs-toggle="modal"
+                                                    class="btn btn-primary d-none d-sm-inline-block  js-update-discount-btn"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#modal-discount-update"
 
                                                     data-discount-id="{{ $discount_item->discount_id }}"
@@ -114,13 +115,14 @@
                                                     data-percentage="{{$discount_item->percentage}}"
                                                 >
 
-                                                <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </button>
-                                                <a
+                                                <button
+                                                    class="btn btn-primary d-none d-sm-inline-block  js-delete-discount-btn"
 
                                                 >
                                                     <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
-                                                </a>
+                                                </button>
                                             </td>
 
                                     @endforeach
