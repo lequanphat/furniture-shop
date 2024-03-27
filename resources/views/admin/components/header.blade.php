@@ -1,6 +1,5 @@
-<header class="navbar navbar-expand-md d-print-none">
+<header class="navbar navbar-expand-md d-print-none d-lg-block d-md-none d-sm-none d-none">
     <div class="container-xl">
-
         <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item d-none d-md-flex me-3">
                 <div class="btn-list">
@@ -100,7 +99,10 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <a href="#" class="dropdown-item">Status</a>
-                    <a href="#" class="dropdown-item">Profile</a>
+                    <a href="{{ route('profiles.profile_details', Auth::user()->user_id) }}"
+                        class="dropdown-item">Profile</a>
+                    <a href="{{ route('change_password_ui') }}" class="dropdown-item">Change password</a>
+                    <!-- This is temporary route-->
                     <a href="#" class="dropdown-item">Feedback</a>
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item">Settings</a>

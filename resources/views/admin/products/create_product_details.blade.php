@@ -9,7 +9,7 @@
                         Overview
                     </div>
                     <h2 class="page-title">
-                        Create Product Details
+                        Create Detailed Product
                     </h2>
                 </div>
                 <!-- Page title actions -->
@@ -49,10 +49,20 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <label for="coder" class="form-label">Color</label>
-                                        <input id="color" name="color" type="color"
-                                            class="form-control form-control-color" value="#206bc4"
-                                            title="Choose your color" style="width: 100%">
+                                        <label class="form-label">Color</label>
+                                        <div class="row g-2">
+                                            @foreach ($colors as $color)
+                                                <div class="col-auto">
+                                                    <label class="form-colorinput">
+                                                        <input name="color_id" type="radio" value="{{ $color->color_id }}"
+                                                            class="form-colorinput-input" />
+                                                        <span class="form-colorinput-color"
+                                                            style="background-color: {{ $color->code }}"
+                                                            title="{{ $color->name }}"></span>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -72,7 +82,7 @@
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="warranty_month" class="form-label">Warranty Month</label>
-                                        <input id="warranty_month" name="warranty_month" type="text" class="form-control"
+                                        <input id="warranty_month" name="warranty_month" type="number" class="form-control"
                                             placeholder="6" value="">
                                     </div>
                                 </div>
@@ -94,7 +104,9 @@
                                                         <path d="M5 12l14 0" />
                                                     </svg>
                                                 </label>
-                                                <input class="d-none" type="file" id="image-picker" accept="image/*">
+                                                <input class="d-none" type="file" id="image-picker" accept="image/*"
+                                                    multiple>
+
                                             </div>
                                         </div>
                                     </div>
@@ -108,14 +120,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    @if ($errors->any())
-                                        <p class="text-danger m-0">*{{ $errors->first() }}</p>
-                                    @endif
-                                    @if (session('message'))
-                                        <div class="alert alert-success">
-                                            {{ session('message') }}
-                                        </div>
-                                    @endif
+                                    <div id="js-error" class="alert alert-danger d-none">
+                                    </div>
                                 </div>
 
                             </div>

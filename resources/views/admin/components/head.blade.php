@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     <!-- CSS files -->
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler-vendors.min.css') }}">
     <style>
         @import url('https://rsms.me/inter/inter.css');
 

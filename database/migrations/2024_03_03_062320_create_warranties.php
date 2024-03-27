@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('sku');
             $table->date('start_date')->default(now());
             $table->date('end_date');
-            $table->string('description')->default('');
+            $table->text('description')->default('');
             $table->timestamps();
 
             $table->foreign('order_id')->references('order_id')->on('orders');

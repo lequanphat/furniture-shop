@@ -10,9 +10,11 @@ use App\Models\User;
 use App\Models\UserVerify;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Mail;
+
 
 class AuthController extends Controller
 {
@@ -90,7 +92,9 @@ class AuthController extends Controller
                 $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
             }
             // send mail here
-            // --->
+            Mail::raw('Your code is ' . $otp, function ($message) use ($user) {
+                $message->to($user->email);
+            });
 
             // response
             return redirect("/account-verification/" . $user->user_id);
@@ -100,6 +104,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'first_name' => $request->input('first_name'),
                 'last_name' => $request->input('last_name'),
+                'avatar' => config('app.url') . 'storage/defaults/default_avatar.jpg',
             ]);
             // generate otp
             $otp = rand(100000, 999999);
@@ -108,7 +113,9 @@ class AuthController extends Controller
             // create user_verify
             $user_verify = UserVerify::create(['user_id' => $user->user_id, 'otp' => $otp, 'expired_time' => $expiredTime]);
             // send mail here
-            // --->
+            Mail::raw('Your code is ' . $otp, function ($message) use ($user) {
+                $message->to($user->email);
+            });
 
             // response
             return redirect("/account-verification/" . $user->user_id);
@@ -146,13 +153,17 @@ class AuthController extends Controller
     {
         $user_id = $request->route('user_id');
         $user_verify = UserVerify::where('user_id', $user_id)->first();
+        $user = User::find($user_id);
         if ($user_verify) {
             // generate otp
             $otp = rand(100000, 999999);
             $expiredTime = Carbon::now()->addMinutes(5);
             $user_verify->update(['otp' => $otp, 'expired_time' => $expiredTime]);
             // send mail here
-            // -->
+            Mail::raw('Your code is ' . $otp, function ($message) use ($user) {
+                $message->to($user->email);
+            });
+            // response
             return back();
         } else return back()->withErrors(['otp' => 'Some went wrong!'])->withInput($request->input());
     }
@@ -168,10 +179,11 @@ class AuthController extends Controller
         if ($user) {
             // generate new password
             $otp = rand(100000, 999999);
-            $otp = 123123; // for testing
             $user->update(['password' => Hash::make($otp)]);
             // send email here
-
+            Mail::raw('Your new password is ' . $otp, function ($message) use ($user) {
+                $message->to($user->email);
+            });
             // response
             return redirect('/forgot-password-verification');
         }
@@ -182,9 +194,12 @@ class AuthController extends Controller
     public function change_password(ChangePassword $request)
     {
         $user = User::find(Auth::user()->user_id);
-        $user->update([
-            'password' => Hash::make($request->input('password')),
-        ]);
-        return redirect('/');
+        if (Hash::check($request->input('password'), $user->password)) {
+            $user->update([
+                'password' => Hash::make($request->input('new_password')),
+            ]);
+            return redirect('/');
+        }
+        return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
     }
 }
