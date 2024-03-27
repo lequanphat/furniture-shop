@@ -111,7 +111,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/discounts', [DiscountController::class, 'index']);
 Route::post('/admin/discounts/create',[DiscountController::class,'create'] );
 
-
+    Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
 
 
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);

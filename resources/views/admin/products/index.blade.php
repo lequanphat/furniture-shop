@@ -73,6 +73,7 @@
                                                 </div>
                                             </td>
                                             <td>69.000đ</td>
+
                                             <td>{{ $product->quantities }}</td>
                                             <td>{{ $product->brand->name }}</td>
                                             <td>{{ $product->category->name }}</td>

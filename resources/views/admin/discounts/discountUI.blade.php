@@ -52,11 +52,12 @@
 
             <div class="input-group mb-3 container-xl">
                 <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary" type="button"><img src="{{ asset('svg/find.svg') }}" style="width: 18px;" /></button>
+                    <button class="btn btn-outline-secondary" type="button"><img src="{{ asset('svg/find.svg') }}"
+                                                                                 style="width: 18px;" /></button>
 
                 </div>
 
-                <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" >
+                <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
             </div>
         </div>
         <div class="page-body">
@@ -77,6 +78,9 @@
                                         <th>start_date</th>
                                         <th>end_date</th>
                                         <th>is_active</th>
+                                        <th>
+                                            action
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody id="employee-table">
@@ -96,17 +100,24 @@
 
                                             {{-- temporary value --}}
                                             <td>
-                                                <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
-                                                        data-bs-toggle="modal" data-bs-target="#update-category-modal"
-                                                        data-category-id="{{ $category->category_id }}"
-                                                        data-name="{{ $category->name }}"
-                                                        data-description="{{ $category->description }}"
-                                                        data-index="{{ $category->index }}"
-                                                        data-parent-id="{{ $category->parent_id }}">
-                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                <button
+                                                    href="#" class="btn btn-primary d-none d-sm-inline-block  js-update-discount-btn" data-bs-toggle="modal"
+                                                    data-bs-target="#modal-discount-update"
+
+                                                    data-discount-id="{{ $discount_item->discount_id }}"
+                                                    data-title="{{ $discount_item->title }}"
+                                                    data-description="{{ $discount_item->description }}"
+                                                    data-amount="{{ $discount_item->amount }}"
+                                                    data-start-date="{{ $discount_item->start_date }}"
+                                                    data-end-date="{{$discount_item->end_date}}"
+                                                    data-is-active="{{$discount_item->is_active}}"
+                                                    data-percentage="{{$discount_item->percentage}}"
+                                                >
+
+                                                <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </button>
                                                 <a
-                                                    href='/admin/categories/delete/{{ $category->category_id }}'
+
                                                 >
                                                     <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
                                                 </a>
@@ -151,7 +162,8 @@
                     </div>
                 </div>
             </div>
-@include('admin.discounts.CreateDiscount')
+            @include('admin.discounts.CreateDiscount')
+            @include('admin.discounts.UpdateDiscount')
 
             @include('admin.components.footer')
         </div>

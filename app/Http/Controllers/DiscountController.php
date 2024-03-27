@@ -76,9 +76,26 @@ class DiscountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         //
+
+        $discount_find = Discount::where('discount_id', $request->input('discount_id'))->first();
+
+        if ($discount_find) {
+            $discount_find->update([
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'percentage' => $request->input('percentage'),
+                'amount' => $request->input('amount'),
+                'start_date' => $request->input('startdate'),
+                'end_date' => $request->input('enddate'),
+                'is_active' => $request->input('active')
+            ]);
+            // response
+
+        }
+        return "Update_Done";
     }
 
     /**
