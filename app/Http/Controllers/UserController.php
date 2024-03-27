@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateEmployee;
 use App\Http\Requests\UpdateEmployee;
+use App\Http\Requests\UpdateCustomer;
 use App\Models\Address;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -43,6 +44,7 @@ class UserController extends Controller
             'last_name' => $request->input('last_name'),
             'gender' => ($request->input('gender') == 'male'),
             'birth_date' => $request->input('birth_date'),
+            'avatar' => config('app.url'). 'storage/defaults/default_avatar.jpg',
             'is_staff' => 1,
             'is_verified' => 1,
         ];
@@ -56,10 +58,10 @@ class UserController extends Controller
             'phone_number' => $request->input('phone_number'),
             'is_default' => 1,
         ];
-        Address::create($addressData);
+        $address = Address::create($addressData);
 
         // response
-        return ['message' => 'Created employee successfully!', 'user' => $user];
+        return ['message' => 'Created employee successfully!', 'user' => $user, 'address' => $address];
     }
 
     public function employee_details_ui(Request $request)
@@ -135,7 +137,32 @@ class UserController extends Controller
                     'phone_number' => $request->input('phone_number'),
                 ]);
                 // response
-                return ['message' => 'Updateted employee successfully!', 'user' => $user];
+                return ['message' => 'Updateted employee successfully!', 'user' => $user, 'address' => $address];
+            }
+            return back()->withErrors(['address' => 'Address not found.'])->withInput($request->input());
+        }
+        return back()->withErrors(['email' => 'User not found.'])->withInput($request->input());
+    }
+    public function update_customer(UpdateCustomer $request)
+    {
+        // check existed user
+        $user = User::where('email', $request->input('email'))->first();
+        if ($user) {
+            $user->update([
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'gender' => ($request->input('gender') == 'male'),
+                'birth_date' => $request->input('birth_date'),
+            ]);
+
+            $address = Address::where('user_id', $user->user_id)->where('is_default', 1)->first();
+            if ($address) {
+                $address->update([
+                    'address' => $request->input('address'),
+                    'phone_number' => $request->input('phone_number'),
+                ]);
+                // response
+                return ['message' => 'Updateted customer successfully!', 'user' => $user];
             }
             return back()->withErrors(['address' => 'Address not found.'])->withInput($request->input());
         }

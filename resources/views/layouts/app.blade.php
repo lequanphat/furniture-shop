@@ -3,6 +3,7 @@
 @include('components.head')
 
 <body>
+    <div id="asset" data-asset="{{ asset('') }}"></div>
     <div class="main-wrapper main-wrapper-2">
         @include('components.header')
         @yield('content')
@@ -32,6 +33,8 @@
         <script src="{{ asset('js/plugins/ajax-mail.js') }}"></script>
         <!-- Main JS -->
         <script src="{{ asset('js/main.js') }}"></script>
+        <script src="{{ asset('js/shop_api.js') }}"></script>
+        <script src="{{ asset('js/profile_api.js') }}"></script>
     </div>
     @include('components.footer')
 </body>

@@ -18,7 +18,7 @@ class UpdateDetailedProduct extends FormRequest
         return [
             'sku' => 'required',
             'name' => 'required',
-            'color' => 'required',
+            'color_id' => 'required',
             'size' => 'required',
             'original_price' => 'required',
             'warranty_month' => 'required',
@@ -30,7 +30,7 @@ class UpdateDetailedProduct extends FormRequest
         return [
             'sku.required' => 'The sku field is required.',
             'name.required' => 'The name field is required.',
-            'color.required' => 'The color field is required.',
+            'color_id.required' => 'The color field is required.',
             'size.required' => 'The size field is required.',
             'original_price.required' => 'The original price field is required.',
             'warranty_month.required' => 'The warranty month field is required.',

@@ -99,7 +99,8 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <a href="#" class="dropdown-item">Status</a>
-                    <a href="#" class="dropdown-item">Profile</a>
+                    <a href="{{ route('profiles.profile_details', Auth::user()->user_id) }}"
+                        class="dropdown-item">Profile</a>
                     <a href="{{ route('change_password_ui') }}" class="dropdown-item">Change password</a>
                     <!-- This is temporary route-->
                     <a href="#" class="dropdown-item">Feedback</a>

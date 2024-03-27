@@ -137,6 +137,14 @@
                                     Brands
                                     <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                                 </a>
+                                <a class="dropdown-item" href="/admin/colors">
+                                    Colors
+                                    <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                </a>
+                                <a class="dropdown-item" href="/admin/tags">
+                                    Tags
+                                    <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                </a>
                                 <a class="dropdown-item" href="/admin/products">
                                     Products
                                 </a>

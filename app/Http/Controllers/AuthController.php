@@ -104,6 +104,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'first_name' => $request->input('first_name'),
                 'last_name' => $request->input('last_name'),
+                'avatar' => config('app.url') . 'storage/defaults/default_avatar.jpg',
             ]);
             // generate otp
             $otp = rand(100000, 999999);

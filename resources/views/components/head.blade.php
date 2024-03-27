@@ -40,4 +40,5 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/easyzoom.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/plugins/slinky.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
 </head>

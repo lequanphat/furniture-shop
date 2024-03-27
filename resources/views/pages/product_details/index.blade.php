@@ -13,124 +13,66 @@
                         data-aos-delay="200">
                         <div class="product-details-small-img-wrap">
                             <div class="swiper-container product-details-small-img-slider-1 pd-small-img-style">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-1.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
+                                @foreach ($product->detailed_products as $detailed_product)
+                                    <div
+                                        class="js-images-list swiper-wrapper {{ $loop->index }} @if (!$loop->first) d-none  @endif">
+                                        @foreach ($detailed_product->images as $image)
+                                            <div class="swiper-slide">
+                                                <div class="product-details-small-img">
+                                                    <img src="{{ $image->url }}" alt="Product Thumnail">
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-2.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-3.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-4.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="product-details-small-img">
-                                            <img src="{{ asset('images/product-details/pro-details-small-img-5.png') }}"
-                                                alt="Product Thumnail">
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                             <div class="pd-prev pd-nav-style"> <i class="ti-angle-up"></i></div>
                             <div class="pd-next pd-nav-style"> <i class="ti-angle-down"></i></div>
                         </div>
                         <div class="swiper-container product-details-big-img-slider-1 pd-big-img-style">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-1.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-1.png') }}"
-                                                    alt="">
-                                            </a>
+                            @foreach ($product->detailed_products as $detailed_product)
+                                <div
+                                    class="js-images-preview swiper-wrapper {{ $loop->index }} @if (!$loop->first) d-none @endif">
+                                    @foreach ($detailed_product->images as $image)
+                                        <div class="swiper-slide">
+                                            <div class="easyzoom-style">
+                                                <div class="easyzoom easyzoom--overlay">
+
+                                                    <a href="{{ $image->url }}">
+                                                        <img src="{{ $image->url }}" alt="">
+                                                    </a>
+                                                </div>
+                                                <a class="easyzoom-pop-up img-popup" href="{{ $image->url }}">
+                                                    <i class="pe-7s-search"></i>
+                                                </a>
+                                            </div>
                                         </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-1.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
+                                    @endforeach
+
                                 </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-2.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-2.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-2.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-3.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-3.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-3.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-4.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-4.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-4.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{ asset('images/product-details/pro-details-zoom-img-5.png') }}">
-                                                <img src="{{ asset('images/product-details/pro-details-large-img-5.png') }}"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <a class="easyzoom-pop-up img-popup"
-                                            href="{{ asset('images/product-details/pro-details-large-img-5.png') }}">
-                                            <i class="pe-7s-search"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
+
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="product-details-content" data-aos="fade-up" data-aos-delay="400">
-                        <h2>New Modern Chair</h2>
+                        @foreach ($product->detailed_products as $detailed_product)
+                            <h2 class="js-product-name {{ $loop->index }} @if ($loop->first) active @else d-none @endif"
+                                data-id="{{ $detailed_product->sku }}">
+                                {{ $detailed_product->name }}
+                            </h2>
+                        @endforeach
+
                         <div class="product-details-price">
                             <span class="old-price">$25.89 </span>
-                            <span class="new-price">$20.25</span>
+                            @foreach ($product->detailed_products as $detailed_product)
+                                <span
+                                    class="js-product-price {{ $loop->index }} new-price  @if ($loop->first) active @else d-none @endif">
+                                    {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
+                                </span>
+                            @endforeach
+
                         </div>
                         <div class="product-details-review">
                             <div class="product-rating">
@@ -142,14 +84,21 @@
                             </div>
                             <span>( 1 Customer Review )</span>
                         </div>
-                        <div class="product-color product-color-active product-details-color">
-                            <span>Color :</span>
-                            <ul>
-                                <li><a title="Pink" class="pink" href="#">pink</a></li>
-                                <li><a title="Yellow" class="active yellow" href="#">yellow</a></li>
-                                <li><a title="Purple" class="purple" href="#">purple</a></li>
-                            </ul>
+                        {{-- temporary custom  --}}
+                        <div class="d-flex my-4 " style="flex-wrap: wrap;">
+                            @foreach ($product->detailed_products as $detailed_product)
+                                <div class="disable detailed-product-tag d-flex p-2 me-3 mb-3"
+                                    style="align-items: center; border: 1px solid #aaa;" data-index="{{ $loop->index }}"
+                                    data-sku="{{ $detailed_product->sku }}">
+                                    <div class="me-2"
+                                        style="width: 20px; height:20px; background-color: {{ $detailed_product->color->code }}">
+                                    </div>
+                                    <span>{{ $detailed_product->size }}</span>
+                                    <span>({{ $detailed_product->quantities }})</span>
+                                </div>
+                            @endforeach
                         </div>
+                        {{--  temporary custom --}}
                         <div class="product-details-action-wrap">
                             <div class="product-quality">
                                 <input class="cart-plus-minus-box input-text qty text" name="qtybutton" value="1">
@@ -158,34 +107,20 @@
                                 <a href="#">Add to cart</a>
                             </div>
                             <div class="single-product-wishlist">
-                                <a title="Wishlist" href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                <span>(12 products available)</span>
                             </div>
-                            <div class="single-product-compare">
-                                <a title="Compare" href="#"><i class="pe-7s-shuffle"></i></a>
-                            </div>
+
                         </div>
                         <div class="product-details-meta">
                             <ul>
-                                <li><span class="title">SKU:</span> Ch-256xl</li>
+                                <li class="js-product-sku"><span class="title">SKU:</span>
+                                    {{ $product->detailed_products->first()->sku }}</li>
                                 <li><span class="title">Category:</span>
                                     <ul>
-                                        <li><a href="#">Office</a>,</li>
-                                        <li><a href="#">Home</a></li>
-                                    </ul>
-                                </li>
-                                <li><span class="title">Tags:</span>
-                                    <ul class="tag">
-                                        <li><a href="#">Furniture</a></li>
+                                        <li><a href="#">{{ $product->category->name }}</a></li>
                                     </ul>
                                 </li>
                             </ul>
-                        </div>
-                        <div class="social-icon-style-4">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-dribbble"></i></a>
-                            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
@@ -201,14 +136,7 @@
             <div class="tab-content">
                 <div id="des-details1" class="tab-pane active">
                     <div class="product-description-content text-center">
-                        <p data-aos="fade-up" data-aos-delay="200">Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercita ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                        <p data-aos="fade-up" data-aos-delay="400">Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum. Sed ut per unde omnis iste natus error
-                            sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo</p>
+                        <div data-aos="fade-up" data-aos-delay="400">{!! $product->detailed_products->first()->description !!}</div>
                     </div>
                 </div>
                 <div id="des-details2" class="tab-pane">
@@ -217,7 +145,7 @@
                             <tbody>
                                 <tr>
                                     <td class="width1">Brands</td>
-                                    <td>Airi, Brand, Draven, Skudmart, Yena</td>
+                                    <td>{{ $product->brand->name }}</td>
                                 </tr>
                                 <tr>
                                     <td class="width1">Color</td>
@@ -225,7 +153,7 @@
                                 </tr>
                                 <tr>
                                     <td class="width1">Size</td>
-                                    <td>L, M, S, XL, XXL</td>
+                                    <td>{{ $product->detailed_products->first()->size }}</td>
                                 </tr>
                             </tbody>
                         </table>

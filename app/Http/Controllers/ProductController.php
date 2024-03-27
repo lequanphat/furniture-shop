@@ -7,9 +7,12 @@ use App\Http\Requests\CreateProduct;
 use App\Http\Requests\UpdateDetailedProduct;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\ProductImage;
+use App\Models\ProductTag;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -28,12 +31,14 @@ class ProductController extends Controller
         $data = [
             'page' => 'Create Product',
             'categories' => Category::all(),
-            'brands' => Brand::all()
+            'brands' => Brand::all(),
+            'tags' => Tag::all(),
         ];
         return view('admin.products.create', $data);
     }
     public function create(CreateProduct $request)
     {
+        // create products
         $product = Product::create([
             'name' => $request->input('title'),
             'category_id' => $request->input('category'),
@@ -41,7 +46,9 @@ class ProductController extends Controller
             'description' => $request->input('description'),
             'quantities' => 0,
         ]);
-        return  $product;
+        // create tags
+
+        return  ['product' => $product];
     }
     public function update_ui(Request $request)
     {
@@ -74,7 +81,7 @@ class ProductController extends Controller
         $data = [
             'page' => 'Product Details',
             'product' => Product::with('category', 'brand')->find($product_id),
-            'detaild_products' => ProductDetail::where('product_id', $product_id)->with('images')->paginate(6) // 6 elements per page
+            'detaild_products' => ProductDetail::where('product_id', $product_id)->with('images')->with('color')->paginate(6) // 6 elements per page
         ];
         return  view('admin.products.product_details', $data);
     }
@@ -84,6 +91,7 @@ class ProductController extends Controller
         $data = [
             'page' => 'Create Product Details',
             'product' => Product::with('category', 'brand')->find($product_id),
+            'colors' => Color::all(),
         ];
         return view('admin.products.create_product_details', $data);
     }
@@ -94,7 +102,7 @@ class ProductController extends Controller
             'product_id' => $product_id,
             'sku' => $request->input('sku'),
             'name' => $request->input('name'),
-            'color' => $request->input('color'),
+            'color_id' => $request->input('color_id'),
             'size' => $request->input('size'),
             'original_price' => $request->input('original_price'),
             'warranty_month' => $request->input('warranty_month'),
@@ -104,7 +112,7 @@ class ProductController extends Controller
         $count = 0;
         while ($request->hasFile('image' . $count)) {
             $file = $request->file('image' . $count);
-            $path = $file->store('uploads/images', 'public');
+            $path = config('app.url') . 'storage/' . $file->store('uploads/images', 'public');
             ProductImage::create([
                 'sku' => $request->input('sku'),
                 'url' => $path
@@ -119,7 +127,7 @@ class ProductController extends Controller
         $sku = $request->route('sku');
         $data = [
             'page' => 'Product Details',
-            'detailed_product' => ProductDetail::with('images')->find($sku),
+            'detailed_product' => ProductDetail::with('images', 'color')->find($sku),
         ];
         return  view('admin.products.detailed_product_details', $data);
     }
@@ -129,6 +137,7 @@ class ProductController extends Controller
         $data = [
             'page' => 'Update Detailed Product',
             'detailed_product' => ProductDetail::with('images')->find($sku),
+            'colors' => Color::all(),
         ];
         return  view('admin.products.update_product_details', $data);
     }
@@ -138,7 +147,7 @@ class ProductController extends Controller
         $detailed_product = ProductDetail::find($sku);
         $detailed_product->update([
             'name' => $request->input('name'),
-            'color' => $request->input('color'),
+            'color_id' => $request->input('color_id'),
             'size' => $request->input('size'),
             'original_price' => $request->input('original_price'),
             'warranty_month' => $request->input('warranty_month'),
@@ -152,7 +161,7 @@ class ProductController extends Controller
         $count = 0;
         while ($request->hasFile('image' . $count)) {
             $file = $request->file('image' . $count);
-            $path = $file->store('uploads/images', 'public');
+            $path = config('app.url') . 'storage/' . $file->store('uploads/images', 'public');
             ProductImage::create([
                 'sku' => $request->input('sku'),
                 'url' => $path
@@ -160,5 +169,16 @@ class ProductController extends Controller
             $count++;
         }
         return ['message' => 'Product details updated successfully!'];
+    }
+
+    public function get_products()
+    {
+        $products =  Product::with(
+            'category',
+            'brand',
+            'detailed_products.images'
+        )->where('is_deleted', false)->paginate(9);
+
+        return response()->json($products);
     }
 }

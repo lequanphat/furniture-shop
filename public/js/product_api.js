@@ -4,7 +4,9 @@ jQuery.noConflict();
         $('#create-product-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
-            formData += `&description=${CKEDITOR.instances.editor.getData()}`;
+            formData += `&description=${CKEDITOR.instances.editor.getData()}&tags=${JSON.stringify(
+                $('#select-states').val(),
+            )}`;
             $.ajax({
                 url: `/admin/products/create`,
                 type: 'POST',
@@ -13,9 +15,15 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    window.location.href = '/admin/products';
+                    console.log('====================================');
+                    console.log(response);
+                    console.log('====================================');
+                    // window.location.href = `/admin/products/${response.product.product_id}`;
                 },
                 error: function (error) {
+                    console.log('====================================');
+                    console.log(error);
+                    console.log('====================================');
                     $('#js-error').removeClass('d-none');
                     $('#js-error').text(error.responseJSON.message);
                 },

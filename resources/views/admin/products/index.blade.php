@@ -61,7 +61,7 @@
                                                         $imageUrl = null;
                                                         foreach ($product->detailed_products as $detailed_product) {
                                                             if ($image = $detailed_product->images->first()) {
-                                                                $imageUrl = asset('storage/' . $image->url);
+                                                                $imageUrl = $image->url;
                                                                 break;
                                                             }
                                                         }
