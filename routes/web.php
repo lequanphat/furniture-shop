@@ -110,7 +110,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // tag
     Route::get('/admin/tags', [TagController::class, 'index'])->name('tags.index');
     Route::post('/admin/tags', [TagController::class, 'create'])->name('tags.create');
-
+    Route::patch('/admin/tags/{tag_id}', [TagController::class, 'update'])->name('tags.update');
+    Route::delete('/admin/tags/{tag_id}', [TagController::class, 'delete'])->name('tags.delete');
 
     // color
     Route::get('/admin/colors', [ColorController::class, 'index'])->name('colors.index');
