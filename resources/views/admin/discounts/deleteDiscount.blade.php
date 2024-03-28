@@ -1,28 +1,21 @@
-<div class="modal fade" id="delete-discount-modal" tabindex="-1" role="dialog" aria-labelledby="deleteEmployeeTittle"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form class="modal-content">
+
+<div class="modal fade" id="discount.delete{{$discount_item->discount_id}}" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="delete-category-id">Delete Confirmation</h5>
+                <h5 class="modal-title" id="myModalLabel">Delete Discount</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body ">
-
-                <form action="ad" id="delete-discount-form" action="#" method="dialog">
-                    @csrf
-                    <input type="text" class="form-control" id="discount_id" name="discount_id">
-                    <div class="mb-3 row">
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary float-right px-4 mx-2">Delete</button>
-                        <button id="js-cancel-delete-category" type="button" class="btn btn-secondary"
-                                data-dismiss="modal">Cancel
-                        </button>
-                    </div>
-                </form>
-
+            <div class="modal-body">
+                {!! Form::model($discounts, [ 'method' => 'delete','route' => ['discount.delete', $discount_item->discount_id] ]) !!}
+                <h4 class="text-center">Are you sure you want to delete Discount?</h4>
+                <h5 class="text-center">Discount ID: {{$discount_item->discount_id}} </h5>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                {{Form::button('<i class="fa fa-trash"></i> Delete', ['class' => 'btn btn-danger', 'type' => 'submit'])}}
+                {!! Form::close() !!}
+            </div>
+        </div>
     </div>
 </div>

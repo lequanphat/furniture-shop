@@ -145,7 +145,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 Route::post('/admin/discounts/create',[DiscountController::class,'create'] );
 
     Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
-//Route::delete('admin')
+
+    Route::delete('admin/discounts/delete/{id}', [ DiscountController::class,'destroy'])->name('discount.delete');
+
 
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
 

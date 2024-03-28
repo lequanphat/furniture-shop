@@ -117,14 +117,9 @@
 
                                                     <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </button>
-                                                <button
-                                                    class="btn btn-primary d-none d-sm-inline-block  js-delete-discount-btn"
+                                                <a href="#discount.delete{{$discount_item->discount_id}}" data-bs-toggle="modal" class="btn btn-danger"><i class='fa fa-trash'></i> Delete</a>
+                                                @include('admin.discounts.deleteDiscount')
 
-                                                >
-                                                    <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
-
-
-                                                </button>
                                             </td>
 
                                     @endforeach
@@ -168,6 +163,7 @@
             </div>
             @include('admin.discounts.CreateDiscount')
             @include('admin.discounts.UpdateDiscount')
+            @include('admin.discounts.deleteDiscount')
 
             @include('admin.components.footer')
         </div>

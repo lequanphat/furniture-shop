@@ -93,11 +93,18 @@ class DiscountController extends Controller
         return "Update_Done";
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         //
+        $discount = Discount::find($id);
+        $discount->delete();
+
+        return redirect('/admin/discounts');
+//        return "Take It";
+
     }
 }
