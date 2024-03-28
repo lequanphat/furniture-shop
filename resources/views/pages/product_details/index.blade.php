@@ -114,7 +114,10 @@
                         <div class="product-details-meta">
                             <ul>
                                 <li class="js-product-sku"><span class="title">SKU:</span>
-                                    {{ $product->detailed_products->first()->sku }}</li>
+                                    @if (isset($product->detailed_products->first()->sku))
+                                        {{ $product->detailed_products->first()->sku }}
+                                    @endif
+
                                 <li><span class="title">Category:</span>
                                     <ul>
                                         <li><a>{{ $product->category->name }}</a></li>
@@ -143,32 +146,39 @@
             <div class="tab-content">
                 <div id="des-details1" class="tab-pane active">
                     <div class="product-description-content text-center">
-                        <div data-aos="fade-up" data-aos-delay="400">{!! $product->detailed_products->first()->description !!}</div>
+                        <div data-aos="fade-up" data-aos-delay="400">
+                            @if (isset($product->detailed_products->first()->description))
+                                {{ $product->detailed_products->first()->description }}
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div id="des-details2" class="tab-pane">
-                    <div class="specification-wrap table-responsive">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="width1">Brands</td>
-                                    <td>{{ $product->brand->name }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="width1">Color</td>
-                                    <td>Blue, Gray, Pink</td>
-                                </tr>
-                                <tr>
-                                    <td class="width1">Size</td>
-                                    <td>{{ $product->detailed_products->first()->size }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div id="des-details2" class="tab-pane">
+                        <div class="specification-wrap table-responsive">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="width1">Brands</td>
+                                        <td>{{ $product->brand->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width1">Color</td>
+                                        <td>Blue, Gray, Pink</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width1">Size</td>
+                                        <td>
+                                            @if (isset($product->detailed_products->first()->size))
+                                                {{ $product->detailed_products->first()->size }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    {{-- Related products --}}
-    @include('pages.product_details.related-products')
-@endsection
+        {{-- Related products --}}
+        @include('pages.product_details.related-products')
+    @endsection

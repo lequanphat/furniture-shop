@@ -215,7 +215,9 @@
                                     @foreach ($categories as $category)
                                         <li><a>{{ $category->name }} <span>
                                                     <input data-id="{{ $category->category_id }}"
-                                                        class="js-cate-checkbox" type="checkbox"></span></a></li>
+                                                        class="js-cate-checkbox" type="checkbox"
+                                                        @if (in_array($category->category_id, $selected_categories)) @checked(true) @endif></span></a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -237,7 +239,8 @@
                                                 </div>
                                                 <span>
                                                     <input data-id="{{ $color->color_id }}" class="js-color-checkbox"
-                                                        type="checkbox">
+                                                        type="checkbox"
+                                                        @if (in_array($color->color_id, $selected_colors)) @checked(true) @endif>
                                                 </span>
                                             </a></li>
                                     @endforeach
