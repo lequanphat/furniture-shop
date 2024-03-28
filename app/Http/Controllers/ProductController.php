@@ -193,12 +193,32 @@ class ProductController extends Controller
 
     public function get_products()
     {
-        $products =  Product::with(
+        $categories = request()->query('categories');
+        $color = request()->query('color');
+        // query
+        $query = Product::with(
             'category',
             'brand',
             'detailed_products.images'
-        )->where('is_deleted', false)->paginate(9);
+        )->where('is_deleted', false);
 
-        return response()->json($products);
+        // If categories is not 'all', filter by category_id
+        if ($categories !== 'all' && $categories !== null) {
+            $categoryIds = explode(',', $categories);
+            $query->whereIn('category_id', $categoryIds);
+        }
+        // If color is not 'all', filter by color_id
+        if ($color !== 'all' && $color !== null) {
+            $colorIds = explode(',', $color);
+            $query->whereHas('detailed_products', function ($query) use ($colorIds) {
+                $query->whereIn('color_id', $colorIds);
+            });
+        }
+
+        $data = [
+            'products' => $query->paginate(9) // 9 elements per page
+        ];
+
+        return response()->json($data);
     }
 }

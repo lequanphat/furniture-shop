@@ -99,7 +99,7 @@
 
         {{-- script --}}
         <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
-        <script src="{{ asset('vendor/tom-select/dist/js/tom-select.base.min.js') }}"></script>
+        <script src="{{ asset('vendor/tom-select/dist/js/tom-select.complete.js') }}"></script>
         <script>
             CKEDITOR.replace('editor');
         </script>
@@ -108,6 +108,7 @@
             document.addEventListener("DOMContentLoaded", function() {
                 var el;
                 window.TomSelect && (new TomSelect(el = document.getElementById('select-tags'), {
+                    plugins: ["remove_button"],
                     copyClassesToDropdown: false,
                     dropdownParent: 'body',
                     controlInput: '<input>',

@@ -22,7 +22,7 @@ jQuery.noConflict();
                     const row = `
                         <tr>
                             <td>${response.color.color_id}</td>
-                            <td>${response.color.name}
+                            <td>#${response.color.name}
                                 <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
                                 </span>
                             </td>
@@ -100,7 +100,7 @@ jQuery.noConflict();
                         const data_asset = $('#asset').attr('data-asset');
                         row.html(`
                             <td>${response.color.color_id}</td>
-                        <td>${response.color.name}
+                        <td>#${response.color.name}
                             <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
                             </span>
                         </td>

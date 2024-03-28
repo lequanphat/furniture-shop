@@ -133,13 +133,7 @@
                                                 </a>
                                                 <a href="#" class="btn p-2" data-bs-toggle="modal"
                                                     data-bs-target="#update-employee-modal"
-                                                    data-user-id="{{ $user->user_id }}" data-email="{{ $user->email }}"
-                                                    data-first-name="{{ $user->first_name }}"
-                                                    data-last-name="{{ $user->last_name }}"
-                                                    data-phone-number="{{ $user->default_address->phone_number }}"
-                                                    data-address="{{ $user->default_address->address }}"
-                                                    data-gender="{{ $user->gender }}"
-                                                    data-birth-date="{{ $user->birth_date }}">
+                                                    data-user-id="{{ $user->user_id }}">
                                                     <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </a>
                                                 @if ($user->is_active)
