@@ -50,13 +50,7 @@ jQuery.noConflict();
                             </a>
                             <a href="#" class="btn p-2" data-bs-toggle="modal"
                                 data-bs-target="#update-employee-modal"
-                                data-user-id="${response.user.user_id}" data-email="${response.user.email}"
-                                data-first-name="${response.user.first_name}"
-                                data-last-name="${response.user.last_name}"
-                                data-phone-number="${response.address.phone_number}"
-                                data-address="${response.address.address}"
-                                data-gender="${response.user.gender}"
-                                data-birth-date="${response.user.birth_date}">
+                                data-user-id="${response.user.user_id}">
                                 <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                             </a>
                             <a href="#" class="btn p-2" data-bs-toggle="modal"
@@ -86,16 +80,27 @@ jQuery.noConflict();
         $('#update-employee-modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);
-            modal.find('#update-employee-title').html('Update Employee - ' + button.data('user-id'));
-            modal.find('#first_name').val(button.data('first-name'));
-            modal.find('#last_name').val(button.data('last-name'));
-            modal.find('#email ').val(button.data('email'));
-            modal.find('#email ').attr('readonly', true);
-            modal.find('#address ').val(button.data('address'));
-            modal.find('#phone_number ').val(button.data('phone-number'));
-            modal.find('#birth_date ').val(button.data('birth-date'));
-            if (button.data('gender')) modal.find('#male ').prop('checked', true);
-            else modal.find('#female ').prop('checked', true);
+            const user_id = button.data('user-id');
+            modal.find('#update-employee-title').html('Update Employee - ' + user_id);
+            $.ajax({
+                url: `/admin/employee/${user_id}`,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    modal.find('#first_name').val(response.user.first_name);
+                    modal.find('#last_name').val(response.user.last_name);
+                    modal.find('#email ').val(response.user.email);
+                    modal.find('#email ').attr('readonly', true);
+                    modal.find('#address ').val(response.user.default_address.address);
+                    modal.find('#phone_number ').val(response.user.default_address.phone_number);
+                    modal.find('#birth_date ').val(response.user.birth_date);
+                    if (response.user.gender) modal.find('#male ').prop('checked', true);
+                    else modal.find('#female ').prop('checked', true);
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
         });
 
         // update employee
@@ -152,13 +157,7 @@ jQuery.noConflict();
                             </a>
                             <a href="#" class="btn p-2" data-bs-toggle="modal"
                                 data-bs-target="#update-employee-modal"
-                                data-user-id="${response.user.user_id}" data-email="${response.user.email}"
-                                data-first-name="${response.user.first_name}"
-                                data-last-name="${response.user.last_name}"
-                                data-phone-number="${response.address.phone_number}"
-                                data-address="${response.address.address}"
-                                data-gender="${response.user.gender}"
-                                data-birth-date="${response.user.birth_date}">
+                                data-user-id="${response.user.user_id}" >
                                 <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                             </a>
                             <a href="#" class="btn p-2" data-bs-toggle="modal"

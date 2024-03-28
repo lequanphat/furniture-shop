@@ -75,6 +75,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // employee routes
     Route::get('/admin/employee', [UserController::class, 'employee_ui']);
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
+    Route::get('/admin/employee/{user_id}', [UserController::class, 'employee_details']);
     Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
     Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
     // customer routes
@@ -101,12 +102,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
-    Route::post('/admin/categories/create', [CategoryController::class, 'category_insert']);
-    // Route::post('/admin/categories', [CategoryController::class, 'category_insert']); for create
-    Route::get('/admin/categories/delete/{id}', [CategoryController::class, 'category_delete']);
-    // Route::delete('/admin/categories/{id}', [CategoryController::class, 'category_delete']); for delete
-    Route::post('/admin/categories/update', [CategoryController::class, 'category_update']);
-    // Route::patch('/admin/categories/{id}', [CategoryController::class, 'category_delete']); for update
+    Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
+    Route::delete('/admin/categories/{category_id}', [CategoryController::class, 'delete'])->name('categories.delete');
+    Route::patch('/admin/categories/{category_id}', [CategoryController::class, 'update'])->name('categories.update');
 
 
     // tag

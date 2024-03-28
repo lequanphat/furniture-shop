@@ -129,5 +129,5 @@
 {{-- Modal --}}
 @include('admin.tags.create_tag_modal')
 @include('admin.tags.update_tag_modal')
-@include('admin.tags.error_delete_modal')
+@include('admin.components.error_delete_modal')
 @endsection

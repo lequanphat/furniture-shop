@@ -102,7 +102,6 @@
                                                     href="">{{ $i }}</a>
                                             </li>
                                         @endfor
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -164,15 +163,17 @@
                                     </div>
                                 @endforeach
 
-                                <div class="pagination-style-1">
+                                {{-- <div class="pagination-style-1">
                                     <ul>
-                                        <li><a class="active" href="?page=1">1</a></li>
-                                        <li><a href="?page=2">2</a></li>
-                                        <li><a href="?page=3">3</a></li>
-                                        <li><a class="next" href="#"><i class=" ti-angle-double-right "></i></a>
-                                        </li>
+                                        @for ($i = 1; $i <= $products->lastPage(); $i++)
+                                            <li>
+                                                <a class="pagination-item
+                                                {{ $retVal = $i == $products->currentPage() ? 'active' : '' }}"
+                                                    href="">{{ $i }}</a>
+                                            </li>
+                                        @endfor
                                     </ul>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -211,10 +212,10 @@
                             </div>
                             <div class="sidebar-list-style">
                                 <ul>
-                                    <li><a href="#">All <span><input type="checkbox" checked></span></a></li>
                                     @foreach ($categories as $category)
                                         <li><a>{{ $category->name }} <span>
-                                                    <input type="checkbox"></span></a></li>
+                                                    <input data-id="{{ $category->category_id }}"
+                                                        class="js-cate-checkbox" type="checkbox"></span></a></li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -226,8 +227,7 @@
                             </div>
                             <div class="sidebar-widget-color sidebar-list-style">
                                 <ul>
-                                    <li><a class="black">All <span><input type="checkbox" checked></span></a>
-                                    </li>
+
                                     @foreach ($colors as $color)
                                         <li><a class="black">
                                                 <div class="d-flex">
@@ -236,7 +236,8 @@
                                                     {{ $color->name }}
                                                 </div>
                                                 <span>
-                                                    <input type="checkbox">
+                                                    <input data-id="{{ $color->color_id }}" class="js-color-checkbox"
+                                                        type="checkbox">
                                                 </span>
                                             </a></li>
                                     @endforeach
@@ -250,9 +251,8 @@
                                 <h3>Tags</h3>
                             </div>
                             <div class="sidebar-widget-tag">
-                                <a>All, </a>
-                                @foreach ($categories as $category)
-                                    <a href="#">{{ $category->name }}</a>
+                                @foreach ($tags as $tag)
+                                    <a>#{{ $tag->name }}</a>
                                 @endforeach
                             </div>
                         </div>

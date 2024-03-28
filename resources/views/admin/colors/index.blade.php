@@ -150,5 +150,5 @@
 {{-- Modal --}}
 @include('admin.colors.create_color_modal')
 @include('admin.colors.update_color_modal')
-@include('admin.colors.error_delete_modal')
+@include('admin.components.error_delete_modal')
 @endsection
