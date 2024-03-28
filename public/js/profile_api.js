@@ -1,8 +1,16 @@
 
-const idcustomer = ['first_name', 'last_name', 'gender', 'birth_date', 'phone_number'];
+const idcustomer = ['first_name', 'last_name', 'gender', 'birth_date', 'phone_number','address'];
 jQuery(document).ready(function () {
-    
-    
+    $('#enable-edit-profile-customer').click(() => {
+        var label;
+        idcustomer.forEach(function (id) {
+            label = $('label[for="' + id + '"]');
+            label.addClass('required');
+            $('#' + id).prop('readonly', false);
+            $('#' + id).prop('required', true);
+        });
+        $('#btn-list-edit').removeClass('d-none');
+    });
     $('#update-address-form').submit(function (e) {
         e.preventDefault();
         var formData = $(this).serialize();

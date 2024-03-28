@@ -289,16 +289,6 @@ jQuery.noConflict();
             $('#btn-list-edit').removeClass('d-none');
             $('#page-title').html('Edit Profile');
         });
-        $('#enable-edit-profile-customer').click(() => {
-            var label;
-            idcustomer.forEach(function (id) {
-                label = $('label[for="' + id + '"]');
-                label.addClass('required');
-                $('#' + id).prop('readonly', false);
-                $('#' + id).prop('required', true);
-            });
-            $('#btn-list-edit').removeClass('d-none');
-        });
         // for avatar change
         var imageData = null;
         $('#avatar').on('change', function () {
