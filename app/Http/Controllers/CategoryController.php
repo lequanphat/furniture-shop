@@ -19,10 +19,7 @@ class CategoryController extends Controller
         return view('admin.categories.index', $data);
     }
 
-    public function category_ui_1()
-    {
-        return "say hello";
-    }
+
     public function create(CreateCategory $request)
     {
         $categoryData = [

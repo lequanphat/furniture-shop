@@ -87,10 +87,13 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="card-footer text-end">
                                     <button type="submit" class="btn btn-primary">Create Discount</button>
                                 </div>
+                                <div id="create_discount_response" class="alert m-0 d-none"> </div>
                             </form>
+
                         </div>
                     </div>
                 </div>

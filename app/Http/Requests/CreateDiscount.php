@@ -16,7 +16,7 @@ class CreateDiscount extends FormRequest
     {
         return [
             'title' => 'required',
-            'description' => 'required|alpha_num',
+            'description' => 'required',
             'percentage' => 'required|numeric',
             'amount' => 'required|numeric',
             'startdate' => 'required|date',
