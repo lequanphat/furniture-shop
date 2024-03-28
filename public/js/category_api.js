@@ -67,10 +67,14 @@ jQuery.noConflict();
             $('#update-category-modal #name').val($(this).data('name'));
             $('#update-category-modal #description').val($(this).data('description'));
             $('#update-category-modal #index').val($(this).data('index'));
-            $('#update-category-modal #parent_id').val($(this).data('parent-id'));
+
+            const parent_id = $(this).data('parent-id') || -1;
+            $('#update-category-modal #parent_id').val(parent_id);
             $('#update_category_response').html('');
             $('#update_category_response').removeClass('alert-success alert-danger');
             $('#update_category_response').addClass('d-none');
+
+            // code here
         });
 
         // update category
@@ -126,8 +130,8 @@ jQuery.noConflict();
                     console.log({ error });
                     // Handle the error response
                     $('#update_category_response').removeClass('d-none');
-                    $('#create_category_response').removeClass('alert-success');
-                    $('#create_category_response').addClass('alert-danger');
+                    $('#update_category_response').removeClass('alert-success');
+                    $('#update_category_response').addClass('alert-danger');
                     $('#update_category_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });

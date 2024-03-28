@@ -23,17 +23,36 @@ class PagesController extends Controller
     {
         $categories = request()->query('categories');
         $color = request()->query('color');
+        // query
+        $query = Product::with(
+            'category',
+            'brand',
+            'detailed_products.images'
+        )->where('is_deleted', false);
+
+        // If categories is not 'all', filter by category_id
+        if ($categories !== 'all' && $categories !== null) {
+            $categoryIds = explode(',', $categories);
+            $query->whereIn('category_id', $categoryIds);
+        }
+        // If color is not 'all', filter by color_id
+        if ($color !== 'all' && $color !== null) {
+            $colorIds = explode(',', $color);
+            $query->whereHas('detailed_products', function ($query) use ($colorIds) {
+                $query->whereIn('color_id', $colorIds);
+            });
+        }
+
         $data = [
             'page' => 'Shop',
             'categories' => Category::all(),
             'colors' => Color::all(),
+            'selected_categories' => $categoryIds ?? [],
+            'selected_colors' => $colorIds ?? [],
             'tags' => Tag::all(),
-            'products' => Product::with(
-                'category',
-                'brand',
-                'detailed_products.images'
-            )->where('is_deleted', false)->paginate(9) // 9 elements per page
+            'products' => $query->paginate(9) // 9 elements per page
         ];
+
         return view('pages.shop.index', $data);
     }
     public function product_details()
