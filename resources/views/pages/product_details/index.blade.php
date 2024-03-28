@@ -15,7 +15,7 @@
                             <div class="swiper-container product-details-small-img-slider-1 pd-small-img-style">
                                 @foreach ($product->detailed_products as $detailed_product)
                                     <div
-                                        class="js-images-list swiper-wrapper {{ $loop->index }} @if (!$loop->first) d-none  @endif">
+                                        class="js-images-list swiper-wrapper {{ $loop->index }} @if (!$loop->first) d-none @endif">
                                         @foreach ($detailed_product->images as $image)
                                             <div class="swiper-slide">
                                                 <div class="product-details-small-img">
@@ -117,7 +117,14 @@
                                     {{ $product->detailed_products->first()->sku }}</li>
                                 <li><span class="title">Category:</span>
                                     <ul>
-                                        <li><a href="#">{{ $product->category->name }}</a></li>
+                                        <li><a>{{ $product->category->name }}</a></li>
+                                    </ul>
+                                </li>
+                                <li><span class="title">Tags:</span>
+                                    <ul>
+                                        @foreach ($product->product_tags as $product_tag)
+                                            <li class="me-2"><a>#{{ $product_tag->tag->name }} </a></li>
+                                        @endforeach
                                     </ul>
                                 </li>
                             </ul>

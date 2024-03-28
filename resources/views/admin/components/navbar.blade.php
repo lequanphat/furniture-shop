@@ -160,10 +160,16 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-receipt">
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-list-details">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M13 5h8" />
+                                <path d="M13 9h5" />
+                                <path d="M13 15h8" />
+                                <path d="M13 19h5" />
                                 <path
-                                    d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" />
+                                    d="M3 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                                <path
+                                    d="M3 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
                             </svg>
                         </span>
                         <span class="nav-link-title">
@@ -178,10 +184,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-receipt">
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-receipt-2">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path
-                                    d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" />
+                                    d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2" />
+                                <path d="M14 8h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5m2 0v1.5m0 -9v1.5" />
                             </svg>
                         </span>
                         <span class="nav-link-title">
@@ -196,10 +203,14 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-receipt">
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-list-check">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path
-                                    d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" />
+                                <path d="M3.5 5.5l1.5 1.5l2.5 -2.5" />
+                                <path d="M3.5 11.5l1.5 1.5l2.5 -2.5" />
+                                <path d="M3.5 17.5l1.5 1.5l2.5 -2.5" />
+                                <path d="M11 6l9 0" />
+                                <path d="M11 12l9 0" />
+                                <path d="M11 18l9 0" />
                             </svg>
                         </span>
                         <span class="nav-link-title">

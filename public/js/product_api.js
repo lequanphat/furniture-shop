@@ -1,5 +1,7 @@
 jQuery.noConflict();
 (function ($) {
+    
+
     $(document).ready(function () {
         $('#create-product-form').submit(function (e) {
             e.preventDefault();

@@ -89,4 +89,46 @@ jQuery(document).ready(function () {
         $('.js-images-preview').addClass('d-none');
         $(`.js-images-preview.${index}`).removeClass('d-none');
     });
+
+    // filter
+    function productFilter() {
+        // page
+        const page = $('.pagination-item.active').text();
+        console.log(page);
+        // category
+        const categories = $('.js-cate-checkbox');
+        const categoryIds = [];
+        for (let category of categories) {
+            if (category.checked) {
+                categoryIds.push(category.dataset.id);
+            }
+        }
+
+        const colors = $('.js-color-checkbox');
+        const colorIds = [];
+        for (let color of colors) {
+            if (color.checked) {
+                colorIds.push(color.dataset.id);
+            }
+        }
+        if (colorIds.length === 0) {
+            colorIds.push('all');
+        }
+        if (categoryIds.length === 0) {
+            categoryIds.push('all');
+        }
+        history.pushState(
+            null,
+            null,
+            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(',')}`,
+        );
+    }
+    $('.js-cate-checkbox').change(function () {
+        // Your code here
+        productFilter();
+    });
+    $('.js-color-checkbox').change(function () {
+        // Your code here
+        productFilter();
+    });
 });

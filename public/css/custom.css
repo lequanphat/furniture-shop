@@ -1,7 +1,8 @@
 /* custom css here */
-.detailed-product-tag{
+.detailed-product-tag {
     cursor: pointer;
 }
-.detailed-product-tag.disable{
+.detailed-product-tag.disable {
     opacity: 0.5;
 }
+

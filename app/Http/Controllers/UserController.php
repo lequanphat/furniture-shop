@@ -44,7 +44,7 @@ class UserController extends Controller
             'last_name' => $request->input('last_name'),
             'gender' => ($request->input('gender') == 'male'),
             'birth_date' => $request->input('birth_date'),
-            'avatar' => config('app.url'). 'storage/defaults/default_avatar.jpg',
+            'avatar' => config('app.url') . 'storage/defaults/default_avatar.jpg',
             'is_staff' => 1,
             'is_verified' => 1,
         ];
@@ -64,6 +64,12 @@ class UserController extends Controller
         return ['message' => 'Created employee successfully!', 'user' => $user, 'address' => $address];
     }
 
+    public function employee_details(Request $request)
+    {
+        $user_id = $request->route('user_id');
+        $user = User::where('user_id', $user_id)->with('default_address')->first();
+        return response()->json(['user' => $user]);
+    }
     public function employee_details_ui(Request $request)
     {
         $user_id = $request->route('user_id');
