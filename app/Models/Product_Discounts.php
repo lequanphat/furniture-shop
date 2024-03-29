@@ -9,6 +9,5 @@ class Product_Discounts extends Model
 {
     use HasFactory;
     protected $table = 'product_discounts';
-    protected $primaryKey = ['sku', 'discount_id'];
     protected $fillable = ['sku', 'discount_id'];
 }

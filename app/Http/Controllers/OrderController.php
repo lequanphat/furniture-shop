@@ -48,8 +48,6 @@ class OrderController extends Controller
     }
 
 
-
-
     //sửa thông tin order
     public function order_update(Request $request)
     { //request chứa dữ liệu về request http đang tới
@@ -103,11 +101,13 @@ class OrderController extends Controller
     public function details(Request $request)
     {
         $order_id = $request->route('order_id');
+        $order = Order::where('order_id', $order_id)->with('employee.default_address')->first();
+        $detailedOrders = $order->order_details()->with('detailed_product')->paginate(6); // 5 items per page
         $data = [
             'page' => 'Order Details',
-            'order' => Order::all()->find( $order_id ),
-            'detail_orders' => OrderDetail::where('order_id', $order_id)->paginate(5),
+            'order' => $order,
+            'detailed_orders' => $detailedOrders,
         ];
-        return  view('admin.orders.order_details', $data);
+        return view('admin.orders.order_details', $data);
     }
 }

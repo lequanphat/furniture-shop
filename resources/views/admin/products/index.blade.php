@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-    
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -13,7 +12,7 @@
                         Products Management
                     </h2>
                 </div>
-                <!-- Page title actions -->
+                <!-- Page actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <span class="d-none d-sm-inline">
@@ -33,6 +32,7 @@
                         </a>
                     </div>
                 </div>
+                <!-- End Page actions -->
             </div>
         </div>
     </div>
@@ -87,10 +87,6 @@
                                                     </div>
                                                 </div>
                                             </td>
-
-                                            <td>69.000đ</td>
-
-                                            <td>{{ $product->quantities }}</td>
 
                                             <td>{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
                                             </td>

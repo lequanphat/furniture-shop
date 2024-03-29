@@ -26,11 +26,11 @@
                             <!--search bar-->
                             <form class="input-group col" action="{{ route('orders.search') }}" method="GET">
                                 @if (isset($search))
-                                    <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by name"
-                                        aria-label="Search" value="{{ $search }}">
+                                    <input name="search" type="text" class="form-control form-control-sm"
+                                        placeholder="Search by name" aria-label="Search" value="{{ $search }}">
                                 @else
-                                    <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by name"
-                                        aria-label="Search">
+                                    <input name="search" type="text" class="form-control form-control-sm"
+                                        placeholder="Search by name" aria-label="Search">
                                 @endif
                                 <button class="btn btn-primary btn-sm" type="submit">
                                     Search
@@ -38,16 +38,16 @@
                             </form>
                         </div>
                         <!--div class="col-3">
-                            <--chọn Status->
-                            <select class="form-select" name="select_status_for_table" id="select_status_for_table" {{ route('orders.search')}}>
-                                <option value="">All Status</option>
-                                <option value="0">Unconfirmed</option>
-                                <option value="1">Confirmed</option>
-                                <option value="2">Intransit</option>
-                                <option value="3">Delivered</option>
-                                <option value="4">Canceled</option>
-                            </select>
-                        </div-->
+                                        <--chọn Status->
+                                        <select class="form-select" name="select_status_for_table" id="select_status_for_table" {{ route('orders.search') }}>
+                                            <option value="">All Status</option>
+                                            <option value="0">Unconfirmed</option>
+                                            <option value="1">Confirmed</option>
+                                            <option value="2">Intransit</option>
+                                            <option value="3">Delivered</option>
+                                            <option value="4">Canceled</option>
+                                        </select>
+                                    </div-->
                         <div class="col-3">
                             <!--nút thêm-->
                             <!--Điểm đầu đường đi tạo form, nhớ tạo hàm tạo order mới và route cho nó-->
@@ -66,8 +66,6 @@
                             </a>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -155,7 +153,8 @@
                                             </td>
                                             <td>
                                                 <!--nút vào detail-->
-                                                <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2" title="Details">
+                                                <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"
+                                                    title="Details">
                                                     <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
                                                 </a>
                                                 <!--nút sửa-->
@@ -190,22 +189,22 @@
         @include('admin.components.footer')
 
         <!-- Tổng quát      trang chính ở đây là trang index.blade.php
-                                                                                                                                                            Với thêm, ta làm:
-                                                                                                                                                            1/Tạo hàm thêm ở controller và tạo route của nó ở route/web.php (xem order_create)
-                                                                                                                                                            2/Tạo form thêm (nhớ include nó ở trang chính), Khi nhấn nút thêm ở trang chính, chuyển qua form thêm (xem file ) (createorder.blade.php)
-                                                                                                                                                            3/Tạo file js ở public/js chứa hàm xử lý, nhớ cho file js vào views/admin/components/link-script.blade.php (order.php hàm có id #create-order-form)
-                                                                                                                                                            4/Sau khi nhập đủ thông tin, nhấn nút thì truyền dữ liệu qua hàm có chung id ở file js
-                                                                                                                                                            5/file js sẽ truyền dữ liệu sang hàm bên controller xử lý
-                                                                                                                                                            6/controller return kết quả về js, js hiển thị qua file form
+                                                                                                                                                                        Với thêm, ta làm:
+                                                                                                                                                                        1/Tạo hàm thêm ở controller và tạo route của nó ở route/web.php (xem order_create)
+                                                                                                                                                                        2/Tạo form thêm (nhớ include nó ở trang chính), Khi nhấn nút thêm ở trang chính, chuyển qua form thêm (xem file ) (createorder.blade.php)
+                                                                                                                                                                        3/Tạo file js ở public/js chứa hàm xử lý, nhớ cho file js vào views/admin/components/link-script.blade.php (order.php hàm có id #create-order-form)
+                                                                                                                                                                        4/Sau khi nhập đủ thông tin, nhấn nút thì truyền dữ liệu qua hàm có chung id ở file js
+                                                                                                                                                                        5/file js sẽ truyền dữ liệu sang hàm bên controller xử lý
+                                                                                                                                                                        6/controller return kết quả về js, js hiển thị qua file form
 
-                                                                                                                                                            Với sửa, ta làm:
-                                                                                                                                                            1/Tạo hàm sửa ở controller và tạo route của nó ở route/web.php (xem order_update)
-                                                                                                                                                            2/Thêm vào nút sửa ở dòng dữ liệu trên trang chính và lưu thêm dữ liệu ở dòng đó vào nút (xem button có data-bs-target="#UpdateOrderModal")
-                                                                                                                                                            3/Tạo form sửa, div chứa form có id UpdateOrderModal và còn form thì có id update-order-form (update_order.blade.php)
-                                                                                                                                                            4/Tạo hàm có id UpdateOrderModal ở js để hiển thị dữ liệu ở dòng đó vào form khi bấm sửa
-                                                                                                                                                            5/Tạo hàm sửa dữ liệu ở js có id=update-order-form để khi nhấn nút update trên form thì gửi dữ liệu về js
-                                                                                                                                                            6/js truyền dữ liệu qua hàm sửa ở controller thông qua route
-                                                                                                                                                            7/controller return kết quả về js, js hiển thị qua file form
-                                                                                                                                                            -->
+                                                                                                                                                                        Với sửa, ta làm:
+                                                                                                                                                                        1/Tạo hàm sửa ở controller và tạo route của nó ở route/web.php (xem order_update)
+                                                                                                                                                                        2/Thêm vào nút sửa ở dòng dữ liệu trên trang chính và lưu thêm dữ liệu ở dòng đó vào nút (xem button có data-bs-target="#UpdateOrderModal")
+                                                                                                                                                                        3/Tạo form sửa, div chứa form có id UpdateOrderModal và còn form thì có id update-order-form (update_order.blade.php)
+                                                                                                                                                                        4/Tạo hàm có id UpdateOrderModal ở js để hiển thị dữ liệu ở dòng đó vào form khi bấm sửa
+                                                                                                                                                                        5/Tạo hàm sửa dữ liệu ở js có id=update-order-form để khi nhấn nút update trên form thì gửi dữ liệu về js
+                                                                                                                                                                        6/js truyền dữ liệu qua hàm sửa ở controller thông qua route
+                                                                                                                                                                        7/controller return kết quả về js, js hiển thị qua file form
+                                                                                                                                                                        -->
     </div>
 @endsection

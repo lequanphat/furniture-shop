@@ -103,9 +103,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
 
     //warranty
-    Route::get('admin/warranties', [WarrantyController::class,'index'])->name('warranties.index');
-
-
+    Route::get('admin/warranties', [WarrantyController::class, 'index'])->name('warranties.index');
 
 
 
@@ -148,7 +146,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/discounts', [DiscountController::class, 'index']);
     Route::post('/admin/discounts/create', [DiscountController::class, 'create']);
     Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
-
+    Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
 
     //profile
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
