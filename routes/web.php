@@ -13,6 +13,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarrantyController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\PrivateMiddleware;
@@ -98,6 +99,14 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/orders', [OrderController::class,'index']);
     Route::post('/admin/orders/create', [OrderController::class, 'order_create']);
     Route::put('/admin/orders/update', [OrderController::class,'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
+    Route::get('/admin/orders', [OrderController::class, 'order_search_ui'])->name('orders.search');
+    Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
+
+    //warranty
+    Route::get('admin/warranties', [WarrantyController::class,'index'])->name('warranties.index');
+
+
+
 
 
     // category
