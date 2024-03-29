@@ -153,11 +153,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // *This is only temporary, use the appropriate controller
 
 
-    Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
-
-    //    Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
-    Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
-
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
