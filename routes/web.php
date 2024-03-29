@@ -14,6 +14,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarrantyController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\PrivateMiddleware;
@@ -97,6 +98,12 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::post('/admin/orders/create', [OrderController::class, 'order_create']);
     Route::put('/admin/orders/update', [OrderController::class, 'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
+    Route::get('/admin/orders', [OrderController::class, 'order_search_ui'])->name('orders.search');
+    Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
+
+    //warranty
+    Route::get('admin/warranties', [WarrantyController::class, 'index'])->name('warranties.index');
+
 
 
     // category
@@ -134,22 +141,21 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // receipts
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
 
+    // discounts
+    Route::get('/admin/discounts', [DiscountController::class, 'index']);
+    Route::post('/admin/discounts/create', [DiscountController::class, 'create']);
+    Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
+    Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
+
     //profile
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
     // *This is only temporary, use the appropriate controller
 
-    Route::get('/admin/discounts', [DiscountController::class, 'index']);
-Route::post('/admin/discounts/create',[DiscountController::class,'create'] );
-
-    Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
-
-    Route::delete('admin/discounts/delete/{id}', [ DiscountController::class,'destroy'])->name('discount.delete');
-
 
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
 
-//    Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
+    //    Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
     Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
 
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
@@ -160,5 +166,4 @@ Route::post('/admin/discounts/create',[DiscountController::class,'create'] );
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
 
     Route::get('/admin/catetest', [CategoryController::class, 'category_ui_1']);
-
 });

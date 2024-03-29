@@ -60,7 +60,7 @@ jQuery.noConflict();
             modal.find('#customer_id').val(button.data('customer-id'));
             modal.find('#employee_id').val(button.data('created-by'));
         });
-        //hàm sửa dữ liệu
+        //hàm sửa dữ liệu order
         $('#update-order-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
@@ -82,6 +82,26 @@ jQuery.noConflict();
                     $('#update_order_response').removeClass('alert-success');
                     $('#update_order_response').addClass('alert-danger');
                 },
+            });
+        });
+
+
+        //hàm lấy giá trị đc chọn từ select rồi gửi yêu cầu ajax đến controller
+        $('#select_status_for_table').on('change', function() {
+            var statusnum = $(this).val();
+
+            // Gửi yêu cầu Ajax đến controller
+            $.ajax({
+                url: "/admin/orders",
+                method: "GET",
+                data: {
+                    status: statusnum,
+                },
+                success: function(response) {
+                    // Hiển thị dữ liệu được trả về từ controller vào table
+                    var data = response.data;
+                    // ...
+                }
             });
         });
     });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrder;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,8 @@ class OrderController extends Controller
     {
         $data = [               //nhãn gồm có tên trang là orders, dòng 2 là dữ liệu nạp từ model
             'page' => 'Orders ', //đặt tên cho pages
-            'orders' =>  Order::paginate(10),     //hàm query cho phân trang
+            'orders' =>  Order::query()->paginate(5),     //hàm query cho phân trang
+
             'customer_and_employee' => User::all() //dùng để nạp dữ liệu chọn vào các ô trong trang tạo
             //Đây là dòng query, lấy toàn bộ dữ liệu database trong order
             //lưu ý chữ orders bên trái này sẽ là biến để sử dụng ở view
@@ -46,8 +48,6 @@ class OrderController extends Controller
     }
 
 
-
-
     //sửa thông tin order
     public function order_update(Request $request)
     { //request chứa dữ liệu về request http đang tới
@@ -69,5 +69,45 @@ class OrderController extends Controller
         } else {         //nếu không có order nào được tìm thấy
             abort(404); //ném ra 404 Not Found HTTP exception
         }
+    }
+
+    public function order_search_ui(Request $request)
+    {
+
+        $search = $request->input('search');
+        $data = [
+            'page' => 'Orders',
+            'orders' =>  Order::where('receiver_name', 'LIKE', '%' . $search . '%')->paginate(5),
+            'customer_and_employee' => User::all(),
+            'search' => $search,
+        ];
+        return view('admin.orders.index', $data);
+    }
+
+    /*public function change_status_table(Request $request){
+        $status = $request->input('select_status_for_table');
+        $data = [
+            'page' => 'Orders',
+            'orders' => Order::where('status', 'LIKE', '%'.$status.'%')->paginate(5),
+            'customer_and_employee' => User::all(),
+        ];
+        return view('admin.orders.index', $data);
+    }*/
+
+
+
+
+    //Phần của order detail
+    public function details(Request $request)
+    {
+        $order_id = $request->route('order_id');
+        $order = Order::where('order_id', $order_id)->with('employee.default_address')->first();
+        $detailedOrders = $order->order_details()->with('detailed_product')->paginate(6); // 5 items per page
+        $data = [
+            'page' => 'Order Details',
+            'order' => $order,
+            'detailed_orders' => $detailedOrders,
+        ];
+        return view('admin.orders.order_details', $data);
     }
 }

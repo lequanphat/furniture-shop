@@ -43,8 +43,15 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Status</label>
-                                    <input id="status" name="status" type="number" class="form-control"
-                                        placeholder="Enter status" value="" maxlength="10" min="0" required>
+                                    <!--input id="status" name="status" type="number" class="form-control"
+                                        placeholder="Enter status" value="" maxlength="10" min="0" required-->
+                                    <select id="status" name="status" class="form-control form-select">
+                                        <option value="0">Unconfirmed</option>
+                                        <option value="1">Confirmed</option>
+                                        <option value="2">In transit</option>
+                                        <option value="3">Delivered</option>
+                                        <option value="4">Canceled</option>
+                                    </select>
                                 </div>
                             </div>
 

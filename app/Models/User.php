@@ -16,6 +16,10 @@ class User extends Model implements Authenticatable
     protected $casts = [
         'gender' => 'boolean',
     ];
+    public function full_name()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
     public function getAuthIdentifierName()
     {
         return 'user_id';
