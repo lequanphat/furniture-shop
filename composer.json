@@ -9,6 +9,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/tinker": "^2.8",
+        "laravelcollective/html": "^6.4",
         "livewire/livewire": "^3.4",
         "spatie/laravel-permission": "^6.3"
     },

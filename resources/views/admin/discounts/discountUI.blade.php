@@ -57,7 +57,8 @@
 
                 </div>
 
-                <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                <input  id="myInput" onkeyup="myFunction()"
+                    type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
             </div>
         </div>
         <div class="page-body">
@@ -66,7 +67,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="table-responsive">
-                                <table class="table table-vcenter card-table">
+                                <table id="myTable" class="table table-vcenter card-table">
                                     <thead>
 
                                     <tr>
@@ -117,12 +118,9 @@
 
                                                     <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </button>
-                                                <button
-                                                    class="btn btn-primary d-none d-sm-inline-block  js-delete-discount-btn"
+                                                <a href="#discount.delete{{$discount_item->discount_id}}" data-bs-toggle="modal" class="btn btn-danger"><i class='fa fa-trash'></i> Delete</a>
+                                                @include('admin.discounts.deleteDiscount')
 
-                                                >
-                                                    <img src="{{ asset('svg/trash.svg') }}" style="width: 18px;" />
-                                                </button>
                                             </td>
 
                                     @endforeach
@@ -164,8 +162,34 @@
                     </div>
                 </div>
             </div>
+            <script>
+                function myFunction() {
+                    // Declare variables
+                    var input, filter, table, tr, td, i, txtValue;
+                    input = document.getElementById("myInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+
+                    // Loop through all table rows, and hide those who don't match the search query
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[1];
+                        // fast find follow title [1];
+                        // Tip: Change tr[i].getElementsByTagName('td')[0] to [1] if you want to search for "Country" (index 1) instead of "Name" (index 0).
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            </script>
             @include('admin.discounts.CreateDiscount')
             @include('admin.discounts.UpdateDiscount')
+            @include('admin.discounts.deleteDiscount')
 
             @include('admin.components.footer')
         </div>
