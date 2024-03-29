@@ -17,8 +17,7 @@ class DiscountController extends Controller
         //
         $data = [
             'page' => 'Discount Site',
-            'discounts' => Discount::all(),
-            //            'request' => 'request'
+            'discounts' => Discount::paginate(8),
         ];
         return view('admin.discounts.discountUI', $data);
     }
@@ -106,7 +105,7 @@ class DiscountController extends Controller
         $discount->delete();
 
         return redirect('/admin/discounts');
-//        return "Take It";
+        //        return "Take It";
 
     }
 }
