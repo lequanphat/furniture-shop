@@ -49,7 +49,17 @@
                                         <strong> Status: </strong>{{ $order->get_status() }}<br>
                                         <strong> Paid: </strong>{{ $order->get_is_paid() }}<br>
                                         <strong>Total price:
-                                        </strong>{{ number_format($order->total_price, 0, '.', ',') }}đ<br>
+                                        </strong>
+                                        <span
+                                            class="text-success">{{ number_format(
+                                                $detailed_orders->sum(function ($detailed_order) {
+                                                    return $detailed_order->unit_price * $detailed_order->quantities;
+                                                }),
+                                                0,
+                                                '.',
+                                                ',',
+                                            ) }}đ
+                                        </span><br>
                                         <strong>Number of products: </strong>{{ $detailed_orders->count() }}
                                     </address>
                                 </div>
