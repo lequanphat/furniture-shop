@@ -74,25 +74,67 @@ jQuery(document).ready(function () {
         });
     });
 
-    $('.detailed-product-tag').click(function () {
-        const index = $(this).data('index');
+    $('.detailed-product-tag').click(function (e) {
+        // pre process
+        if ($(this).hasClass('active')) return;
+        $('.detailed-product-tag').removeClass('active');
+        $(this).addClass('active');
+        $('.js-product-sku').text($(this).data('sku'));
+        // get data
+        const product_id = $(this).data('id');
         const sku = $(this).data('sku');
 
-        $('.js-product-name').addClass('d-none');
-        $(`.js-product-name.${index}`).removeClass('d-none');
-        $('.js-product-price').addClass('d-none');
-        $(`.js-product-price.${index}`).removeClass('d-none');
-        $(`.js-product-sku`).html(`SKU: ${sku}`);
+        history.pushState(null, null, `/products/${product_id}/${sku}`);
+        // call api
+        $.ajax({
+            url: `/products/${sku}`,
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+                // render ui
 
-        $('.js-images-list').addClass('d-none');
-        $(`.js-images-list.${index}`).removeClass('d-none');
+                let images_list = '';
+                let images_preview = '';
+                for (let i = 0; i < response.detailed_product.images.length; i++) {
+                    let image = response.detailed_product.images[i];
+                    images_list += `<div class="swiper-slide ${
+                        i === 0 && 'swiper-slide-active swiper-slide-thumb-active'
+                    }  ${i === 1 && 'swiper-slide-next'} ">
+                    <div class="product-details-small-img">
+                        <img src="${image.url}" alt="Product Thumnail">
+                    </div>
+                </div>`;
+                    images_preview += `<div class="swiper-slide ${
+                        i === 0 && 'swiper-slide-active swiper-slide-thumb-active'
+                    }  ${i === 1 && 'swiper-slide-next'} ">
+                    <div class="easyzoom-style">
+                        <div class="easyzoom easyzoom--overlay">
 
-        $('.js-images-preview').addClass('d-none');
-        $(`.js-images-preview.${index}`).removeClass('d-none');
+                            <a href="${image.url}">
+                                <img src="${image.url}" alt="">
+                            </a>
+                        </div>
+                        <a class="easyzoom-pop-up img-popup" href="${image.url}">
+                            <i class="pe-7s-search"></i>
+                        </a>
+                    </div>
+                </div>`;
+                }
+                $('.js-images-list').html(images_list);
+                $('.js-images-preview').html(images_preview);
+
+                $('.js-product-name').text(response.detailed_product.name);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
     });
 
     // filter
     function productFilter() {
+        // search
+        const search_text = $('#search-input').val();
         // page
         const page = $('.pagination-item.active').text();
         console.log(page);
@@ -121,10 +163,12 @@ jQuery(document).ready(function () {
         history.pushState(
             null,
             null,
-            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(',')}`,
+            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(',')}&search=${search_text}`,
         );
         $.ajax({
-            url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(',')}`,
+            url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+                ',',
+            )}&search=${search_text}`,
             type: 'GET',
             success: function (response) {
                 let html = '';
@@ -180,12 +224,35 @@ jQuery(document).ready(function () {
             },
         });
     }
+
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // search filter
+    $('#search-input').on(
+        'input',
+        debounce(function () {
+            productFilter();
+        }, 500),
+    );
+
+    // category filter
     $('.js-cate-checkbox').change(function () {
-        // Your code here
         productFilter();
     });
+
+    // color filter
     $('.js-color-checkbox').change(function () {
-        // Your code here
         productFilter();
     });
 });

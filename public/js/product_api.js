@@ -1,14 +1,11 @@
 jQuery.noConflict();
 (function ($) {
-    
-
     $(document).ready(function () {
         $('#create-product-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
-            formData += `&description=${CKEDITOR.instances.editor.getData()}&tags=${JSON.stringify(
-                $('#select-tags').val(),
-            )}`;
+            formData += '&description=' + encodeURIComponent(CKEDITOR.instances.editor.getData());
+            formData += '&tags=' + encodeURIComponent(JSON.stringify($('#select-tags').val()));
             $.ajax({
                 url: `/admin/products/create`,
                 type: 'POST',
@@ -30,9 +27,8 @@ jQuery.noConflict();
         $('#update-product-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
-            formData += `&description=${CKEDITOR.instances.editor.getData()}&tags=${JSON.stringify(
-                $('#select-tags').val(),
-            )}`;
+            formData += '&description=' + encodeURIComponent(CKEDITOR.instances.editor.getData());
+            formData += '&tags=' + encodeURIComponent(JSON.stringify($('#select-tags').val()));
             const product_id = $('#update-product-form').data('id');
             $.ajax({
                 url: `/admin/products/${product_id}/update`,

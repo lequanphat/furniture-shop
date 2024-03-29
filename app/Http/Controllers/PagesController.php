@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductDetail;
 use App\Models\Tag;
 
 class PagesController extends Controller
@@ -23,11 +24,13 @@ class PagesController extends Controller
     {
         $categories = request()->query('categories');
         $color = request()->query('color');
+        $search = request()->query('search');
         // query
         $query = Product::with(
             'category',
             'brand',
-            'detailed_products.images'
+            'detailed_products.images',
+            'detailed_products.product_discounts.discount',
         )->where('is_deleted', false);
 
         // If categories is not 'all', filter by category_id
@@ -43,6 +46,11 @@ class PagesController extends Controller
             });
         }
 
+        // If search is not null, filter by name
+        if ($search !== null) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        }
+
         $data = [
             'page' => 'Shop',
             'categories' => Category::all(),
@@ -50,7 +58,8 @@ class PagesController extends Controller
             'selected_categories' => $categoryIds ?? [],
             'selected_colors' => $colorIds ?? [],
             'tags' => Tag::all(),
-            'products' => $query->paginate(9) // 9 elements per page
+            'products' => $query->paginate(9), // 9 elements per page
+            'search' => $search ?? '',
         ];
 
         return view('pages.shop.index', $data);
@@ -58,10 +67,13 @@ class PagesController extends Controller
     public function product_details()
     {
         $product_id = request()->route('product_id');
+        $sku = request()->route('sku');
+
         $data = [
             'page' => 'Product Details',
-            'product' => Product::with('category', 'brand', 'detailed_products.images', 'detailed_products.color', 'product_tags.tag')
+            'product' => Product::with('category', 'brand', 'detailed_products.color', 'product_tags.tag')
                 ->where('is_deleted', false)->find($product_id),
+            'detailed_product' => ProductDetail::where('sku', $sku)->with('images', 'product_discounts.discount')->first(),
         ];
         return view('pages.product_details.index', $data);
     }
