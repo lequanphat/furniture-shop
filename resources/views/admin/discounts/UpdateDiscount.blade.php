@@ -98,6 +98,7 @@
                                 <div class="card-footer text-end">
                                     <button type="submit" class="btn btn-primary">Update Discount</button>
                                 </div>
+                                <div id="update_discount_response" class="alert m-0 d-none"> </div>
                             </form>
                         </div>
                     </div>

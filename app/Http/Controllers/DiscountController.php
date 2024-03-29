@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateDiscount;
+use App\Http\Requests\UpdateDiscount;
 use App\Models\Discount;
 use Illuminate\Http\Request;
 
@@ -24,7 +26,7 @@ class DiscountController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(CreateDiscount $request)
     {
         //
 
@@ -41,7 +43,7 @@ class DiscountController extends Controller
             ];
         $Discount = Discount::create($DiscountData);
         //print_r($request);
-        return "Success";
+        return ['message' => 'Created discount successfully!'];
     }
 
     /**
@@ -71,7 +73,7 @@ class DiscountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(UpdateDiscount $request)
     {
         //
 
@@ -90,8 +92,9 @@ class DiscountController extends Controller
             // response
 
         }
-        return "Update_Done";
+        return ['message' => 'update discount successfully!'];
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -99,5 +102,11 @@ class DiscountController extends Controller
     public function destroy(string $id)
     {
         //
+        $discount = Discount::find($id);
+        $discount->delete();
+
+        return redirect('/admin/discounts');
+//        return "Take It";
+
     }
 }

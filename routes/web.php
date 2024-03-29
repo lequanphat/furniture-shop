@@ -5,10 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
@@ -95,7 +95,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::put('/admin/suppliers/update', [SupplierController::class, 'supplier_update'])->name('suppliers.edit');
 
 
-    //  orders
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::post('/admin/orders/create', [OrderController::class, 'order_create']);
     Route::put('/admin/orders/update', [OrderController::class, 'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
@@ -151,10 +150,13 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //profile
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
-
-
-
     // *This is only temporary, use the appropriate controller
+
+
+    Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
+
+    //    Route::get('/admin/discounts', [PagesController::class, 'admin_discounts']);
+    Route::get('/admin/orders', [PagesController::class, 'admin_orders']);
 
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
@@ -162,5 +164,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
+
     Route::get('/admin/catetest', [CategoryController::class, 'category_ui_1']);
 });
