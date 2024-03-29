@@ -88,9 +88,7 @@
                                                 </div>
                                             </td>
 
-                                            <td>69.000đ</td>
 
-                                            <td>{{ $product->quantities }}</td>
 
                                             <td>{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
                                             </td>
