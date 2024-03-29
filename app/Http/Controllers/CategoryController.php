@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCategory;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -9,65 +10,64 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     //
-
     public function category_ui()
     {
-
-
         $data = [
             'page' => 'Categories',
-            'categories' => Category::all(),
-            'request' => 'request'
+            'categories' => Category::with('parent')->paginate(9),
         ];
-                    return view('admin.categories.category', $data);
+        return view('admin.categories.index', $data);
     }
 
-    public function category_insert(Request $request)
+    public function category_ui_1()
+    {
+        return "say hello";
+    }
+    public function create(CreateCategory $request)
     {
         $categoryData = [
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'index' => $request->input('index'),
-            'parent_id' => $request->input('parent_id'),
+            'parent_id' => $request->input('parent_id') == -1 ? null : $request->input('parent_id'),
         ];
-
         $category = Category::create($categoryData);
-        return ['message' => 'Created Category successfully!', 'user' => $category];
+        // Load the parent relationship
+        $category->load('parent');
+
+
+        return ['message' => 'Created category successfully!', 'category' => $category];
     }
 
-    public function category_delete($id)
-
+    public function delete(Request $request)
     {
-
-
-        if (Product::where('category_id', $id)->exists()) {
-            return " Khong The Xoa";
-        } else {
-
-            Category::find($id)->delete();
-            $product = Category::findOrFail($id);
-
-            $product->delete();
-            return " Xoa Thanh cong";
-
+        $category_id = $request->route('category_id');
+        $category = Category::where('category_id', $category_id)->first();
+        if ($category->products->count() > 0) {
+            return response()->json(['errors' => ['message' => ['Can not delete this category because it has products.']]], 400);
         }
-
-
+        if ($category->children_categories->count() > 0) {
+            return response()->json(['errors' => ['message' => ['Can not delete this category because it has children categories.']]], 400);
+        }
+        $category->delete();
+        return ['message' => 'Deleted category successfully!'];
     }
 
-    public function category_update(Request $request)
+    public function update(CreateCategory $request)
     {
-        $cate = Category::where('category_id', $request->input('category_id'))->first();
-        if ($cate) {
-            $cate->update([
+        $category_id = $request->route('category_id');
+        $category = Category::where('category_id', $category_id)->first();
+        if ($category) {
+            $category->update([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'index' => $request->input('index'),
-                'parent_id' => $request->input('parent_id'),
-
+                'parent_id' => $request->input('parent_id') == -1 ? null : $request->input('parent_id'),
             ]);
+            $category->load('parent');
             // response
-            return "say_hello";
+            return ['message' => 'Updated category successfully!', 'category' => $category];
         }
+        return response()->json(['errors' => ['message' => ['Can not find this category.']]], 400);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\Tag;
 
 class PagesController extends Controller
 {
@@ -20,16 +21,38 @@ class PagesController extends Controller
 
     public function shop()
     {
+        $categories = request()->query('categories');
+        $color = request()->query('color');
+        // query
+        $query = Product::with(
+            'category',
+            'brand',
+            'detailed_products.images'
+        )->where('is_deleted', false);
+
+        // If categories is not 'all', filter by category_id
+        if ($categories !== 'all' && $categories !== null) {
+            $categoryIds = explode(',', $categories);
+            $query->whereIn('category_id', $categoryIds);
+        }
+        // If color is not 'all', filter by color_id
+        if ($color !== 'all' && $color !== null) {
+            $colorIds = explode(',', $color);
+            $query->whereHas('detailed_products', function ($query) use ($colorIds) {
+                $query->whereIn('color_id', $colorIds);
+            });
+        }
+
         $data = [
             'page' => 'Shop',
             'categories' => Category::all(),
             'colors' => Color::all(),
-            'products' => Product::with(
-                'category',
-                'brand',
-                'detailed_products.images'
-            )->where('is_deleted', false)->paginate(9) // 9 elements per page
+            'selected_categories' => $categoryIds ?? [],
+            'selected_colors' => $colorIds ?? [],
+            'tags' => Tag::all(),
+            'products' => $query->paginate(9) // 9 elements per page
         ];
+
         return view('pages.shop.index', $data);
     }
     public function product_details()
@@ -37,7 +60,8 @@ class PagesController extends Controller
         $product_id = request()->route('product_id');
         $data = [
             'page' => 'Product Details',
-            'product' => Product::with('category', 'brand', 'detailed_products.images', 'detailed_products.color')->where('is_deleted', false)->find($product_id),
+            'product' => Product::with('category', 'brand', 'detailed_products.images', 'detailed_products.color', 'product_tags.tag')
+                ->where('is_deleted', false)->find($product_id),
         ];
         return view('pages.product_details.index', $data);
     }

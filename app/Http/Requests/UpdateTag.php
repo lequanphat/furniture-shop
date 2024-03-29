@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateTag extends FormRequest
+class UpdateTag extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class CreateTag extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:tags,name|max:20|min:3',
+            'name' => 'required|max:20|min:3',
         ];
     }
 
@@ -31,10 +31,9 @@ class CreateTag extends FormRequest
     {
 
         return  [
-            'name.required' => 'The tag name is required.',
-            'name.unique' => 'The tag name have already existed.',
-            'name.max' => 'The tag name must not exceed 20 characters.',
-            'name.min' => 'The tag name must be at least 3 characters.',
+            'name.required' => 'The tag name is required',
+            'name.max' => 'The tag name must not exceed 20 characters',
+            'name.min' => 'The tag name must be at least 3 characters',
         ];
     }
 }

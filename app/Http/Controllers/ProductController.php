@@ -47,7 +47,14 @@ class ProductController extends Controller
             'quantities' => 0,
         ]);
         // create tags
+        $tags = json_decode($request->input('tags'));
 
+        foreach ($tags as $tag) {
+            ProductTag::create([
+                'product_id' => $product->product_id,
+                'tag_id' => $tag
+            ]);
+        }
         return  ['product' => $product];
     }
     public function update_ui(Request $request)
@@ -55,9 +62,10 @@ class ProductController extends Controller
         $product_id = $request->route('product_id');
         $data = [
             'page' => 'Product Details',
-            'product' => Product::with('category', 'brand')->find($product_id),
+            'product' => Product::with('category', 'brand', 'product_tags')->find($product_id),
             'categories' => Category::all(),
             'brands' => Brand::all(),
+            'tags' => Tag::all(),
         ];
         return  view('admin.products.update', $data);;
     }
@@ -65,6 +73,7 @@ class ProductController extends Controller
     {
         $product_id = $request->route('product_id');
         $product = Product::find($product_id);
+        // update product
         if ($product) {
             $product->update([
                 'name' => $request->input('title'),
@@ -73,14 +82,25 @@ class ProductController extends Controller
                 'description' => $request->input('description'),
             ]);
         }
-        return back()->with('message', 'Product updated successfully!');
+        // update tags
+        $tags = json_decode($request->input('tags'));
+        // delete all tags
+        ProductTag::where('product_id', $product_id)->delete();
+        // create new tags
+        foreach ($tags as $tag) {
+            ProductTag::create([
+                'product_id' => $product->product_id,
+                'tag_id' => $tag
+            ]);
+        }
+        return ['product' => $product, 'message' => 'Product updated successfully!'];
     }
     public function details(Request $request)
     {
         $product_id = $request->route('product_id');
         $data = [
             'page' => 'Product Details',
-            'product' => Product::with('category', 'brand')->find($product_id),
+            'product' => Product::with('category', 'brand', 'product_tags.tag')->find($product_id),
             'detaild_products' => ProductDetail::where('product_id', $product_id)->with('images')->with('color')->paginate(6) // 6 elements per page
         ];
         return  view('admin.products.product_details', $data);
@@ -173,12 +193,32 @@ class ProductController extends Controller
 
     public function get_products()
     {
-        $products =  Product::with(
+        $categories = request()->query('categories');
+        $color = request()->query('color');
+        // query
+        $query = Product::with(
             'category',
             'brand',
             'detailed_products.images'
-        )->where('is_deleted', false)->paginate(9);
+        )->where('is_deleted', false);
 
-        return response()->json($products);
+        // If categories is not 'all', filter by category_id
+        if ($categories !== 'all' && $categories !== null) {
+            $categoryIds = explode(',', $categories);
+            $query->whereIn('category_id', $categoryIds);
+        }
+        // If color is not 'all', filter by color_id
+        if ($color !== 'all' && $color !== null) {
+            $colorIds = explode(',', $color);
+            $query->whereHas('detailed_products', function ($query) use ($colorIds) {
+                $query->whereIn('color_id', $colorIds);
+            });
+        }
+
+        $data = [
+            'products' => $query->paginate(9) // 9 elements per page
+        ];
+
+        return response()->json($data);
     }
 }

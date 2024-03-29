@@ -61,8 +61,8 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <div class="form-label">Select multiple states</div>
-                                        <select name="tags" type="text" class="form-select" id="select-states"
+                                        <div class="form-label">Select multiple tags</div>
+                                        <select name="tags" type="text" class="form-select" id="select-tags"
                                             value="" multiple>
                                             @foreach ($tags as $tag)
                                                 <option value="{{ $tag->tag_id }}">{{ $tag->name }}</option>
@@ -93,9 +93,10 @@
     </div>
     @include('admin.components.footer')
     </div>
-    {{-- Modal --}}
+
+    {{-- script --}}
     <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
-    <script src="{{ asset('vendor/tom-select/dist/js/tom-select.base.min.js') }}"></script>
+    <script src="{{ asset('vendor/tom-select/dist/js/tom-select.complete.js') }}"></script>
     <script>
         CKEDITOR.replace('editor');
     </script>
@@ -103,7 +104,8 @@
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function() {
             var el;
-            window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
+            window.TomSelect && (new TomSelect(el = document.getElementById('select-tags'), {
+                plugins: ["remove_button"],
                 copyClassesToDropdown: false,
                 dropdownParent: 'body',
                 controlInput: '<input>',

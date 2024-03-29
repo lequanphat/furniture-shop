@@ -22,10 +22,10 @@ class CreateCategory extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required',
-            'description'=>'required',
-            'index'=>'required',
-            'parent_id'=>'required',
+            'name' => 'required',
+            'description' => 'required',
+            'index' => 'required',
+            'parent_id' => 'required',
 
         ];
     }
@@ -35,11 +35,11 @@ class CreateCategory extends FormRequest
     {
 
         return
-        [
-            'name.required'=>'The name is required',
-            'description.required'=>'This Description Is required',
-            'index.required'=>'This index Is required',
-            'parent_id.required'=>'This parent Is required',
-        ];
+            [
+                'name.required' => 'The name is required',
+                'description.required' => 'This Description Is required',
+                'index.required' => 'This index Is required',
+                'parent_id.required' => 'This parent Is required',
+            ];
     }
 }

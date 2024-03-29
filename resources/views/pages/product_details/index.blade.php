@@ -15,7 +15,7 @@
                             <div class="swiper-container product-details-small-img-slider-1 pd-small-img-style">
                                 @foreach ($product->detailed_products as $detailed_product)
                                     <div
-                                        class="js-images-list swiper-wrapper {{ $loop->index }} @if (!$loop->first) d-none  @endif">
+                                        class="js-images-list swiper-wrapper {{ $loop->index }} @if (!$loop->first) d-none @endif">
                                         @foreach ($detailed_product->images as $image)
                                             <div class="swiper-slide">
                                                 <div class="product-details-small-img">
@@ -114,10 +114,20 @@
                         <div class="product-details-meta">
                             <ul>
                                 <li class="js-product-sku"><span class="title">SKU:</span>
-                                    {{ $product->detailed_products->first()->sku }}</li>
+                                    @if (isset($product->detailed_products->first()->sku))
+                                        {{ $product->detailed_products->first()->sku }}
+                                    @endif
+
                                 <li><span class="title">Category:</span>
                                     <ul>
-                                        <li><a href="#">{{ $product->category->name }}</a></li>
+                                        <li><a>{{ $product->category->name }}</a></li>
+                                    </ul>
+                                </li>
+                                <li><span class="title">Tags:</span>
+                                    <ul>
+                                        @foreach ($product->product_tags as $product_tag)
+                                            <li class="me-2"><a>#{{ $product_tag->tag->name }} </a></li>
+                                        @endforeach
                                     </ul>
                                 </li>
                             </ul>
@@ -136,32 +146,39 @@
             <div class="tab-content">
                 <div id="des-details1" class="tab-pane active">
                     <div class="product-description-content text-center">
-                        <div data-aos="fade-up" data-aos-delay="400">{!! $product->detailed_products->first()->description !!}</div>
+                        <div data-aos="fade-up" data-aos-delay="400">
+                            @if (isset($product->detailed_products->first()->description))
+                                {{ $product->detailed_products->first()->description }}
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div id="des-details2" class="tab-pane">
-                    <div class="specification-wrap table-responsive">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="width1">Brands</td>
-                                    <td>{{ $product->brand->name }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="width1">Color</td>
-                                    <td>Blue, Gray, Pink</td>
-                                </tr>
-                                <tr>
-                                    <td class="width1">Size</td>
-                                    <td>{{ $product->detailed_products->first()->size }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div id="des-details2" class="tab-pane">
+                        <div class="specification-wrap table-responsive">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="width1">Brands</td>
+                                        <td>{{ $product->brand->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width1">Color</td>
+                                        <td>Blue, Gray, Pink</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="width1">Size</td>
+                                        <td>
+                                            @if (isset($product->detailed_products->first()->size))
+                                                {{ $product->detailed_products->first()->size }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    {{-- Related products --}}
-    @include('pages.product_details.related-products')
-@endsection
+        {{-- Related products --}}
+        @include('pages.product_details.related-products')
+    @endsection
