@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         $data = [
             'page' => 'Products',
-            'products' => Product::with('category', 'brand', 'detailed_products.images')->paginate(6) // 6 elements per page
+            'products' => Product::with('category', 'brand', 'detailed_products.images')->paginate(4) // 6 elements per page
         ];
         return view('admin.products.index', $data);
     }
@@ -195,11 +195,13 @@ class ProductController extends Controller
     {
         $categories = request()->query('categories');
         $color = request()->query('color');
+        $search = request()->query('search');
         // query
         $query = Product::with(
             'category',
             'brand',
-            'detailed_products.images'
+            'detailed_products.images',
+            'detailed_products.product_discounts.discount',
         )->where('is_deleted', false);
 
         // If categories is not 'all', filter by category_id
@@ -215,10 +217,32 @@ class ProductController extends Controller
             });
         }
 
+        // If search is not null, filter by name
+        if ($search !== null) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        }
+
         $data = [
             'products' => $query->paginate(9) // 9 elements per page
         ];
 
         return response()->json($data);
+    }
+
+    public function get_detailed_product()
+    {
+        $sku = request()->route('sku');
+        $today = now();
+
+        $detailed_product = ProductDetail::with(['images', 'product_discounts' => function ($query) use ($today) {
+            $query->whereHas('discount', function ($query) use ($today) {
+                $query->where('start_date', '<=', $today)
+                    ->where('end_date', '>=', $today);
+            });
+        }])->find($sku);
+
+        return response()->json([
+            'detailed_product' => $detailed_product
+        ]);
     }
 }

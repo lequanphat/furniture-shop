@@ -1,8 +1,19 @@
 /* custom css here */
 .detailed-product-tag {
+    align-items: center;
+    border: 1px solid #333;
     cursor: pointer;
 }
 .detailed-product-tag.disable {
     opacity: 0.5;
 }
 
+.detailed-product-tag.active {
+    border: 1px solid white;
+    background-color: rgba(230, 126, 34,1.0);
+    color: white;
+}
+.custom-product-img {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}

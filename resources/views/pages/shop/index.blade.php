@@ -4,10 +4,6 @@
     @include('components.mini-cart')
     @include('components.head-banner')
 
-
-
-
-
     <div class="shop-area shop-page-responsive pt-100 pb-100">
         <div class="container">
             <div class="row flex-row-reverse">
@@ -40,27 +36,42 @@
                             <div id="shop-1" class="tab-pane active">
                                 <div id="product-list" class="row">
                                     @foreach ($products as $product)
+                                        @php
+                                            $today = now();
+
+                                            $detailed_product =
+                                                $product->detailed_products
+                                                    ->sortByDesc(function ($detailed_product) use ($today) {
+                                                        return $detailed_product->product_discounts
+                                                            ->where('discount.start_date', '<=', $today)
+                                                            ->where('discount.end_date', '>=', $today)
+                                                            ->sum('discount.percentage');
+                                                    })
+                                                    ->first() ?? $product->detailed_products->first();
+
+                                            $discount_percentage = $detailed_product->product_discounts
+                                                ->where('discount.start_date', '<=', $today)
+                                                ->where('discount.end_date', '>=', $today)
+                                                ->sum('discount.percentage');
+                                        @endphp
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                             <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
-                                                <div class="product-img img-zoom mb-25">
-                                                    <a href="/products/{{ $product->product_id }}">
+                                                <div class="custom-product-img product-img img-zoom mb-25">
+                                                    <a
+                                                        href="/products/{{ $product->product_id }}/{{ $detailed_product->sku }}">
                                                         @php
                                                             $imageUrl = asset('images/product/product-5.png');
-                                                            foreach ($product->detailed_products as $detailed_product) {
-                                                                if ($image = $detailed_product->images->first()) {
-                                                                    $imageUrl = $image->url;
-                                                                    break;
-                                                                }
+                                                            if ($detailed_product->images->first()) {
+                                                                $imageUrl = $detailed_product->images->first()->url;
                                                             }
                                                         @endphp
                                                         <img src="{{ $imageUrl }}" alt="" style="height: 275px">
                                                     </a>
                                                     <div class="product-badge badge-top badge-right badge-pink">
-                                                        <span>-{{ rand(0, 70) }}%</span>
+                                                        <span>{{ $discount_percentage != 0 ? '-' . $discount_percentage . '%' : '' }}</span>
                                                     </div>
                                                     <div class="product-action-wrap">
-                                                        <a href="/products/{{ $product->product_id }}"
-                                                            class="product-action-btn-1" title="Wishlist"><i
+                                                        <a class="product-action-btn-1" title="Wishlist"><i
                                                                 class="pe-7s-like"></i></a>
                                                         <button class="product-action-btn-1" title="Quick View"
                                                             data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -73,17 +84,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="product-content">
-                                                    <h3><a
-                                                            href="/products/{{ $product->product_id }}">{{ $product->name }}</a>
+                                                    <h3><a>{{ $product->name }}</a>
                                                     </h3>
                                                     <div class="product-price">
-                                                        <span class="old-price">
-                                                            $1000
-                                                        </span>
+                                                        @if ($discount_percentage > 0)
+                                                            <span class="old-price">
+                                                                {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
+                                                            </span>
+                                                        @endif
                                                         <span class="new-price">
-                                                            @if (isset($product->detailed_products->first()->original_price))
-                                                                {{ number_format($product->detailed_products->first()->original_price, 0, '.', ',') }}đ
-                                                            @endif
+                                                            {{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ
                                                         </span>
                                                     </div>
                                                 </div>
@@ -106,74 +116,7 @@
                                 </div>
                             </div>
                             <div id="shop-2" class="tab-pane">
-                                @foreach ($products as $product)
-                                    <div class="shop-list-wrap mb-30">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-5">
-                                                <div class="product-list-img">
-                                                    <a href="/products/{{ $product->product_id }}">
-                                                        @php
-                                                            $imageUrl = asset('images/product/product-5.png');
-                                                            foreach ($product->detailed_products as $detailed_product) {
-                                                                if ($image = $detailed_product->images->first()) {
-                                                                    $imageUrl = $image->url;
-                                                                    break;
-                                                                }
-                                                            }
-                                                        @endphp
-                                                        <img src="{{ $imageUrl }}" alt="">
-                                                    </a>
-                                                    <div class="product-list-badge badge-right badge-pink">
-                                                        <span>-20%</span>
-                                                    </div>
-                                                    <div class="product-list-quickview">
-                                                        <button class="product-action-btn-2" title="Quick View"
-                                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                            <i class="pe-7s-look"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-8 col-sm-7">
-                                                <div class="shop-list-content">
-                                                    <h3><a href="/products/1">{{ $product->name }}</a></h3>
-                                                    <div class="product-price">
-                                                        <span class="old-price">$70.89 </span>
-                                                        <span class="new-price">$55.25 </span>
-                                                    </div>
-                                                    <div class="product-list-rating">
-                                                        <i class=" ti-star"></i>
-                                                        <i class=" ti-star"></i>
-                                                        <i class=" ti-star"></i>
-                                                        <i class=" ti-star"></i>
-                                                        <i class=" ti-star"></i>
-                                                    </div>
-                                                    <div>{!! $product->description !!}</div>
-                                                    <div class="product-list-action">
-                                                        <button class="product-action-btn-3" title="Add to cart"><i
-                                                                class="pe-7s-cart"></i></button>
-                                                        <button class="product-action-btn-3" title="Wishlist"><i
-                                                                class="pe-7s-like"></i></button>
-                                                        <button class="product-action-btn-3" title="Compare"><i
-                                                                class="pe-7s-shuffle"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
 
-                                {{-- <div class="pagination-style-1">
-                                    <ul>
-                                        @for ($i = 1; $i <= $products->lastPage(); $i++)
-                                            <li>
-                                                <a class="pagination-item
-                                                {{ $retVal = $i == $products->currentPage() ? 'active' : '' }}"
-                                                    href="">{{ $i }}</a>
-                                            </li>
-                                        @endfor
-                                    </ul>
-                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -183,7 +126,8 @@
                         <div class="sidebar-widget mb-40" data-aos="fade-up" data-aos-delay="200">
                             <div class="search-wrap-2">
                                 <form class="search-2-form" action="#">
-                                    <input placeholder="Search products..." type="text">
+                                    <input id="search-input" placeholder="Search products..." type="text"
+                                        value="{{ $search }}">
                                     <button class="button-search"><i class=" ti-search "></i></button>
                                 </form>
                             </div>
@@ -198,8 +142,7 @@
                                 <div class="price-slider-amount">
                                     <div class="label-input">
                                         <label>Price:</label>
-                                        <input type="text" id="amount" name="price"
-                                            placeholder="Add Your Price" />
+                                        <input type="text" id="amount" name="price" placeholder="Add Your Price" />
                                     </div>
                                     <button type="button">Filter</button>
                                 </div>
@@ -213,10 +156,15 @@
                             <div class="sidebar-list-style">
                                 <ul>
                                     @foreach ($categories as $category)
-                                        <li><a>{{ $category->name }} <span>
-                                                    <input data-id="{{ $category->category_id }}"
-                                                        class="js-cate-checkbox" type="checkbox"
-                                                        @if (in_array($category->category_id, $selected_categories)) @checked(true) @endif></span></a>
+                                        <li>
+                                            <a><label for="category_{{ $loop->index }}">{{ $category->name }}
+                                                </label><span>
+                                                    <input id="category_{{ $loop->index }}"
+                                                        data-id="{{ $category->category_id }}" class="js-cate-checkbox"
+                                                        type="checkbox"
+                                                        @if (in_array($category->category_id, $selected_categories)) @checked(true) @endif>
+                                                </span>
+                                            </a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -235,10 +183,11 @@
                                                 <div class="d-flex">
                                                     <div class="color" style="background-color: {{ $color->code }}">
                                                     </div>
-                                                    {{ $color->name }}
+                                                    <label for="color_{{ $loop->index }}">{{ $color->name }}</label>
                                                 </div>
                                                 <span>
-                                                    <input data-id="{{ $color->color_id }}" class="js-color-checkbox"
+                                                    <input id="color_{{ $loop->index }}"
+                                                        data-id="{{ $color->color_id }}" class="js-color-checkbox"
                                                         type="checkbox"
                                                         @if (in_array($color->color_id, $selected_colors)) @checked(true) @endif>
                                                 </span>

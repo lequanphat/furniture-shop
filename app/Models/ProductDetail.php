@@ -22,4 +22,9 @@ class ProductDetail extends Model
     {
         return $this->belongsTo(Color::class, 'color_id');
     }
+
+    public function product_discounts()
+    {
+        return $this->hasMany(ProductDiscounts::class, 'sku');
+    }
 }
