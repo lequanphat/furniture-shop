@@ -58,7 +58,7 @@ jQuery.noConflict();
             modal.find('#address').val(button.data('address'));
             modal.find('#phone_number').val(button.data('phone-number'));
             modal.find('#customer_id').val(button.data('customer-id'));
-            modal.find('#employee_id').val(button.data('created-by'));
+            //modal.find('#employee_id').val(button.data('created-by'));
         });
         //hàm sửa dữ liệu order
         $('#update-order-form').submit(function (e) {

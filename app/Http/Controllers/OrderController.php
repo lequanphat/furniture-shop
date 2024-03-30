@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -41,7 +42,8 @@ class OrderController extends Controller
             'address' => $request->input('address'),
             'phone_number' => $request->input('phone_number'),
             'customer_id' => $request->input('customer_id'),
-            'created_by' => $request->input('employee_id'),
+            //'created_by' => $request->input('employee_id'),
+            'created_by' => Auth::user()->user_id,
         ];
         $order = Order::create($order_data);        //hàm tạo order
         return ['message' => 'Created order successfully!', 'order' => $order]; //gửi message về order_api.js để thông báo thành công
@@ -63,7 +65,7 @@ class OrderController extends Controller
                 'address' => $request->input('address'),
                 'phone_number' => $request->input('phone_number'),
                 'customer_id' => $request->input('customer_id'),
-                'created_by' => $request->input('employee_id'),
+                //'created_by' => $request->input('employee_id'),
             ]);
             return ['message' => 'Update order successfully', 'order' => $order];
         } else {         //nếu không có order nào được tìm thấy

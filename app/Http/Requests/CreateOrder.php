@@ -23,7 +23,7 @@ class CreateOrder extends FormRequest
             'address' => 'required',
             'phone_number'=> 'required',
             'customer_id'=> 'required|exists:users,user_id',
-            'employee_id'=> 'required|exists:users,user_id',
+            //'employee_id'=> 'required|exists:users,user_id',
 
         ];
     }
@@ -39,8 +39,8 @@ class CreateOrder extends FormRequest
             'phone_number.required'=> 'The phone number field is required',
             'customer_id.required'=> 'The customer field is required',
             'customer_id.exists'=> 'The customer doesnt exist',
-            'employee_id.required'=> 'The employee field is required',
-            'employee_id.exists'=> 'The employee doesnt exist',
+            //'employee_id.required'=> 'The employee field is required',
+            //'employee_id.exists'=> 'The employee doesnt exist',
         ];
     }
 }

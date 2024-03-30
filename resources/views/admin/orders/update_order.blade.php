@@ -90,16 +90,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5">
-                                <div class="mb-3">
-                                    <label for="employee_id" class="form-label">Created by</label>
-                                    <select id="employee_id" name="employee_id" class="form-control form-select">
-                                        @foreach ($customer_and_employee as $employee_id)
-                                            <option value="{{ $employee_id->user_id }}">{{ $employee_id->email }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 
