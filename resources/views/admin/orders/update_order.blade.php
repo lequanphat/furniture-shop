@@ -26,7 +26,7 @@
                                 <div class="mb-3">
                                     <label for="totalPrice" class="form-label">Total price</label>
                                     <input id="totalPrice" name="totalPrice" type="number" class="form-control"
-                                        placeholder="Enter the price money " value="" min="0" required>
+                                        placeholder="Enter the price money " value="" min="0" readonly>
                                 </div>
                             </div>
 
