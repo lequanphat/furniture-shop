@@ -48,8 +48,7 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/about', [PagesController::class, 'about']);
     Route::get('/contact', [PagesController::class, 'contact']);
     // products api
-    Route::get('/products/{sku}', [ProductController::class, 'get_detailed_product']); // => json
-    Route::get('/products/{product_id}/{sku}', [PagesController::class, 'product_details']);
+    Route::get('/products/{product_id}', [PagesController::class, 'product_details']);
     Route::get('/products', [ProductController::class, 'get_products']); // => json
 
     Route::get('/cart', [PagesController::class, 'cart']);
@@ -101,7 +100,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //order
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::post('/admin/orders/create', [OrderController::class, 'order_create']);
-    Route::put('/admin/orders/update', [OrderController::class, 'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
+    Route::put('/admin/orders/{order_id}', [OrderController::class, 'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
     Route::get('/admin/orders', [OrderController::class, 'order_search_ui'])->name('orders.search');
     Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
     //order detail

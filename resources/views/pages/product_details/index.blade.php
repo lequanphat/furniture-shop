@@ -14,12 +14,14 @@
                         <div class="product-details-small-img-wrap">
                             <div class="swiper-container product-details-small-img-slider-1 pd-small-img-style">
                                 <div class="js-images-list swiper-wrapper">
-                                    @foreach ($detailed_product->images as $image)
-                                        <div class="swiper-slide">
-                                            <div class="product-details-small-img">
-                                                <img src="{{ $image->url }}" alt="Product Thumnail">
+                                    @foreach ($product->detailed_products as $detailed_product)
+                                        @foreach ($detailed_product->images as $image)
+                                            <div class="swiper-slide swiper-slice-{{ $loop->parent->index }}">
+                                                <div class="product-details-small-img">
+                                                    <img src="{{ $image->url }}" alt="Product Thumnail">
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endforeach
                                     @endforeach
                                 </div>
                             </div>
@@ -28,20 +30,22 @@
                         </div>
                         <div class="swiper-container product-details-big-img-slider-1 pd-big-img-style">
                             <div class="js-images-preview swiper-wrapper">
-                                @foreach ($detailed_product->images as $image)
-                                    <div class="swiper-slide">
-                                        <div class="easyzoom-style">
-                                            <div class="easyzoom easyzoom--overlay">
+                                @foreach ($product->detailed_products as $detailed_product)
+                                    @foreach ($detailed_product->images as $image)
+                                        <div class="swiper-slide">
+                                            <div class="easyzoom-style">
+                                                <div class="easyzoom easyzoom--overlay">
 
-                                                <a href="{{ $image->url }}">
-                                                    <img src="{{ $image->url }}" alt="">
+                                                    <a href="{{ $image->url }}">
+                                                        <img src="{{ $image->url }}" alt="">
+                                                    </a>
+                                                </div>
+                                                <a class="easyzoom-pop-up img-popup" href="{{ $image->url }}">
+                                                    <i class="pe-7s-search"></i>
                                                 </a>
                                             </div>
-                                            <a class="easyzoom-pop-up img-popup" href="{{ $image->url }}">
-                                                <i class="pe-7s-search"></i>
-                                            </a>
                                         </div>
-                                    </div>
+                                    @endforeach
                                 @endforeach
 
                             </div>
@@ -51,59 +55,73 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="product-details-content" data-aos="fade-up" data-aos-delay="400">
-                        <h2 class="js-product-name">
-                            {{ $detailed_product->name }}
-                        </h2>
-                        @php
-                            $today = now();
-                            $discount_percentage = $detailed_product->product_discounts
-                                ->where('discount.start_date', '<=', $today)
-                                ->where('discount.end_date', '>=', $today)
-                                ->sum('discount.percentage');
-                        @endphp
-                        <div class="product-details-price">
-                            @if ($discount_percentage > 0)
-                                <span class="old-price">
-                                    {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ</span>
-                            @endif
-                            <span class="js-product-price  new-price ">
-                                {{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ
-                            </span>
+                        @foreach ($product->detailed_products as $detailed_product)
+                            <div
+                                class="js-product-name-price {{ $detailed_product->sku }} @if (!$loop->first) d-none @endif">
+                                <h2>{{ $detailed_product->name }} </h2>
 
-                        </div>
-                        <div class="product-details-review">
-                            <div class="product-rating">
-                                <i class=" ti-star"></i>
-                                <i class=" ti-star"></i>
-                                <i class=" ti-star"></i>
-                                <i class=" ti-star"></i>
-                                <i class=" ti-star"></i>
+                                @php
+                                    $today = now();
+                                    $discount_percentage = $detailed_product->product_discounts
+                                        ->where('discount.start_date', '<=', $today)
+                                        ->where('discount.end_date', '>=', $today)
+                                        ->sum('discount.percentage');
+                                @endphp
+                                <div class="product-details-price">
+                                    @if ($discount_percentage > 0)
+                                        <span class="old-price">
+                                            {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ</span>
+                                    @endif
+                                    <span class="new-price ">
+                                        {{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ
+                                    </span>
+
+                                </div>
                             </div>
-                            <span>( 1 Customer Review )</span>
-                        </div>
+                        @endforeach
                         {{-- temporary custom  --}}
                         <div class="d-flex my-4 " style="flex-wrap: wrap;">
                             @foreach ($product->detailed_products as $dt_product)
-                                <div class="detailed-product-tag d-flex p-2 me-3 mb-3 @if ($dt_product->sku == $detailed_product->sku) active @endi @endif"
+                                @php
+                                    $today = now();
+                                    $discount_percentage = $dt_product->product_discounts
+                                        ->where('discount.start_date', '<=', $today)
+                                        ->where('discount.end_date', '>=', $today)
+                                        ->sum('discount.percentage');
+                                @endphp
+                                <div class="detailed-product-tag @if ($loop->first) active @endif
+                                @if ($dt_product->quantities == 0) disable @endif"
                                     data-sku="{{ $dt_product->sku }}" data-id="{{ $product->product_id }}">
-                                    <div class="me-2"
-                                        style="width: 20px; height:20px; background-color: {{ $dt_product->color->code }}">
-                                    </div>
-                                    <span>{{ $dt_product->size }}</span>
+                                    <img src="{{ $dt_product->images->first()->url }}" alt=""
+                                        style="width: 40px; height: 40px;">
+                                    <span>C: {{ $dt_product->color->name }}</span>
+                                    <span>S: {{ $dt_product->size }}</span>
+                                    @if ($discount_percentage > 0)
+                                        <span class="text-danger">-{{ $discount_percentage }}%</span>
+                                    @endif
+
                                 </div>
                             @endforeach
                         </div>
                         {{--  temporary custom --}}
+                        <div class="product-details-quantities">
+                            <div class="select-quantities-wrapper">
+                                <button class="js-quantity-minus"><i class="ti-minus"></i></button>
+                                <input class="js-quantity-input quantity-input" type="number" value="0">
+                                <button class="js-quantity-add"><i class="ti-plus"></i></button>
+                            </div>
+
+                            @foreach ($product->detailed_products as $detailed_product)
+                                <p class="js-product-quantities m-0 {{ $detailed_product->sku }} @if (!$loop->first) d-none @endif"
+                                    data-quantities="{{ $detailed_product->quantities }}">
+                                    ({{ $detailed_product->quantities }} available products)
+                                </p>
+                            @endforeach
+
+                        </div>
                         <div class="product-details-action-wrap">
-                            <div class="product-quality">
-                                <input class="cart-plus-minus-box input-text qty text" name="qtybutton" value="1">
-                            </div>
-                            <div class="single-product-cart btn-hover">
-                                <a href="#">Add to cart</a>
-                            </div>
-                            <div class="single-product-wishlist">
-                                <span>(12 products available)</span>
-                            </div>
+                            <button class="js-add-to-cart add-to-cart">Add to cart</button>
+                            <button class="js-buy-now buy-now">Buy now</button>
 
                         </div>
                         <div class="product-details-meta">

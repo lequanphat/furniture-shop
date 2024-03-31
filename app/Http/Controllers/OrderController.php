@@ -36,42 +36,43 @@ class OrderController extends Controller
     //dữ liệu từ order_api.js sẽ được route dẫn qua đây nạp vào rồi gửi tạo ở database
     public function order_create(CreateOrder $request)
     {
-        $order_data = [                                             //mảng order_data
-            'total_price' => $request->input('totalPrice'),         //lấy dữ liệu từ ô có id và name là totalPrice được đính qua request
-            'is_paid' => $request->input('paid'),
+        $isPaid = $request->input('paid') === 'on' ? true : false;
+        $order_data = [
+            'total_price' => 0,
+            'is_paid' => $isPaid,
             'status' => $request->input('status'),
             'receiver_name' => $request->input('receiver_name'),
             'address' => $request->input('address'),
             'phone_number' => $request->input('phone_number'),
             'customer_id' => $request->input('customer_id'),
-            //'created_by' => $request->input('employee_id'),
             'created_by' => Auth::user()->user_id,
         ];
-        $order = Order::create($order_data);        //hàm tạo order
-        return ['message' => 'Created order successfully!', 'order' => $order]; //gửi message về order_api.js để thông báo thành công
+        $order = Order::create($order_data);
+        return ['message' => 'Created order successfully!', 'order' => $order];
     }
 
 
     //sửa thông tin order
     public function order_update(Request $request)
-    { //request chứa dữ liệu về request http đang tới
+    {
+        //request chứa dữ liệu về request http đang tới
         //lấy thông tin về order trong database
         //lấy order ở order_id trên database, dựa trên order_id trong dữ liệu của request request
-        $order = order::where('order_id', $request->input('order_id'))->first();    //first là lấy phần tử đầu tiên
+        $order_id = $request->route('order_id');
+        $order = order::where('order_id', $order_id)->first();    //first là lấy phần tử đầu tiên
         if ($order) {     //nếu biến order trả lại 1 (là tìm ra)
+            $isPaid = $request->input('paid') === 'on' ? true : false;
             $order->update([                                            //update order trong database qua biến này
-                'total_price' => $request->input('totalPrice'),         //lấy dữ liệu từ ô có id và name là totalPrice được đính qua request
-                'is_paid' => $request->input('paid'),
+                'is_paid' => $isPaid,
                 'status' => $request->input('status'),
                 'receiver_name' => $request->input('receiver_name'),
                 'address' => $request->input('address'),
                 'phone_number' => $request->input('phone_number'),
                 'customer_id' => $request->input('customer_id'),
-                //'created_by' => $request->input('employee_id'),
             ]);
             return ['message' => 'Update order successfully', 'order' => $order];
-        } else {         //nếu không có order nào được tìm thấy
-            abort(404); //ném ra 404 Not Found HTTP exception
+        } else {
+            response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
         }
     }
 
@@ -98,9 +99,6 @@ class OrderController extends Controller
         return view('admin.orders.index', $data);
     }*/
 
-
-
-
     //Phần của order detail
     public function details(Request $request)
     {
@@ -121,10 +119,10 @@ class OrderController extends Controller
     public function order_detail_create(CreateDetailedOrder $request)
     {
         $order_detail_data = [
-            'order_id'=> $request->input('orderID'),
-            'sku'=> $request->input('productDetailId'),
-            'quantities'=> $request->input('quantity'),
-            'unit_price'=> $request->input('unitPrice'),
+            'order_id' => $request->input('orderID'),
+            'sku' => $request->input('productDetailId'),
+            'quantities' => $request->input('quantity'),
+            'unit_price' => $request->input('unitPrice'),
         ];
         $order_detail = OrderDetail::create($order_detail_data);        //hàm tạo order
         return ['message' => 'Created order detail successfully!', 'order_detail' => $order_detail]; //gửi message về order_api.js để thông báo thành công
@@ -133,13 +131,13 @@ class OrderController extends Controller
     //update detail
     public function order_detail_update(Request $request)
     {
-        $orderdetail = OrderDetail::where('order_id','=', $request->input('orderId'))->where('sku','=', $request->input('productDetailId'))->first();    //first là lấy phần tử đầu tiên
+        $orderdetail = OrderDetail::where('order_id', '=', $request->input('orderId'))->where('sku', '=', $request->input('productDetailId'))->first();    //first là lấy phần tử đầu tiên
         if ($orderdetail) {     //nếu biến order trả lại 1 (là tìm ra)
             $orderdetail->update([
-                'order_id'=> $request->input('orderID'),
-                'sku'=> $request->input('productDetailId'),
-                'quantities'=> $request->input('quantity'),
-                'unit_price'=> $request->input('unitPrice'),
+                'order_id' => $request->input('orderID'),
+                'sku' => $request->input('productDetailId'),
+                'quantities' => $request->input('quantity'),
+                'unit_price' => $request->input('unitPrice'),
             ]);
             return ['message' => 'Update order detail successfully', 'order_detail' => $orderdetail];
         } else {         //nếu không có order detail nào được tìm thấy
