@@ -196,6 +196,7 @@ class ProductController extends Controller
         $categories = request()->query('categories');
         $color = request()->query('color');
         $search = request()->query('search');
+        $sorted_by = request()->query('sorted_by');
         // query
         $query = Product::with(
             'category',
@@ -221,28 +222,24 @@ class ProductController extends Controller
         if ($search !== null) {
             $query->where('name', 'LIKE', '%' . $search . '%');
         }
+        // sorted 
+        if ($sorted_by === 'latest') {
+            $query->orderBy('created_at', 'desc');
+        }
+        if ($sorted_by === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        }
 
+        $products = $query->paginate(9); // 9 elements per page
+        if ($sorted_by === 'price_asc') {
+            
+        }
         $data = [
-            'products' => $query->paginate(9) // 9 elements per page
+            'products' => $products
         ];
 
         return response()->json($data);
     }
 
-    public function get_detailed_product()
-    {
-        $sku = request()->route('sku');
-        $today = now();
-
-        $detailed_product = ProductDetail::with(['images', 'product_discounts' => function ($query) use ($today) {
-            $query->whereHas('discount', function ($query) use ($today) {
-                $query->where('start_date', '<=', $today)
-                    ->where('end_date', '>=', $today);
-            });
-        }])->find($sku);
-
-        return response()->json([
-            'detailed_product' => $detailed_product
-        ]);
-    }
+    
 }

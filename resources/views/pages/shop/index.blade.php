@@ -18,11 +18,22 @@
                         </div>
                         <div class="shop-topbar-right">
                             <div class="shop-sorting-area">
-                                <select class="nice-select nice-select-style-1">
-                                    <option>Default Sorting</option>
-                                    <option>Sort by popularity</option>
-                                    <option>Sort by average rating</option>
-                                    <option>Sort by latest</option>
+                                <select id="sort-product" class="nice-select nice-select-style-1">
+                                    <option value="default"
+                                        @if ($sorted_by == 'default') @selected(true) @endif>Default
+                                        Sorting</option>
+                                    <option value="price_asc"
+                                        @if ($sorted_by == 'price_asc') @selected(true) @endif>Sort by price
+                                        ascending</option>
+                                    <option value="price_des"
+                                        @if ($sorted_by == 'price_des') @selected(true) @endif>Sort by price
+                                        descending</option>
+                                    <option value="latest"
+                                        @if ($sorted_by == 'latest') @selected(true) @endif>Sort
+                                        by latest</option>
+                                    <option value="oldest"
+                                        @if ($sorted_by == 'oldest') @selected(true) @endif>Sort
+                                        by oldest</option>
                                 </select>
                             </div>
                             <div class="shop-view-mode nav">
@@ -57,8 +68,7 @@
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                             <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
                                                 <div class="custom-product-img product-img img-zoom mb-25">
-                                                    <a
-                                                        href="/products/{{ $product->product_id }}/{{ $detailed_product->sku }}">
+                                                    <a href="/products/{{ $product->product_id }}">
                                                         @php
                                                             $imageUrl = asset('images/product/product-5.png');
                                                             if ($detailed_product->images->first()) {
