@@ -109,7 +109,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::put('/admin/orders/{order_id}/update', [OrderController::class,'order_detail_update']);
 
     //warranty
-    Route::get('admin/warranties', [WarrantyController::class, 'index'])->name('warranties.index');
+    Route::get('/admin/warranties', [WarrantyController::class, 'index']);
 
 
 
@@ -160,7 +160,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // *This is only temporary, use the appropriate controller
 
 
-    Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
+    //Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);

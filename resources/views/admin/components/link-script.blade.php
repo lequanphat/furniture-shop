@@ -14,3 +14,4 @@
 <script src="{{ asset('js/tag_api.js') }}" defer></script>
 <script src="{{ asset('js/color_api.js') }}" defer></script>
 
+<script src="{{ asset('js/warranty_api.js') }}" defer></script>
