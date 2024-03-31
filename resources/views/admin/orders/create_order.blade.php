@@ -12,6 +12,7 @@
                 <!-- Form đây, khi nhấn tạo form, gửi dữ liệu qua file order_api.js, ở hàm có id giống id form -->
                 <form id="create-order-form" action="#" method="dialog">
                     @csrf
+
                     <div class="card-body">
                         <div class="row row-cards">
                             <div class="col-md-5">

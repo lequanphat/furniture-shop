@@ -14,7 +14,7 @@
                     <div class="card-body">
                         <div class="row row-cards">
 
-                            <!--ở đây khác create là có thêm ô id-->
+                            <!--ở đây khác create là có thêm ô  order id-->
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="order_id" class="form-label">Order ID</label>
