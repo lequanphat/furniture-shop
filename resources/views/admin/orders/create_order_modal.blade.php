@@ -1,11 +1,10 @@
-<div class="modal fade" id="UpdateOrderModal" tabindex="-1" aria-labelledby="updateOrderTitle" aria-hidden="true">
-    <div class="modal-dialog">
-        <form id="update-order-form" action="#" method="dialog">
+<div class="modal fade" id="order-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form id="create-order-form" action="#" method="dialog">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateOrderTitle"></h5>
-                    <!--id updateOrderTitle sẽ được gửi từ hàm js có id UpdateOrderModal-->
+                    <h5 class="modal-title" id="exampleModalLabel">Create Order</h5>
                     <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
                         aria-label="Close"><i class="ti-close"></i></button>
                 </div>
@@ -38,8 +37,6 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Status</label>
-                                    <!--input id="status" name="status" type="number" class="form-control"
-                                        placeholder="Enter status" value="" maxlength="10" min="0" required-->
                                     <select id="status" name="status" class="form-control form-select">
                                         <option value="0">Unconfirmed</option>
                                         <option value="1">Confirmed</option>
@@ -49,15 +46,14 @@
                                     </select>
                                 </div>
                             </div>
-
-
-
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="customer_id" class="form-label">Customer</label>
-                                    <select id="customer_id" name="customer_id" class="form-control form-select">
-                                        @foreach ($customer_and_employee as $customer_id)
-                                            <option value="{{ $customer_id->user_id }}">{{ $customer_id->email }}
+                                    <label for="customer_id" class="form-label">Advanced select</label>
+                                    <select id="customer_id" name="customer_id" type="text" class="form-select">
+                                        <option value="-1" selected>Không
+                                        </option>
+                                        @foreach ($customers as $customer)
+                                            <option value="{{ $customer->user_id }}">{{ $customer->email }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -70,14 +66,15 @@
                                     <span class="form-check-label">Paid yet ?</span>
                                 </label>
                             </div>
+
                         </div>
                     </div>
-                    <div id="update_order_response" class="alert ">
+                    <div id="create_order_response" class="alert ">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="reset" class="btn me-auto">Reset</button>
-                    <button type="submit" class="btn btn-primary float-right px-4 mx-2">Update</button>
+                    <button type="submit" class="btn btn-primary float-right px-4 mx-2">Create</button>
                 </div>
             </div>
         </form>

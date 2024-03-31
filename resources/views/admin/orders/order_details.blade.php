@@ -20,7 +20,8 @@
                                 Back
                             </a>
                         </span>
-                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#order-detail-modal">
+                        <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                            data-bs-target="#create-detailed-order-modal">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -28,7 +29,7 @@
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Add new instance
+                            Add product
                         </a>
                     </div>
                 </div>
@@ -68,7 +69,9 @@
                                     <address><strong>{{ $order->receiver_name }} <br>
                                         </strong>{{ $order->address }}<br>
                                         {{ $order->phone_number }}<br>
-                                        <a href="mailto:#">{{ $order->customer->email }}</a>
+                                        @isset($order->customer->email)
+                                            <a href="mailto:{{ $order->customer->email }}">{{ $order->customer->email }}</a>
+                                        @endisset
                                     </address>
 
                                 </div>
@@ -77,7 +80,6 @@
                                     <address>
                                         <strong>{{ $order->employee->full_name() }}<br></strong>
                                         {{ $order->employee->default_address->address }}<br>
-
                                         {{ $order->employee->default_address->phone_number }}<br>
                                         <a href="mailto:#">{{ $order->employee->email }}</a>
                                     </address>
@@ -149,7 +151,8 @@
                                                 <td>
                                                     <!--nút sửa, order detail chỉ nên ửa được quantity-->
                                                     <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
-                                                        title="Update" data-bs-toggle="modal" data-bs-target="#UpdateOrderDetailModal"
+                                                        title="Update" data-bs-toggle="modal"
+                                                        data-bs-target="#UpdateOrderDetailModal"
                                                         data-order-id="{{ $order->order_id }}"
                                                         data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
                                                         data-quantities="{{ $detailed_order->quantities }}"
@@ -169,9 +172,9 @@
                     </div>
                 </div>
             </div>
-            @include('admin.orders.create_order_details')
-            @include('admin.orders.update_order_details')
+
             @include('admin.components.footer')
         </div>
         {{-- Modal --}}
+        @include('admin.orders.create_detailed_order')
     @endsection

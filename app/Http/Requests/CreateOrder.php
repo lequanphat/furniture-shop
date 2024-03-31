@@ -20,7 +20,7 @@ class CreateOrder extends FormRequest
             'receiver_name' => 'required',
             'address' => 'required',
             'phone_number' => 'required',
-            'customer_id' => 'required|exists:users,user_id',
+            'customer_id' => 'required',
         ];
     }
     public function messages()
@@ -32,7 +32,6 @@ class CreateOrder extends FormRequest
             'address.required' => 'The address field is required',
             'phone_number.required' => 'The phone number field is required',
             'customer_id.required' => 'The customer field is required',
-            'customer_id.exists' => 'The customer doesnt exist',
         ];
     }
 }

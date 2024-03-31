@@ -100,6 +100,7 @@
     <script>
         CKEDITOR.replace('editor');
     </script>
+    
     <script>
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function() {

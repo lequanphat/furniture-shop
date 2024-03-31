@@ -137,4 +137,5 @@
     <script>
         CKEDITOR.replace('editor');
     </script>
+    
 @endsection

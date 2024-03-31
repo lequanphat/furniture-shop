@@ -126,4 +126,7 @@
         @include('admin.components.footer')
     </div>
     {{-- Modal --}}
+
+
+    
 @endsection
