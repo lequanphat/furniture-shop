@@ -100,7 +100,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //order
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::post('/admin/orders/create', [OrderController::class, 'order_create']);
-    Route::put('/admin/orders/update', [OrderController::class, 'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
+    Route::put('/admin/orders/{order_id}', [OrderController::class, 'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
     Route::get('/admin/orders', [OrderController::class, 'order_search_ui'])->name('orders.search');
     Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
     //order detail

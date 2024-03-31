@@ -14,29 +14,26 @@
                     @csrf
                     <div class="card-body">
                         <div class="row row-cards">
-
-                            <div class="col-md-5">
+                            <div class="col-6">
                                 <div class="mb-3">
                                     <label for="orderID" class="form-label">Order id</label>
                                     <input id="orderID" name="orderID" type="number" class="form-control"
                                         placeholder="" value="{{ $order->order_id }}" readonly>
                                 </div>
                             </div>
-
-                            <div class="col-md-5">
+                            <div class="col-6">
                                 <div class="mb-3">
                                     <label for="productDetailId" class="form-label">Product detail id</label>
-                                    <select id="productDetailId" name="productDetailId" class="form-control form-select">
+                                    <select id="productDetailId" name="productDetailId"
+                                        class="form-control form-select">
                                         @foreach ($all_product_detail as $product_detail)
-                                            <option value="{{ $product_detail->sku }}">{{ $product_detail->name }}</option>
+                                            <option value="{{ $product_detail->sku }}">{{ $product_detail->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-
-
-
-                            <div class="col-md-5">
+                            <div class="col-6">
                                 <div class="mb-3">
                                     <label for="quantity" class="form-label">Quantities</label>
                                     <input id="quantity" name="quantity" type="number" class="form-control"
@@ -44,21 +41,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5">
+                            <div class="col-6">
                                 <div class="mb-3">
                                     <label for="unitPrice" class="form-label">Unit price</label>
                                     <input id="unitPrice" name="unitPrice" type="number" class="form-control"
                                         placeholder="Enter unit price" value="" required>
                                 </div>
                             </div>
-
-
-
-
                         </div>
                     </div>
-
-
 
                     <div id="create_order_detail_response" class="alert "></div>
 

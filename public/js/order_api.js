@@ -4,11 +4,10 @@ jQuery.noConflict();
         //file phải được khai báo ở views/admin/components/link-script.blade.php
 
         //hàm tạo order
-        $('#js-create-order-btn').click(() => {
-            $('#createEmployeeModal').modal('show');
+        $('#order-modal').on('show.bs.modal', function (event) {
             $('#create-order-form')[0].reset();
-            // $('#create_category_response').html('');
-            // $('#create_category_response').removeClass('alert-success alert-danger');
+            $('#create_order_response').addClass('d-none');
+            console.log('order-modal');
         });
 
         $('#create-order-form').submit(function (e) {
@@ -23,6 +22,7 @@ jQuery.noConflict();
                 success: function (response) {
                     //hàm nếu cái ajax request thành công
                     console.log(response);
+                    $('#create_order_response').removeClass('d-none');
                     $('#create_order_response').removeClass('alert-danger'); //bỏ class css alert-danger để hiển thị cái mới
                     $('#create_order_response').addClass('alert-success'); //thêm class css để thông báo cái mới
                     $('#create_order_response').html(response.message); //chỉnh lại trên file html ở cái id đó với cái message gửi từ respone của server
@@ -30,6 +30,7 @@ jQuery.noConflict();
                 error: function (error) {
                     //hàm nếu lỗi, tương tự như trên
                     console.log(error);
+                    $('#create_order_response').removeClass('d-none');
                     $('#create_order_response').removeClass('alert-success');
                     $('#create_order_response').addClass('alert-danger');
                     $('#create_order_response').html(Object.values(error.responseJSON.errors)[0][0]);
@@ -49,29 +50,34 @@ jQuery.noConflict();
         $('#UpdateOrderModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); //biến lưu đối tượng jQuery đại diện cho cái nút triggerd mở modal
             var modal = $(this); //biến lưu đối tượng jQuery của toàn bộ cái modal
-            modal.find('#updateOrderTitle').html('Update Order number ' + button.data('order-id')); //tìm id updateOrderTitle rồi sửa cái nội dung html của đối tượng có id đó
+            modal.find('#updateOrderTitle').html('Update Order - ' + button.data('order-id')); //tìm id updateOrderTitle rồi sửa cái nội dung html của đối tượng có id đó
+            modal.find('#updateOrderTitle').data('order-id', button.data('order-id'));
             modal.find('#order_id').val(button.data('order-id')); //tìm đối tượng có id đó trong form rồi sửa value nó thành dữ liệu có id là brand-id được lưu trong button
             modal.find('#totalPrice').val(button.data('total-price'));
-            modal.find('#paid').val(button.data('is-paid'));
+            if (button.data('is-paid')) {
+                modal.find('#paid').attr('checked', true);
+            } else modal.find('#paid').attr('checked', false);
             modal.find('#status').val(button.data('status'));
             modal.find('#receiver_name').val(button.data('receiver-name'));
             modal.find('#address').val(button.data('address'));
             modal.find('#phone_number').val(button.data('phone-number'));
             modal.find('#customer_id').val(button.data('customer-id'));
+            $('#update_order_response').addClass('d-none');
             //modal.find('#employee_id').val(button.data('created-by'));
         });
         //hàm sửa dữ liệu order
         $('#update-order-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
-            console.log({ formData });
+            const order_id = $('#updateOrderTitle').data('order-id');
             $.ajax({
-                url: `/admin/orders/update`,
+                url: `/admin/orders/${order_id}`,
                 type: 'PUT',
                 data: formData,
                 success: function (response) {
                     console.log({ response });
                     // Handle the success response
+                    $('#update_order_response').removeClass('d-none');
                     $('#update_order_response').removeClass('alert-danger');
                     $('#update_order_response').addClass('alert-success');
                     $('#update_order_response').html(response.message);
@@ -79,12 +85,12 @@ jQuery.noConflict();
                 error: function (error) {
                     console.log({ error });
                     // Handle the error response
+                    $('#update_order_response').removeClass('d-none');
                     $('#update_order_response').removeClass('alert-success');
                     $('#update_order_response').addClass('alert-danger');
                 },
             });
         });
-
 
         // //hàm lấy giá trị đc chọn từ select rồi gửi yêu cầu ajax đến controller
         // $('#select_status_for_table').on('change', function() {
@@ -105,7 +111,6 @@ jQuery.noConflict();
         //     });
         // });
 
-
         //hàm thêm chi tiết đơn hàng
         $('#js-create-order-detail-btn').click(() => {
             $('#createEmployeeModal').modal('show');
@@ -120,21 +125,20 @@ jQuery.noConflict();
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    alert("success");
+                    alert('success');
                     console.log(response);
                     $('#create_order_detail_response').removeClass('alert-danger');
                     $('#create_order_detail_response').addClass('alert-success');
                     $('#create_order_detail_response').html(response.message);
                 },
                 error: function (error) {
-                    alert("error");
+                    alert('error');
                     console.log(error);
                     $('#create_order_detail_response').removeClass('alert-success');
                     $('#create_order_detail_response').addClass('alert-danger');
                     $('#create_order_detail_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
-
         });
         $('#create-order-detail-form').on('reset', function () {
             $('#create_order_detail_response').html('');
@@ -146,7 +150,15 @@ jQuery.noConflict();
         $('#UpdateOrderDetailModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); //biến lưu đối tượng jQuery đại diện cho cái nút triggerd mở modal
             var modal = $(this); //biến lưu đối tượng jQuery của toàn bộ cái modal
-            modal.find('#updateOrderDetailTitle').html('Update Order detail {order_id:' + button.data('order-id') + ' & sku:' + button.data('product-detail-id') + '}'); //tìm id updateOrderDetailTitle rồi sửa cái nội dung html của đối tượng có id đó
+            modal
+                .find('#updateOrderDetailTitle')
+                .html(
+                    'Update Order detail {order_id:' +
+                        button.data('order-id') +
+                        ' & sku:' +
+                        button.data('product-detail-id') +
+                        '}',
+                ); //tìm id updateOrderDetailTitle rồi sửa cái nội dung html của đối tượng có id đó
             modal.find('#orderID').val(button.data('order-id'));
             modal.find('#productDetailId').val(button.data('product-detail-id'));
             modal.find('#quantity').val(button.data('quantities'));
@@ -162,21 +174,19 @@ jQuery.noConflict();
                 type: 'PUT',
                 data: formData,
                 success: function (response) {
-                    alert("success");
+                    alert('success');
                     console.log({ response });
                     $('#update_order_response').removeClass('alert-danger');
                     $('#update_order_response').addClass('alert-success');
                     $('#update_order_response').html(response.message);
                 },
                 error: function (error) {
-                    alert("error");
+                    alert('error');
                     console.log({ error });
                     $('#update_order_response').removeClass('alert-success');
                     $('#update_order_response').addClass('alert-danger');
                 },
             });
         });
-
-
     });
 })(jQuery);
