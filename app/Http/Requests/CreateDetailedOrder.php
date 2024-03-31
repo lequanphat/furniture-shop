@@ -16,21 +16,18 @@ class CreateDetailedOrder extends FormRequest
     {
         // validate here
         return [
-            'orderID' => 'required',
-            'productDetailId' => 'required|unique:order_details,sku',//dòng unique kiếm trong model
-            'quantity'=> 'required',
-            'unitPrice' => 'required',
+            'sku' => 'required',
+            'quantities' => 'required',
+            'unit_price' => 'required',
         ];
     }
     public function messages()
     {
         // response message here
         return [
-            'orderID.required'=> 'The order id field is required.',
-            'productDetailId.unique' => 'The product have already existed in the detail.',
-            'productDetailID.required' => 'The product detail field is required.',
-            'quantity.required'=> 'The quantity field is required.',
-            'unitPrice.required'=> 'The unit price field is required.',
+            'sku.required' => 'The sku field is required.',
+            'quantities.required' => 'The quantities field is required.',
+            'unit_price.required' => 'The unit price field is required.',
         ];
     }
 }

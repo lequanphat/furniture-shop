@@ -130,7 +130,7 @@
                                                 <td>{{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
                                                 </td>
                                                 <td>{{ $detailed_product->quantities }}</td>
-                                                
+
                                                 </td>
 
                                                 <td>{{ $detailed_product->warranty_month }} Months</td>
@@ -157,4 +157,5 @@
             @include('admin.components.footer')
         </div>
         {{-- Modal --}}
+        
     @endsection
