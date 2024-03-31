@@ -1,31 +1,15 @@
 @if ($paginator->hasPages())
     <ul class="pagination my-2 ms-auto">
-        @if ($paginator->onFirstPage())
-            <li class="page-item disabled">
-                <a class="page-link" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M15 6l-6 6l6 6" />
-                    </svg>
-                    prev
-                </a>
-            </li>
-        @else
-            <li class="page-item ">
-                <a class="page-link" href="#" rel="prev"
-                    data-page="{{ $paginator->currentPage() > 1 ? $paginator->currentPage() - 1 : null }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M15 6l-6 6l6 6" />
-                    </svg>
-                    prev
-                </a>
-            </li>
-        @endif
+        <li class="page-item @if ($paginator->onFirstPage()) disabled @endif">
+            <a class="page-link" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg>
+                prev
+            </a>
+        </li>
 
         {{-- Display first page --}}
         @if ($paginator->currentPage() > 3)
@@ -81,30 +65,18 @@
             </li>
         @endif
 
-        @if ($paginator->hasMorePages())
-            <li class="page-item">
-                <a class="page-link" href="#" data-page="{{ $paginator->currentPage() + 1 }}" rel="next">
-                    next
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M9 6l6 6l-6 6" />
-                    </svg>
-                </a>
-            </li>
-        @else
-            <li class="page-item disabled">
-                <a class="page-link" href="#">
-                    next
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M9 6l6 6l-6 6" />
-                    </svg>
-                </a>
-            </li>
-        @endif
+        <li class="page-item @if (!$paginator->hasMorePages()) disabled @endif"
+            data-page="{{ $paginator->currentPage() + 1 }}">
+            <a class="page-link" href="#">
+                next
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </a>
+        </li>
+
     </ul>
 @endif

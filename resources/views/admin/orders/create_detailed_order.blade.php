@@ -47,8 +47,13 @@
                                                             ->where('discount.start_date', '<=', $today)
                                                             ->where('discount.end_date', '>=', $today)
                                                             ->sum('discount.percentage');
+
+                                                        $unit_price =
+                                                            $detailed_product->original_price -
+                                                            ($detailed_product->original_price * $discount_percentage) /
+                                                                100;
                                                     @endphp
-                                                    <tr>
+                                                    <tr data-sku="{{ $detailed_product->sku }}">
                                                         <td>
                                                             <div class="d-flex py-1 align-items-center">
                                                                 <span class="avatar me-2"
@@ -77,13 +82,14 @@
                                                                 </p>
                                                             </div>
                                                         </td>
-                                                        <td>{{ $detailed_product->quantities }}</td>
+                                                        <td class="js-detailed-product-quantities">{{ $detailed_product->quantities }}</td>
                                                         <td>
                                                             @if ($discount_percentage > 0)
                                                                 <del>{{ number_format($detailed_product->original_price, 0, '.', ',') }}đ</del>
                                                             @endif
-                                                            <p class="text-danger m-0">
-                                                                {{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ
+                                                            <p class="js-unit-price text-danger m-0"
+                                                                data-unit-price="{{ $unit_price }}">
+                                                                {{ number_format($unit_price, 0, '.', ',') }}đ
                                                             </p>
 
                                                         </td>
@@ -91,10 +97,11 @@
                                                         <td>
                                                             <div class="custom-table-action">
                                                                 @if ($detailed_product->quantities > 0)
-                                                                    <input class="quantities-input" type="number">
+                                                                    <input class="quantities-input" type="number"
+                                                                        max="{{ $detailed_product->quantities }}">
                                                                 @endif
 
-                                                                <button class="btn p-2"
+                                                                <button class="js-add-product btn p-2"
                                                                     @if ($detailed_product->quantities == 0) disabled @endif>
                                                                     <img src="{{ asset('svg/plus.svg') }}"
                                                                         style="width: 18px;" />

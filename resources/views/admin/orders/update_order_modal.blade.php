@@ -1,6 +1,6 @@
 <div class="modal fade" id="update-order-modal" tabindex="-1" aria-labelledby="updateOrderTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form id="update-order-form " action="#" method="dialog">
+        <form id="update-order-form" action="#" method="dialog">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">

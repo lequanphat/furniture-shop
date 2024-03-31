@@ -108,8 +108,6 @@ jQuery.noConflict();
                 url: url,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
-
                     const now = new Date();
                     now.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
                     let formatter = new Intl.NumberFormat('en-US', {
@@ -126,12 +124,14 @@ jQuery.noConflict();
                                 discount_percentage += detailed_product.product_discounts[j].discount.percentage;
                             }
                         }
-
+                        let unit_price =
+                            detailed_product.original_price -
+                            (detailed_product.original_price * discount_percentage) / 100;
                         let image = '';
                         if (detailed_product.images.length > 0) {
                             image = detailed_product.images[0].url;
                         }
-                        html += `<tr>
+                        html += `<tr data-sku="${detailed_product.sku}">
                         <td>
                             <div class="d-flex py-1 align-items-center">
                                 <span class="avatar me-2"
@@ -151,25 +151,26 @@ jQuery.noConflict();
                             <div><p class="text-reset m-0">${detailed_product.color.name}</p></div>
                             <div class="text-muted "><p class="text-reset m-0">${detailed_product.size}</p></div>
                         </td>
-                        <td>${detailed_product.quantities}</td>
+                        <td class="js-detailed-product-quantities">${detailed_product.quantities}</td>
                         <td>
                         ${
                             discount_percentage > 0
                                 ? `<del>${formatter.format(detailed_product.original_price)}đ</del>`
                                 : ''
                         }
-                            <p class="text-danger m-0">
-                                ${formatter.format(
-                                    detailed_product.original_price -
-                                        (detailed_product.original_price * discount_percentage) / 100,
-                                )}đ
+                            <p class="js-unit-price text-danger m-0" data-unit-price="${unit_price}">
+                                ${formatter.format(unit_price)}đ
                             </p>
                         </td>
                         </td>
                         <td>
                             <div class="custom-table-action">
-                            ${detailed_product.quantities > 0 ? '<input class="quantities-input" type="number">' : ''}
-                                <button class="btn p-2"
+                            ${
+                                detailed_product.quantities > 0
+                                    ? `<input class="quantities-input" type="number" max="${detailed_product.quantities}">`
+                                    : ''
+                            }
+                                <button class="js-add-product btn p-2"
                                 ${detailed_product.quantities == 0 ? 'disabled' : ''} >
                                     <img src="${data_asset}svg/plus.svg"
                                         style="width: 18px;" />
@@ -246,8 +247,53 @@ jQuery.noConflict();
         $(document).on('click', '.pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
-            console.log({ page });
             filterDetailedProducts({ page });
         });
+
+        $(document).on('input', '.quantities-input', function () {
+            var max = parseInt($(this).attr('max'));
+            if (parseInt($(this).val()) > max) {
+                $(this).val(max);
+            } else if (parseInt($(this).val()) < 0) {
+                $(this).val(parseInt($(this).val()));
+            }
+        });
+        $(document).on('click', '.js-add-product', function (event) {
+            const _this = this;
+            let quantities = $(this).closest('tr').find('.quantities-input').val();
+            if (quantities === '' || quantities <= 0) {
+                alert('Please input quantities');
+                return;
+            }
+            quantities = parseInt(quantities);
+            const sku = $(this).closest('tr').data('sku');
+            const order_id = $('#js-order-id-info').text();
+            const unit_price = $(this).closest('tr').find('.js-unit-price').data('unit-price');
+            console.log('add product', quantities, sku, order_id, unit_price);
+
+            $.ajax({
+                url: `/admin/orders/${order_id}`,
+                type: 'POST',
+                data: {
+                    sku,
+                    quantities,
+                    unit_price,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    console.log(response);
+                    const quantities_instance = $(_this).closest('tr').find('.js-detailed-product-quantities');
+                    quantities_instance.text(parseInt(quantities_instance.text()) - quantities);
+                    $(_this).closest('tr').find('.quantities-input').val(0)
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        });
+
+        // on modal show
     });
 })(jQuery);

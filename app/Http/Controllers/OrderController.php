@@ -6,6 +6,7 @@ use App\Http\Requests\CreateDetailedOrder;
 use App\Http\Requests\CreateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -78,32 +79,29 @@ class OrderController extends Controller
 
 
 
-    public function order_detail_create(CreateDetailedOrder $request)
+    public function create_detailed_order(CreateDetailedOrder $request)
     {
-        $order_detail_data = [
-            'order_id' => $request->input('orderID'),
-            'sku' => $request->input('productDetailId'),
-            'quantities' => $request->input('quantity'),
-            'unit_price' => $request->input('unitPrice'),
-        ];
-        $order_detail = OrderDetail::create($order_detail_data);
-        return ['message' => 'Created order detail successfully!', 'order_detail' => $order_detail];
-    }
-
-
-    public function order_detail_update(Request $request)
-    {
-        $orderdetail = OrderDetail::where('order_id', '=', $request->input('orderId'))->where('sku', '=', $request->input('productDetailId'))->first();    //first là lấy phần tử đầu tiên
-        if ($orderdetail) {
-            $orderdetail->update([
-                'order_id' => $request->input('orderID'),
-                'sku' => $request->input('productDetailId'),
-                'quantities' => $request->input('quantity'),
-                'unit_price' => $request->input('unitPrice'),
+        $order_id = $request->route('order_id');
+        $sku = $request->input('sku');
+        $quantities = $request->input('quantities');
+        $unit_price = $request->input('unit_price');
+        $detailed_order_exist = OrderDetail::where('order_id', $order_id)->where('sku', $sku)->first();
+        if ($detailed_order_exist) {
+            OrderDetail::where('order_id', $order_id)->where('sku', $sku)->update([
+                'quantities' => $detailed_order_exist->quantities + $quantities,
+                'unit_price' => $unit_price,
             ]);
-            return ['message' => 'Update order detail successfully', 'order_detail' => $orderdetail];
+            ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+            return ['message' => 'Created order detail successfully!', 'detailed_order' => $detailed_order_exist];
         } else {
-            abort(404);
+            $order_detail = OrderDetail::create([
+                'order_id' => $order_id,
+                'sku' => $sku,
+                'quantities' => $quantities,
+                'unit_price' => $unit_price,
+            ]);
         }
+        ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+        return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
     }
 }

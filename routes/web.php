@@ -103,8 +103,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
     //order detail
     Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
-    Route::post('/admin/orders/{order_id}/create', [OrderController::class, 'order_detail_create']);
-    Route::put('/admin/orders/{order_id}/update', [OrderController::class, 'order_detail_update']);
+    Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
 
     //warranty
     Route::get('admin/warranties', [WarrantyController::class, 'index'])->name('warranties.index');
