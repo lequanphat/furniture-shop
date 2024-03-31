@@ -12,13 +12,14 @@
                 <!-- Form đây, khi nhấn tạo form, gửi dữ liệu qua file order_api.js, ở hàm có id giống id form -->
                 <form id="create-order-form" action="#" method="dialog">
                     @csrf
+
                     <div class="card-body">
                         <div class="row row-cards">
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="totalPrice" class="form-label">Total price</label>
                                     <input id="totalPrice" name="totalPrice" type="number" class="form-control"
-                                        placeholder="Enter the price money " value="" min="0" required>
+                                        placeholder="" value="0" min="0" readonly>
                                 </div>
                             </div>
 
@@ -35,8 +36,15 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Status</label>
-                                    <input id="status" name="status" type="number" class="form-control"
-                                        placeholder="Enter status" value="" maxlength="10" min="0" required>
+                                    <!--input id="status" name="status" type="number" class="form-control"
+                                        placeholder="Enter status" value="" maxlength="10" min="0" required-->
+                                    <select id="status" name="status" class="form-control form-select">
+                                        <option value="0">Unconfirmed</option>
+                                        <option value="1">Confirmed</option>
+                                        <option value="2">In transit</option>
+                                        <option value="3">Delivered</option>
+                                        <option value="4">Canceled</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -75,16 +83,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5">
-                                <div class="mb-3">
-                                    <label for="employee_id" class="form-label">Created by</label>
-                                    <select id="employee_id" name="employee_id" class="form-control form-select">
-                                        @foreach ($customer_and_employee as $employee_id)
-                                            <option value="{{ $employee_id->user_id }}">{{ $employee_id->email }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 

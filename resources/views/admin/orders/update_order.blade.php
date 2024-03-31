@@ -14,7 +14,7 @@
                     <div class="card-body">
                         <div class="row row-cards">
 
-                            <!--ở đây khác create là có thêm ô id-->
+                            <!--ở đây khác create là có thêm ô  order id-->
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="order_id" class="form-label">Order ID</label>
@@ -26,7 +26,7 @@
                                 <div class="mb-3">
                                     <label for="totalPrice" class="form-label">Total price</label>
                                     <input id="totalPrice" name="totalPrice" type="number" class="form-control"
-                                        placeholder="Enter the price money " value="" min="0" required>
+                                        placeholder="Enter the price money " value="" min="0" readonly>
                                 </div>
                             </div>
 
@@ -90,16 +90,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5">
-                                <div class="mb-3">
-                                    <label for="employee_id" class="form-label">Created by</label>
-                                    <select id="employee_id" name="employee_id" class="form-control form-select">
-                                        @foreach ($customer_and_employee as $employee_id)
-                                            <option value="{{ $employee_id->user_id }}">{{ $employee_id->email }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 

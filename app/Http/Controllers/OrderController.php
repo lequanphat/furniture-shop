@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateDetailedOrder;
 use App\Http\Requests\CreateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\ProductDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -41,7 +44,8 @@ class OrderController extends Controller
             'address' => $request->input('address'),
             'phone_number' => $request->input('phone_number'),
             'customer_id' => $request->input('customer_id'),
-            'created_by' => $request->input('employee_id'),
+            //'created_by' => $request->input('employee_id'),
+            'created_by' => Auth::user()->user_id,
         ];
         $order = Order::create($order_data);        //hàm tạo order
         return ['message' => 'Created order successfully!', 'order' => $order]; //gửi message về order_api.js để thông báo thành công
@@ -63,7 +67,7 @@ class OrderController extends Controller
                 'address' => $request->input('address'),
                 'phone_number' => $request->input('phone_number'),
                 'customer_id' => $request->input('customer_id'),
-                'created_by' => $request->input('employee_id'),
+                //'created_by' => $request->input('employee_id'),
             ]);
             return ['message' => 'Update order successfully', 'order' => $order];
         } else {         //nếu không có order nào được tìm thấy
@@ -102,12 +106,44 @@ class OrderController extends Controller
     {
         $order_id = $request->route('order_id');
         $order = Order::where('order_id', $order_id)->with('employee.default_address')->first();
-        $detailedOrders = $order->order_details()->with('detailed_product')->paginate(6); // 5 items per page
+        $detailedOrders = $order->order_details()->with('detailed_product')->paginate(5); // 5 items per page
         $data = [
             'page' => 'Order Details',
             'order' => $order,
             'detailed_orders' => $detailedOrders,
+            'all_product_detail' => ProductDetail::all(),
         ];
         return view('admin.orders.order_details', $data);
+    }
+
+
+    //tạo detail mới
+    public function order_detail_create(CreateDetailedOrder $request)
+    {
+        $order_detail_data = [
+            'order_id'=> $request->input('orderID'),
+            'sku'=> $request->input('productDetailId'),
+            'quantities'=> $request->input('quantity'),
+            'unit_price'=> $request->input('unitPrice'),
+        ];
+        $order_detail = OrderDetail::create($order_detail_data);        //hàm tạo order
+        return ['message' => 'Created order detail successfully!', 'order_detail' => $order_detail]; //gửi message về order_api.js để thông báo thành công
+    }
+
+    //update detail
+    public function order_detail_update(Request $request)
+    {
+        $orderdetail = OrderDetail::where('order_id','=', $request->input('orderId'))->where('sku','=', $request->input('productDetailId'))->first();    //first là lấy phần tử đầu tiên
+        if ($orderdetail) {     //nếu biến order trả lại 1 (là tìm ra)
+            $orderdetail->update([
+                'order_id'=> $request->input('orderID'),
+                'sku'=> $request->input('productDetailId'),
+                'quantities'=> $request->input('quantity'),
+                'unit_price'=> $request->input('unitPrice'),
+            ]);
+            return ['message' => 'Update order detail successfully', 'order_detail' => $orderdetail];
+        } else {         //nếu không có order detail nào được tìm thấy
+            abort(404); //ném ra 404 Not Found HTTP exception
+        }
     }
 }

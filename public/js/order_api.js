@@ -58,7 +58,7 @@ jQuery.noConflict();
             modal.find('#address').val(button.data('address'));
             modal.find('#phone_number').val(button.data('phone-number'));
             modal.find('#customer_id').val(button.data('customer-id'));
-            modal.find('#employee_id').val(button.data('created-by'));
+            //modal.find('#employee_id').val(button.data('created-by'));
         });
         //hàm sửa dữ liệu order
         $('#update-order-form').submit(function (e) {
@@ -70,14 +70,14 @@ jQuery.noConflict();
                 type: 'PUT',
                 data: formData,
                 success: function (response) {
-                    //console.log({ response });
+                    console.log({ response });
                     // Handle the success response
                     $('#update_order_response').removeClass('alert-danger');
                     $('#update_order_response').addClass('alert-success');
                     $('#update_order_response').html(response.message);
                 },
                 error: function (error) {
-                    //console.log({ error });
+                    console.log({ error });
                     // Handle the error response
                     $('#update_order_response').removeClass('alert-success');
                     $('#update_order_response').addClass('alert-danger');
@@ -86,23 +86,97 @@ jQuery.noConflict();
         });
 
 
-        //hàm lấy giá trị đc chọn từ select rồi gửi yêu cầu ajax đến controller
-        $('#select_status_for_table').on('change', function() {
-            var statusnum = $(this).val();
+        // //hàm lấy giá trị đc chọn từ select rồi gửi yêu cầu ajax đến controller
+        // $('#select_status_for_table').on('change', function() {
+        //     var statusnum = $(this).val();
 
-            // Gửi yêu cầu Ajax đến controller
+        //     // Gửi yêu cầu Ajax đến controller
+        //     $.ajax({
+        //         url: "/admin/orders",
+        //         method: "GET",
+        //         data: {
+        //             status: statusnum,
+        //         },
+        //         success: function(response) {
+        //             // Hiển thị dữ liệu được trả về từ controller vào table
+        //             var data = response.data;
+        //             // ...
+        //         }
+        //     });
+        // });
+
+
+        //hàm thêm chi tiết đơn hàng
+        $('#js-create-order-detail-btn').click(() => {
+            $('#createEmployeeModal').modal('show');
+            $('#create-order-detail-form')[0].reset();
+        });
+        $('#create-detail-order-form').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            alert(formData);
             $.ajax({
-                url: "/admin/orders",
-                method: "GET",
-                data: {
-                    status: statusnum,
+                url: '/admin/orders/{order_id}/create',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    alert("success");
+                    console.log(response);
+                    $('#create_order_detail_response').removeClass('alert-danger');
+                    $('#create_order_detail_response').addClass('alert-success');
+                    $('#create_order_detail_response').html(response.message);
                 },
-                success: function(response) {
-                    // Hiển thị dữ liệu được trả về từ controller vào table
-                    var data = response.data;
-                    // ...
-                }
+                error: function (error) {
+                    alert("error");
+                    console.log(error);
+                    $('#create_order_detail_response').removeClass('alert-success');
+                    $('#create_order_detail_response').addClass('alert-danger');
+                    $('#create_order_detail_response').html(Object.values(error.responseJSON.errors)[0][0]);
+                },
+            });
+
+        });
+        $('#create-order-detail-form').on('reset', function () {
+            $('#create_order_detail_response').html('');
+            $('#create_order_detail_response').removeClass('alert-success alert-danger');
+            $('#create_order_detail_response').addClass('d-none');
+        });
+
+        //hàm show dữ liệu của hàng được chọn lên form sửa
+        $('#UpdateOrderDetailModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); //biến lưu đối tượng jQuery đại diện cho cái nút triggerd mở modal
+            var modal = $(this); //biến lưu đối tượng jQuery của toàn bộ cái modal
+            modal.find('#updateOrderDetailTitle').html('Update Order detail {order_id:' + button.data('order-id') + ' & sku:' + button.data('product-detail-id') + '}'); //tìm id updateOrderDetailTitle rồi sửa cái nội dung html của đối tượng có id đó
+            modal.find('#orderID').val(button.data('order-id'));
+            modal.find('#productDetailId').val(button.data('product-detail-id'));
+            modal.find('#quantity').val(button.data('quantities'));
+            modal.find('#unitPrice').val(button.data('unit-price'));
+        });
+
+        $('#update-order-detail-form').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            console.log({ formData });
+            $.ajax({
+                url: `/admin/orders/{order_id}/update`,
+                type: 'PUT',
+                data: formData,
+                success: function (response) {
+                    alert("success");
+                    console.log({ response });
+                    $('#update_order_response').removeClass('alert-danger');
+                    $('#update_order_response').addClass('alert-success');
+                    $('#update_order_response').html(response.message);
+                },
+                error: function (error) {
+                    alert("error");
+                    console.log({ error });
+                    $('#update_order_response').removeClass('alert-success');
+                    $('#update_order_response').addClass('alert-danger');
+                },
             });
         });
+
+
     });
 })(jQuery);
