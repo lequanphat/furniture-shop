@@ -73,68 +73,69 @@ jQuery(document).ready(function () {
             },
         });
     });
-
-    $('.detailed-product-tag').click(function (e) {
+    $(document).on('click', '.detailed-product-tag', function (e) {
         // pre process
         if ($(this).hasClass('active')) return;
         $('.detailed-product-tag').removeClass('active');
         $(this).addClass('active');
-        $('.js-product-sku').text($(this).data('sku'));
-        // get data
-        const product_id = $(this).data('id');
+
         const sku = $(this).data('sku');
+        $('.js-product-sku').text(sku);
+        $(`.js-product-name-price`).addClass('d-none');
+        $(`.js-product-name-price.${sku}`).removeClass('d-none');
+        $('.js-product-quantities').addClass('d-none');
+        $(`.js-product-quantities.${sku}`).removeClass('d-none');
+        $('.quantity-input').val(0);
+        if ($(this).hasClass('disable')) {
+            $('.js-add-to-cart').addClass('disable');
+            $('.js-buy-now').addClass('disable');
+        } else {
+            $('.js-add-to-cart').removeClass('disable');
+            $('.js-buy-now').removeClass('disable');
+        }
+        // get data
+    });
 
-        history.pushState(null, null, `/products/${product_id}/${sku}`);
-        // call api
-        $.ajax({
-            url: `/products/${sku}`,
-            type: 'GET',
-            success: function (response) {
-                console.log(response);
-                // render ui
+    $(document).on('click', '.js-quantity-add', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        const max_value = parseInt($('.js-product-quantities:not(.d-none)').data('quantities'));
+        if (quantity_input.val() === '') {
+            quantity_input.val(1);
+            return;
+        }
+        const current_value = parseInt(quantity_input.val());
+        if (current_value >= max_value) return;
 
-                let images_list = '';
-                let images_preview = '';
-                for (let i = 0; i < response.detailed_product.images.length; i++) {
-                    let image = response.detailed_product.images[i];
-                    images_list += `<div class="swiper-slide ${
-                        i === 0 && 'swiper-slide-active swiper-slide-thumb-active'
-                    }  ${i === 1 && 'swiper-slide-next'} ">
-                    <div class="product-details-small-img">
-                        <img src="${image.url}" alt="Product Thumnail">
-                    </div>
-                </div>`;
-                    images_preview += `<div class="swiper-slide ${
-                        i === 0 && 'swiper-slide-active swiper-slide-thumb-active'
-                    }  ${i === 1 && 'swiper-slide-next'} ">
-                    <div class="easyzoom-style">
-                        <div class="easyzoom easyzoom--overlay">
+        quantity_input.val(current_value + 1);
+    });
+    $(document).on('click', '.js-quantity-minus', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        if (quantity_input.val() === '') {
+            quantity_input.val(0);
+            return;
+        }
+        const current_value = parseInt(quantity_input.val());
+        if (current_value == 0) return;
+        quantity_input.val(current_value - 1);
+    });
 
-                            <a href="${image.url}">
-                                <img src="${image.url}" alt="">
-                            </a>
-                        </div>
-                        <a class="easyzoom-pop-up img-popup" href="${image.url}">
-                            <i class="pe-7s-search"></i>
-                        </a>
-                    </div>
-                </div>`;
-                }
-                $('.js-images-list').html(images_list);
-                $('.js-images-preview').html(images_preview);
-
-                $('.js-product-name').text(response.detailed_product.name);
-            },
-            error: function (error) {
-                console.log(error);
-            },
-        });
+    $('.js-quantity-input').on('input', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        const max_value = parseInt($('.js-product-quantities:not(.d-none)').data('quantities'));
+        const current_value = parseInt(quantity_input.val());
+        if (current_value >= max_value) {
+            quantity_input.val(max_value);
+        } else if (current_value < 0) {
+            quantity_input.val(0);
+        }
     });
 
     // filter
     function productFilter() {
         // search
         const search_text = $('#search-input').val();
+        // sort
+        const sorted_by = $('#sort-product').val();
         // page
         const page = $('.pagination-item.active').text();
         console.log(page);
@@ -146,7 +147,7 @@ jQuery(document).ready(function () {
                 categoryIds.push(category.dataset.id);
             }
         }
-
+        // color
         const colors = $('.js-color-checkbox');
         const colorIds = [];
         for (let color of colors) {
@@ -163,12 +164,14 @@ jQuery(document).ready(function () {
         history.pushState(
             null,
             null,
-            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(',')}&search=${search_text}`,
+            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+                ',',
+            )}&search=${search_text}&sorted_by=${sorted_by}`,
         );
         $.ajax({
             url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
                 ',',
-            )}&search=${search_text}`,
+            )}&search=${search_text}&sorted_by=${sorted_by}`,
             type: 'GET',
             success: function (response) {
                 let html = '';
@@ -246,6 +249,10 @@ jQuery(document).ready(function () {
         }, 500),
     );
 
+    // sorted
+    $('#sort-product').change(function () {
+        productFilter();
+    });
     // category filter
     $('.js-cate-checkbox').change(function () {
         productFilter();

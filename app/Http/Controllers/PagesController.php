@@ -25,6 +25,7 @@ class PagesController extends Controller
         $categories = request()->query('categories');
         $color = request()->query('color');
         $search = request()->query('search');
+        $sorted_by = request()->query('sorted_by');
         // query
         $query = Product::with(
             'category',
@@ -50,6 +51,13 @@ class PagesController extends Controller
         if ($search !== null) {
             $query->where('name', 'LIKE', '%' . $search . '%');
         }
+        // sorted 
+        if ($sorted_by === 'latest') {
+            $query->orderBy('created_at', 'desc');
+        }
+        if ($sorted_by === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        }
 
         $data = [
             'page' => 'Shop',
@@ -60,6 +68,7 @@ class PagesController extends Controller
             'tags' => Tag::all(),
             'products' => $query->paginate(9), // 9 elements per page
             'search' => $search ?? '',
+            'sorted_by' => $sorted_by ?? 'default',
         ];
 
         return view('pages.shop.index', $data);
@@ -67,13 +76,11 @@ class PagesController extends Controller
     public function product_details()
     {
         $product_id = request()->route('product_id');
-        $sku = request()->route('sku');
 
         $data = [
             'page' => 'Product Details',
-            'product' => Product::with('category', 'brand', 'detailed_products.color', 'product_tags.tag')
+            'product' => Product::with('category', 'brand', 'detailed_products', 'product_tags.tag')
                 ->where('is_deleted', false)->find($product_id),
-            'detailed_product' => ProductDetail::where('sku', $sku)->with('images', 'product_discounts.discount')->first(),
         ];
         return view('pages.product_details.index', $data);
     }
