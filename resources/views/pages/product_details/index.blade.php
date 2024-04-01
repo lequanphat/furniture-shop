@@ -1,7 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    {{-- Mini cart --}}
-    @include('components.mini-cart')
     {{-- Head banner --}}
     @include('components.head-banner')
 
@@ -58,7 +56,7 @@
                         @foreach ($product->detailed_products as $detailed_product)
                             <div
                                 class="js-product-name-price {{ $detailed_product->sku }} @if (!$loop->first) d-none @endif">
-                                <h2>{{ $detailed_product->name }} </h2>
+                                <h2 class="js-product-name">{{ $detailed_product->name }} </h2>
 
                                 @php
                                     $today = now();
@@ -72,10 +70,8 @@
                                         <span class="old-price">
                                             {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ</span>
                                     @endif
-                                    <span class="new-price ">
-                                        {{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ
-                                    </span>
-
+                                    <span
+                                        class="js-unit-price new-price">{{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ</span>
                                 </div>
                             </div>
                         @endforeach
@@ -120,8 +116,10 @@
 
                         </div>
                         <div class="product-details-action-wrap">
-                            <button class="js-add-to-cart add-to-cart">Add to cart</button>
-                            <button class="js-buy-now buy-now">Buy now</button>
+                            <button class="js-add-to-cart add-to-cart disable" disabled>Add
+                                to cart</button>
+                            <button class="js-buy-now buy-now disable " disabled>Buy
+                                now</button>
 
                         </div>
                         <div class="product-details-meta">

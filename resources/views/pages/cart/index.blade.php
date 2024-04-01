@@ -1,7 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    {{-- Mini cart --}}
-    @include('components.mini-cart')
     {{-- Head banner --}}
     @include('components.head-banner')
     

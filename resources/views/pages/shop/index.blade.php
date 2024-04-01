@@ -1,7 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    {{-- Mini cart --}}
-    @include('components.mini-cart')
     @include('components.head-banner')
 
     <div class="shop-area shop-page-responsive pt-100 pb-100">
