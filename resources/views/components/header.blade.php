@@ -49,7 +49,7 @@
                         @endif
                         <div class="header-action-style header-action-cart">
                             <a class="cart-active" href="#"><i class="pe-7s-shopbag"></i>
-                                <span class="product-count bg-black">01</span>
+                                <span class="js-total-cart product-count "></span>
                             </a>
                         </div>
                         @if (!Auth::user())

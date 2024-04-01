@@ -19,13 +19,7 @@
     <meta property="og:description"
         content="SayyamCode eCommerce Bootstrap 5 Template is a stunning eCommerce website template that is the best choice for any online store." />
 
-    {{-- <link rel="icon" href="{{ asset('images/favicon/cropped-favicon-32x32.png') }}" sizes="32x32" />
-    <link rel="icon" href="{{ asset('images/favicon/cropped-favicon-192x192.png') }}" sizes="192x192" />
-    <link rel="apple-touch-icon" href="{{ asset('images/favicon/cropped-favicon-180x180.png') }}" />
-    <meta name="msapplication-TileImage" content="{{ asset('images/favicon/cropped-favicon-270x270.png') }}" /> --}}
-
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
-
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/vendor/pe-icon-7-stroke.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/vendor/themify-icons.css') }}" />
