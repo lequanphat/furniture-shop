@@ -24,7 +24,7 @@
                             <!--Điểm đầu đường đi tạo form, nhớ tạo hàm tạo order mới và route cho nó-->
                             <!--nút tạo order mới, dẫn qua file create_order kế bên -->
                             <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                                data-bs-target="#order-modal">
+                                data-bs-target="#warranty-modal">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -52,10 +52,11 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Order ID</th>
-                                        <th>Sku</th>
+                                        <th>Product</th>
                                         <th>Start day</th>
                                         <th>End day</th>
                                         <th>Description</th>
+                                        <th>Time</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -68,11 +69,17 @@
                                             <td>{{ $warranty->start_date }}</td>
                                             <td>{{ $warranty->end_date }}</td>
                                             <td>{{ $warranty->description }}</td>
+                                            <td>{{ $warranty->product_detail->warranty_month}} months</td>
                                             <td>
                                                 <!--nút sửa-->
                                                 <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
                                                     title="Update" data-bs-toggle="modal" data-bs-target="#UpdateWarrantyModal"
-
+                                                    data-warranty-id="{{ $warranty->warranty_id }}"
+                                                    data-order-id="{{ $warranty->order_id }}"
+                                                    data-sku="{{ $warranty->sku }}"
+                                                    data-start-date="{{ $warranty->start_date }}"
+                                                    {{-- data-end-date="{{ $warranty->end_date }}" --}}
+                                                    data-description="{{ $warranty->description }}"
                                                     >
                                                     <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </button>
@@ -90,6 +97,8 @@
             </div>
         </div>
 
+        @include('admin.warranties.create_warranties')
+        @include('admin.warranties.update_warranties')
         @include('admin.components.footer')
 
     </div>
