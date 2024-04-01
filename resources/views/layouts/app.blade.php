@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('components.head')
-
 <body>
     <div id="asset" data-asset="{{ asset('') }}"></div>
     <div class="main-wrapper main-wrapper-2">
         @include('components.header')
         @yield('content')
-
         <!-- All JS is here -->
         <script src="{{ asset('js/vendor/modernizr-3.11.7.min.js') }}"></script>
         <script src="{{ asset('js/vendor/jquery-3.6.0.min.js') }}"></script>
@@ -38,5 +36,4 @@
     </div>
     @include('components.footer')
 </body>
-
 </html>

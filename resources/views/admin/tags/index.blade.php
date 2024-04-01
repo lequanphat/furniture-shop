@@ -130,4 +130,6 @@
 @include('admin.tags.create_tag_modal')
 @include('admin.tags.update_tag_modal')
 @include('admin.components.error_delete_modal')
+{{-- Script --}}
+<script src="{{ asset('js/tag_api.js') }}" defer></script>
 @endsection

@@ -179,4 +179,6 @@
         </div>
         {{-- Modal --}}
         @include('admin.orders.create_detailed_order')
+        {{-- Script --}}
+        <script src="{{ asset('js/order_api.js') }}" defer></script>
     @endsection
