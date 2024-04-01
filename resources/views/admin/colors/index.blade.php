@@ -151,4 +151,8 @@
 @include('admin.colors.create_color_modal')
 @include('admin.colors.update_color_modal')
 @include('admin.components.error_delete_modal')
+
+
+{{-- Script --}}
+<script src="{{ asset('js/color_api.js') }}" defer></script>
 @endsection

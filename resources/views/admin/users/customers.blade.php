@@ -154,13 +154,13 @@
                 </div>
             </div>
         </div>
-
-
         {{-- Footer --}}
         @include('admin.components.footer')
-        {{-- Modal --}}
-        @include('admin.users.delete_confirm_modal')
-        @include('admin.users.restore_confirm_modal')
-        @include('admin.users.success_notify_modal')
-        </section>
-    @endsection
+    </div>
+    {{-- Modal --}}
+    @include('admin.users.delete_confirm_modal')
+    @include('admin.users.restore_confirm_modal')
+    @include('admin.users.success_notify_modal')
+    {{-- Script --}}
+    <script src="{{ asset('js/users_api.js') }}" defer></script>
+@endsection

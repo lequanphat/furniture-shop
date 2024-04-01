@@ -160,7 +160,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
 
     Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
-    Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);

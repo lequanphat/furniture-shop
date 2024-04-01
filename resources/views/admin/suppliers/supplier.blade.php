@@ -109,7 +109,8 @@
                                 </tbody>
                             </table>
                             {{-- Pagination --}}
-                            <div class="d-flex justify-content-end my-2">{{ $suppliers->render('common.pagination') }}</div>
+                            <div class="d-flex justify-content-end my-2">{{ $suppliers->render('common.pagination') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -119,4 +120,6 @@
         @include('admin.suppliers.update_supplier')
         @include('admin.components.footer')
     </div>
+    {{-- Script --}}
+    <script src="{{ asset('js/supplier_api.js') }}" defer></script>
 @endsection

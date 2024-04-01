@@ -28,11 +28,6 @@
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <span class="d-none d-sm-inline">
-                            <a href="#" class="btn">
-                                New view
-                            </a>
-                        </span>
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
                             data-bs-target="#brand-modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -115,4 +110,6 @@
         @include('admin.brands.update_brand')
         @include('admin.components.footer')
     </div>
+    {{-- Script --}}
+    <script src="{{ asset('js/brand_api.js') }}" defer></script>
 @endsection
