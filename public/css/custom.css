@@ -1,8 +1,88 @@
 /* custom css here */
 .detailed-product-tag {
+    display: flex;
+    align-items: center;
+    border: 1px solid #333;
+    border-radius: 2px;
     cursor: pointer;
+    padding: 6px 8px;
+    gap: 8px;
+    margin-right: 12px;
+    margin-bottom: 12px;
 }
 .detailed-product-tag.disable {
     opacity: 0.5;
 }
 
+.detailed-product-tag.active {
+    border: 2px solid rgba(230, 126, 34, 1);
+}
+.custom-product-img {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+.product-details-action-wrap {
+}
+.product-details-action-wrap button {
+    border: 1px solid #e97730;
+    outline: none;
+    padding: 10px 40px;
+    margin-right: 12px;
+    border-radius: 2px;
+}
+.product-details-action-wrap button.disable {
+    opacity: 0.5 !important;
+}
+.product-details-action-wrap .add-to-cart {
+    background-color: rgba(233, 119, 48, 0.2);
+    color: #e97730;
+}
+.product-details-action-wrap .add-to-cart:hover {
+    background-color: rgba(233, 119, 48, 0.1);
+}
+.product-details-action-wrap .buy-now {
+    background-color: #e97730;
+    color: white;
+}
+.product-details-action-wrap .buy-now:hover {
+    opacity: 0.8;
+}
+.product-details-quantities {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+}
+.select-quantities-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+.select-quantities-wrapper button {
+    width: 32px;
+    height: 32px;
+    outline: none;
+    border: 2px solid #ccc;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.select-quantities-wrapper input {
+    width: 60px;
+    height: 32px;
+    border: none;
+    border-top: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    text-align: center;
+}
+/* Chrome, Safari, Edge, Opera */
+.select-quantities-wrapper input::-webkit-outer-spin-button,
+.select-quantities-wrapper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.select-quantities-wrapper input[type='number'] {
+    -moz-appearance: textfield;
+}

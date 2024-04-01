@@ -13,5 +13,37 @@ class Order extends Model
     protected $fillable = ['total_price', 'is_paid', 'status', 'receiver_name', 'address', 'phone_number', 'customer_id', 'created_by'];    //mảng các trường có thể tác động
 
     // status: 0: unconfirmed, 1: confirmed, 2: in transit, 3: delivered, 4: canceled
-
+    public function get_status()
+    {
+        switch ($this->status) {
+            case 0:
+                return 'Unconfirmed';
+            case 1:
+                return 'Confirmed';
+            case 2:
+                return 'In transit';
+            case 3:
+                return 'Delivered';
+            case 4:
+                return 'Canceled';
+            default:
+                return 'Unknown';
+        }
+    }
+    public function get_is_paid()
+    {
+        return $this->is_paid ? 'Payment Received' : 'Pending Payment';
+    }
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
+    public function employee()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
 }

@@ -87,10 +87,10 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Price</th>
-                                            <th>Quantities</th>
                                             <th>Color</th>
                                             <th>Size</th>
+                                            <th>Price</th>
+                                            <th>Quantities</th>
                                             <th>Warranty</th>
                                             <th>Action</th>
                                         </tr>
@@ -121,15 +121,18 @@
                                                     </div>
 
                                                 </td>
-                                                <td>{{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
-                                                </td>
-                                                <td>{{ $detailed_product->quantities }}</td>
                                                 <td>
                                                     <div class="col-auto rounded"
                                                         style="background: {{ $detailed_product->color->code }}; width: 20px; height: 20px;">
                                                     </div>
                                                 </td>
                                                 <td>{{ $detailed_product->size }}</td>
+                                                <td>{{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
+                                                </td>
+                                                <td>{{ $detailed_product->quantities }}</td>
+
+                                                </td>
+
                                                 <td>{{ $detailed_product->warranty_month }} Months</td>
                                                 <td><a href="{{ route('products.detailed_product_details', ['product_id' => $product->product_id, 'sku' => $detailed_product->sku]) }}"
                                                         class="btn p-2">
@@ -154,4 +157,6 @@
             @include('admin.components.footer')
         </div>
         {{-- Modal --}}
+        {{-- Script --}}
+        <script src="{{ asset('js/product_api.js') }}" defer></script>
     @endsection

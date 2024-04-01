@@ -73,26 +73,69 @@ jQuery(document).ready(function () {
             },
         });
     });
+    $(document).on('click', '.detailed-product-tag', function (e) {
+        // pre process
+        if ($(this).hasClass('active')) return;
+        $('.detailed-product-tag').removeClass('active');
+        $(this).addClass('active');
 
-    $('.detailed-product-tag').click(function () {
-        const index = $(this).data('index');
         const sku = $(this).data('sku');
+        $('.js-product-sku').text(sku);
+        $(`.js-product-name-price`).addClass('d-none');
+        $(`.js-product-name-price.${sku}`).removeClass('d-none');
+        $('.js-product-quantities').addClass('d-none');
+        $(`.js-product-quantities.${sku}`).removeClass('d-none');
+        $('.quantity-input').val(0);
+        if ($(this).hasClass('disable')) {
+            $('.js-add-to-cart').addClass('disable');
+            $('.js-buy-now').addClass('disable');
+        } else {
+            $('.js-add-to-cart').removeClass('disable');
+            $('.js-buy-now').removeClass('disable');
+        }
+        // get data
+    });
 
-        $('.js-product-name').addClass('d-none');
-        $(`.js-product-name.${index}`).removeClass('d-none');
-        $('.js-product-price').addClass('d-none');
-        $(`.js-product-price.${index}`).removeClass('d-none');
-        $(`.js-product-sku`).html(`SKU: ${sku}`);
+    $(document).on('click', '.js-quantity-add', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        const max_value = parseInt($('.js-product-quantities:not(.d-none)').data('quantities'));
+        if (quantity_input.val() === '') {
+            quantity_input.val(1);
+            return;
+        }
+        const current_value = parseInt(quantity_input.val());
+        if (current_value >= max_value) return;
 
-        $('.js-images-list').addClass('d-none');
-        $(`.js-images-list.${index}`).removeClass('d-none');
+        quantity_input.val(current_value + 1);
+    });
+    $(document).on('click', '.js-quantity-minus', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        if (quantity_input.val() === '') {
+            quantity_input.val(0);
+            return;
+        }
+        const current_value = parseInt(quantity_input.val());
+        if (current_value == 0) return;
+        quantity_input.val(current_value - 1);
+    });
 
-        $('.js-images-preview').addClass('d-none');
-        $(`.js-images-preview.${index}`).removeClass('d-none');
+    $('.js-quantity-input').on('input', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        const max_value = parseInt($('.js-product-quantities:not(.d-none)').data('quantities'));
+        const current_value = parseInt(quantity_input.val());
+        if (current_value >= max_value) {
+            quantity_input.val(max_value);
+        } else if (current_value < 0) {
+            quantity_input.val(0);
+        }
     });
 
     // filter
     function productFilter() {
+        // search
+        const search_text = $('#search-input').val();
+        // sort
+        const sorted_by = $('#sort-product').val();
         // page
         const page = $('.pagination-item.active').text();
         console.log(page);
@@ -104,7 +147,7 @@ jQuery(document).ready(function () {
                 categoryIds.push(category.dataset.id);
             }
         }
-
+        // color
         const colors = $('.js-color-checkbox');
         const colorIds = [];
         for (let color of colors) {
@@ -121,10 +164,14 @@ jQuery(document).ready(function () {
         history.pushState(
             null,
             null,
-            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(',')}`,
+            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+                ',',
+            )}&search=${search_text}&sorted_by=${sorted_by}`,
         );
         $.ajax({
-            url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(',')}`,
+            url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+                ',',
+            )}&search=${search_text}&sorted_by=${sorted_by}`,
             type: 'GET',
             success: function (response) {
                 let html = '';
@@ -180,12 +227,39 @@ jQuery(document).ready(function () {
             },
         });
     }
-    $('.js-cate-checkbox').change(function () {
-        // Your code here
+
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // search filter
+    $('#search-input').on(
+        'input',
+        debounce(function () {
+            productFilter();
+        }, 500),
+    );
+
+    // sorted
+    $('#sort-product').change(function () {
         productFilter();
     });
+    // category filter
+    $('.js-cate-checkbox').change(function () {
+        productFilter();
+    });
+
+    // color filter
     $('.js-color-checkbox').change(function () {
-        // Your code here
         productFilter();
     });
 });

@@ -8,6 +8,7 @@
     <!-- CSS files -->
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler-vendors.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <style>
         @import url('https://rsms.me/inter/inter.css');
 

@@ -97,9 +97,13 @@
                 </div>
             </div>
         </div>
-        @include('admin.categories.create_category')
-        @include('admin.categories.update_category')
-        @include('admin.components.error_delete_modal')
         @include('admin.components.footer')
     </div>
+    {{-- Modal --}}
+    @include('admin.categories.create_category')
+    @include('admin.categories.update_category')
+    @include('admin.components.error_delete_modal')
+
+    {{-- Script --}}
+    <script src="{{ asset('js/category_api.js') }}" defer></script>
 @endsection

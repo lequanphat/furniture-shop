@@ -15,11 +15,19 @@
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <span class="d-none d-sm-inline">
-                            <a href="#" class="btn">
-                                New view
-                            </a>
-                        </span>
+                        <div class="input-icon ">
+                            <input type="text" value="" class="form-control" placeholder="Search…">
+                            <span class="input-icon-addon">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                    <path d="M21 21l-6 -6" />
+                                </svg>
+                            </span>
+                        </div>
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
                             data-bs-target="#create-employee-modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -173,4 +181,6 @@
     @include('admin.users.delete_confirm_modal')
     @include('admin.users.restore_confirm_modal')
     @include('admin.users.success_notify_modal')
+    {{-- Script --}}
+    <script src="{{ asset('js/users_api.js') }}" defer></script>
 @endsection
