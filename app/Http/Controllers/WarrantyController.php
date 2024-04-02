@@ -73,4 +73,32 @@ class WarrantyController extends Controller{
         }
     }
 
+    //tìm kiếm warranty
+    public function warranty_search_ui(Request $request)
+    {
+        $search = $request->input('search');
+        $search_date = $request->input('start_date');
+
+        $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+
+        if (isset($search) && isset($search_date)){
+            $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->whereDate('start_date',$search_date)->paginate(5);
+        } else {
+            if(isset($search_date)){
+                $warranty = Warranty::whereDate('start_date',$search_date)->paginate(5);
+            }
+        }
+
+        $data = [
+            'page' => 'Warranties',
+            'warranties' => $warranty, //Warranty::where('order_id', 'LIKE', '%' . $search . '%')->paginate(5),
+            'orders' => Order::all(),
+            'order_detail' => OrderDetail::all(),
+            'all_product_detail' => ProductDetail::all(),
+            'search' => $search,
+            'search_date' => $search_date,
+        ];
+        return view('admin.warranties.index', $data);
+    }
+
 }

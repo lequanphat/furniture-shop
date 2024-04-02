@@ -14,6 +14,22 @@
                 </div>
 
 
+                <form class="input-group col" action="{{ route('warranty.search') }}" method="GET">
+                    @if (isset($search))
+                        <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
+                            aria-label="Search" value="{{ $search }}">
+                        {{-- <input name="start_date" type="date" class="form-control" > --}}
+                        <input name="start_date" type="date" class="form-control" value="{{ $search_date }}">
+                    @else
+                        <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
+                            aria-label="Search">
+                        <input name="start_date" type="date" class="form-control" placeholder="Choose start date">
+                    @endif
+                    <button class="btn btn-primary btn-sm" type="submit">
+                        Search
+                    </button>
+                </form>
+
 
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
