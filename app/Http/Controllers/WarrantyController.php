@@ -80,7 +80,6 @@ class WarrantyController extends Controller{
         $search_date = $request->input('start_date');
 
         $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
-
         if (isset($search) && isset($search_date)){
             $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->whereDate('start_date',$search_date)->paginate(5);
         } else {
@@ -91,7 +90,7 @@ class WarrantyController extends Controller{
 
         $data = [
             'page' => 'Warranties',
-            'warranties' => $warranty, //Warranty::where('order_id', 'LIKE', '%' . $search . '%')->paginate(5),
+            'warranties' => $warranty,
             'orders' => Order::all(),
             'order_detail' => OrderDetail::all(),
             'all_product_detail' => ProductDetail::all(),
