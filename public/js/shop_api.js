@@ -1,4 +1,18 @@
 jQuery(document).ready(function () {
+    // show toast function
+    function showToast(message, type) {
+        let background = '#0097e6';
+        if (type === 'success') background = '#4cd137';
+        else if (type === 'error') background = '#e84118';
+        Toastify({
+            text: message,
+            close: true,
+            style: {
+                background,
+            },
+            duration: 3000,
+        }).showToast();
+    }
     const data_asset = $('#asset').attr('data-asset');
     $('.pagination-item').click((e) => {
         e.preventDefault();
@@ -160,6 +174,8 @@ jQuery(document).ready(function () {
             if (cart[i].sku === sku) {
                 cart[i].quantities += quantities;
                 localStorage.setItem('cart', JSON.stringify(cart));
+                // show toast
+                showToast('Add to cart successfully', 'success');
                 return;
             }
         }
@@ -167,6 +183,8 @@ jQuery(document).ready(function () {
         $('.js-total-cart').text(cart.length);
         $('.js-total-cart').addClass('bg-black');
         localStorage.setItem('cart', JSON.stringify(cart));
+        // show toast
+        showToast('Add to cart successfully', 'success');
     });
 
     // filter
