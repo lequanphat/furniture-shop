@@ -35,4 +35,6 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/slinky.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
+    {{-- Toastify --}}
+    <link rel="stylesheet" href="{{ asset('css/vendor/toastify.min.css') }}" />
 </head>
