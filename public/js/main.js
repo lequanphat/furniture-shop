@@ -1,7 +1,6 @@
 (function ($) {
     'use strict';
 
-    
     /*--
     currency active
     -----------------------------------*/
@@ -391,6 +390,8 @@
 
     $('.checkout-toggle').on('click', function () {
         $('.open-toggle').slideToggle(1000);
+        //
+        $('.close-toggle').slideToggle(1000);
     });
 
     /*-------------------------
