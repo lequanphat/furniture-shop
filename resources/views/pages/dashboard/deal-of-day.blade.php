@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="product-slider-active-1 swiper-container">
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper"  id="deal_of_day">
                 <div class="swiper-slide">
                     <div class="product-wrap" data-aos="fade-up" data-aos-delay="200">
                         <div class="product-img img-zoom mb-25">

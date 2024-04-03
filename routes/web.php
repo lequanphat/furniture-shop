@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\HotDealController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
@@ -50,6 +51,7 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/cart', [PagesController::class, 'cart']);
     Route::get('/checkout', [PagesController::class, 'checkout']);
     Route::get('/products', [ProductController::class, 'get_products']);
+    Route::get('/top5deal',[HotDealController::class,'get_Deal_of_Date_product']);
 });
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
