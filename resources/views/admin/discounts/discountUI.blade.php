@@ -152,10 +152,9 @@
             </script>
             @include('admin.discounts.CreateDiscount')
             @include('admin.discounts.UpdateDiscount')
-
             @include('admin.components.footer')
         </div>
-
-
     </section>
+    {{-- Script --}}
+    <script src="{{ asset('js/discount_api.js') }}" defer></script>
 @endsection

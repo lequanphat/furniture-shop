@@ -8,25 +8,19 @@
 * Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
 -->
 <html lang="en">
-
 @include('admin.components.head')
 
 <body>
+    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
     <script src="{{ asset('vendor/tabler/tabler.min.js') }}" defer></script>
     <div id="asset" data-asset="{{ asset('') }}"></div>
-
-
-
     <div class="page">
         @include('admin.components.navbar')
         <div class="page-wrapper">
             @include('admin.components.header')
             @yield('content')
-
         </div>
     </div>
-    @include('admin.components.link-script')
-
 </body>
 
 </html>

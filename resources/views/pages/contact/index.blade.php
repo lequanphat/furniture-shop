@@ -1,10 +1,8 @@
 @extends('layouts.app')
 @section('content')
-     {{-- Mini cart --}}
-     @include('components.mini-cart')
     {{-- Head banner --}}
     @include('components.head-banner')
-    
+
     <div class="contact-form-area pt-90 pb-100">
         <div class="container">
             <div class="section-title-4 text-center mb-55" data-aos="fade-up" data-aos-delay="200">

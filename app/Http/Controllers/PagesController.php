@@ -125,22 +125,6 @@ class PagesController extends Controller
         return view('admin.dashboard.index', $data);
     }
 
-
-
-    public function admin_discounts()
-    {
-        $data = [
-            'page' => 'Discounts',
-        ];
-        return view('admin.discounts.index', $data);
-    }
-    public function admin_orders()
-    {
-        $data = [
-            'page' => 'Orders',
-        ];
-        return view('admin.orders.index', $data);
-    }
     public function admin_warranties()
     {
         $data = [
@@ -148,13 +132,7 @@ class PagesController extends Controller
         ];
         return view('admin.warranties.index', $data);
     }
-    public function admin_receipts()
-    {
-        $data = [
-            'page' => 'Receipts',
-        ];
-        return view('admin.receipts.index', $data);
-    }
+
 
     public function admin_permissions()
     {

@@ -126,4 +126,8 @@
         @include('admin.components.footer')
     </div>
     {{-- Modal --}}
+
+    {{-- Script --}}
+    <script src="{{ asset('js/product_api.js') }}" defer></script>
+    
 @endsection

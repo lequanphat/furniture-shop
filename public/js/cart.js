@@ -1,0 +1,198 @@
+jQuery(document).ready(function () {
+    // init cart
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length > 0) {
+        $('.js-total-cart').text(cart.length);
+        $('.js-total-cart').addClass('bg-black');
+    } else {
+        $('.js-total-cart').removeClass('bg-black');
+    }
+    function convertCurrencyToNumber(currency) {
+        return Number(currency.replace(/,|đ/g, ''));
+    }
+    let formatter = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+    });
+
+    // load mini cart
+    $('.header-action-cart').on('click', function () {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let html = '';
+        let total_price = 0;
+        for (let i = 0; i < cart.length; i++) {
+            item = cart[i];
+            total_price += convertCurrencyToNumber(item.unit_price) * item.quantities;
+            html += `<li>
+                    <div class="cart-item-info">
+                        <div class="cart-img">
+                            <a href="#"><img src="${item.image}" alt=""></a>
+                        </div>
+                        <div class="cart-title">
+                            <h4><a>${item.name}</a></h4>
+                            <span> ${item.quantities} × <span class="unit-price">${item.unit_price}</span> </span>
+                        </div>
+                    </div>
+                    <div class="cart-delete">
+                        <a class="js-delete-cart-item" data-sku="${item.sku}"><i class="ti-close"></i></a>
+                    </div>
+                </li>`;
+        }
+        $('#cart-list').html(html);
+        $('.js-total-price').text(formatter.format(total_price) + 'đ');
+    });
+    // delete cart item
+    $(document).on('click', '.js-delete-cart-item', function (e) {
+        const sku = $(this).data('sku');
+        $(this).closest('li').remove();
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const newCart = cart.filter((item) => item.sku !== sku);
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        $('.js-total-cart').text(newCart.length);
+        if (newCart.length === 0) $('.js-total-cart').removeClass('bg-black');
+
+        let total_price = 0;
+        for (let i = 0; i < newCart.length; i++) {
+            item = cart[i];
+            total_price += convertCurrencyToNumber(item.unit_price) * item.quantities;
+        }
+        $('.js-total-price').text(formatter.format(total_price) + 'đ');
+    });
+
+    // cart page
+    function loadCart() {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let html = '';
+        for (let i = 0; i < cart.length; i++) {
+            let item = cart[i];
+            html += `<div class="js-cart-item cart-item">
+            <div class="product-cart-item">
+                <input class="js-check-cart-item" type="checkbox" name="" id="">
+                <img src="${item.image}" alt="">
+                <div class="info">
+                    <p> ${item.name} </p>
+                    <p class="js-sku">${item.sku}</p>
+                </div>
+            </div>
+            <div><span class="js-unit-price">${item.unit_price}</span></div>
+            <div>
+                <div class="quantities-wrapper">
+                    <button class="js-quantities-minus" ><i class="ti-minus"></i></button>
+                    <input class="js-cart-quantities-input" type="number" value="${item.quantities}">
+                    <button class="js-quantities-plus" ><i class="ti-plus"></i></button>
+                </div>
+            </div>
+            <div><span class="js-subtotal-price text-danger">${formatter.format(
+                convertCurrencyToNumber(item.unit_price) * item.quantities,
+            )}đ</span></div>
+            <div class="js-delete-cart-item delete-item"><i class="ti-close"></i></div>
+            </div>`;
+        }
+        $('#js-cart-table').html(html);
+    }
+    loadCart();
+    $(document).on('click', '.js-quantities-minus', function () {
+        let quantities = $(this).siblings('input').val();
+        quantities = Number(quantities) - 1;
+        if (quantities < 1) quantities = 1;
+        $(this).siblings('input').val(quantities);
+
+        // set subtotal price
+        const unit_price = convertCurrencyToNumber($(this).closest('.cart-item').find('.js-unit-price').text());
+        $(this)
+            .closest('.cart-item')
+            .find('.js-subtotal-price')
+            .text(formatter.format(unit_price * quantities) + 'đ');
+
+        // update cart
+        const sku = $(this).closest('.cart-item').find('.js-sku').text();
+        console.log(sku);
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const newCart = cart.map((item) => {
+            if (item.sku === sku) {
+                item.quantities = quantities;
+            }
+            return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        // reset checkbox
+        $(this).closest('.cart-item').find('.js-check-cart-item').prop('checked', false);
+    });
+    $(document).on('click', '.js-quantities-plus', function () {
+        let quantities = $(this).siblings('input').val();
+        quantities = Number(quantities) + 1;
+        $(this).siblings('input').val(quantities);
+
+        // set subtotal price
+        const unit_price = convertCurrencyToNumber($(this).closest('.cart-item').find('.js-unit-price').text());
+
+        $(this)
+            .closest('.cart-item')
+            .find('.js-subtotal-price')
+            .text(formatter.format(unit_price * quantities) + 'đ');
+
+        // update cart
+        const sku = $(this).closest('.cart-item').find('.js-sku').text();
+        console.log(sku);
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const newCart = cart.map((item) => {
+            if (item.sku === sku) {
+                item.quantities = quantities;
+            }
+            return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        // reset checkbox
+        $(this).closest('.cart-item').find('.js-check-cart-item').prop('checked', false);
+    });
+    $(document).on('change', '.js-cart-quantities-input', function () {
+        let quantities = $(this).val();
+        if (quantities < 1) quantities = 1;
+        $(this).val(quantities);
+
+        // set subtotal price
+        const unit_price = convertCurrencyToNumber($(this).closest('.cart-item').find('.js-unit-price').text());
+        $(this)
+            .closest('.cart-item')
+            .find('.js-subtotal-price')
+            .text(formatter.format(unit_price * quantities) + 'đ');
+
+        // update cart
+        const sku = $(this).closest('.cart-item').find('.js-sku').text();
+        console.log(sku);
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const newCart = cart.map((item) => {
+            if (item.sku === sku) {
+                item.quantities = quantities;
+            }
+            return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        // reset checkbox
+        $(this).closest('.cart-item').find('.js-check-cart-item').prop('checked', false);
+    });
+    $(document).on('click', '.js-delete-cart-item', function () {
+        const sku = $(this).closest('.cart-item').find('.js-sku').text();
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const newCart = cart.filter((item) => item.sku !== sku);
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        $(this).closest('.cart-item').remove();
+    });
+
+    $(document).on('click', '.js-check-cart-item', function () {
+        let cart_items = $('.js-cart-item');
+        cart_items = cart_items.filter(function (cart_item) {
+            return $(this).find('.js-check-cart-item').prop('checked');
+        });
+        let html = '';
+        cart_items.each(function () {
+            const name = $(this).find('.info p:not(.js-sku)').text();
+            const quantities = parseInt($(this).find('.js-cart-quantities-input').val());
+            const unit_price = convertCurrencyToNumber($(this).find('.js-unit-price').text());
+            html += `<div class="checkout-item">
+                        <p>x${quantities} ${name}</p>
+                        <p>${formatter.format(unit_price * quantities)}đ</p>
+                    </div>`;
+        });
+        $('.js-checkout-content').html(html);
+    });
+});

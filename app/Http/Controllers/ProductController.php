@@ -232,7 +232,6 @@ class ProductController extends Controller
 
         $products = $query->paginate(9); // 9 elements per page
         if ($sorted_by === 'price_asc') {
-            
         }
         $data = [
             'products' => $products
@@ -241,5 +240,14 @@ class ProductController extends Controller
         return response()->json($data);
     }
 
-    
+
+    public function search_detailed_product()
+    {
+        $search = request()->query('search');
+        $detailed_products = ProductDetail::with('product_discounts.discount', 'images', 'color')
+        ->where('name', 'LIKE', '%' . $search . '%')
+        ->orWhere('sku', 'LIKE', '%' . $search . '%')
+        ->paginate(4); // 4 elements per page
+        return response()->json(['detailed_products' => $detailed_products]);
+    }
 }

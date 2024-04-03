@@ -99,13 +99,11 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     //order
     Route::get('/admin/orders', [OrderController::class, 'index']);
-    Route::post('/admin/orders/create', [OrderController::class, 'order_create']);
-    Route::put('/admin/orders/{order_id}', [OrderController::class, 'order_update']);    //hàm put dùng để cập nhập dữ liệu cho một resource hiện có, lưu ý là nó sẽ cập nhập lại toàn bộ resource, nếu muốn cập nhập chỉ 1 phần nên xài patch
-    Route::get('/admin/orders', [OrderController::class, 'order_search_ui'])->name('orders.search');
-    Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
+    Route::post('/admin/orders', [OrderController::class, 'create']);
+    Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
     //order detail
-    Route::post('/admin/orders/{order_id}/create', [OrderController::class, 'order_detail_create']);
-    Route::put('/admin/orders/{order_id}/update', [OrderController::class,'order_detail_update']);
+    Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
+    Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
 
     //warranty
     Route::get('/admin/warranties', [WarrantyController::class, 'index']);
@@ -138,6 +136,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
     Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
     Route::get('/admin/products/{product_id}', [ProductController::class, 'details'])->name('products.details');
     Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
     Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
@@ -146,6 +145,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
     Route::get('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product_ui'])->name('products.update_detailed_product_ui');
     Route::patch('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product'])->name('products.update_detailed_product');
+
 
     // receipts
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
@@ -163,7 +163,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
 
     //Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
-    Route::get('/admin/receipts', [PagesController::class, 'admin_receipts']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);

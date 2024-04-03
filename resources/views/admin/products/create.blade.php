@@ -95,11 +95,13 @@
     </div>
 
     {{-- script --}}
+    <script src="{{ asset('js/product_api.js') }}" defer></script>
     <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
     <script src="{{ asset('vendor/tom-select/dist/js/tom-select.complete.js') }}"></script>
     <script>
         CKEDITOR.replace('editor');
     </script>
+    
     <script>
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function() {

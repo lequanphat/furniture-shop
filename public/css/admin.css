@@ -1,0 +1,30 @@
+.quantities-input {
+    width: 40px;
+    height: 30px;
+    text-align: center;
+    outline: none;
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+.custom-table-action {
+    display: flex;
+    align-items: center;
+}
+.custom-table-action input {
+    margin-right: 6px;
+}
+.custom-table-action button {
+    border: 1px solid #333;
+    width: 30px;
+    height: 30px;
+}
+.custom-table-action input::-webkit-outer-spin-button,
+.custom-table-action input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.custom-table-action input[type='number'] {
+    -moz-appearance: textfield;
+}
