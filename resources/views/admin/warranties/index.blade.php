@@ -19,7 +19,7 @@
                         <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
                             aria-label="Search" value="{{ $search }}">
                         {{-- <input name="start_date" type="date" class="form-control" > --}}
-                        <input name="start_date" type="date" class="form-control" value="{{ $search_date }}">
+                        <input name="start_date" type="date" class="form-control" placeholder="choose" value="{{ $search_date }}">
                     @else
                         <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
                             aria-label="Search">
