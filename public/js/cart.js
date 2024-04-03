@@ -8,7 +8,11 @@ jQuery(document).ready(function () {
         $('.js-total-cart').removeClass('bg-black');
     }
     function convertCurrencyToNumber(currency) {
-        return Number(currency.replace(/,|đ/g, ''));
+        if (currency.includes(',') || currency.includes('đ')) {
+            return Number(currency.replace(/,|đ/g, ''));
+        } else {
+            return Number(currency);
+        }
     }
     let formatter = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 0,
@@ -81,7 +85,7 @@ jQuery(document).ready(function () {
                     <button class="js-quantities-plus" ><i class="ti-plus"></i></button>
                 </div>
             </div>
-            <div><span class="js-subtotal-price text-danger">${formatter.format(
+            <div><span class="js-subtotal-price">${formatter.format(
                 convertCurrencyToNumber(item.unit_price) * item.quantities,
             )}đ</span></div>
             <div class="js-delete-cart-item delete-item"><i class="ti-close"></i></div>
@@ -184,15 +188,57 @@ jQuery(document).ready(function () {
             return $(this).find('.js-check-cart-item').prop('checked');
         });
         let html = '';
+        let total_price = 0;
         cart_items.each(function () {
+            const sku = $(this).find('.info p.js-sku').text();
             const name = $(this).find('.info p:not(.js-sku)').text();
             const quantities = parseInt($(this).find('.js-cart-quantities-input').val());
             const unit_price = convertCurrencyToNumber($(this).find('.js-unit-price').text());
-            html += `<div class="checkout-item">
-                        <p>x${quantities} ${name}</p>
+            html += `<div class="checkout-item" data-sku="${sku}" data-unit-price="${unit_price}" data-quantities="${quantities}">
+                        <p>x<span>${quantities}</span> <span>${name}</span></p>
                         <p>${formatter.format(unit_price * quantities)}đ</p>
                     </div>`;
+            total_price += unit_price * quantities;
         });
         $('.js-checkout-content').html(html);
+        $('.js-cart-order-total-price').text(formatter.format(total_price) + 'đ');
     });
+
+    $(document).on('click', '.js-cart-checkout-btn', function () {
+        let checkout_items = $('.checkout-item');
+        let checkout = [];
+        for (let i = 0; i < checkout_items.length; i++) {
+            const item = checkout_items[i];
+            const sku = $(item).data('sku');
+            const name = $(item).find('span').eq(1).text();
+            const unit_price = $(item).data('unit-price');
+            const quantities = $(item).data('quantities');
+            checkout.push({ sku, name, unit_price, quantities });
+        }
+        localStorage.setItem('checkout', JSON.stringify(checkout));
+        window.location.href = '/checkout';
+    });
+    $(document).on('click', '.js-mini-cart-checkout-btn', function () {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        localStorage.setItem('checkout', JSON.stringify(cart));
+        window.location.href = '/checkout';
+    });
+
+    function loadCheckoutProduct() {
+        const checkout = JSON.parse(localStorage.getItem('checkout')) || [];
+        let total_price = 0;
+        let total_quantities = 0;
+        for (let i = 0; i < checkout.length; i++) {
+            const item = checkout[i];
+            let subtotal_price = convertCurrencyToNumber(item.unit_price+'') * parseInt(item.quantities);
+            total_price += subtotal_price;
+            total_quantities += parseInt(item.quantities);
+            $('.js-checkout-product').append(
+                `<li>x${item.quantities} ${item.name} <span>${formatter.format(subtotal_price)}đ</span></li>`,
+            );
+        }
+        $('.js-checkout-total-product').text(total_quantities + ' products');
+        $('.js-checkout-total-price').text(formatter.format(total_price) + 'đ');
+    }
+    loadCheckoutProduct();
 });
