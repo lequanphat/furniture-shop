@@ -217,6 +217,9 @@ body::-webkit-scrollbar-track {
     font-weight: 600;
 }
 
+.js-subtotal-price {
+    color: #e97730;
+}
 #cart-section .cart-item .quantities-wrapper {
     display: flex;
     align-items: center;
@@ -288,7 +291,7 @@ body::-webkit-scrollbar-track {
 }
 #checkout-cart .total-price {
     font-size: 20px;
-    color: #fd1748;
+    color: #e97730;
 }
 #checkout-cart button,
 #checkout-cart a {
@@ -320,4 +323,21 @@ body::-webkit-scrollbar-track {
     width: 100%;
     margin: 18px 0;
     border-bottom: 1px solid #ccc;
+}
+
+.change-address-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-bottom: 16px;
+}
+
+.change-address-wrapper button {
+    border: none;
+    background-color: transparent;
+    color: #e97730;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 4px;
 }
