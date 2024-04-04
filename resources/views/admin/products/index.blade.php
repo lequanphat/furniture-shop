@@ -129,5 +129,5 @@
 
     {{-- Script --}}
     <script src="{{ asset('js/product_api.js') }}" defer></script>
-    
+
 @endsection

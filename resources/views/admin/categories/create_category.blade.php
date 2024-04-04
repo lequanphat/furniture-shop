@@ -1,13 +1,13 @@
 <div class="modal fade" id="create-category-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <!-- Form goes here -->
-        <form id="create-category-form" action="/admin/discounts/create" method="POST">
+        <form id="create-category-form" action="/admin/categories/create" method="POST">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Create Category </h5>
                     <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                            aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3 row">
@@ -39,9 +39,9 @@
                         <input type="text" class="form-control" id="description" name="description" required>
                     </div>
 
-                    <div id="create_category_response" class="alert d-none">
-                    </div>
 
+                </div>
+                <div id="create_category_response" class="alert d-none">
                 </div>
                 <div class="modal-footer">
                     <button type="reset" class="btn me-auto">Reset</button>
