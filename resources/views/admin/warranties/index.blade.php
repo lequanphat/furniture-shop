@@ -14,11 +14,10 @@
                 </div>
 
 
-                <form class="input-group col" action="{{ route('warranty.search') }}" method="GET">
+                {{-- <form class="input-group col" action="{{ route('warranty.search') }}" method="GET">
                     @if (isset($search))
                         <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
                             aria-label="Search" value="{{ $search }}">
-                        {{-- <input name="start_date" type="date" class="form-control" > --}}
                         <input name="start_date" type="date" class="form-control" placeholder="choose" value="{{ $search_date }}">
                     @else
                         <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
@@ -28,7 +27,7 @@
                     <button class="btn btn-primary btn-sm" type="submit">
                         Search
                     </button>
-                </form>
+                </form> --}}
 
 
                 <!-- Page title actions -->
@@ -76,7 +75,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id ="employee-table">
+                                <tbody id ="employee-table warranties-list">
                                     @foreach ($warranties as $warranty)
                                         <tr>
                                             <td>{{ $warranty->warranty_id }}</td>
@@ -104,8 +103,35 @@
                                     @endforeach
 
                                 </tbody>
-                            </table>
+                            </table><br><br>
                             <div class="d-flex justify-content-end my-2">{{ $warranties->render('common.pagination') }}
+                            {{-- {!! $warranties->links() !!} --}}
+
+                            {{-- <script>
+                                $(document).ready(function() {
+                                    // Xử lý sự kiện click trên các liên kết phân trang
+                                    $('#pagination a').click(function(e) {
+                                        e.preventDefault();
+
+                                        // Lấy số trang từ URL
+                                        var page = $(this).attr('href').split('page=')[1];
+
+                                        // Gửi yêu cầu AJAX đến server
+                                        $.ajax({
+                                            url: '?page=' + page,
+                                            method: 'GET',
+                                            success: function(response) {
+                                                // Cập nhật nội dung danh sách bảo hành
+                                                $('#warranties-list').html(response.html);
+
+                                                // Cập nhật URL hiện tại
+                                                window.history.pushState({}, '', '?page=' + page);
+                                            }
+                                        });
+                                    });
+                                });
+                            </script> --}}
+
                             </div>
                         </div>
                     </div>

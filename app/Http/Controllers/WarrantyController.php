@@ -12,9 +12,12 @@ use Illuminate\Http\Request;
 
 class WarrantyController extends Controller{
     public function index(){
+        $currentPage = request()->get("page",1);
+        $perPage = 5;
         $data = [
             'page' => 'Warranties ',
-            'warranties' => Warranty::with('product_detail','order')->paginate(5),
+            //'warranties' => Warranty::with('product_detail','order')->paginate(5),
+            'warranties' => Warranty::with('product_detail','order')::paginate($perPage, ['*'], 'page', $currentPage),
             'orders' => Order::all(),
             'order_detail' => OrderDetail::all(),
             'all_product_detail' => ProductDetail::all(),
@@ -22,6 +25,7 @@ class WarrantyController extends Controller{
 
     return view('admin.warranties.index', $data);
     }
+
 
     //thêm warranty
     public function warranty_create(CreateWarranty $request){
