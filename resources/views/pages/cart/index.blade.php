@@ -26,10 +26,10 @@
                     <div class="separate"></div>
                     <div class="total-price-wrapper">
                         <p class="title">Order Total:</p>
-                        <p class="total-price">120,000,000d</p>
+                        <p class="js-cart-order-total-price total-price">0đ</p>
                     </div>
                     <div class="separate"></div>
-                    <button class="checkout">Checkout</button>
+                    <button class="js-cart-checkout-btn checkout">Checkout</button>
 
                     <a href="/shop" class="continue-shopping">Continue Shopping</a>
                 </div>

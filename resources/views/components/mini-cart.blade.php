@@ -11,7 +11,7 @@
              </div>
              <div class="product-details-action-wrap">
                  <a href="/cart" class="add-to-cart">View cart</a>
-                 <a href="/checkout" class="buy-now">Checkout</a>
+                 <a class="js-mini-cart-checkout-btn buy-now">Checkout</a>
              </div>
          </div>
      </div>
