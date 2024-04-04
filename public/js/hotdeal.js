@@ -27,8 +27,8 @@ jQuery.noConflict();
                                 <span>-${product.discount_percent }%</span>
                             </div>
                             <div class="product-action-wrap">
-                                <button class="product-action-btn-1" title="Wishlist"><i
-                                        class="pe-7s-like"></i></button>
+                                <a href="/products/${product.product_id}" class="product-action-btn-1" title="Wishlist"><i
+                                        class="pe-7s-like"></i></a>
                                 <button class="product-action-btn-1" title="Quick View" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                     <i class="pe-7s-look"></i>
