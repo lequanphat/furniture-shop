@@ -53,9 +53,9 @@ class AuthController extends Controller
                     // authenticated
                     Auth::login($user);
                     if ($user->is_staff)
-                        return redirect('/admin');
+                        return redirect()->intended('/admin');
                     else
-                        return redirect('/');
+                        return redirect()->intended('/');
                     // user haven't verified
                 } else return back()->withErrors(['password' => 'This account is not verified!'])->withInput($request->input());
             } else {

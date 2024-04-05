@@ -28,3 +28,9 @@
 .custom-table-action input[type='number'] {
     -moz-appearance: textfield;
 }
+
+.custom-product-image {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}

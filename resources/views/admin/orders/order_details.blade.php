@@ -77,15 +77,17 @@
                                     </address>
 
                                 </div>
-                                <div class="col-md-4 markdown">
-                                    <h3>Created by</h3>
-                                    <address>
-                                        <strong>{{ $order->employee->full_name() }}<br></strong>
-                                        {{ $order->employee->default_address->address }}<br>
-                                        {{ $order->employee->default_address->phone_number }}<br>
-                                        <a href="mailto:#">{{ $order->employee->email }}</a>
-                                    </address>
-                                </div>
+                                @if (isset($order->employee))
+                                    <div class="col-md-4 markdown">
+                                        <h3>Created by</h3>
+                                        <address>
+                                            <strong>{{ $order->employee->full_name() }}<br></strong>
+                                            {{ $order->employee->default_address->address }}<br>
+                                            {{ $order->employee->default_address->phone_number }}<br>
+                                            <a href="mailto:#">{{ $order->employee->email }}</a>
+                                        </address>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </form>

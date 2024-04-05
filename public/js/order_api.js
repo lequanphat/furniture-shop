@@ -108,6 +108,9 @@ jQuery.noConflict();
                 url: url,
                 type: 'GET',
                 success: function (response) {
+                    console.log('====================================');
+                    console.log(response.detailed_products.data);
+                    console.log('====================================');
                     const now = new Date();
                     now.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
                     let formatter = new Intl.NumberFormat('en-US', {
@@ -134,8 +137,8 @@ jQuery.noConflict();
                         html += `<tr data-sku="${detailed_product.sku}">
                         <td>
                             <div class="d-flex py-1 align-items-center">
-                                <span class="avatar me-2"
-                                    style="background-image: url(${image}); width: 40px; height: 40px;">
+                                <span class="avatar me-2 custom-product-image"
+                                    style="background-image: url(${image});">
                                 </span>
                                 <div class="flex-1">
                                     <div class="font-weight-medium">
@@ -286,7 +289,7 @@ jQuery.noConflict();
                     console.log(response);
                     const quantities_instance = $(_this).closest('tr').find('.js-detailed-product-quantities');
                     quantities_instance.text(parseInt(quantities_instance.text()) - quantities);
-                    $(_this).closest('tr').find('.quantities-input').val(0)
+                    $(_this).closest('tr').find('.quantities-input').val(0);
                 },
                 error: function (error) {
                     console.log(error);

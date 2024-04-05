@@ -118,8 +118,7 @@ jQuery(document).ready(function () {
             return item;
         });
         localStorage.setItem('cart', JSON.stringify(newCart));
-        // reset checkbox
-        $(this).closest('.cart-item').find('.js-check-cart-item').prop('checked', false);
+        loadCartCheckout();
     });
     $(document).on('click', '.js-quantities-plus', function () {
         let quantities = $(this).siblings('input').val();
@@ -145,8 +144,7 @@ jQuery(document).ready(function () {
             return item;
         });
         localStorage.setItem('cart', JSON.stringify(newCart));
-        // reset checkbox
-        $(this).closest('.cart-item').find('.js-check-cart-item').prop('checked', false);
+        loadCartCheckout();
     });
     $(document).on('change', '.js-cart-quantities-input', function () {
         let quantities = $(this).val();
@@ -171,8 +169,7 @@ jQuery(document).ready(function () {
             return item;
         });
         localStorage.setItem('cart', JSON.stringify(newCart));
-        // reset checkbox
-        $(this).closest('.cart-item').find('.js-check-cart-item').prop('checked', false);
+        loadCartCheckout();
     });
     $(document).on('click', '.js-delete-cart-item', function () {
         const sku = $(this).closest('.cart-item').find('.js-sku').text();
@@ -180,9 +177,10 @@ jQuery(document).ready(function () {
         const newCart = cart.filter((item) => item.sku !== sku);
         localStorage.setItem('cart', JSON.stringify(newCart));
         $(this).closest('.cart-item').remove();
+        loadCartCheckout();
     });
 
-    $(document).on('click', '.js-check-cart-item', function () {
+    function loadCartCheckout() {
         let cart_items = $('.js-cart-item');
         cart_items = cart_items.filter(function (cart_item) {
             return $(this).find('.js-check-cart-item').prop('checked');
@@ -202,6 +200,9 @@ jQuery(document).ready(function () {
         });
         $('.js-checkout-content').html(html);
         $('.js-cart-order-total-price').text(formatter.format(total_price) + 'đ');
+    }
+    $(document).on('click', '.js-check-cart-item', function () {
+        loadCartCheckout();
     });
 
     $(document).on('click', '.js-cart-checkout-btn', function () {
@@ -215,22 +216,31 @@ jQuery(document).ready(function () {
             const quantities = $(item).data('quantities');
             checkout.push({ sku, name, unit_price, quantities });
         }
-        localStorage.setItem('checkout', JSON.stringify(checkout));
+        document.cookie = `checkout=${JSON.stringify(checkout)}; expires=${new Date(
+            new Date().getTime() + 1800000, // 1800000 milliseconds = 30 minutes
+        ).toUTCString()}; path=/`;
         window.location.href = '/checkout';
     });
     $(document).on('click', '.js-mini-cart-checkout-btn', function () {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        localStorage.setItem('checkout', JSON.stringify(cart));
+        document.cookie = `checkout=${JSON.stringify(cart)}; expires=${new Date(
+            new Date().getTime() + 1800000, // 1800000 milliseconds = 30 minutes
+        ).toUTCString()}; path=/`;
         window.location.href = '/checkout';
     });
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
     function loadCheckoutProduct() {
-        const checkout = JSON.parse(localStorage.getItem('checkout')) || [];
+        const checkout = JSON.parse(getCookie('checkout')) || [];
         let total_price = 0;
         let total_quantities = 0;
         for (let i = 0; i < checkout.length; i++) {
             const item = checkout[i];
-            let subtotal_price = convertCurrencyToNumber(item.unit_price+'') * parseInt(item.quantities);
+            let subtotal_price = convertCurrencyToNumber(item.unit_price + '') * parseInt(item.quantities);
             total_price += subtotal_price;
             total_quantities += parseInt(item.quantities);
             $('.js-checkout-product').append(
@@ -241,4 +251,33 @@ jQuery(document).ready(function () {
         $('.js-checkout-total-price').text(formatter.format(total_price) + 'đ');
     }
     loadCheckoutProduct();
+
+    $(document).on('submit', '#checkout-form', function (event) {
+        event.preventDefault();
+        let data = $(this).serialize();
+
+        const checkout_list = JSON.parse(getCookie('checkout')) || [];
+        let checkout = checkout_list.map((item) => ({
+            sku: item.sku,
+            quantities: item.quantities,
+            unit_price: convertCurrencyToNumber(item.unit_price),
+        }));
+        data += `&checkout=${JSON.stringify(checkout)}`;
+        $.ajax({
+            url: '/checkout',
+            method: 'POST',
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function (response) {
+                console.log('====================================');
+                console.log(response);
+                console.log('====================================');
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    });
 });

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <link rel="canonical" href="#" />
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="website" />

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone_number');
             $table->unsignedInteger('customer_id');
-            $table->unsignedInteger('created_by');
+            $table->unsignedInteger('created_by')->nullable();
             $table->timestamps();
 
             $table->foreign('customer_id')->references('user_id')->on('users');
