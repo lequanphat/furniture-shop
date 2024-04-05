@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CheckoutOrder;
 use App\Http\Requests\CreateDetailedOrder;
 use App\Http\Requests\CreateOrder;
 use App\Models\Order;
@@ -105,9 +106,22 @@ class OrderController extends Controller
         return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
     }
 
-    public function checkout_order(Request $request)
+    public function checkout_order(CheckoutOrder $request)
     {
+        // validate data
 
+        $checkout = json_decode($request->input('checkout'), true);
+        foreach ($checkout as $item) {
+            $product = ProductDetail::where('sku', $item['sku'])->first();
+            if (!$product) {
+                return response()->json(['errors' => ['message' => ['Cannot find this product.']]], 400);
+            }
+            if ($product->quantities < $item['quantities']) {
+                return response()->json(['errors' => ['message' => ['Not enough quantities for this product.']]], 400);
+            }
+        }
+
+        // create order
         $order = Order::create([
             'total_price' => 0,
             'is_paid' => false,
@@ -115,10 +129,11 @@ class OrderController extends Controller
             'receiver_name' => $request->input('receiver_name'),
             'address' => $request->input('address'),
             'phone_number' => $request->input('phone_number'),
+            'note' => $request->input('note'),
             'customer_id' => Auth::user()->user_id,
             'created_by' => null,
         ]);
-        $checkout = json_decode($request->input('checkout'), true);
+        // create order detail
         foreach ($checkout as $item) {
             $order_detail = OrderDetail::create([
                 'order_id' => $order->order_id,
@@ -128,6 +143,7 @@ class OrderController extends Controller
             ]);
             ProductDetail::where('sku', $item['sku'])->decrement('quantities', $item['quantities']);
         }
+
         return ['message' => 'Checkout order successfully!', 'order' => $order];
     }
 
