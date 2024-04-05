@@ -233,11 +233,44 @@ class ProductController extends Controller
         $products = $query->paginate(9); // 9 elements per page
         if ($sorted_by === 'price_asc') {
         }
-        $data = [
-            'products' => $products
-        ];
 
-        return response()->json($data);
+
+        foreach ($products as $product) {
+            $total_discount_percentage = 0;
+            foreach ($product->detailed_products as $detailed_product) {
+                foreach ($detailed_product->product_discounts as $product_discount) {
+                    if ($product_discount->discount->is_currently_active()) {
+                        $total_discount_percentage += $product_discount->discount->percentage;
+                    }
+                }
+                $detailed_product->total_discount_percentage = $total_discount_percentage;
+            }
+        }
+        $today = now();
+        foreach ($products as $product) {
+            $detailed_product =
+                $product->detailed_products
+                ->sortByDesc(function ($detailed_product) use ($today) {
+                    return $detailed_product->product_discounts
+                        ->where('discount.start_date', '<=', $today)
+                        ->where('discount.end_date', '>=', $today)
+                        ->sum('discount.percentage');
+                })
+                ->first() ?? $product->detailed_products->first();
+
+            if (isset($detailed_product->images->first()->url)) {
+                $detailed_product->image = $detailed_product->images->first()->url;
+                $detailed_product->setRelation('images', null);
+            }
+            $product->detailed_product = $detailed_product;
+            $total_quantities = $product->detailed_products->sum('quantities');
+            $product->setRelation('detailed_products', null);
+            $product->total_quantities = $total_quantities;
+        }
+
+        return response()->json([
+            'products' => $products
+        ]);
     }
 
 
@@ -245,9 +278,9 @@ class ProductController extends Controller
     {
         $search = request()->query('search');
         $detailed_products = ProductDetail::with('product_discounts.discount', 'images', 'color')
-        ->where('name', 'LIKE', '%' . $search . '%')
-        ->orWhere('sku', 'LIKE', '%' . $search . '%')
-        ->paginate(4); // 4 elements per page
+            ->where('name', 'LIKE', '%' . $search . '%')
+            ->orWhere('sku', 'LIKE', '%' . $search . '%')
+            ->paginate(4); // 4 elements per page
         return response()->json(['detailed_products' => $detailed_products]);
     }
 }

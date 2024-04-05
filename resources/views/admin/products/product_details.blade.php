@@ -87,11 +87,11 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Color</th>
-                                            <th>Size</th>
-                                            <th>Price</th>
-                                            <th>Quantities</th>
+                                            <th>Color & Size</th>
                                             <th>Warranty</th>
+                                            <th>Quantities</th>
+                                            <th>Dicounts</th>
+                                            <th>Price</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -122,18 +122,36 @@
 
                                                 </td>
                                                 <td>
-                                                    <div class="col-auto rounded"
-                                                        style="background: {{ $detailed_product->color->code }}; width: 20px; height: 20px; border: 1px solid #ccc;">
-                                                    </div>
+                                                    <p class="m-0">Color: {{ $detailed_product->color->name }}</p>
+                                                    <p class="my-1">Size: {{ $detailed_product->size }}</p>
                                                 </td>
-                                                <td>{{ $detailed_product->size }}</td>
-                                                <td>{{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
-                                                </td>
-                                                <td>{{ $detailed_product->quantities }}</td>
-
-                                                </td>
-
                                                 <td>{{ $detailed_product->warranty_month }} Months</td>
+                                                <td>{{ $detailed_product->quantities }}</td>
+                                                <td>
+                                                    @if (isset($detailed_product->product_discounts->first()->discount))
+                                                        @foreach ($detailed_product->product_discounts as $product_discount)
+                                                            <span
+                                                                class="badge bg-cyan-lt">{{ $product_discount->discount->percentage }}%</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge bg-cyan-lt">No discount</span>
+                                                    @endif
+
+
+                                                </td>
+                                                <td>
+                                                    @if ($detailed_product->product_discounts->sum('discount.percentage') > 0)
+                                                        <del
+                                                            class="text-muted">{{ number_format($detailed_product->original_price - ($detailed_product->original_price * $detailed_product->product_discounts->sum('discount.percentage')) / 100, 0, '.', ',') }}đ</del>
+                                                    @endif
+
+                                                    <p class="text-danger m-0">
+                                                        {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ
+                                                    </p>
+                                                </td>
+
+                                                </td>
+
                                                 <td><a href="{{ route('products.detailed_product_details', ['product_id' => $product->product_id, 'sku' => $detailed_product->sku]) }}"
                                                         class="btn p-2">
                                                         <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />

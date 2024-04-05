@@ -59,6 +59,40 @@ class PagesController extends Controller
         if ($sorted_by === 'oldest') {
             $query->orderBy('created_at', 'asc');
         }
+        $products = $query->paginate(9); // 9 elements per page
+        foreach ($products as $product) {
+            $total_discount_percentage = 0;
+            foreach ($product->detailed_products as $detailed_product) {
+                foreach ($detailed_product->product_discounts as $product_discount) {
+                    if ($product_discount->discount->is_currently_active()) {
+                        $total_discount_percentage += $product_discount->discount->percentage;
+                    }
+                }
+                $detailed_product->total_discount_percentage = $total_discount_percentage;
+            }
+        }
+
+        $today = now();
+        foreach ($products as $product) {
+            $detailed_product =
+                $product->detailed_products
+                ->sortByDesc(function ($detailed_product) use ($today) {
+                    return $detailed_product->product_discounts
+                        ->where('discount.start_date', '<=', $today)
+                        ->where('discount.end_date', '>=', $today)
+                        ->sum('discount.percentage');
+                })
+                ->first() ?? $product->detailed_products->first();
+
+            if (isset($detailed_product->images->first()->url)) {
+                $detailed_product->image = $detailed_product->images->first()->url;
+                $detailed_product->setRelation('images', null);
+            }
+            $product->detailed_product = $detailed_product;
+            $total_quantities = $product->detailed_products->sum('quantities');
+            $product->setRelation('detailed_products', null);
+            $product->total_quantities = $total_quantities;
+        }
 
         $data = [
             'page' => 'Shop',
@@ -67,7 +101,7 @@ class PagesController extends Controller
             'selected_categories' => $categoryIds ?? [],
             'selected_colors' => $colorIds ?? [],
             'tags' => Tag::all(),
-            'products' => $query->paginate(9), // 9 elements per page
+            'products' => $products,
             'search' => $search ?? '',
             'sorted_by' => $sorted_by ?? 'default',
         ];

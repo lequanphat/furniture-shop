@@ -260,7 +260,7 @@ jQuery(document).ready(function () {
         let checkout = checkout_list.map((item) => ({
             sku: item.sku,
             quantities: item.quantities,
-            unit_price: convertCurrencyToNumber(item.unit_price),
+            unit_price: convertCurrencyToNumber(item.unit_price + ''),
         }));
         data += `&checkout=${JSON.stringify(checkout)}`;
         $.ajax({
@@ -271,9 +271,9 @@ jQuery(document).ready(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             },
             success: function (response) {
-                console.log('====================================');
-                console.log(response);
-                console.log('====================================');
+                // delete checkout cookie
+                document.cookie = 'checkout=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                window.location.href = `/checkout/${response.order.order_id}`;
             },
             error: function (error) {
                 console.log(error);

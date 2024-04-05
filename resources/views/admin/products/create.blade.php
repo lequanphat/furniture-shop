@@ -83,9 +83,9 @@
                                 </div>
                             </div>
                         </div>
-                </div>
-                <div class="card-footer text-end">
-                    <button type="submit" class="btn btn-primary">Create Product</button>
+                        <div class="card-footer text-end">
+                            <button type="submit" class="btn btn-primary">Create Product</button>
+                        </div>
                 </div>
                 </form>
             </div>
@@ -101,7 +101,7 @@
     <script>
         CKEDITOR.replace('editor');
     </script>
-    
+
     <script>
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function() {
