@@ -74,7 +74,7 @@
 
                                     </tr>
                                 </thead>
-                                <tbody id="employee-table">
+                                <tbody id="brand-table">
                                     @foreach ($brands as $brand)
                                         <tr>
                                             <td>{{ $brand->brand_id }}</td>

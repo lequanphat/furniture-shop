@@ -28,6 +28,10 @@
                         <input type="text" class="form-control" id="address" name="address"
                             placeholder="203 An Dương Vương, phường 01, quận 5, TP.HCM" required>      
                     </div>
+                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox"  value="true" name="is_default" id="is_default">
+                                    <label class="form-check-label" for="male">Make this address default</label>
+                                </div>
                     <div id="create_address_response" class="alert ">
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>

@@ -37,7 +37,7 @@
         <!-- Main JS -->
         <script src="{{ asset('js/main.js') }}" defer></script>
         <script src="{{ asset('js/shop_api.js') }}" defer></script>
-
+        <script src="{{ asset('js/hotdeal.js') }}" defer></script>
         <script src="{{ asset('js/profile_api.js') }}" defer></script>
         @include('components.mini-cart')
         @yield('content')

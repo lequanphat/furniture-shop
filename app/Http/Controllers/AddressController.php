@@ -48,13 +48,20 @@ class AddressController extends Controller
     }
     public function create_address(RequestsAddress $request)
     {
+        $user_id =$request->input("user_id");
         $address = Address::create([
             'receiver_name' => $request->input('receiver_name'),
             'address' => $request->input("address"),
             'phone_number' => $request->input('phone_number'),
-            'is_default' => 0,
-            'user_id' => $request->input("user_id"),
+            'is_default' =>0,
+            'user_id' => $user_id,
         ]);
+        $default=$request->input('is_default');
+        if($default==true)
+        {
+            Address::where('user_id', $user_id)->where('is_default', 1)->update(['is_default' => 0]);
+            $address->update(['is_default' =>1]);
+        }
         return ['message' => 'Created address  successfully!', 'address' => $address];
     }
 }

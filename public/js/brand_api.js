@@ -20,7 +20,25 @@ jQuery.noConflict();
                     $('#create_brand_response').removeClass('alert-danger');
                     $('#create_brand_response').addClass('alert-success');
                     $('#create_brand_response').html(response.message);
-                },
+                    $('#brand-table').append(`
+                    <tr>
+                    <td>${response.brand.brand_id }</td>
+                    <td>${response.brand.name }</td>
+                    <td>
+                    ${response.brand.description }
+                    </td>
+                    <td>${response.brand.index }</td>
+                    <td>
+                        <button type="button" class="js-update-brand-btn btn  mr-2 px-2 py-1"
+                            data-bs-toggle="modal" data-bs-target="#UpdateBrandModal"
+                            data-brand-id="${response.brand.brand_id }" data-name="${response.brand.brand_id }"
+                            data-description="   ${response.brand.description }"
+                            data-index="${response.brand.index }"
+                            data-parent-id="${response.brand.parent_id }">
+                            <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                        </button>
+                    </td>`
+            )},
                 error: function (error) {
                     console.log(error);
                     $('#create_brand_response').removeClass('alert-success');
@@ -59,6 +77,31 @@ jQuery.noConflict();
                     $('#update_brand_response').removeClass('alert-danger');
                     $('#update_brand_response').addClass('alert-success');
                     $('#update_brand_response').html(response.message);
+                    var row = $('#brand-table tr').filter(function () {
+                        return $(this).find('td:first').text() == response.brand.brand_id;
+                    });
+                    if (row)
+                    {
+                        row.html(`
+                        <tr>
+                        <td>${response.brand.brand_id }</td>
+    
+                        <td>${response.brand.name }</td>
+                        <td>
+                        ${response.brand.description }
+                        </td>
+                        <td>${response.brand.index }</td>
+                        <td>
+                            <button type="button" class="js-update-brand-btn btn  mr-2 px-2 py-1"
+                                data-bs-toggle="modal" data-bs-target="#UpdateBrandModal"
+                                data-brand-id="${response.brand.brand_id }" data-name="${response.brand.brand_id }"
+                                data-description="   ${response.brand.description }"
+                                data-index="${response.brand.index }"
+                                data-parent-id="${response.brand.parent_id }">
+                                <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                            </button>
+                        </td>`)
+                    }
                 },
                 error: function (error) {
                     console.log({ error });
