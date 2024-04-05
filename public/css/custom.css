@@ -195,13 +195,14 @@ body::-webkit-scrollbar-track {
     align-items: center;
 }
 #cart-section .cart-item .product-cart-item input {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
     border: 1px solid #ccc;
     border-radius: 6px;
     text-align: center;
     margin-right: 16px;
+    flex-shrink: 0;
 }
 #cart-section .cart-item .product-cart-item img {
     width: 60px;
@@ -340,4 +341,25 @@ body::-webkit-scrollbar-track {
     font-size: 14px;
     font-weight: 600;
     gap: 4px;
+}
+
+.custom-product-badge {
+    background-color: #ccc;
+
+    color: white !important;
+    padding: 2px 16px;
+}
+
+.place-order-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    background-color: #e97730;
+    color: white;
+    border-radius: 2px;
 }

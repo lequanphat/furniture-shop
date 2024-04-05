@@ -62,6 +62,8 @@
                                                 ->where('discount.start_date', '<=', $today)
                                                 ->where('discount.end_date', '>=', $today)
                                                 ->sum('discount.percentage');
+
+                                            $total_quantities = $product->detailed_products->sum('quantities');
                                         @endphp
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                                             <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
@@ -78,6 +80,12 @@
                                                     <div class="product-badge badge-top badge-right badge-pink">
                                                         <span>{{ $discount_percentage != 0 ? '-' . $discount_percentage . '%' : '' }}</span>
                                                     </div>
+                                                    @if ($total_quantities == 0)
+                                                        <div
+                                                            class="custom-product-badge product-badge badge-top badge-left badge-pink">
+                                                            <span>Sold out</span>
+                                                        </div>
+                                                    @endif
                                                     <div class="product-action-wrap">
                                                         <a class="product-action-btn-1" title="Wishlist"><i
                                                                 class="pe-7s-like"></i></a>

@@ -44,7 +44,8 @@
                         </div>
                         @if (Auth::user())
                             <div class="header-action-style">
-                                <a title="Account" href="{{route('my_account',Auth::user()->user_id)}}"><i class="pe-7s-user"></i></a>
+                                <a title="Account" href="{{ route('my_account', Auth::user()->user_id) }}"><i
+                                        class="pe-7s-user"></i></a>
                             </div>
                         @endif
                         <div class="header-action-style header-action-cart">

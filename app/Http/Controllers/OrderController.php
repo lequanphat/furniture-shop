@@ -104,4 +104,31 @@ class OrderController extends Controller
         ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
         return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
     }
+
+    public function checkout_order(Request $request)
+    {
+
+        $order = Order::create([
+            'total_price' => 0,
+            'is_paid' => false,
+            'status' => 0,
+            'receiver_name' => $request->input('receiver_name'),
+            'address' => $request->input('address'),
+            'phone_number' => $request->input('phone_number'),
+            'customer_id' => Auth::user()->user_id,
+            'created_by' => null,
+        ]);
+        $checkout = json_decode($request->input('checkout'), true);
+        foreach ($checkout as $item) {
+            $order_detail = OrderDetail::create([
+                'order_id' => $order->order_id,
+                'sku' => $item['sku'],
+                'quantities' => $item['quantities'],
+                'unit_price' => $item['unit_price'],
+            ]);
+            ProductDetail::where('sku', $item['sku'])->decrement('quantities', $item['quantities']);
+        }
+
+        return response()->json($checkout);
+    }
 }

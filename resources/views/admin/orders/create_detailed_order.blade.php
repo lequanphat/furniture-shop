@@ -56,8 +56,8 @@
                                                     <tr data-sku="{{ $detailed_product->sku }}">
                                                         <td>
                                                             <div class="d-flex py-1 align-items-center">
-                                                                <span class="avatar me-2"
-                                                                    style="background-image: url(@if (isset($detailed_product->images->first()->url)) {{ $detailed_product->images->first()->url }} @endif); width: 40px; height: 40px;">
+                                                                <span class="avatar me-2 custom-product-image"
+                                                                    style="background-image: url(@if (isset($detailed_product->images->first()->url)) {{ $detailed_product->images->first()->url }} @endif);">
                                                                 </span>
                                                                 <div class="flex-1">
                                                                     <div class="font-weight-medium">
@@ -82,7 +82,8 @@
                                                                 </p>
                                                             </div>
                                                         </td>
-                                                        <td class="js-detailed-product-quantities">{{ $detailed_product->quantities }}</td>
+                                                        <td class="js-detailed-product-quantities">
+                                                            {{ $detailed_product->quantities }}</td>
                                                         <td>
                                                             @if ($discount_percentage > 0)
                                                                 <del>{{ number_format($detailed_product->original_price, 0, '.', ',') }}đ</del>

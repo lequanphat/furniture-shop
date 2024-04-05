@@ -7,6 +7,7 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
@@ -91,8 +92,13 @@ class PagesController extends Controller
     }
     public function checkout()
     {
-        $data = ['page' => 'Checkout'];
-        return view('pages.checkout.index', $data);
+        if (Auth::check()) {
+            $data = ['page' => 'Checkout'];
+            return view('pages.checkout.index', $data);
+        } else {
+            session()->put('url.intended', '/checkout');
+            return redirect()->route('login');
+        }
     }
     public function about()
 

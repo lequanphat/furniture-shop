@@ -1,0 +1,42 @@
+{
+    "version": 2,
+    "functions": {
+        "api/index.php": {
+            "runtime": "vercel-php@0.6.0"
+        }
+    },
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ],
+    "env": {
+        "APP_NAME": "Laravel",
+        "APP_ENV": "local",
+        "APP_KEY": "base64:t1k9r3pEZk+ptF6AEVHW5ewzO0gmWImHD71idC0tPTs=",
+        "APP_DEBUG": "true",
+        "APP_URL": "https://furniture-shop.vercel.app",
+
+        "LOG_CHANNEL": "stack",
+        "LOG_DEPRECATIONS_CHANNEL": "null",
+        "LOG_LEVEL": "debug",
+
+        "DB_CONNECTION": "mysql",
+        "DB_HOST": "127.0.0.1",
+        "DB_PORT": "3306",
+        "DB_DATABASE": "furniture_shop",
+        "DB_USERNAME": "root",
+        "DB_PASSWORD": "",
+
+        "MAIL_MAILER": "smtp",
+        "MAIL_HOST": "smtp.gmail.com",
+        "MAIL_PORT": "587",
+        "MAIL_USERNAME": "robotmailer1010@gmail.com",
+        "MAIL_PASSWORD": "bgoz edtg nnyw wcua",
+        "MAIL_ENCRYPTION": "tls",
+        "MAIL_FROM_ADDRESS": "robotmailer1010@gmail.com",
+        "MAIL_FROM_NAME": "${APP_NAME}"
+    },
+    "outputDirectory": "public"
+}

@@ -123,7 +123,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="col-auto rounded"
-                                                        style="background: {{ $detailed_product->color->code }}; width: 20px; height: 20px;">
+                                                        style="background: {{ $detailed_product->color->code }}; width: 20px; height: 20px; border: 1px solid #ccc;">
                                                     </div>
                                                 </td>
                                                 <td>{{ $detailed_product->size }}</td>
