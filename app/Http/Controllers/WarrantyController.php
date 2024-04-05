@@ -12,12 +12,9 @@ use Illuminate\Http\Request;
 
 class WarrantyController extends Controller{
     public function index(){
-        $currentPage = request()->get("page",1);
-        $perPage = 5;
         $data = [
             'page' => 'Warranties ',
-            //'warranties' => Warranty::with('product_detail','order')->paginate(5),
-            'warranties' => Warranty::with('product_detail','order')::paginate($perPage, ['*'], 'page', $currentPage),
+            'warranties' => Warranty::with('product_detail','order')->paginate(5),
             'orders' => Order::all(),
             'order_detail' => OrderDetail::all(),
             'all_product_detail' => ProductDetail::all(),
@@ -78,30 +75,41 @@ class WarrantyController extends Controller{
     }
 
     //tìm kiếm warranty
-    public function warranty_search_ui(Request $request)
+    // public function warranty_search_ui(Request $request)
+    // {
+    //     $search = $request->input('search');
+    //     $search_date = $request->input('start_date');
+
+    //     $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+    //     if (isset($search) && isset($search_date)){
+    //         $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->whereDate('start_date',$search_date)->paginate(5);
+    //     } else {
+    //         if(isset($search_date)){
+    //             $warranty = Warranty::whereDate('start_date',$search_date)->paginate(5);
+    //         }
+    //     }
+
+    //     $data = [
+    //         'page' => 'Warranties',
+    //         'warranties' => $warranty,
+    //         'orders' => Order::all(),
+    //         'order_detail' => OrderDetail::all(),
+    //         'all_product_detail' => ProductDetail::all(),
+    //         'search' => $search,
+    //         'search_date' => $search_date,
+    //     ];
+    //     return view('admin.warranties.index', $data);
+    // }
+
+    //hàm trả json về cho bên warranty_api lấy làm việc trong filterWarranties
+    public function search_warranties_ajax()
     {
-        $search = $request->input('search');
-        $search_date = $request->input('start_date');
-
-        $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
-        if (isset($search) && isset($search_date)){
-            $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->whereDate('start_date',$search_date)->paginate(5);
-        } else {
-            if(isset($search_date)){
-                $warranty = Warranty::whereDate('start_date',$search_date)->paginate(5);
-            }
+        $search = request()->query('search');
+        $warranties = Warranty::with('product_detail','order')->where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+        foreach( $warranties as $warranty ) {
+            $warranty->is_active = $warranty->is_active();
         }
-
-        $data = [
-            'page' => 'Warranties',
-            'warranties' => $warranty,
-            'orders' => Order::all(),
-            'order_detail' => OrderDetail::all(),
-            'all_product_detail' => ProductDetail::all(),
-            'search' => $search,
-            'search_date' => $search_date,
-        ];
-        return view('admin.warranties.index', $data);
+        return response()->json(['warranties' => $warranties]);
     }
 
 }

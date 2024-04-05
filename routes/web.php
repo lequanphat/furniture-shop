@@ -109,7 +109,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/warranties', [WarrantyController::class, 'index']);
     Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
     Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
-    Route::get('/admin/warranties', [WarrantyController::class,'warranty_search_ui'])->name('warranty.search');
+    //Route::get('/admin/warranties', [WarrantyController::class,'warranty_search_ui'])->name('warranty.search');
+    Route::get('/admin/warranties/search', [WarrantyController::class,'search_warranties_ajax'])->name('warranty.search');
 
 
 

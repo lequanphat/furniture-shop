@@ -1,5 +1,8 @@
 @extends('layouts.admin')
 @section('content')
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -14,7 +17,10 @@
                 </div>
 
 
-                {{-- <form class="input-group col" action="{{ route('warranty.search') }}" method="GET">
+
+
+
+                {{--<form class="input-group col" action="{{ route('warranty.search') }}" method="GET">
                     @if (isset($search))
                         <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
                             aria-label="Search" value="{{ $search }}">
@@ -29,6 +35,8 @@
                     </button>
                 </form> --}}
 
+                {{-- thanh search --}}
+                <input id="search-warranties" name="search" type="text" value="" class="input-group col form-control" placeholder="Search here…" autocomplete="off">
 
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
@@ -72,10 +80,11 @@
                                         <th>End day</th>
                                         <th>Description</th>
                                         <th>Time</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id ="employee-table warranties-list">
+                                <tbody id ="warranties-list">
                                     @foreach ($warranties as $warranty)
                                         <tr>
                                             <td>{{ $warranty->warranty_id }}</td>
@@ -85,6 +94,14 @@
                                             <td>{{ $warranty->end_date }}</td>
                                             <td>{{ $warranty->description }}</td>
                                             <td>{{ $warranty->product_detail->warranty_month}} months</td>
+                                            <td>
+                                                @if ($warranty->is_active())
+                                                <span class="badge bg-green-lt">Still on</span>
+
+                                                @else
+                                                <span class="badge bg-red-lt">Not Within</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <!--nút sửa-->
                                                 <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
@@ -104,33 +121,8 @@
 
                                 </tbody>
                             </table><br><br>
-                            <div class="d-flex justify-content-end my-2">{{ $warranties->render('common.pagination') }}
-                            {{-- {!! $warranties->links() !!} --}}
-
-                            {{-- <script>
-                                $(document).ready(function() {
-                                    // Xử lý sự kiện click trên các liên kết phân trang
-                                    $('#pagination a').click(function(e) {
-                                        e.preventDefault();
-
-                                        // Lấy số trang từ URL
-                                        var page = $(this).attr('href').split('page=')[1];
-
-                                        // Gửi yêu cầu AJAX đến server
-                                        $.ajax({
-                                            url: '?page=' + page,
-                                            method: 'GET',
-                                            success: function(response) {
-                                                // Cập nhật nội dung danh sách bảo hành
-                                                $('#warranties-list').html(response.html);
-
-                                                // Cập nhật URL hiện tại
-                                                window.history.pushState({}, '', '?page=' + page);
-                                            }
-                                        });
-                                    });
-                                });
-                            </script> --}}
+                            {{-- <div class="d-flex justify-content-end my-2">{{ $warranties->render('common.pagination') }} --}}
+                            <div class="d-flex justify-content-end my-2">{{ $warranties->render('common.ajax-pagination') }}
 
                             </div>
                         </div>
@@ -144,4 +136,5 @@
         @include('admin.components.footer')
 
     </div>
+    <script src="{{ asset('js/warranty_api.js') }}" defer></script>
 @endsection

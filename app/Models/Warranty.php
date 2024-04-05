@@ -18,4 +18,9 @@ class Warranty extends Model
     public function order(){
         return $this->belongsTo(Order::class,'order_id');
     }
+    public function is_active()
+    {
+        $today = date('Y-m-d');
+        return $today >= $this->start_date && $today <= $this->end_date;
+    }
 }
