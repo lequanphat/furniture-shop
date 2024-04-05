@@ -12,6 +12,14 @@ class Warranty extends Model
     protected $primaryKey = 'warranty_id';
     protected $fillable = ['order_id', 'sku', 'start_date', 'end_date', 'description'];
 
+    public function product_detail()
+    {
+        return $this->belongsTo(ProductDetail::class, 'sku');
+    }
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
     public function is_active()
     {
         $today = date('Y-m-d');

@@ -85,7 +85,7 @@ jQuery.noConflict();
             });
         });
 
-        function debounce(func, wait) {
+        function debounce(func, wait) { //hàm đợi 1 thời gian rồi mới thực hiện
             let timeout;
             return function executedFunction(...args) {
                 const later = () => {
@@ -97,9 +97,9 @@ jQuery.noConflict();
             };
         }
 
-        // filter
+        // filter cho bảng dữ liệu, liên quan tới tìm kiếm và phân trang
         const filterDetailedProducts = ({ page }) => {
-            const search = $('#search-detailed-products').val();
+            const search = $('#search-detailed-products').val();    //lấy value từ ô tìm kiếm bên create_detailed_order
             if (!page) {
                 page = 1;
             }
@@ -116,8 +116,8 @@ jQuery.noConflict();
                     let formatter = new Intl.NumberFormat('en-US', {
                         minimumFractionDigits: 0,
                     });
-                    let html = '';
-                    for (let i = 0; i < response.detailed_products.data.length; i++) {
+                    let html = '';            //khởi tạo biến html để hiển thị cho bảng thêm sản phẩm order
+                    for (let i = 0; i < response.detailed_products.data.length; i++) {  //đối với mỗi dòng dữ liệu, tính giá tiền từ phần trăm discount
                         const detailed_product = response.detailed_products.data[i];
                         let discount_percentage = 0;
                         for (let j = 0; j < detailed_product.product_discounts.length; j++) {
@@ -133,7 +133,7 @@ jQuery.noConflict();
                         let image = '';
                         if (detailed_product.images.length > 0) {
                             image = detailed_product.images[0].url;
-                        }
+                        }                                                           //sau khi tính xong bắt đầu tạo dòng html để hiển thị lên bảng
                         html += `<tr data-sku="${detailed_product.sku}">
                         <td>
                             <div class="d-flex py-1 align-items-center">
@@ -182,9 +182,9 @@ jQuery.noConflict();
                         </td>
                     </tr>`;
                     }
-                    $('#detailed-products-table').html(html);
+                    $('#detailed-products-table').html(html);   //mớ trên đó là tạo dữ liệu, giờ thì set dòng html đó vào bảng
 
-                    // pagination
+                    // pagination, tạo dòng phân trang sau khi đã tạo các dòng dữ liệu
                     let pagination = `<li class="page-item ${
                         response.detailed_products.current_page === 1 ? 'disabled' : ''
                     }">
