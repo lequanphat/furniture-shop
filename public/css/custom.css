@@ -330,11 +330,12 @@ body::-webkit-scrollbar-track {
 
 .change-address-wrapper button {
     border: none;
-    background-color: transparent;
-    color: #e97730;
+    background-color: #e97730;
+    border-radius: 2px;
+    padding: 6px 16px;
+    color: white;
     cursor: pointer;
     font-size: 14px;
-    font-weight: 600;
     gap: 4px;
 }
 
@@ -361,4 +362,193 @@ body::-webkit-scrollbar-track {
 .custom-product-img {
     border: 1px solid #ccc;
     border-radius: 6px;
+}
+
+/* custom header action account */
+
+.header-bottom .header-action-account {
+    margin-left: 10px;
+    position: relative;
+}
+.header-bottom .header-action-account > ul {
+    background: #fff none repeat scroll 0 0;
+    -webkit-box-shadow: 0 0 20px 0.4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px 0.4px rgba(0, 0, 0, 0.1);
+    display: block;
+    right: 0;
+    padding: 14px;
+    position: absolute;
+    top: 110%;
+    width: max-content;
+    border-radius: 6px;
+    -webkit-transform: rotateX(90deg);
+    transform: rotateX(90deg);
+    -webkit-transform-origin: center top 0;
+    -ms-transform-origin: center top 0;
+    transform-origin: center top 0;
+    -webkit-transition: all 0.5s ease 0s;
+    -o-transition: all 0.5s ease 0s;
+    transition: all 0.5s ease 0s;
+    /* visibility: hidden; */
+    z-index: 99;
+}
+
+.header-bottom .header-action-account > ul li {
+    display: block;
+    position: relative;
+    line-height: 1;
+    padding: 8px 0;
+}
+.header-bottom .header-action-account > ul li a {
+    display: block;
+    color: #000000;
+    font-weight: 400;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.header-bottom .header-action-account > ul li:last-child a {
+    color: #fd1748;
+}
+.header-bottom .header-action-account > ul li:hover > a {
+    color: #e97730;
+}
+
+.header-bottom .header-action-account:hover > ul {
+    -webkit-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+    visibility: visible;
+}
+
+/* Custom modal */
+
+.modal-content {
+    padding: 0 !important;
+}
+.modal-title {
+    padding: 20px !important;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.modal-title h4 {
+    margin: 0;
+    font-size: 16px;
+}
+.modal-footer button {
+    border: none;
+    outline: none;
+    padding: 10px;
+    min-width: 140px;
+    border-radius: 2px;
+}
+.modal-footer button:hover {
+    opacity: 0.8;
+}
+.modal-footer button.cancel {
+    background-color: white;
+    border: 1px solid #e97730;
+    color: #e97730;
+}
+.modal-footer button.submit {
+    background-color: #e97730;
+    border: 1px solid #e97730;
+    color: white;
+}
+.quickview-modal-style .modal-dialog {
+    max-width: 540px;
+}
+
+.address-modal-content {
+    padding: 0 16px !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.09);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+}
+
+.address-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+    padding: 16px;
+}
+.address-item:last-child {
+    border-bottom: none !important;
+}
+.address-item div:first-child {
+    width: 10%;
+}
+.address-item div:last-child {
+    flex: 1;
+}
+.address-item p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.address-item div:last-child .heading {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.address-item div:last-child .default-tag {
+    width: max-content;
+    border-color: #e97730;
+    color: #e97730;
+    padding: 0px 8px;
+    border: 0.5px solid;
+    border-radius: 1px;
+    font-size: 12px;
+    margin-top: 2px;
+}
+.address-item div:last-child .heading p:first-child {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
+}
+.address-item div:last-child .heading .separate {
+    margin: 0 8px;
+    height: 20px;
+    border-left: 0.5px solid rgba(0, 0, 0, 0.26);
+    flex-shrink: 0;
+}
+/* Hide the default radio button */
+.custom-radio input[type='radio'] {
+    display: none;
+}
+
+/* Create a custom radio button */
+.custom-radio .checkmark {
+    position: relative;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    height: 21px;
+    width: 21px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+}
+
+.custom-radio input:checked ~ .checkmark {
+    background-color: white;
+    border: 1px solid #e97730;
+}
+
+.custom-radio .checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.custom-radio input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.custom-radio .checkmark:after {
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e97730;
 }

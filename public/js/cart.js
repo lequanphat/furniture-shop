@@ -1,4 +1,17 @@
 jQuery(document).ready(function () {
+    function showToast(message, type) {
+        let background = '#0097e6';
+        if (type === 'success') background = '#4cd137';
+        else if (type === 'error') background = '#e84118';
+        Toastify({
+            text: message,
+            close: true,
+            style: {
+                background,
+            },
+            duration: 3000,
+        }).showToast();
+    }
     // init cart
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     if (cart.length > 0) {
@@ -21,6 +34,7 @@ jQuery(document).ready(function () {
     // load mini cart
     $('.header-action-cart').on('click', function () {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
         let html = '';
         let total_price = 0;
         for (let i = 0; i < cart.length; i++) {
@@ -216,26 +230,17 @@ jQuery(document).ready(function () {
             const quantities = $(item).data('quantities');
             checkout.push({ sku, name, unit_price, quantities });
         }
-        document.cookie = `checkout=${JSON.stringify(checkout)}; expires=${new Date(
-            new Date().getTime() + 1800000, // 1800000 milliseconds = 30 minutes
-        ).toUTCString()}; path=/`;
+        localStorage.setItem('checkout', JSON.stringify(checkout));
         window.location.href = '/checkout';
     });
     $(document).on('click', '.js-mini-cart-checkout-btn', function () {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        document.cookie = `checkout=${JSON.stringify(cart)}; expires=${new Date(
-            new Date().getTime() + 1800000, // 1800000 milliseconds = 30 minutes
-        ).toUTCString()}; path=/`;
+        localStorage.setItem('checkout', JSON.stringify(cart));
         window.location.href = '/checkout';
     });
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
 
     function loadCheckoutProduct() {
-        const checkout = JSON.parse(getCookie('checkout')) || [];
+        const checkout = JSON.parse(localStorage.getItem('checkout')) || [];
         let total_price = 0;
         let total_quantities = 0;
         for (let i = 0; i < checkout.length; i++) {
@@ -252,12 +257,30 @@ jQuery(document).ready(function () {
     }
     loadCheckoutProduct();
 
+    $(document).on('click', '.js-change-address', function () {
+        var checkedRadio = $('.address-item input[type=radio]:checked');
+        if (checkedRadio.length > 0) {
+            var addressItem = checkedRadio.closest('.address-item');
+            var receiverName = addressItem.find('.heading p').first().text();
+            var phoneNumber = addressItem.find('.heading p').last().text();
+            var address = addressItem.find('p').not('.heading p').text();
+            $('#receiver-name').val(receiverName);
+            $('#phone-number').val(phoneNumber);
+            $('#address').val(address);
+        } else {
+            console.log('No address selected');
+        }
+    });
     $(document).on('submit', '#checkout-form', function (event) {
         event.preventDefault();
         let data = $(this).serialize();
 
-        const checkout_list = JSON.parse(getCookie('checkout')) || [];
-        let checkout = checkout_list.map((item) => ({
+        let checkout = JSON.parse(localStorage.getItem('checkout')) || [];
+        if (checkout.length === 0) {
+            showToast('No product in cart', 'error');
+            return;
+        }
+        checkout = checkout.map((item) => ({
             sku: item.sku,
             quantities: item.quantities,
             unit_price: convertCurrencyToNumber(item.unit_price + ''),
