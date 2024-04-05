@@ -113,7 +113,11 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
 
     //warranty
-    Route::get('admin/warranties', [WarrantyController::class, 'index'])->name('warranties.index');
+    Route::get('/admin/warranties', [WarrantyController::class, 'index']);
+    Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
+    Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
+    //Route::get('/admin/warranties', [WarrantyController::class,'warranty_search_ui'])->name('warranty.search');
+    Route::get('/admin/warranties/search', [WarrantyController::class,'search_warranties_ajax'])->name('warranty.search');
 
 
 
@@ -166,7 +170,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // *This is only temporary, use the appropriate controller
 
 
-    Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
+    //Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
     Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
     Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
     Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);

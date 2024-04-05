@@ -14,7 +14,7 @@ class CreateOrder extends FormRequest
     }
     public function rules()
     {
-        // validate here
+        // validate here, các ô id trên form tạo
         return [
             'status' => 'required',
             'receiver_name' => 'required',
