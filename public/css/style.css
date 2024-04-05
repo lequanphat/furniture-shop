@@ -8983,10 +8983,10 @@ textarea {
     align-items: center;
 }
 .sidebar-widget .sidebar-list-style.sidebar-widget-color ul li a div.color {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #ccc;
     border-radius: 50%;
-    background-color: #000000;
     margin-right: 10px;
 }
 

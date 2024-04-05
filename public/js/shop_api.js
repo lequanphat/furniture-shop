@@ -1,4 +1,8 @@
 jQuery(document).ready(function () {
+    // format number
+    let formatter = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+    });
     // show toast function
     function showToast(message, type) {
         let background = '#0097e6';
@@ -13,79 +17,14 @@ jQuery(document).ready(function () {
             duration: 3000,
         }).showToast();
     }
-    const data_asset = $('#asset').attr('data-asset');
+
+    // product pagination
     $('.pagination-item').click((e) => {
         e.preventDefault();
         $('.pagination-item.active').removeClass('active');
         $(e.target).addClass('active');
-
         const page = $(e.target).text();
-        $.ajax({
-            url: `/products?page=${page}`,
-            type: 'GET',
-            success: function (response) {
-                console.log(response);
-
-                const products = response.data;
-                let html = '';
-                for (let i = 0; i < products.length; i++) {
-                    let product = products[i];
-
-                    let image = `${data_asset}images/product/product-5.png`;
-                    if (product.detailed_products[0]?.images[0]?.url) {
-                        image = `${data_asset}storage/${product.detailed_products[0]?.images[0]?.url}`;
-                    }
-                    html += `<div class="col-lg-4 col-md-4 col-sm-6 col-12">
-                    <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
-                        <div class="product-img img-zoom mb-25">
-                            <a href="/products/${product.product_id}" alt="" style="height: 275px">
-                                <img src="${image}" alt="" style="height: 275px">
-                            </a>
-                            <div class="product-badge badge-top badge-right badge-pink">
-                                <span>-5%</span>
-                            </div>
-                            <div class="product-action-wrap">
-                                <a href="/products/${product.product_id}"
-                                    class="product-action-btn-1" title="Wishlist"><i
-                                        class="pe-7s-like"></i></a>
-                                <button class="product-action-btn-1" title="Quick View"
-                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    <i class="pe-7s-look"></i>
-                                </button>
-                            </div>
-                            <div class="product-action-2-wrap">
-                                <button class="product-action-btn-2" title="Add To Cart"><i
-                                        class="pe-7s-cart"></i> Add to cart</button>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h3><a
-                                    href="/products/${product.product_id}">${product.name}</a>
-                            </h3>
-                            <div class="product-price">
-                                <span class="old-price">
-                                    $1000
-                                </span>
-                                <span class="new-price">
-                                    ${product.detailed_products[0]?.original_price || '999.000đ'}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-                }
-                $('#product-list').html(html);
-                $('html, body').animate(
-                    {
-                        scrollTop: $('#product-list').offset().top - 200,
-                    },
-                    'slow',
-                );
-            },
-            error: function (error) {
-                console.log(error);
-            },
-        });
+        productFilter({ page });
     });
 
     // helper function
@@ -188,14 +127,12 @@ jQuery(document).ready(function () {
     });
 
     // filter
-    function productFilter() {
+    function productFilter({ page = 1 }) {
         // search
         const search_text = $('#search-input').val();
         // sort
         const sorted_by = $('#sort-product').val();
-        // page
-        const page = $('.pagination-item.active').text();
-        console.log(page);
+
         // category
         const categories = $('.js-cate-checkbox');
         const categoryIds = [];
@@ -234,19 +171,27 @@ jQuery(document).ready(function () {
                 let html = '';
                 for (let i = 0; i < response.products.data.length; i++) {
                     let product = response.products.data[i];
-                    let image = `${data_asset}images/product/product-5.png`;
-                    if (product.detailed_products[0]?.images[0]?.url) {
-                        image = product.detailed_products[0]?.images[0]?.url;
-                    }
                     html += `<div class="col-lg-4 col-md-4 col-sm-6 col-12">
                     <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
-                        <div class="product-img img-zoom mb-25">
+                        <div class="custom-product-img product-img img-zoom mb-25">
                             <a href="/products/${product.product_id}">
-                                <img src="${image}" alt="" style="height: 275px">
+                                <img src="${product.detailed_product.image}" alt="" style="height: 275px">
                             </a>
                             <div class="product-badge badge-top badge-right badge-pink">
-                                <span>-10%</span>
+                            ${
+                                product.detailed_product.total_discount_percentage > 0
+                                    ? `<span>-${product.detailed_product.total_discount_percentage}%</span>`
+                                    : ''
+                            }
                             </div>
+                            ${
+                                product.total_quantities == 0
+                                    ? ` <div class="custom-product-badge product-badge badge-top badge-left badge-pink">
+                                <span>Sold out</span>
+                            </div>`
+                                    : ''
+                            }
+                            
                             <div class="product-action-wrap">
                                 <a href="/products/${product.product_id}"
                                     class="product-action-btn-1" title="Wishlist"><i
@@ -266,11 +211,16 @@ jQuery(document).ready(function () {
                                     href="/products/${product.product_id}">${product.name}</a>
                             </h3>
                             <div class="product-price">
-                                <span class="old-price">
-                                    $1000
-                                </span>
+                            ${
+                                product.detailed_product.total_discount_percentage > 0
+                                    ? `<span class="old-price">
+                                    ${formatter.format(product.detailed_product.original_price)}đ
+                                    </span>`
+                                    : ''
+                            } 
+                            
                                 <span class="new-price">
-                                    ${product.detailed_products[0]?.original_price || '999.000đ'}
+                                    ${formatter.format(product.detailed_product.original_price)}đ
                                 </span>
                             </div>
                         </div>
@@ -302,21 +252,25 @@ jQuery(document).ready(function () {
     $('#search-input').on(
         'input',
         debounce(function () {
-            productFilter();
+            const page = $('.pagination-item.active').text();
+            productFilter({ page });
         }, 500),
     );
 
     // sorted
     $('#sort-product').change(function () {
-        productFilter();
+        const page = $('.pagination-item.active').text();
+        productFilter({ page });
     });
     // category filter
     $('.js-cate-checkbox').change(function () {
-        productFilter();
+        const page = $('.pagination-item.active').text();
+        productFilter({ page });
     });
 
     // color filter
     $('.js-color-checkbox').change(function () {
-        productFilter();
+        const page = $('.pagination-item.active').text();
+        productFilter({ page });
     });
 });

@@ -128,7 +128,14 @@ class OrderController extends Controller
             ]);
             ProductDetail::where('sku', $item['sku'])->decrement('quantities', $item['quantities']);
         }
+        return ['message' => 'Checkout order successfully!', 'order' => $order];
+    }
 
-        return response()->json($checkout);
+    public function checkout_order_success(Request $request)
+    {
+        $data = [
+            'page' => 'Checkout Success',
+        ];
+        return view('pages.checkout.success', $data);
     }
 }

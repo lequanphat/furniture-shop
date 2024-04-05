@@ -76,7 +76,7 @@
                                                         }
                                                     @endphp
                                                     <span class="avatar me-2"
-                                                        style="background-image: url({{ $imageUrl }}); width: 80px; height: 80px;"></span>
+                                                        style="background-image: url({{ $imageUrl }}); width: 80px; height: 80px; flex-shrink: 0;"></span>
                                                     <div class="flex-fill">
                                                         <div class="font-weight-medium">
                                                             <h3 class="m-0">{{ $product->name }}

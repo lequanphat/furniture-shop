@@ -45,9 +45,7 @@
                                         </div>
                                     @endforeach
                                 @endforeach
-
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -88,7 +86,7 @@
                                 <div class="detailed-product-tag @if ($loop->first) active @endif
                                 @if ($dt_product->quantities == 0) disable @endif"
                                     data-sku="{{ $dt_product->sku }}" data-id="{{ $product->product_id }}">
-                                    <img src="{{ $dt_product->images->first()->url }}" alt=""
+                                    <img src="@if (isset($dt_product->images->first()->url)) {{ $dt_product->images->first()->url }} @endif"
                                         style="width: 40px; height: 40px;">
                                     <span>C: {{ $dt_product->color->name }}</span>
                                     <span>S: {{ $dt_product->size }}</span>
