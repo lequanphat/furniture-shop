@@ -306,11 +306,26 @@ jQuery(document).ready(function () {
                 console.log('====================================');
                 console.log(response);
                 console.log('====================================');
-                window.location.href = `/checkout/${response.order.order_id}`;
+                window.location.href = response;
+                // window.location.href = `/checkout/${response.order.order_id}`;
             },
             error: function (error) {
                 console.log(error);
             },
         });
+    });
+
+    $(document).on('click', '.js-buy-now', function () {
+        const quantity_input = $('.js-quantity-input');
+        let quantities = parseInt(quantity_input.val());
+        const sku = $('.detailed-product-tag.active').data('sku');
+        const unit_price = $('.js-product-name-price:not(.d-none) .js-unit-price').text();
+        const name = $('.js-product-name-price:not(.d-none) .js-product-name').text();
+        const image = $('.detailed-product-tag.active img').attr('src');
+
+        // save to local storage
+        const checkout = [{ sku, quantities, unit_price, name, image }];
+        localStorage.setItem('checkout', JSON.stringify(checkout));
+        window.location.href = '/checkout';
     });
 });

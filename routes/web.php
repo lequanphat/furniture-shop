@@ -70,7 +70,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 
     // checkout
     Route::post('/checkout', [OrderController::class, 'checkout_order'])->name('checkout');
-    Route::get('/checkout/{order_id}', [PagesController::class, 'checkout_order_success'])->name('checkout.success');
+    Route::get('/checkout/{order_id}', [PagesController::class, 'handle_checkout_order'])->name('checkout.handle');
 
     // my orders
     Route::get('/myorders', [PagesController::class, 'my_orders'])->name('my_orders');
