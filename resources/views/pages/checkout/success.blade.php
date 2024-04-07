@@ -37,7 +37,8 @@
                             </div>
                             <div class="checkout-footer">
                                 <a href="{{ route('shop') }}"><i class="fa-solid fa-chevron-left"></i>Continue shopping</a>
-                                <a href="/myorders/{{ $order->order_id }}">Track your order<i class="fa-solid fa-chevron-right"></i></a>
+                                <a href="/myorders/{{ $order->order_id }}">Track your order<i
+                                        class="fa-solid fa-chevron-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -56,13 +57,21 @@
                                 <h3>order summary</h3>
                                 @foreach ($order->order_details as $detailed_order)
                                     <div class="item">
-                                        <p>x{{ $detailed_order->quantities }} {{ $detailed_order->detailed_product->name }}
+                                        <p>x{{ $detailed_order->quantities }}
+                                            {{ $detailed_order->detailed_product->name }}
                                         </p>
                                         <p>{{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
                                         </p>
                                     </div>
                                 @endforeach
                             </div>
+                            @if (isset($order->note))
+                                <div class="order-note">
+                                    <h3>Order Note</h3>
+                                    <p>{{ $order->note }}</p>
+                                </div>
+                            @endif
+
                         </div>
                         <div class="footer">
                             <h3>Total</h3>

@@ -295,6 +295,11 @@ jQuery(document).ready(function () {
             },
             success: function (response) {
                 // delete checkout storage
+
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                checkout = checkout.map((item) => item.sku);
+                cart = cart.filter((cart_item) => !checkout.includes(cart_item.sku));
+                localStorage.setItem('cart', JSON.stringify(cart));
                 localStorage.removeItem('checkout');
 
                 // redirect to checkout page

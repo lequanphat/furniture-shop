@@ -656,7 +656,7 @@ body::-webkit-scrollbar-track {
     margin: 0 4px;
 }
 .checkout-footer a:hover {
-    color: #e97730!important;
+    color: #e97730 !important;
 }
 
 .checkout-right {
@@ -695,6 +695,9 @@ body::-webkit-scrollbar-track {
 .checkout-right .order-summary .item p {
     margin-bottom: 6px;
 }
+.checkout-right .order-note {
+    margin-top: 24px;
+}
 .checkout-right .footer {
     padding-top: 8px;
     display: flex;
@@ -704,4 +707,116 @@ body::-webkit-scrollbar-track {
 .checkout-right .footer span {
     font-size: 16px;
     color: #e97730;
+}
+
+/* my orders custom */
+.my-orders-filter-wrapper {
+    width: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+.my-orders-filter-wrapper .filter-item {
+    position: relative;
+    padding: 4px 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.my-orders-filter-wrapper .filter-item:hover {
+    color: #e97730;
+}
+.my-orders-filter-wrapper .filter-item.active {
+    color: #e97730;
+}
+.my-orders-filter-wrapper .filter-item.active::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    height: 2px;
+    background-color: #e97730;
+}
+
+.my-orders-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid rgba(52, 53, 56, 0.1);
+}
+.my-orders-header div:first-child {
+    width: 5%;
+}
+.my-orders-header div:nth-child(2) {
+    width: 40%;
+}
+.my-orders-header div:nth-child(3) {
+    width: 15%;
+}
+.my-orders-header div:nth-child(4) {
+    width: 15%;
+}
+.my-orders-header div:nth-child(5) {
+    width: 15%;
+}
+.my-orders-header div:nth-child(6) {
+    width: 10%;
+}
+
+.my-order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(52, 53, 56, 0.1);
+}
+
+.my-order-item div:first-child {
+    width: 5%;
+}
+.my-order-item div:nth-child(2) {
+    width: 40%;
+}
+.my-order-item div:nth-child(3) {
+    width: 15%;
+}
+.my-order-item div:nth-child(4) {
+    width: 15%;
+}
+.my-order-item div:nth-child(5) {
+    width: 15%;
+}
+.my-order-item div:nth-child(6) {
+    width: 10%;
+}
+
+.my-order-item .img-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.my-order-item .img-wrapper img {
+    position: absolute;
+   
+    border-radius: 12px;
+    border: 1px solid #ccc;
+}
+.my-order-item .img-wrapper img:first-child {
+    width: 80px;
+    height: 80px;
+    top: 0;
+    left: 0;
+}
+.my-order-item .img-wrapper img:nth-child(2) {
+    width: 90px;
+    height: 90px;
+    top: -5px;
+    left: 25px;
+}
+.my-order-item .img-wrapper img:nth-child(3) {
+    width: 100px;
+    height: 100px;
+    top: -10px;
+    left: 50px;
 }

@@ -74,6 +74,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 
     // my orders
     Route::get('/myorders', [PagesController::class, 'my_orders'])->name('my_orders');
+    Route::get('/myorders/{order_id}', [PagesController::class, 'my_detailed_order'])->name('my_detailed_order');
 });
 
 

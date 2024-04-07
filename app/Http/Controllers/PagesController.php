@@ -230,9 +230,21 @@ class PagesController extends Controller
     }
     public function my_orders()
     {
+        $orders = Order::where('customer_id', Auth::id())->with('order_details')->orderBy('created_at', 'desc')->get();
         $data = [
             'page' => 'My orders',
+            'orders' => $orders,
         ];
         return view('pages.myorders.index', $data);
+    }
+    public function my_detailed_order()
+    {
+        $order_id = request()->route('order_id');
+        $order = Order::where('order_id', $order_id)->where('customer_id', Auth::id())->with('order_details')->first();
+        $data = [
+            'page' => 'My detailed order',
+            'order' => $order,
+        ];
+        return view('pages.myorders.detailed_order', $data);
     }
 }
