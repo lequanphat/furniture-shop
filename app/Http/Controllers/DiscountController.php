@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateDiscount;
 use App\Http\Requests\UpdateDiscount;
 use App\Models\Discount;
+use App\Models\Product;
+use App\Models\ProductDetail;
+use App\Models\ProductDiscounts;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
@@ -43,6 +46,38 @@ class DiscountController extends Controller
         $Discount = Discount::create($DiscountData);
         //print_r($request);
         return ['message' => 'Created discount successfully!'];
+    }
+
+    public function  discount_detail()
+    {
+        $discount_id = request()->route('discount_id');
+    //  $product = ProductDiscounts::with('sku', 'discount')->find($discount_id);
+        // $sku = ProductDiscounts::where('discount_id', $discount_id) ->pluck('sku')
+        // ->first();
+
+        // $find_sku = ProductDiscounts::where('discount_id',$discount_id)->select('sku')->first();
+        $find_product_id = ProductDiscounts::with('sku', 'discount')->find($discount_id);
+
+
+
+
+// $find_product_detail = ProductDetail::with('product')->find($sku);
+
+
+
+        $data = [
+            'page' => 'Discount Details And List Discount Item',
+            //        ,
+
+            'discount' => Discount::find($discount_id),
+            'product' => Product::all(),
+            'check' => $find_product_id,
+
+
+        ];
+
+
+        return view('admin.discounts.discount_detail', $data);
     }
 
     /**

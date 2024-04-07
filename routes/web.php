@@ -125,7 +125,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/warranties/search', [WarrantyController::class, 'search_warranties_ajax'])->name('warranty.search');
 
 
-
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
@@ -168,7 +167,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/discounts/create', [DiscountController::class, 'create']);
     Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
     Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
-
+    Route::get('/admin/discounts/viewDetail/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
     //profile
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
