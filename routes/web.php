@@ -124,7 +124,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //Route::get('/admin/warranties', [WarrantyController::class,'warranty_search_ui'])->name('warranty.search');
     Route::get('/admin/warranties/search', [WarrantyController::class, 'search_warranties_ajax'])->name('warranty.search');
 
-
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
