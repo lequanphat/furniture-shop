@@ -45,15 +45,15 @@ Route::get('logout', [AuthController::class, 'logout']);
 Route::middleware([PublicMiddleware::class])->group(function () {
     // public api
     Route::get('/', [PagesController::class, 'index'])->name('user');
-    Route::get('/shop', [PagesController::class, 'shop']);
+    Route::get('/shop', [PagesController::class, 'shop'])->name('shop');
     Route::get('/about', [PagesController::class, 'about']);
     Route::get('/contact', [PagesController::class, 'contact']);
     // products api
     Route::get('/products/{product_id}', [PagesController::class, 'product_details']);
     Route::get('/products', [ProductController::class, 'get_products']); // => json
 
-    Route::get('/cart', [PagesController::class, 'cart']);
-    Route::get('/checkout', [PagesController::class, 'checkout']);
+    Route::get('/cart', [PagesController::class, 'cart'])->name('cart');
+    Route::get('/checkout', [PagesController::class, 'checkout'])->name('checkout');;
 
     Route::get('/products', [ProductController::class, 'get_products']);
     Route::get('/top5deal', [HotDealController::class, 'get_Deal_of_Date_product']);
@@ -62,14 +62,19 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
     //account
-    Route::get('/account/{user_id}', [ProfileController::class, 'customer_ui'])->name('my_account');
+    Route::get('/account', [ProfileController::class, 'customer_ui'])->name('my_account');
     Route::post('/account/profile/update', [ProfileController::class, 'update_customer']);
     //address_card
     Route::post('/account/profile/addresscard/update', [AddressController::class, 'update_address']);
     Route::post('/account/profile/addresscard/create', [AddressController::class, 'create_address']);
 
+    // checkout
     Route::post('/checkout', [OrderController::class, 'checkout_order'])->name('checkout');
-    Route::get('/checkout/{order_id}', [OrderController::class, 'checkout_order_success'])->name('checkout.success');
+    Route::get('/checkout/{order_id}', [PagesController::class, 'checkout_order_success'])->name('checkout.success');
+
+    // my orders
+    Route::get('/myorders', [PagesController::class, 'my_orders'])->name('my_orders');
+    Route::get('/myorders/{order_id}', [PagesController::class, 'my_detailed_order'])->name('my_detailed_order');
 });
 
 
@@ -117,7 +122,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
     Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
     //Route::get('/admin/warranties', [WarrantyController::class,'warranty_search_ui'])->name('warranty.search');
-    Route::get('/admin/warranties/search', [WarrantyController::class,'search_warranties_ajax'])->name('warranty.search');
+    Route::get('/admin/warranties/search', [WarrantyController::class, 'search_warranties_ajax'])->name('warranty.search');
 
 
 

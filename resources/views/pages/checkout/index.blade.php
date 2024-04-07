@@ -72,7 +72,7 @@
                             @endif
                             <div class="additional-info-wrap">
                                 <label>Order notes</label>
-                                <textarea placeholder="Notes about your order, e.g. special notes for delivery. " name="note"></textarea>
+                                <textarea id="note" name="note" placeholder="Notes about your order, e.g. special notes for delivery. "></textarea>
                             </div>
                         </div>
                     </div>

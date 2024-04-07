@@ -147,11 +147,5 @@ class OrderController extends Controller
         return ['message' => 'Checkout order successfully!', 'order' => $order];
     }
 
-    public function checkout_order_success(Request $request)
-    {
-        $data = [
-            'page' => 'Checkout Success',
-        ];
-        return view('pages.checkout.success', $data);
-    }
+    
 }

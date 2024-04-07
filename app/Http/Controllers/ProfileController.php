@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateEmployee;
 use Illuminate\Http\Request;
 use app\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -20,7 +21,7 @@ class ProfileController extends Controller
     //
     public function user_ui(Request $request)
     {
-        $user_id = $request->route('user_id');
+        $user_id = Auth::id();
         $user = User::where('user_id', $user_id)->first();
         if ($user) {
             $data = [
@@ -32,7 +33,7 @@ class ProfileController extends Controller
     }
     public function customer_ui(Request $request)
     {
-        $user_id = $request->route('user_id');
+        $user_id = Auth::id();
         $user = User::where('user_id', $user_id)->first();
         $listaddress = $this->address_controller->address_user($request);
         if ($user) {
