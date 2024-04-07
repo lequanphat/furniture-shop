@@ -55,7 +55,7 @@
                                 </a>
                                 <ul>
                                     <li><a href="{{ route('my_account') }}">My Account</a></li>
-                                    <li><a href="#">My orders</a></li>
+                                    <li><a href="{{ route('my_orders') }}">My orders</a></li>
                                     <li><a href="/logout">Logout</a></li>
                                 </ul>
                             </div>

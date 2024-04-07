@@ -68,8 +68,12 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     Route::post('/account/profile/addresscard/update', [AddressController::class, 'update_address']);
     Route::post('/account/profile/addresscard/create', [AddressController::class, 'create_address']);
 
+    // checkout
     Route::post('/checkout', [OrderController::class, 'checkout_order'])->name('checkout');
     Route::get('/checkout/{order_id}', [PagesController::class, 'checkout_order_success'])->name('checkout.success');
+
+    // my orders
+    Route::get('/myorders', [PagesController::class, 'my_orders'])->name('my_orders');
 });
 
 

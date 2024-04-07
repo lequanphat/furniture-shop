@@ -228,4 +228,11 @@ class PagesController extends Controller
         }
         return view('pages.checkout.success', $data);
     }
+    public function my_orders()
+    {
+        $data = [
+            'page' => 'My orders',
+        ];
+        return view('pages.myorders.index', $data);
+    }
 }
