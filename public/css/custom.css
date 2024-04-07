@@ -552,3 +552,156 @@ body::-webkit-scrollbar-track {
     border-radius: 50%;
     background: #e97730;
 }
+
+/* checkout success custom */
+
+.checkout-container {
+    border: 2px solid rgba(52, 53, 56, 0.1);
+}
+.checkout-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 2px solid rgba(52, 53, 56, 0.1);
+    padding: 24px;
+}
+.checkout-left .checkout-icon {
+    width: 80px;
+    height: 80px;
+}
+.checkout-left .checkout-message h2 {
+    text-align: center;
+}
+.checkout-left .checkout-message h2:first-child {
+    font-size: 16px;
+    text-transform: uppercase;
+    margin: 16px 0;
+}
+
+.checkout-left .checkout-message h2:nth-child(2) {
+    font-size: 22px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.checkout-left .checkout-message p {
+    font-size: 16px;
+    margin: 24px 0;
+}
+.checkout-left .checkout-message p span {
+    color: #e97730;
+}
+.checkout-status .title {
+    font-size: 16px;
+    text-align: center;
+}
+.checkout-status .title a,
+.checkout-status .title span {
+    color: #e97730;
+}
+.checkout-status .status-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 0;
+}
+.checkout-status .status-progress .progress-item {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+}
+.checkout-status .status-progress .progress-item span {
+    position: absolute;
+    bottom: -80%;
+    width: max-content;
+    left: 50%;
+    font-size: 14px;
+    color: #333;
+    transform: translateX(-50%);
+}
+.checkout-status .status-progress .progress-item.active span {
+    color: #1abc9c;
+}
+.checkout-status .status-progress .progress-item.active {
+    background-color: #1abc9c;
+}
+.checkout-status .status-progress .progress-line {
+    width: 15%;
+    height: 4px;
+    background-color: #ccc;
+}
+.checkout-status .status-progress .progress-line.active {
+    background-color: #1abc9c;
+}
+
+.checkout-footer {
+    margin-top: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.checkout-footer a {
+    margin: 0 4px;
+    font-size: 16px;
+}
+.checkout-footer a i {
+    font-size: 14px;
+    margin: 0 4px;
+}
+.checkout-footer a:hover {
+    color: #e97730!important;
+}
+
+.checkout-right {
+    padding: 24px;
+}
+.checkout-right .header h2 {
+    font-size: 17px;
+    font-weight: 600;
+}
+.checkout-right .header h3 {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.checkout-right .content {
+    padding: 16px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin: 10px 0;
+}
+.checkout-right h3 {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.checkout-right .delivery-address p {
+    margin: 0;
+}
+
+.checkout-right .order-summary {
+    margin-top: 24px;
+}
+.checkout-right .order-summary .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.checkout-right .order-summary .item p {
+    margin-bottom: 6px;
+}
+.checkout-right .footer {
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.checkout-right .footer span {
+    font-size: 16px;
+    color: #e97730;
+}

@@ -17,7 +17,7 @@ class Order extends Model
     {
         switch ($this->status) {
             case 0:
-                return 'Unconfirmed';
+                return 'Awaiting Confirm';
             case 1:
                 return 'Confirmed';
             case 2:

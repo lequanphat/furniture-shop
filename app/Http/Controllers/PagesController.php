@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
@@ -206,5 +208,24 @@ class PagesController extends Controller
     public function change_password()
     {
         return view('auth.change-password');
+    }
+
+    public function checkout_order_success(Request $request)
+    {
+        $order_id = $request->route('order_id');
+        $order = Order::where('order_id', $order_id)->with('order_details')->first();
+        if ($order && $order->customer_id == Auth::id()) {
+            $order->get_status = $order->get_status();
+            $data = [
+                'page' => 'Checkout Success',
+                'order' => $order,
+            ];
+        } else {
+            $data = [
+                'page' => 'Checkout Success',
+                'order' => null,
+            ];
+        }
+        return view('pages.checkout.success', $data);
     }
 }

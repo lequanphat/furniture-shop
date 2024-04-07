@@ -50,11 +50,11 @@
                         </div>
                         @if (Auth::user())
                             <div class="header-action-style header-action-account">
-                                <a title="Account" href="{{ route('my_account', Auth::user()->user_id) }}">
+                                <a title="Account">
                                     <i class="pe-7s-user"></i>
                                 </a>
                                 <ul>
-                                    <li><a href="#">My Account</a></li>
+                                    <li><a href="{{ route('my_account') }}">My Account</a></li>
                                     <li><a href="#">My orders</a></li>
                                     <li><a href="/logout">Logout</a></li>
                                 </ul>
