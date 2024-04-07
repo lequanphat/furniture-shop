@@ -28,4 +28,5 @@ class Product extends Model
     {
         return $this->hasMany(ProductTag::class, 'product_id');
     }
+  
 }

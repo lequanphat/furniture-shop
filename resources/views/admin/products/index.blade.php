@@ -10,7 +10,7 @@
                     </div>
                     <h2 class="page-title">
                         Products Management
-                    </h2>
+                    </h2>produc
                 </div>
                 <!-- Page actions -->
                 <div class="col-auto ms-auto d-print-none">

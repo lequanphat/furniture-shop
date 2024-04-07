@@ -11,4 +11,9 @@ class Discount extends Model
     protected $table = 'discounts';
     protected $primaryKey = 'discount_id';
     protected $fillable = ['title', 'description', 'percentage', 'amount', 'start_date', 'end_date', 'is_active'];
+
+    public function productDetail()
+    {
+        return $this->hasMany(ProductDiscounts::class,'discount_id');
+    }
 }
