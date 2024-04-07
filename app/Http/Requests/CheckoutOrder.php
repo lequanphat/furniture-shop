@@ -18,6 +18,7 @@ class CheckoutOrder extends FormRequest
             'receiver_name' => 'required',
             'address' => 'required',
             'phone_number' => 'required',
+            'payment_method' => 'required',
         ];
     }
     public function messages()
@@ -27,6 +28,7 @@ class CheckoutOrder extends FormRequest
             'receiver_name.required' => 'The customer name field is required',
             'address.required' => 'The address field is required',
             'phone_number.required' => 'The phone number field is required',
+            'payment_method.required' => 'The payment method field is required',
         ];
     }
 }

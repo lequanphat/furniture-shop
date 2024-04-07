@@ -22,27 +22,40 @@
                                 in progress
                             </p>
                             <div class="status-progress">
-                                <div class="progress-item @if ($order->status >= 0) active @endif"><i
-                                        class="fa-solid fa-clock"></i><span>Await confirm</span></div>
-                                <div class="progress-line @if ($order->status >= 1) active @endif"></div>
-                                <div class="progress-item @if ($order->status >= 1) active @endif"><i
-                                        class="fa-solid fa-check"></i><span>Comfirmed</span></div>
-                                <div class="progress-line @if ($order->status >= 2) active @endif"></div>
-                                <div class="progress-item @if ($order->status >= 2) active @endif"><i
-                                        class="fa-solid fa-truck"></i><span>In transit</span></div>
-                                <div class="progress-line @if ($order->status >= 3) active @endif"></div>
-                                <div class="progress-item @if ($order->status >= 3) active @endif"><i
-                                        class="fa-solid fa-thumbs-up"></i><span>Deliverd</span></div>
+                                @if ($order->status == 4)
+                                    <div class="progress-item active "><i class="fa-solid fa-clock"></i><span>Await
+                                            confirm</span></div>
+                                    <div class="progress-line cancel "></div>
+                                    <div class="progress-item cancel "><i
+                                            class="fa-solid fa-xmark"></i><span>Canceled</span></div>
+                                @else
+                                    <div class="progress-item @if ($order->status >= 0) active @endif"><i
+                                            class="fa-solid fa-clock"></i><span>Await confirm</span></div>
+                                    <div class="progress-line @if ($order->status >= 1) active @endif"></div>
+                                    <div class="progress-item @if ($order->status >= 1) active @endif"><i
+                                            class="fa-solid fa-check"></i><span>Comfirmed</span></div>
+                                    <div class="progress-line @if ($order->status >= 2) active @endif"></div>
+                                    <div class="progress-item @if ($order->status >= 2) active @endif"><i
+                                            class="fa-solid fa-truck"></i><span>In transit</span></div>
+                                    <div class="progress-line @if ($order->status >= 3) active @endif"></div>
+                                    <div class="progress-item @if ($order->status >= 3) active @endif"><i
+                                            class="fa-solid fa-thumbs-up"></i><span>Deliverd</span></div>
+                                @endif
+
 
                             </div>
-                            <div class="checkout-footer">
-                                <a href="{{ route('shop') }}"><i class="fa-solid fa-chevron-left"></i>Continue shopping</a>
-                                <a href="/myorders/{{ $order->order_id }}">Track your order<i
-                                        class="fa-solid fa-chevron-right"></i></a>
+                            <div class="checkout-footer justify-between"><a class="btn" href="{{ route('shop') }}">Back to shop</a>
+                                <a class="btn" href="/myorders/{{ $order->order_id }}">Track your order</a>
                             </div>
+
                         </div>
                     </div>
                     <div class="col-4 checkout-right">
+                        @if ($order->is_paid)
+                            <div class="paid-tag">Paid</div>
+                        @else
+                            <div class="paid-tag unpaid">Unpaid</div>
+                        @endif
                         <div class="header">
                             <h3>Order detail</h3>
                             <h2>#{{ $order->order_id }}</h2>
@@ -58,7 +71,9 @@
                                 @foreach ($order->order_details as $detailed_order)
                                     <div class="item">
                                         <p>x{{ $detailed_order->quantities }}
-                                            {{ $detailed_order->detailed_product->name }}
+
+                                            <a
+                                                href="/products/{{ $detailed_order->detailed_product->product_id }}">{{ $detailed_order->detailed_product->name }}</a>
                                         </p>
                                         <p>{{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
                                         </p>

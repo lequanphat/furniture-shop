@@ -100,8 +100,19 @@
                                     </div>
                                 </div>
                                 <div class="payment-method">
-                                    Payment method
-
+                                    <label class="payment-method-label" for="payment-method-1">
+                                        <i class="fa-solid fa-truck-fast"></i>
+                                        <span>Cash on delivery</span>
+                                        <input type="radio" name="payment_method" id="payment-method-1"
+                                            value="cash-on-delivery" checked>
+                                        <div class="mark"></div>
+                                    </label>
+                                    <label class="payment-method-label" for="payment-method-2">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>Payment with VNPay</span>
+                                        <input type="radio" name="payment_method" id="payment-method-2" value="vnpay">
+                                        <div class="mark"></div>
+                                    </label>
                                 </div>
                             </div>
                             <button type="submit" class="place-order-btn">Place order</button>

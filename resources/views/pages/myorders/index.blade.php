@@ -17,42 +17,47 @@
             <div class="row my-orders-container">
                 <div class="my-orders-header">
                     <div>#</div>
-                    <div>Product</div>
+                    <div>Order </div>
                     <div>Total</div>
                     <div>Paid</div>
                     <div>Status</div>
+                    <div>Time</div>
                     <div>Action</div>
                 </div>
                 <div class="my-orders-list">
                     @foreach ($orders as $order)
                         <div class="my-order-item">
                             <div>#{{ $order->order_id }}</div>
-                            <div class="img-wrapper">
-                                @foreach ($order->order_details as $order_detail)
-                                    @if ($loop->index == 3)
-                                    @break
-                                @endif
-                                <img src="{{ $order_detail->detailed_product->images->first()->url }}" alt="">
-                            @endforeach
+                            <div class="products-wrapper">
+                                <div class="img-wrapper">
+                                    <img src="{{ $order->order_details->first()->detailed_product->images->first()->url }}"
+                                        alt="">
+                                </div>
+                                <div class="product-name">
+                                    <p>{{ $order->order_details->first()->detailed_product->name }}</p>
+                                    <p>{{ $order->order_details->first()->quantities }} x
+                                        {{ number_format($order->order_details->first()->unit_price, 0, '.', ',') }}đ</p>
+                                </div>
+                            </div>
+                            <div class="total-price">
+                                {{ number_format(
+                                    $order->order_details->reduce(function ($carry, $detail) {
+                                        return $carry + $detail->unit_price * $detail->quantities;
+                                    }, 0),
+                                    0,
+                                    '.',
+                                    ',',
+                                ) }}đ
+                            </div>
+                            <div class="order-paid">{{ $order->is_paid }}</div>
+                            <div class="order-status">{{ $order->status }}</div>
+                            <div class="order-status">{{ $order->created_at }}</div>
+                            <div><a href="{{ route('my_detailed_order', $order->order_id) }}">View</a></div>
                         </div>
-                        <div class="total-price">
-                            {{ number_format(
-                                $order->order_details->reduce(function ($carry, $detail) {
-                                    return $carry + $detail->unit_price * $detail->quantities;
-                                }, 0),
-                                0,
-                                '.',
-                                ',',
-                            ) }}đ
-                        </div>
-                        <div class="total-price">{{ $order->is_paid }}</div>
-                        <div class="total-price">{{ $order->status }}</div>
-                        <div><a href="{{ route('my_detailed_order', $order->order_id) }}">View</a></div>
-                    </div>
-                @endforeach
+                    @endforeach
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
