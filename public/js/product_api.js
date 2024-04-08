@@ -339,12 +339,10 @@ jQuery.noConflict();
         $(document).on('click', '.pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
-            const search = '';
             productPagination({ page });
         });
 
         function debounce(func, wait) {
-            //hàm đợi 1 thời gian rồi mới thực hiện
             let timeout;
             return function executedFunction(...args) {
                 const later = () => {

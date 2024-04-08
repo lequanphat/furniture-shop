@@ -22,16 +22,49 @@ class UserController extends Controller
         return view('admin.users.customers', $data);
     }
 
+
+
     public function employee_ui()
     {
+        $search = request()->query('search');
+        $employee = User::where('is_staff', 1)
+            ->whereNotIn('user_id', [Auth::user()->user_id])
+            ->where(function ($query) use ($search) {
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->with('default_address')
+            ->paginate(6); // 6 elements per page
+
         $data = [
             'page' => 'Employee',
-            'users' => User::where('is_staff', 1)
-                ->whereNotIn('user_id', [Auth::user()->user_id])
-                ->with('default_address')
-                ->paginate(6) // 6 elements per page
+            'search' => $search,
+            'users' => $employee
         ];
         return view('admin.users.employee', $data);
+    }
+    public function employee_pagination()
+    {
+        $search = request()->query('search');
+        $employee = User::where('is_staff', 1)
+            ->whereNotIn('user_id', [Auth::user()->user_id])
+            ->where(function ($query) use ($search) {
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->with('default_address')
+            ->paginate(6); // 6 elements per page
+        foreach ($employee as $user) {
+            if ($user->created_at->diffInDays() < 7) {
+                $user->new = true;
+            }
+        }
+        $data = [
+            'employee' => $employee // 6 elements per page
+        ];
+        return response()->json($data);
     }
 
     public function create_employee(CreateEmployee $request)
@@ -59,6 +92,8 @@ class UserController extends Controller
             'is_default' => 1,
         ];
         $address = Address::create($addressData);
+
+        $user->default_address = $address;
 
         // response
         return ['message' => 'Created employee successfully!', 'user' => $user, 'address' => $address];
@@ -142,6 +177,10 @@ class UserController extends Controller
                     'address' => $request->input('address'),
                     'phone_number' => $request->input('phone_number'),
                 ]);
+                $user->default_address = $address;
+                if ($user->created_at->diffInDays() < 7) {
+                    $user->new = true;
+                }
                 // response
                 return ['message' => 'Updateted employee successfully!', 'user' => $user, 'address' => $address];
             }

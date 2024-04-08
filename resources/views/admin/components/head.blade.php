@@ -9,15 +9,5 @@
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler-vendors.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <style>
-        @import url('https://rsms.me/inter/inter.css');
 
-        :root {
-            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-        }
-
-        body {
-            font-feature-settings: "cv03", "cv04", "cv11";
-        }
-    </style>
 </head>

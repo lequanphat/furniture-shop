@@ -16,7 +16,8 @@
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <div class="input-icon ">
-                            <input type="text" value="" class="form-control" placeholder="Search…">
+                            <input id="search-employee-input" type="text" value="{{ $search }}" class="form-control"
+                                placeholder="Search…">
                             <span class="input-icon-addon">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -163,7 +164,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-end my-2">{{ $users->render('common.pagination') }}</div>
+                            <div class="d-flex justify-content-end my-2">{{ $users->render('common.ajax-pagination') }}
+                            </div>
                         </div>
                     </div>
                 </div>
