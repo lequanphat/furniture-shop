@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CheckoutOrder;
 use App\Http\Requests\CreateDetailedOrder;
 use App\Http\Requests\CreateOrder;
 use App\Models\Order;
@@ -116,8 +117,75 @@ class OrderController extends Controller
         return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
     }
 
-    public function checkout_order(Request $request)
+
+    public function payment_with_vnpay($order_id, $amount)
     {
+        $vnp_TxnRef = $order_id;
+        $vnp_Locale = "vn"; // language
+        $vnp_BankCode = "NCB";  // bank code
+        $vnp_IpAddr = request()->ip();  // ip address of client
+        $vnp_TmnCode = env('VNP_TMN_CODE');
+
+        $vnp_Returnurl =  config('app.url') . 'checkout/' . $order_id;
+        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+        $vnp_HashSecret = env('VNP_HASH_SECRET');
+
+        $inputData = array(
+            "vnp_Version" => "2.1.0",
+            "vnp_TmnCode" => $vnp_TmnCode,
+            "vnp_Amount" => $amount * 100,
+            "vnp_Command" => "pay",
+            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CurrCode" => "VND",
+            "vnp_IpAddr" => $vnp_IpAddr,
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => "Thanh toan GD: " . $vnp_TxnRef,
+            "vnp_OrderType" => "billpayment",
+            "vnp_ReturnUrl" => $vnp_Returnurl,
+            "vnp_TxnRef" => $vnp_TxnRef,
+        );
+
+        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+            $inputData['vnp_BankCode'] = $vnp_BankCode;
+        }
+
+        ksort($inputData);
+        $query = "";
+        $i = 0;
+        $hashdata = "";
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashdata .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
+
+        $vnp_Url = $vnp_Url . "?" . $query;
+        if (isset($vnp_HashSecret)) {
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        }
+        return $vnp_Url;
+    }
+    public function checkout_order(CheckoutOrder $request)
+    {
+        // validate data
+
+        $checkout = json_decode($request->input('checkout'), true);
+        foreach ($checkout as $item) {
+            $product = ProductDetail::where('sku', $item['sku'])->first();
+            if (!$product) {
+                return response()->json(['errors' => ['message' => ['Cannot find this product.']]], 400);
+            }
+            if ($product->quantities < $item['quantities']) {
+                return response()->json(['errors' => ['message' => ['Not enough quantities for this product.']]], 400);
+            }
+        }
+
+        // create order
 
         $order = Order::create([
             'total_price' => 0,
@@ -126,10 +194,13 @@ class OrderController extends Controller
             'receiver_name' => $request->input('receiver_name'),
             'address' => $request->input('address'),
             'phone_number' => $request->input('phone_number'),
+            'note' => $request->input('note'),
             'customer_id' => Auth::user()->user_id,
             'created_by' => null,
         ]);
-        $checkout = json_decode($request->input('checkout'), true);
+
+        // create order detail
+        $total_price = 0;
         foreach ($checkout as $item) {
             $order_detail = OrderDetail::create([
                 'order_id' => $order->order_id,
@@ -138,15 +209,19 @@ class OrderController extends Controller
                 'unit_price' => $item['unit_price'],
             ]);
             ProductDetail::where('sku', $item['sku'])->decrement('quantities', $item['quantities']);
-        }
-        return ['message' => 'Checkout order successfully!', 'order' => $order];
-    }
 
-    public function checkout_order_success(Request $request)
-    {
-        $data = [
-            'page' => 'Checkout Success',
-        ];
-        return view('pages.checkout.success', $data);
+            $total_price += $order_detail->quantities * $order_detail->unit_price;
+        }
+        // Update the total_price in the order
+        $order->update(['total_price' => $total_price]);
+
+        if ($request->input('payment_method') == 'vnpay') {
+            $order->update([
+                'is_paid' => true,
+            ]);
+            return OrderController::payment_with_vnpay($order->order_id, $order->total_price);
+        } else {
+            return config('app.url') . 'checkout/' . $order->order_id;
+        }
     }
 }

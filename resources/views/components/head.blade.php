@@ -37,4 +37,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
     {{-- Toastify --}}
     <link rel="stylesheet" href="{{ asset('css/vendor/toastify.min.css') }}" />
+
+    {{-- Fontaw --}}
+    <script src="{{ asset('js/vendor/fontawesome.js') }}" crossorigin="anonymous"></script>
 </head>

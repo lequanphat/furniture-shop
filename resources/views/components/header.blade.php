@@ -42,18 +42,24 @@
                                 </form>
                             </div>
                         </div>
-                        @if (Auth::user())
-                            <div class="header-action-style">
-                                <a title="Account" href="{{ route('my_account', Auth::user()->user_id) }}"><i
-                                        class="pe-7s-user"></i></a>
-                            </div>
-                        @endif
+
                         <div class="header-action-style header-action-cart">
                             <a class="cart-active" href="#"><i class="pe-7s-shopbag"></i>
                                 <span class="js-total-cart product-count "></span>
                             </a>
                         </div>
-                        @if (!Auth::user())
+                        @if (Auth::user())
+                            <div class="header-action-style header-action-account">
+                                <a title="Account">
+                                    <i class="pe-7s-user"></i>
+                                </a>
+                                <ul>
+                                    <li><a href="{{ route('my_account') }}">My Account</a></li>
+                                    <li><a href="{{ route('my_orders') }}">My orders</a></li>
+                                    <li><a href="/logout">Logout</a></li>
+                                </ul>
+                            </div>
+                        @else
                             <a href="/login" class="ms-2">
                                 <span> Sign in</span>
                             </a>

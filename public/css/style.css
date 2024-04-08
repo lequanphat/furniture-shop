@@ -1,45 +1,3 @@
-/*-----------------------------------------------------------------------------------
-
-    Template Name: sayyamcode eCommerce HTML Template
-    Version: 1.2
-
------------------------------------------------------------------------------------
-    
-    CSS INDEX
-    ===================
-	
-    01. Template default CSS
-    02. Header style
-    03. Slider style
-    04. Banner style
-    05. Section title style
-    06. Product style
-    07. Service style
-    08. Blog style
-    09. Footer style
-    10. Brand logo style
-    11. Category style
-    12. Subscribe style
-    13. Testimonial style
-    14. Product details style
-    15. Breadcrumb style
-    16. Sidebar style
-    17. Shop style
-    18. About us style
-    19. Contact us style
-    20. Cart style
-    21. Wishlist style
-    22. Login register style
-    23. My account style
-    24. Compare style
-    25. Checkout style
-
------------------------------------------------------------------------------------*/
-/*----------------------------------------*/
-/*  01. Template default CSS
-/*----------------------------------------*/
-/*-- Google Font --*/
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&amp;family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,500&amp;family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&amp;family=Poppins:wght@300;400;500;600;700;800&amp;display=swap');
 @font-face {
     font-family: 'URWAbbeyW01';
     src: url('../fonts/urwabbeyw01-bold/URWAbbeyW01-Bold.eot');
@@ -104,7 +62,7 @@ body {
     position: relative;
     visibility: visible;
     color: #000000;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.5;
@@ -122,7 +80,7 @@ p {
     line-height: 24px;
     color: #535353;
     margin-bottom: 15px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 h1,
@@ -134,7 +92,7 @@ h6 {
     color: #000000;
     font-weight: 400;
     margin-top: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 ul {
@@ -1185,7 +1143,7 @@ textarea {
     display: inline-block;
     text-align: center;
     color: #ffffff;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -2111,7 +2069,7 @@ textarea {
 .slider-content-1 h1 {
     font-size: 78px;
     line-height: 90px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 19px 0 44px;
 }
 
@@ -2504,7 +2462,7 @@ textarea {
     color: #242424;
     line-height: 74px;
     margin: 9px 0 24px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     z-index: 5;
     position: relative;
 }
@@ -2953,7 +2911,7 @@ textarea {
     line-height: 90px;
     margin: 6px 0 43px;
     color: #ffffff;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media only screen and (min-width: 1366px) and (max-width: 1600px) {
@@ -3163,7 +3121,7 @@ textarea {
 .banner-wrap .banner-content-1 h3 {
     font-size: 24px;
     font-weight: 500;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 7px 0 15px;
 }
 
@@ -3516,7 +3474,7 @@ textarea {
     letter-spacing: 1.6px;
     display: inline-block;
     line-height: 1;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     position: relative;
 }
 
@@ -3756,7 +3714,7 @@ textarea {
     font-size: 16px;
     font-weight: 500;
     color: #e97730;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     display: block;
     margin: -15px 0 0;
@@ -3981,7 +3939,7 @@ textarea {
 
 .btn-style-2 a {
     display: inline-block;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     z-index: 1;
 }
 
@@ -4480,7 +4438,7 @@ textarea {
     letter-spacing: 0.3px;
     margin: 0;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .section-border {
@@ -4709,7 +4667,7 @@ textarea {
 .timer-style-1 span {
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: #ffffff;
     margin-right: 10px;
     line-height: 1;
@@ -4763,7 +4721,7 @@ textarea {
 .timer-style-1 .syotimer__body .syotimer-cell .syotimer-cell__value {
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: #ffffff;
     line-height: 1;
 }
@@ -5348,7 +5306,7 @@ textarea {
     font-size: 14px;
     color: #8f8f8f;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .product-quality > input::-moz-input-placeholder {
@@ -5583,7 +5541,7 @@ textarea {
     display: inline-block;
     font-weight: 500;
     color: #b9b9b9;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     border-bottom: 2px solid transparent;
     margin: 0 23px 0 0;
     padding: 0 0 12px;
@@ -5743,7 +5701,7 @@ textarea {
 .service-wrap .service-content h3 {
     font-size: 18px;
     margin: 0 0 4px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -6302,7 +6260,7 @@ textarea {
 .blog-details-wrapper .tag-social-wrap .tag-wrap ul li a {
     display: inline-block;
     color: #878787;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .blog-details-wrapper .tag-social-wrap .tag-wrap ul li a:hover {
@@ -6915,7 +6873,7 @@ textarea {
 .blog-details-wrapper .blog-comment-form-wrap .blog-comment-form form .single-blog-comment-checkbox label {
     color: #4a4a4a;
     font-weight: 300;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin-left: 9px;
 }
 
@@ -6960,7 +6918,7 @@ textarea {
 }
 
 .footer-about p {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     line-height: 28px;
     font-weight: 300;
@@ -6983,10 +6941,11 @@ textarea {
 }
 
 .footer-widget h3.footer-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
-    color: #323232;
+    color: #484848;
     margin: 0 0 20px;
+    text-transform: uppercase;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -7007,7 +6966,7 @@ textarea {
     color: #4a4a4a;
     font-size: 16px;
     font-weight: 300;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media only screen and (max-width: 767px) {
@@ -7035,7 +6994,7 @@ textarea {
 .footer-address ul li span {
     color: #4a4a4a;
     font-weight: 500;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .open-time {
@@ -8782,7 +8741,7 @@ textarea {
     color: #343434;
     line-height: 1;
     padding-left: 12px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .sidebar-widget .sidebar-widget-title h3:before {
@@ -8890,7 +8849,7 @@ textarea {
 .sidebar-widget .price-filter .price-slider-amount .label-input label {
     font-size: 14px;
     color: #575757;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin-right: 2px;
 }
 
@@ -8901,7 +8860,7 @@ textarea {
     background-color: transparent;
     border: none;
     color: #575757;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1365px) {
@@ -8927,7 +8886,7 @@ textarea {
     -webkit-transition: all 0.3s ease 0s;
     -o-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .sidebar-widget .price-filter .price-slider-amount button:hover {
@@ -8946,7 +8905,7 @@ textarea {
 .sidebar-widget .sidebar-list-style ul li a {
     color: #575757;
     font-weight: 300;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -8999,7 +8958,7 @@ textarea {
 .sidebar-widget .sidebar-widget-tag a {
     color: #575757;
     font-weight: 300;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     display: inline-block;
     margin-right: 14px;
     margin-bottom: 10px;
@@ -9108,7 +9067,7 @@ textarea {
     font-weight: 300;
     color: #2f2f2f;
     display: inline-block;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .sidebar-widget .sidebar-list-style-2 ul li a:hover {
@@ -9915,7 +9874,7 @@ textarea {
     font-size: 16px;
     color: #000000;
     font-weight: 500;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media only screen and (max-width: 767px) {

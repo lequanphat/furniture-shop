@@ -16,40 +16,42 @@
                                     <div class="col-lg-6 col-md-6">
                                         <div class="billing-info mb-20">
                                             <label>Receiver name <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" name="receiver_name"
+                                            <input id="receiver_name" type="text" name="receiver_name"
                                                 value="{{ Auth::user()->full_name() }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="billing-info mb-20">
                                             <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                            <input type="phone" name="phone_number"
+                                            <input id="phone_number" type="phone" name="phone_number"
                                                 value="{{ Auth::user()->default_address->phone_number }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="billing-info mb-20">
                                             <label>Street Address <abbr class="required" title="required">*</abbr></label>
-                                            <input class="billing-address" type="text" name="address"
+                                            <input id="address" class="billing-address" type="text" name="address"
                                                 value="{{ Auth::user()->default_address->address }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="change-address-wrapper">
-                                            <button>Choose another address</button>
+                                            <button type="button" data-bs-toggle="modal"
+                                                data-bs-target="#select-address-modal"><i class="ti-pencil-alt"></i> Another
+                                                address</button>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="checkout-account mt-25">
-                                    <input class="checkout-toggle" type="checkbox">
+                                    <input class="checkout-toggle" type="checkbox" name="using_different_address">
                                     <span>Ship to a different address?</span>
                                 </div>
                                 <div class="different-address open-toggle mt-30">
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
-                                                <label>First Name</label>
+                                                <label>Receiver name</label>
                                                 <input type="text">
                                             </div>
                                         </div>
@@ -70,7 +72,7 @@
                             @endif
                             <div class="additional-info-wrap">
                                 <label>Order notes</label>
-                                <textarea placeholder="Notes about your order, e.g. special notes for delivery. " name="message"></textarea>
+                                <textarea id="note" name="note" placeholder="Notes about your order, e.g. special notes for delivery. "></textarea>
                             </div>
                         </div>
                     </div>
@@ -98,25 +100,19 @@
                                     </div>
                                 </div>
                                 <div class="payment-method">
-                                    <div class="pay-top sin-payment">
-                                        <input id="payment-method-2" class="input-radio" type="radio"
-                                            value="cash-on-delivery" name="payment_method" checked>
-                                        <label for="payment-method-2">Cash on delivery </label>
-                                        <div class="payment-box payment_method_bacs">
-                                            <p>Make your payment directly into our bank account. Please use your Order ID as
-                                                the payment reference.</p>
-                                        </div>
-                                    </div>
-                                    <div class="pay-top sin-payment">
-                                        <input id="payment-method-1" class="input-radio" type="radio"
-                                            value="check-payments" name="payment_method">
-                                        <label for="payment-method-1">Check payments</label>
-                                        <div class="payment-box payment_method_bacs">
-                                            <p>Make your payment directly into our bank account. Please use your Order ID as
-                                                the payment reference.</p>
-                                        </div>
-                                    </div>
-
+                                    <label class="payment-method-label" for="payment-method-1">
+                                        <i class="fa-solid fa-truck-fast"></i>
+                                        <span>Cash on delivery</span>
+                                        <input type="radio" name="payment_method" id="payment-method-1"
+                                            value="cash-on-delivery" checked>
+                                        <div class="mark"></div>
+                                    </label>
+                                    <label class="payment-method-label" for="payment-method-2">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>Payment with VNPay</span>
+                                        <input type="radio" name="payment_method" id="payment-method-2" value="vnpay">
+                                        <div class="mark"></div>
+                                    </label>
                                 </div>
                             </div>
                             <button type="submit" class="place-order-btn">Place order</button>
@@ -126,4 +122,6 @@
             </form>
         </div>
     </div>
+    {{-- Modal --}}
+    @include('pages.checkout.select-address-modal')
 @endsection

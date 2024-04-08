@@ -39,59 +39,75 @@
     <div class="page-body mb-2">
         <div class="container-xl">
             <div class="row row-deck row-cards">
-                <div class="col-12">
-
-                    <form id="create-order-form" action="#" method="POST" class="card">
+                <div class="col-md-4 markdown">
+                    <div class="card">
                         <div class="card-body">
-                            <div class="row row-cards">
-                                <div class="col-md-4 markdown">
-                                    <h3>Order Infor</h3>
-                                    <address>
-                                        <strong>ID: </strong><span id="js-order-id-info"
-                                            class="m-0">{{ $order->order_id }}</span><br>
-                                        <strong>Status: </strong>{{ $order->get_status() }}<br>
-                                        <strong>Paid: </strong>{{ $order->get_is_paid() }}<br>
-                                        <strong>Total price:
-                                        </strong>
-                                        <span
-                                            class="text-success">{{ number_format(
-                                                $detailed_orders->sum(function ($detailed_order) {
-                                                    return $detailed_order->unit_price * $detailed_order->quantities;
-                                                }),
-                                                0,
-                                                '.',
-                                                ',',
-                                            ) }}đ
-                                        </span><br>
-                                        <strong>Number of products: </strong>{{ $detailed_orders->count() }}
-                                    </address>
-                                </div>
-                                <div class="col-md-4 markdown">
-                                    <h3>Customer Infor</h3>
-                                    <address><strong>{{ $order->receiver_name }} <br>
-                                        </strong>{{ $order->address }}<br>
-                                        {{ $order->phone_number }}<br>
-                                        @isset($order->customer->email)
-                                            <a href="mailto:{{ $order->customer->email }}">{{ $order->customer->email }}</a>
-                                        @endisset
-                                    </address>
+                            <h3>Order Infor</h3>
+                            <address>
+                                <strong>ID: </strong><span id="js-order-id-info"
+                                    class="m-0">{{ $order->order_id }}</span><br>
+                                <strong>Status: </strong>{{ $order->get_status() }}<br>
+                                <strong>Paid: </strong>{{ $order->get_is_paid() }}<br>
+                                <strong>Total price:
+                                </strong>
+                                <span
+                                    class="text-success">{{ number_format(
+                                        $detailed_orders->sum(function ($detailed_order) {
+                                            return $detailed_order->unit_price * $detailed_order->quantities;
+                                        }),
+                                        0,
+                                        '.',
+                                        ',',
+                                    ) }}đ
+                                </span><br>
+                                <strong>Number of products: </strong>{{ $detailed_orders->count() }}
+                            </address>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 markdown">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Customer Infor</h3>
+                            <address><strong>{{ $order->receiver_name }} <br>
+                                </strong>{{ $order->address }}<br>
+                                {{ $order->phone_number }}<br>
+                                @isset($order->customer->email)
+                                    <a href="mailto:{{ $order->customer->email }}">{{ $order->customer->email }}</a>
+                                @endisset
+                            </address>
+                        </div>
+                    </div>
 
-                                </div>
-                                @if (isset($order->employee))
-                                    <div class="col-md-4 markdown">
-                                        <h3>Created by</h3>
-                                        <address>
-                                            <strong>{{ $order->employee->full_name() }}<br></strong>
-                                            {{ $order->employee->default_address->address }}<br>
-                                            {{ $order->employee->default_address->phone_number }}<br>
-                                            <a href="mailto:#">{{ $order->employee->email }}</a>
-                                        </address>
-                                    </div>
-                                @endif
+                </div>
+                @if (isset($order->employee))
+                    <div class="col-md-4 markdown">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Created by</h3>
+                                <address>
+                                    <strong>{{ $order->employee->full_name() }}<br></strong>
+                                    {{ $order->employee->default_address->address }}<br>
+                                    {{ $order->employee->default_address->phone_number }}<br>
+                                    <a href="mailto:#">{{ $order->employee->email }}</a>
+                                </address>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                @endif
+
+                @if (isset($order->note))
+                    <div class="col-md-4 markdown">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Order note</h3>
+                                <address>
+                                    {{ $order->note }}
+                                </address>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
         <div class="page-body mt-2">

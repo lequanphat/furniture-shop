@@ -4,12 +4,12 @@
     @include('components.head-banner')
     <div class="checkout-main-area pb-100 pt-100">
         <div class="container">
+
             <div class="row checkout-container">
                 @if (isset($order->order_id))
-                    <div class="col-8 checkout-left">
+                    <div class="col-8 checkout-left order-padding">
                         <img class="checkout-icon" src="{{ asset('svg/checkout-success.svg') }}" />
                         <div class="checkout-message">
-                            <h2>Thank you</h2>
                             <h2>Your order is {{ $order->get_status }}</h2>
                             <p>We will be sending you an email confirmation to <span>{{ Auth::user()->email }}</span>
                                 shortly
@@ -41,14 +41,9 @@
                                     <div class="progress-item @if ($order->status >= 3) active @endif"><i
                                             class="fa-solid fa-thumbs-up"></i><span>Deliverd</span></div>
                                 @endif
-
-
                             </div>
-                            <div class="checkout-footer justify-between"><a class="btn" href="{{ route('shop') }}">Back to shop</a>
-                                <a class="btn" href="/myorders/{{ $order->order_id }}">Track your order</a>
-                            </div>
-
                         </div>
+                        <div class="checkout-footer"><a class="btn" href="/myorders">Back to orders</a></div>
                     </div>
                     <div class="col-4 checkout-right">
                         @if ($order->is_paid)
@@ -71,9 +66,9 @@
                                 @foreach ($order->order_details as $detailed_order)
                                     <div class="item">
                                         <p>x{{ $detailed_order->quantities }}
-
                                             <a
                                                 href="/products/{{ $detailed_order->detailed_product->product_id }}">{{ $detailed_order->detailed_product->name }}</a>
+
                                         </p>
                                         <p>{{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
                                         </p>
@@ -104,6 +99,7 @@
                     <p>Can not find this order</p>
                 @endif
             </div>
+           
         </div>
     </div>
 @endsection

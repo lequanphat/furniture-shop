@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
@@ -206,5 +208,75 @@ class PagesController extends Controller
     public function change_password()
     {
         return view('auth.change-password');
+    }
+
+    public function handle_checkout_order(Request $request)
+    {
+        $order_id = $request->route('order_id');
+        $order = Order::where('order_id', $order_id)->where('customer_id', Auth::id())->with('order_details')->first();
+        $data = [
+            'page' => 'Checkout Success',
+        ];
+        if (isset($request->vnp_ResponseCode)) {
+            if ($request->vnp_ResponseCode == '00') {
+                if ($order) {
+                    $order->update([
+                        'is_paid' => true,
+                    ]);
+                    $order->get_status = $order->get_status();
+                    $data['order'] = $order;
+                }
+                return view('pages.checkout.success', $data);
+            } else {
+                // Increase the quantities of the product details
+                foreach ($order->order_details as $order_detail) {
+                    $product_detail = ProductDetail::where('sku', $order_detail->detailed_product->sku)->first();
+                    $product_detail->update([
+                        'quantities' => $product_detail->quantities + $order_detail->quantities,
+                    ]);
+                }
+
+                // Delete the order details and the order
+                $order->order_details()->delete();
+                $order->delete();
+                $data['page'] = 'Checkout Fail';
+                return view('pages.checkout.fail', $data);
+            }
+        } else {
+            if ($order) {
+                $order->get_status = $order->get_status();
+                $data['order'] = $order;
+            }
+            return view('pages.checkout.success', $data);
+        }
+    }
+    public function my_orders()
+    {
+        $orders = Order::where('customer_id', Auth::id())->with('order_details')->orderBy('created_at', 'desc')->get();
+        $data = [
+            'page' => 'My orders',
+            'orders' => $orders,
+        ];
+        return view('pages.myorders.index', $data);
+    }
+    public function my_detailed_order()
+    {
+        $order_id = request()->route('order_id');
+        $order = Order::where('order_id', $order_id)->where('customer_id', Auth::id())->with('order_details')->first();
+
+        if ($order) {
+            $order->get_status = $order->get_status();
+            $data = [
+                'page' => 'My order details',
+                'order' => $order,
+            ];
+        } else {
+            $data = [
+                'page' => 'My order details',
+                'order' => null,
+            ];
+        }
+
+        return view('pages.myorders.detailed_order', $data);
     }
 }
