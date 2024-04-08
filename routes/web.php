@@ -89,6 +89,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user']);
     // employee routes
     Route::get('/admin/employee', [UserController::class, 'employee_ui']);
+    Route::get('/admin/employee/pagination', [UserController::class, 'employee_pagination']);
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
     Route::get('/admin/employee/{user_id}', [UserController::class, 'employee_details']);
     Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
@@ -147,6 +148,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // product
     Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/admin/products/pagination', [ProductController::class, 'products_pagination'])->name('products.pagination'); //-> json
     Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
     Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
