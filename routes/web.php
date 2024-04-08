@@ -147,6 +147,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // product
     Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/admin/products/pagination', [ProductController::class, 'products_pagination'])->name('products.pagination'); //-> json
     Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
     Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json

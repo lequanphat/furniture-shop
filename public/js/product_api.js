@@ -1,6 +1,11 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
+        const data_asset = $('#asset').attr('data-asset');
+        let formatter = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 0,
+        });
+
         $('#create-product-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
@@ -224,5 +229,138 @@ jQuery.noConflict();
                 },
             });
         });
+
+        // product pagination
+        function renderPagination({ current_page, last_page }) {
+            let pagination = `<li class="page-item ${current_page === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page - 1}">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg>
+                prev
+            </a>
+        </li>`;
+
+            for (let i = 0; i < last_page; i++) {
+                pagination += `
+                    <li class="page-item ${current_page === i + 1 ? 'active mx-1' : ''}">
+                        <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
+                    </li>`;
+            }
+            pagination += `<li class="page-item ${current_page === last_page ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page + 1}">
+                next
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </a>
+        </li>`;
+            $('.pagination').html(pagination);
+        }
+        function createProductElement(product) {
+            return `<tr>
+            <td>
+                <div class="d-flex py-1 align-items-center">
+                    <span class="avatar me-2"
+                        style="background-image: url(${
+                            product.detailed_product?.images[0]?.url
+                        }); width: 80px; height: 80px; flex-shrink: 0;"></span>
+                    <div class="flex-fill">
+                        <div class="font-weight-medium">
+                            <h3 class="m-0">${product.name}
+                                ${
+                                    product.new
+                                        ? `<span
+                                class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
+                            </span>`
+                                        : ''
+                                }</h3>
+                        </div>
+                        <div class="text-muted">
+                            <a href="/admin/products/${product.product_id}"
+                                class="text-reset">${product.number_of_detailed_products}detailed products</a>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>${formatter.format(product.average_price)}đ</td>
+            <td>${product.sum_quantities}</td>
+            <td>${product.brand.name}</td>
+            <td>${product.category.name}</td>
+            <td>
+                <a href="/admin/products/${product.product_id}"
+                    class="btn p-2"><img src="${data_asset}svg/view.svg" style="width: 18px;" /></a>
+                <a href="/admin/products/${product.product_id}/update"
+                    class="btn p-2"><img src="${data_asset}svg/edit.svg" style="width: 18px;" /></a>
+            </td>
+        </tr>`;
+        }
+
+        function productPagination({ page }) {
+            const search = $('#search-product-input').val();
+            history.pushState(null, null, `/admin/products?page=${page}&search=${search}`);
+            // call ajax
+            $.ajax({
+                url: `/admin/products/pagination?page=${page}&search=${search}`,
+                type: 'GET',
+                success: function (response) {
+                    let html = '';
+                    response.products.data.forEach((product) => {
+                        html += createProductElement(product);
+                    });
+                    $('#product-table-body').html(html);
+                    renderPagination({
+                        current_page: response.products.current_page,
+                        last_page: response.products.last_page,
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        }
+
+        // pagination
+        $(document).on('click', '.pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            const search = '';
+            productPagination({ page });
+        });
+
+        function debounce(func, wait) {
+            //hàm đợi 1 thời gian rồi mới thực hiện
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        // search with ajax
+        $('#search-product-input').on(
+            'input',
+            debounce(function () {
+                productPagination({ page: 1 });
+            }, 500),
+        );
     });
 })(jQuery);
