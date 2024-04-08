@@ -16,7 +16,8 @@
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <div class="input-icon ">
-                            <input type="text" value="" class="form-control" placeholder="Search…">
+                            <input id="search-product-input" type="text" value="{{ $search }}" class="form-control"
+                                placeholder="Search…">
                             <span class="input-icon-addon">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -61,7 +62,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="product-table-body">
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>
@@ -116,7 +117,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-end my-2">{{ $products->render('common.pagination') }}
+                            <div class="d-flex justify-content-end my-2">{{ $products->render('common.ajax-pagination') }}
                             </div>
                         </div>
                     </div>
@@ -129,5 +130,4 @@
 
     {{-- Script --}}
     <script src="{{ asset('js/product_api.js') }}" defer></script>
-    
 @endsection

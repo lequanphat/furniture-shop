@@ -20,11 +20,61 @@ class ProductController extends Controller
 
     public function index()
     {
+        $search = request()->query('search');
+        $products = Product::with('category', 'brand', 'detailed_products.images')
+            ->where('name', 'LIKE', '%' . $search . '%')
+            ->orWhere('product_id', 'LIKE', '%' . $search . '%')
+            ->orWhereHas('category', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('brand', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%');
+            })
+            ->paginate(4); // 4 elements per page
         $data = [
             'page' => 'Products',
-            'products' => Product::with('category', 'brand', 'detailed_products.images')->paginate(4) // 6 elements per page
+            'search' => $search,
+            'products' => $products,
         ];
         return view('admin.products.index', $data);
+    }
+
+    public function products_pagination()
+    {
+        $search = request()->query('search');
+        $products = Product::with('category', 'brand', 'detailed_products.images')
+            ->where('name', 'LIKE', '%' . $search . '%')
+            ->orWhere('product_id', 'LIKE', '%' . $search . '%')
+            ->orWhereHas('category', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('brand', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%');
+            })
+            ->paginate(4); // 4 elements per 
+
+        foreach ($products as $product) {
+            $average_price = 0;
+            foreach ($product->detailed_products as $detailed_product) {
+                $average_price += $detailed_product->original_price;
+            }
+            $average_price = $average_price / count($product->detailed_products);
+            $product->detailed_product = $product->detailed_products->first();
+            $product->average_price = $average_price;
+            $product->number_of_detailed_products = count($product->detailed_products);
+            $product->sum_quantities = $product->detailed_products->sum('quantities');
+
+            if ($product->created_at->diffInDays() < 7) {
+                $product->new = true;
+            }
+            $product->setRelation('detailed_products', null);
+        }
+
+        $data = [
+            'page' => 'Products',
+            'products' => $products
+        ];
+        return response()->json($data);
     }
     public function create_ui()
     {

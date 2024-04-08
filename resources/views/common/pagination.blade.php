@@ -1,4 +1,3 @@
-@if ($paginator->hasPages())
     <ul class="pagination m-2 ms-auto">
         <li class="page-item @if ($paginator->onFirstPage()) disabled @endif">
             <a class="page-link" href="#">
@@ -78,4 +77,3 @@
         </li>
 
     </ul>
-@endif
