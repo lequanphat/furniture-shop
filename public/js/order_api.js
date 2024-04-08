@@ -97,7 +97,7 @@ jQuery.noConflict();
             };
         }
 
-        // filter cho bảng dữ liệu, liên quan tới tìm kiếm và phân trang
+        ///////////////////////////////// filter cho bảng dữ liệu, liên quan tới tìm kiếm và phân trang của order detail
         const filterDetailedProducts = ({ page }) => {
             const search = $('#search-detailed-products').val();    //lấy value từ ô tìm kiếm bên create_detailed_order
             if (!page) {

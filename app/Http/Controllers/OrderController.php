@@ -62,6 +62,17 @@ class OrderController extends Controller
         }
     }
 
+    //search, hàm trả json về cho bên order_api lấy làm việc trong filterOrders
+    public function search_orders_ajax()
+    {
+        $search = request()->query('search');
+        $orders = Order::with('product_detail','order')->where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+        // foreach( $warranties as $warranty ) {
+        //     $warranty->is_active = $warranty->is_active();
+        // }
+        return response()->json(['warranties' => $orders]);
+    }
+
 
     public function details(Request $request)
     {
