@@ -80,11 +80,22 @@ jQuery.noConflict();
 
         $(document).on('click', '.js-change-role', function (e) {
             const button = $(this);
+            // get data
             const role_name = button.text().trim();
-
-            button.closest('.dropdown').find('button').text(role_name);
             var user_id = button.closest('tr').find('td:first').text().trim();
+            var user_name = button.closest('tr').find('.js-fullname').text().trim();
 
+            // assign data
+            $('#js-arc-message').html(
+                `You want to change role of user <strong>${user_name}</strong> to <strong>${role_name}</strong>`,
+            );
+            $('#assign-role-confirm-modal').data('user-id', user_id);
+            $('#assign-role-confirm-modal').data('role-name', role_name);
+        });
+
+        $(document).on('click', '#js-assign-role-btn', function (e) {
+            const role_name = $('#assign-role-confirm-modal').data('role-name');
+            const user_id = $('#assign-role-confirm-modal').data('user-id');
             $.ajax({
                 url: `/admin/authorization`,
                 type: 'POST',
@@ -96,7 +107,29 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (data) {
-                    console.log(data);
+                    const tr = $('tr')
+                        .find('td:first')
+                        .filter(function () {
+                            return $(this).text().trim() === user_id;
+                        })
+                        .closest('tr');
+                    // get old role
+                    const old_role = tr.find('.js-dropdown-role button').text().trim();
+                    // assign new role
+                    tr.find('.js-dropdown-role button').text(role_name);
+                    // remove old role from dropdown
+                    tr.find('.dropdown-menu')
+                        .find('a')
+                        .filter(function () {
+                            return $(this).text().trim() === role_name;
+                        })
+                        .remove();
+                    // add old role to dropdown
+                    tr.find('.dropdown-menu').append(
+                        ` <a class="js-change-role dropdown-item"
+                        data-bs-toggle="modal"
+                        data-bs-target="#assign-role-confirm-modal">${old_role}</a>`,
+                    );
                 },
                 error: function (error) {
                     console.log(error);

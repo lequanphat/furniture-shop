@@ -63,7 +63,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="table-responsive">
-                            <table class="js-user-table table table-vcenter card-table">
+                            <table class="js-user-table table table-vcenter table-mobile-md card-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>

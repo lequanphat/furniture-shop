@@ -161,13 +161,7 @@ class PagesController extends Controller
         ];
         return view('pages.account.index', $data);
     }
-    public function admin()
-    {
-        $data = [
-            'page' => 'Home',
-        ];
-        return view('admin.dashboard.index', $data);
-    }
+
 
     public function admin_warranties()
     {

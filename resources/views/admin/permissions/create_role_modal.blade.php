@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <label for="role_name" class="form-label">Role name</label>
                         <input type="text" class="form-control" id="role_name" name="role_name"
-                            placeholder="Cristiano" required>
+                            placeholder="Administrators" required>
                     </div>
                 </div>
                 <div class="mb-3 row">

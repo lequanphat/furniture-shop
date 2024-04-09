@@ -70,7 +70,8 @@
                                                     <span class="avatar me-2"
                                                         style="background-image: url({{ $employee->avatar }})"></span>
                                                     <div class="flex-fill">
-                                                        <div class="font-weight-medium">{{ $employee->full_name() }}</div>
+                                                        <div class="js-fullname font-weight-medium">
+                                                            {{ $employee->full_name() }}</div>
                                                         <div class="text-muted"><a href="#"
                                                                 class="text-reset">{{ $employee->email }}</a></div>
                                                     </div>
@@ -102,7 +103,7 @@
                                             </td>
                                             <td>
                                                 <div class="btn-list flex-nowrap">
-                                                    <div class="dropdown">
+                                                    <div class="dropdown js-dropdown-role">
                                                         <button class="btn dropdown-toggle align-text-top"
                                                             data-bs-toggle="dropdown">
                                                             @if (!$employee->getRoleNames()->isEmpty())
@@ -113,8 +114,12 @@
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             @foreach ($roles as $role)
-                                                                <a
-                                                                    class="js-change-role dropdown-item">{{ $role->name }}</a>
+                                                                @if ($employee->hasRole($role->name))
+                                                                    @continue
+                                                                @endif
+                                                                <a class="js-change-role dropdown-item"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#assign-role-confirm-modal">{{ $role->name }}</a>
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -137,6 +142,8 @@
     </div>
 
 
+    {{-- Modal --}}
+    @include('admin.permissions.assign_role_confirm_modal')
 
     {{-- Script --}}
     <script src="{{ asset('js/permission.js') }}" defer></script>
