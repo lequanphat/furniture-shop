@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateRole;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -15,7 +16,7 @@ class PermissionController extends Controller
         $data = [
             'title' => 'Permissions',
             'permissions' => Permission::all(),
-            'roles' => Role::all(),
+            'roles' => Role::paginate(8),
         ];
         return view('admin.permissions.index', $data);
     }
@@ -26,9 +27,12 @@ class PermissionController extends Controller
             'name' => $request->role_name,
         ]);
         $permissions = $request->input('permissions');
-        foreach ($permissions as $permission) {
-            $role->givePermissionTo($permission);
+        if ($permissions != null) {
+            foreach ($permissions as $permission) {
+                $role->givePermissionTo($permission);
+            }
         }
+
         return response()->json([
             'message' => 'Role created successfully',
             'role' => $role,
@@ -61,7 +65,7 @@ class PermissionController extends Controller
     }
     public function authorization_ui()
     {
-        $employee = User::where('is_staff', 1)->paginate(6);
+        $employee = User::where('is_staff', 1)->whereNotIn('user_id', [Auth::user()->user_id])->paginate(6);
         $roles = Role::all();
         $data = [
             'title' => 'Authorization',

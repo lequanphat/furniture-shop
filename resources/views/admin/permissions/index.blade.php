@@ -56,6 +56,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Role name</th>
+                                        <th>Permissions</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -64,6 +65,7 @@
                                         <tr>
                                             <td>{{ $role->id }}</td>
                                             <td>{{ $role->name }}</td>
+                                            <td>{{ $role->permissions->count() }} permissions</td>
                                             <td>
                                                 <a class="btn p-2" data-role-id="{{ $role->id }}" data-bs-toggle="modal"
                                                     data-bs-target="#update-role-modal">
@@ -79,7 +81,8 @@
 
                                 </tbody>
                             </table>
-
+                        </div>
+                        <div class="d-flex justify-content-end my-2">{{ $roles->render('common.pagination') }}
                         </div>
                     </div>
                 </div>

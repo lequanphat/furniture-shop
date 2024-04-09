@@ -19,6 +19,9 @@ jQuery.noConflict();
                     console.log(data);
                 },
                 error: function (error) {
+                    console.log('====================================');
+                    console.log(error);
+                    console.log('====================================');
                     $('#create_role_response').html(Object.values(error.responseJSON.errors)[0][0]);
                     $('#create_role_response').removeClass('alert-success d-none');
                     $('#create_role_response').addClass('alert-danger');

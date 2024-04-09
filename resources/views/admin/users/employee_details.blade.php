@@ -62,13 +62,14 @@
                                 <div class="col-6">
                                     <label class="form-label required">Phone number</label>
                                     <input type="text" class="form-control" autocomplete="off"
-                                        value="{{ $user->default_address->phone_number }}" />
+                                        value="@if (isset($user->default_address)) {{ $user->default_address->phone_number }} @endif" />
+
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label required">Address</label>
                                 <input type="text" class="form-control" autocomplete="off"
-                                    value="{{ $user->default_address->address }}" />
+                                    value="@if (isset($user->default_address)) {{ $user->default_address->address }} @endif" />
                             </div>
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </fieldset>
