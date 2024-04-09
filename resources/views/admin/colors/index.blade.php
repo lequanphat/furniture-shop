@@ -136,12 +136,12 @@
                         <div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end my-2">{{ $colors->render('common.pagination') }}
-                    </div>
+
                 </div>
 
             </div>
-
+            <div class="d-flex justify-content-end my-2">{{ $colors->render('common.pagination') }}
+            </div>
         </div>
     </div>
     @include('admin.components.footer')
