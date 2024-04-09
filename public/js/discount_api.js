@@ -4,6 +4,28 @@ jQuery.noConflict();
     $(document).ready(function() {
 
 
+
+        const checkboxElement = document.getElementById('regist-{{ $detail_product->product_id }}');
+
+        checkboxElement.addEventListener('change', function() {
+            const isChecked = this.checked;
+            const productId = this.value;
+
+            // Send AJAX request to server with isChecked and productId
+            fetch('/updateCheckboxState', {
+                method: 'POST',
+                body: JSON.stringify({ productId, isChecked }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle server response (if necessary)
+                })
+                .catch(error => {
+                    console.error('Error sending AJAX request:', error);
+                });
+        });
+
+
         $('#create-discount-form').submit(function(e) {
             e.preventDefault();
             var formData = $(this).serialize();

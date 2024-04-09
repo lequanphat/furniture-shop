@@ -28,5 +28,10 @@ class   ProductDiscounts extends Model
     {
         return $this->hasMany(Discount::class, 'discount_id');
     }
-   
+    public function getSkuForDiscountId($discountId)
+    {
+//        return $this->where('discount_id', $discountId)->first()->sku;
+        return $this->where('discount_id', $discountId)->pluck('sku');
+    }
+
 }

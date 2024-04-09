@@ -48,21 +48,27 @@ class DiscountController extends Controller
         return ['message' => 'Created discount successfully!'];
     }
 
-    public function  discount_detail()
+    public function discount_detail()
     {
         $discount_id = request()->route('discount_id');
-    //  $product = ProductDiscounts::with('sku', 'discount')->find($discount_id);
-        // $sku = ProductDiscounts::where('discount_id', $discount_id) ->pluck('sku')
-        // ->first();
 
-        // $find_sku = ProductDiscounts::where('discount_id',$discount_id)->select('sku')->first();
-        $find_product_id = ProductDiscounts::with('sku', 'discount')->find($discount_id);
+        $productDiscounts = new ProductDiscounts();
+
+//        lay tat ca cac sku co discount_id
+        $sku = $productDiscounts->getSkuForDiscountId($discount_id);
+
+//        $product_id_productDetail = ProductDetail::where('sku', $sku)->pluck('product_id');
+        $product_ids = ProductDetail::whereIn('sku', $sku)->pluck('product_id');
+        $checkIdProduct = Product::whereIn('product_id', $product_ids)->pluck('product_id');
 
 
-
-
-// $find_product_detail = ProductDetail::with('product')->find($sku);
-
+        if ($sku) {
+            echo "The SKU for discount ID is: -----------------------------------$sku" . "<br>";
+            echo " With $sku have $product_ids" . "<br>";
+            echo " check  $checkIdProduct";
+        } else {
+            echo "No SKU found for discount ID $discount_id";
+        }
 
 
         $data = [
@@ -71,8 +77,8 @@ class DiscountController extends Controller
 
             'discount' => Discount::find($discount_id),
             'product' => Product::all(),
-            'check' => $find_product_id,
 
+            'Registor'=>$checkIdProduct,
 
         ];
 
@@ -143,4 +149,6 @@ class DiscountController extends Controller
         //        return "Take It";
 
     }
+
+
 }
