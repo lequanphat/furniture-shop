@@ -10,6 +10,8 @@ use App\Models\ProductDetail;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PagesController extends Controller
 {

@@ -61,7 +61,7 @@ class PermissionController extends Controller
     }
     public function authorization_ui()
     {
-        $employee = User::where('is_staff', 1)->get();
+        $employee = User::where('is_staff', 1)->paginate(6);
         $roles = Role::all();
         $data = [
             'title' => 'Authorization',

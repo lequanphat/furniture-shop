@@ -19,6 +19,7 @@ jQuery.noConflict();
                     console.log(data);
                 },
                 error: function (error) {
+                    $('#create_role_response').html(Object.values(error.responseJSON.errors)[0][0]);
                     $('#create_role_response').removeClass('alert-success d-none');
                     $('#create_role_response').addClass('alert-danger');
                     console.log(error);
@@ -43,6 +44,7 @@ jQuery.noConflict();
                     console.log(data);
                 },
                 error: function (error) {
+                    $('#update_role_response').html(Object.values(error.responseJSON.errors)[0][0]);
                     $('#update_role_response').removeClass('alert-success d-none');
                     $('#update_role_response').addClass('alert-danger');
                     console.log(error);

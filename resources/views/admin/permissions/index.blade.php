@@ -65,10 +65,9 @@
                                             <td>{{ $role->id }}</td>
                                             <td>{{ $role->name }}</td>
                                             <td>
-                                                <a class="btn p-2">
-                                                    <img src="{{ asset('svg/edit.svg') }}"
-                                                        data-role-id="{{ $role->id }}" style="width: 18px;"
-                                                        data-bs-toggle="modal" data-bs-target="#update-role-modal" />
+                                                <a class="btn p-2" data-role-id="{{ $role->id }}" data-bs-toggle="modal"
+                                                    data-bs-target="#update-role-modal">
+                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
                                                 </a>
                                                 <a href="#" class="js-delete-tag btn p-2"
                                                     data-role-id="{{ $role->id }}">

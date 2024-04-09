@@ -14,8 +14,8 @@
                 </div>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
-                    <div class="btn-list">
-                        <div class="input-icon ">
+                    <div class="row">
+                        <div class="col-7 input-icon">
                             <input id="search-employee-input" type="text" value="" class="form-control"
                                 placeholder="Search…">
                             <span class="input-icon-addon">
@@ -28,19 +28,18 @@
                                 </svg>
                             </span>
                         </div>
-                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                            data-bs-target="#create-role-modal">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M12 5l0 14" />
-                                <path d="M5 12l14 0" />
-                            </svg>
-                            Create new role
-                        </a>
+                        <div class="col-5"><select name="user[month]" class="form-select">
+                                <option value="">All</option>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->name }}"><a
+                                            href="/admin/authorization?role={{ $role->name }}">{{ $role->name }}</a>
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
                     </div>
+
                 </div>
             </div>
         </div>
@@ -127,6 +126,8 @@
 
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="d-flex justify-content-end my-2">{{ $employees->render('common.pagination') }}
                         </div>
                     </div>
                 </div>
