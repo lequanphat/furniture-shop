@@ -10,6 +10,8 @@ use App\Http\Controllers\HotDealController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
@@ -80,7 +82,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
-    Route::get('/admin', [PagesController::class, 'admin'])->name('admin');
+    Route::get('/admin', [HomeController::class, 'index'])->name('admin');
     Route::get('/change-password', [PagesController::class, 'change_password'])->name('change_password_ui');
     Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
 
@@ -174,13 +176,26 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //profile
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
+
+
+
+
+    Route::get('/admin/roles', [PermissionController::class, 'index']);
+    Route::post('/admin/roles', [PermissionController::class, 'create']);
+    Route::patch('/admin/roles/{role_id}', [PermissionController::class, 'update']);
+    Route::get('/admin/roles/{role_id}', [PermissionController::class, 'get_role']);
+
+
+    Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
+    Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
+
+
     // *This is only temporary, use the appropriate controller
 
 
-    //Route::get('/admin/warranties', [PagesController::class, 'admin_warranties']);
-    Route::get('/admin/permissions', [PagesController::class, 'admin_permissions']);
-    Route::get('/admin/authorization', [PagesController::class, 'admin_authorization']);
-    Route::get('/admin/profile', [PagesController::class, 'admin_profiles']);
+
+
+
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
 
     Route::get('/admin/catetest', [CategoryController::class, 'category_ui_1']);

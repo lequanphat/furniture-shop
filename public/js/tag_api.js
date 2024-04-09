@@ -25,7 +25,7 @@ jQuery.noConflict();
                     const row = `
                         <tr>
                         <td>${response.tag.tag_id}</td>
-                        <td><span class="badge bg-cyan-lt">${response.tag.name}</span>
+                        <td><span class="badge bg-cyan-lt">#${response.tag.name}</span>
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
                         </span>
                         </td>
@@ -93,7 +93,7 @@ jQuery.noConflict();
                     if (row) {
                         row.html(`
                         <td>${response.tag.tag_id}</td>
-                        <td><span class="badge bg-cyan-lt">${response.tag.name}</span>
+                        <td><span class="badge bg-cyan-lt">#${response.tag.name}</span>
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
                         </span>
                         </td>

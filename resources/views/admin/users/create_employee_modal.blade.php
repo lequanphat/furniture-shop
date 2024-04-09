@@ -43,7 +43,8 @@
                     <div class="mb-3 row">
                         <div class="col-md-6">
                             <label for="birth_date" class="form-label">Birth Date</label>
-                            <input type="date" class="form-control" id="birth_date" name="birth_date" required>
+                            <input type="date" class="form-control" id="birth_date" name="birth_date"
+                                value="2003-01-01" required>
                         </div>
 
                         <div class="col-md-6">

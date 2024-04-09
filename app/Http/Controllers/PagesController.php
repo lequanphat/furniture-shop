@@ -10,6 +10,8 @@ use App\Models\ProductDetail;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PagesController extends Controller
 {
@@ -159,13 +161,7 @@ class PagesController extends Controller
         ];
         return view('pages.account.index', $data);
     }
-    public function admin()
-    {
-        $data = [
-            'page' => 'Home',
-        ];
-        return view('admin.dashboard.index', $data);
-    }
+
 
     public function admin_warranties()
     {

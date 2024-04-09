@@ -114,7 +114,7 @@
                                         </td>
                                         <td>
                                             <div class="col-auto rounded"
-                                                style="background: {{ $color->code }}; width: 20px; height: 20px;">
+                                                style="background: {{ $color->code }}; width: 20px; height: 20px; border: 1px solid #ccc;">
                                             </div>
                                         </td>
                                         <td>
