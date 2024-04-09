@@ -16,9 +16,9 @@
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                     <span class="d-none d-sm-inline">
-                        {{-- <a href="{{ route('products.index') }}" class="btn">--}}
-                        {{-- Back--}}
-                        {{-- </a>--}}
+                         <a href="/admin/discounts" class="btn">
+                         Back
+                         </a>
 
                     </span>
 
@@ -108,8 +108,8 @@
                 <div class="row row-deck row-cards">
                     <div class="col-12">
                         <div class="card">
-                            <div class="table-responsive">
-                                <table class="js-user-table table table-vcenter card-table">
+                            <div class="table-responsive"  style="overflow:scroll;">
+                                <table class="js-user-table table table-vcenter card-table " >
                                     <thead>
                                     <tr>
                                         <th> product</th>
@@ -136,26 +136,20 @@
                                             <td> {{$detail_product->is_deleted}} </td>
 
 
-
                                             <td>
+
                                                 <input type="checkbox" id="regist-{{ $detail_product->product_id }}"
                                                        name="registDiscount[{{ $detail_product->product_id }}]"
                                                        value="{{ $detail_product->product_id }}" class="regist-checkbox"
-                                                    {{ in_array($detail_product->product_id, $Registor->toArray()) ? 'checked' : '' }}
+                                                       {{ in_array($detail_product->product_id, $Registor->toArray()) ? 'checked' : '' }}
+                                                       data-product-id="{{ $detail_product->product_id }}"
+                                                       data-discount-id ="{{$discount->discount_id}}"
+                                                       onchange="sendCheckboxChange(this)"
 
                                                 />
                                             </td>
 
-{{--<td>--}}
-{{--    <input type="hidden" id="regist-{{ $detail_product->product_id }}_hidden" name="registDiscountHidden[{{ $detail_product->product_id }}]" value="0">--}}
-{{--    <input type="checkbox" id="regist-{{ $detail_product->product_id }}"--}}
-{{--           name="registDiscount[{{ $detail_product->product_id }}]"--}}
-{{--           value="{{ $detail_product->product_id }}" class="regist-checkbox"--}}
-{{--           {{ in_array($detail_product->product_id, $Registor->toArray()) ? 'checked' : '' }}--}}
-{{--           onclick="document.getElementById('regist-{{ $detail_product->product_id }}_hidden').value = this.checked ? 1 : 0" />--}}
 
-
-{{--</td>--}}
 
                                         </tr>
                                     @endforeach
@@ -172,8 +166,88 @@
                     </div>
                 </div>
                 @include('admin.components.footer')
+
+
             </div>
             {{-- Modal --}}
             {{-- Script --}}
             <script src="{{ asset('js/product_api.js') }}" defer></script>
+            <script src="{{ asset('js/jquery.min.js') }}"></script>
+
+            <script>
+
+
+                function sendCheckboxChange(checkbox) {
+                    const productId = checkbox.dataset.productId;
+                    const isChecked = checkbox.checked;
+                    const discount_id = checkbox.dataset.discountId;
+                    const csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    // const a=[productId,isChecked,discount_id];
+                  // Get token from meta tag
+                    if (isChecked) {
+                        $.ajax({
+                            url: '{{ route('product.Discount.checkbox') }}', // Replace with actual route name
+                            method: 'POST',
+                            data: {
+                                product_id: productId,
+                                is_checked: isChecked,
+                                discount_id: discount_id,
+                                _token: csrfToken, // Include the CSRF token
+                            },
+                            success: function(data) {
+                                // Handle successful response (optional)
+                                // console.log('Checkbox change sent successfully:', data);
+                                if (data.message === 'Checkbox change saved successfully') {
+                                    // Handle successful update
+                                    console.log(data.message);
+                                } else if (data.message === 'Khong Ton Tai SKU Cua San Pham Vui Long Them') {
+                                    // Display popup message
+                                    alert(data.message); // Replace with your preferred popup mechanism
+                                    $(checkbox).prop("checked", false);
+
+                                }
+                            },
+                            error: function(error) {
+                                console.error('Error sending checkbox change:', error);
+
+                            },
+                        });
+
+
+                    }
+                    else
+                    {
+                        $.ajax({
+                            url: '{{ route('delete.ProductDiscount.checkbox') }}', // Replace with actual route name
+                            method: 'POST',
+                            data: {
+                                product_id: productId,
+                                is_checked: isChecked,
+                                discount_id: discount_id,
+                                _token: csrfToken, // Include the CSRF token
+                            },
+                            success: function(data) {
+                                // Handle successful response (optional)
+                                console.log('Checkbox change sent successfully:', data);
+                            },
+                            error: function(error) {
+                                console.error('Error sending checkbox change:', error);
+
+                            },
+                        });
+
+
+                    }
+                }
+            </script>
+{{--            scroll--}}
+            <script>
+                var x = 0;
+                $(document).ready(function(){
+                    $("div").scroll(function(){
+                        $("span").text( x+= 1);
+                    });
+                });
+            </script>
+
 @endsection

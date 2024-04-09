@@ -169,6 +169,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
     Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
     Route::get('/admin/discounts/viewDetail/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
+
+    Route::post('/admin/discounts/update-product-discount', [DiscountController::class, 'updateProductDiscount'])->name("product.Discount.checkbox");
+    Route::post('/admin/discounts/deleteProductDiscount', [DiscountController::class, 'deleteProductDiscountCheck'])->name('delete.ProductDiscount.checkbox');
     //profile
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);

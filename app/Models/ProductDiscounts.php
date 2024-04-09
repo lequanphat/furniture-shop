@@ -20,14 +20,7 @@ class   ProductDiscounts extends Model
     {
         return $this->belongsTo(ProductDetail::class, 'sku');
     }
-    public function sku_PL()
-    {
-        return $this->hasMany(ProductDetail::class, 'sku');
-    }
-    public function discount_dc()
-    {
-        return $this->hasMany(Discount::class, 'discount_id');
-    }
+
     public function getSkuForDiscountId($discountId)
     {
 //        return $this->where('discount_id', $discountId)->first()->sku;
