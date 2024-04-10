@@ -47,7 +47,10 @@
                         </div>
                         <div class="checkout-footer justify-between">
                             <a class="btn" href="/myorders">Back to orders</a>
-                            <a class="btn">Cancel order</a>
+                            @if ($order->status < 2)
+                                <a class="btn" data-bs-toggle="modal" data-bs-target="#cancel-order-modal">Cancel
+                                    order</a>
+                            @endif
                         </div>
                     </div>
                     <div class="col-4 checkout-right">
@@ -58,7 +61,7 @@
                         @endif
                         <div class="header">
                             <h3>Order detail</h3>
-                            <h2>#{{ $order->order_id }}</h2>
+                            <h2 class="js-order-id" data-order-id="{{ $order->order_id }}">#{{ $order->order_id }}</h2>
                         </div>
                         <div class="content">
                             <div class="delivery-address">
@@ -107,4 +110,6 @@
 
         </div>
     </div>
+
+    @include('pages.myorders.cancel-order-modal')
 @endsection

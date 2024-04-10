@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-    @include('components.head-banner')
+    {{-- @include('components.head-banner') --}}
 
-    <div class="shop-area shop-page-responsive pt-100 pb-100">
+    <div class="shop-area shop-page-responsive  pb-100">
         <div class="container">
             <div class="row flex-row-reverse">
                 <div class="col-lg-9">

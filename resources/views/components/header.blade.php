@@ -36,9 +36,9 @@
                                 <i class="pe-7s-close s-close"></i>
                             </a>
                             <div class="search-wrap-1">
-                                <form action="#">
+                                <form action="#" method="GET">
                                     <input placeholder="Search products…" type="text">
-                                    <button class="button-search"><i class="pe-7s-search"></i></button>
+                                    <button type="submit" class="button-search"><i class="pe-7s-search"></i></button>
                                 </form>
                             </div>
                         </div>

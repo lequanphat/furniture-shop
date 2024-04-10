@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CancelOrder;
 use App\Http\Requests\CheckoutOrder;
 use App\Http\Requests\CreateDetailedOrder;
 use App\Http\Requests\CreateOrder;
@@ -212,5 +213,19 @@ class OrderController extends Controller
         } else {
             return config('app.url') . 'checkout/' . $order->order_id;
         }
+    }
+
+    public function cancel_order(CancelOrder $request)
+    {
+        $order_id = $request->route('order_id');
+        $order = Order::where('order_id', $order_id)->first();
+        if ($order) {
+            $order->update([
+                'status' => 4,
+                'note' => $order->note . ' - Cancelled by customer',
+            ]);
+            return ['message' => 'Cancel order successfully', 'order' => $order];
+        }
+        return response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
     }
 }

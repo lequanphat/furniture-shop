@@ -190,7 +190,7 @@
                         </a>
                     </li>
                 @endcan
-                @can('orders')
+                @can('read orders')
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/orders">
                             <span

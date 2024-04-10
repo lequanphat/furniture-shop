@@ -498,6 +498,9 @@ textarea {
     background-color: #eee4da;
 }
 
+.header-area {
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+}
 .header-border-top-1 {
     border-top: 1px solid #f5f3f3;
 }

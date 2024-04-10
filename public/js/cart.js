@@ -328,4 +328,26 @@ jQuery(document).ready(function () {
         localStorage.setItem('checkout', JSON.stringify(checkout));
         window.location.href = '/checkout';
     });
+
+    // cancel order
+    $('#cancel-order-form').on('submit', function (event) {
+        event.preventDefault();
+        const order_id = $(this).find('#order_id').val();
+        const data = $(this).serialize();
+        $.ajax({
+            url: `/myorders/${order_id}`,
+            method: 'PATCH',
+            data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function (response) {
+                console.log(response);
+                window.location.reload();
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    });
 });
