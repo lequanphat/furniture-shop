@@ -373,6 +373,7 @@ body::-webkit-scrollbar-track {
 }
 .header-bottom .header-action-account > ul {
     background: #fff none repeat scroll 0 0;
+
     -webkit-box-shadow: 0 0 20px 0.4px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 20px 0.4px rgba(0, 0, 0, 0.1);
     display: block;
@@ -402,14 +403,14 @@ body::-webkit-scrollbar-track {
 }
 .header-bottom .header-action-account > ul li a {
     display: block;
-    color: #000000;
+    color: #6d6d6d;
     font-weight: 400;
     font-size: 14px;
     text-transform: capitalize;
 }
 
 .header-bottom .header-action-account > ul li:last-child a {
-    color: #fd1748;
+    color: #f26483;
 }
 .header-bottom .header-action-account > ul li:hover > a {
     color: #e97730;
@@ -564,6 +565,13 @@ body::-webkit-scrollbar-track {
     flex-direction: column;
     align-items: center;
     border-right: 2px solid rgba(52, 53, 56, 0.1);
+    justify-content: space-between;
+    padding: 24px;
+}
+.checkout-left .top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 24px;
 }
 .checkout-left .checkout-icon {
@@ -739,124 +747,129 @@ body::-webkit-scrollbar-track {
 }
 
 /* my orders custom */
-.my-orders-filter-wrapper {
-    width: max-content;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 32px;
+.myorders-main-area {
+    background-color: #f5f5f5;
 }
-.my-orders-filter-wrapper .filter-item {
-    position: relative;
-    padding: 4px 16px;
-    font-size: 16px;
-    cursor: pointer;
+.myorders-main-area .container .row {
+    margin-bottom: 12px;
 }
-.my-orders-filter-wrapper .filter-item:hover {
-    color: #e97730;
-}
-.my-orders-filter-wrapper .filter-item.active {
-    color: #e97730;
-}
-.my-orders-filter-wrapper .filter-item.active::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    height: 2px;
-    background-color: #e97730;
-}
+
 .my-orders-list {
     padding: 0;
 }
-.my-orders-header {
-    display: flex;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 16px 0;
-    border-bottom: 2px solid rgba(52, 53, 56, 0.1);
+.my-orders-list-header {
+    padding: 12px 0;
+    background-color: white;
 }
-.my-orders-header div {
-    text-align: center;
+.my-orders-list-header h5 {
+    margin: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.6);
 }
-.my-orders-header div:first-child {
-    width: 10%;
-}
-.my-orders-header div:nth-child(2) {
-    width: 35%;
-}
-.my-orders-header div:nth-child(3) {
-    width: 15%;
-}
-.my-orders-header div:nth-child(4) {
-    width: 10%;
-}
-.my-orders-header div:nth-child(5) {
-    width: 10%;
-}
-.my-orders-header div:nth-child(6) {
-    width: 10%;
-}
-.my-orders-header div:nth-child(7) {
-    width: 10%;
+.my-orders-list .order-item {
+    padding: 24px;
+    background-color: white;
+    margin-bottom: 12px;
 }
 
-.my-order-item {
+.my-orders-list .order-item .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 24px 0;
-    border-bottom: 1px solid rgba(52, 53, 56, 0.1);
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 12px;
 }
-.my-order-item > div {
-    text-align: center;
+.my-orders-list .order-item .header .tags {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
-.my-order-item > div:first-child {
-    width: 10%;
-}
-.my-order-item > div:nth-child(2) {
-    width: 35%;
-}
-.my-order-item > div:nth-child(3) {
-    width: 15%;
-}
-.my-order-item > div:nth-child(4) {
-    width: 10%;
-}
-.my-order-item > div:nth-child(5) {
-    width: 10%;
-}
-.my-order-item > div:nth-child(6) {
-    width: 10%;
-}
-.my-order-item > div:nth-child(7) {
-    width: 10%;
+.my-orders-list .order-item .header .paid-tag {
+    color: white;
+    font-size: 16px;
+    padding: 0px 16px;
+    border-radius: 4px;
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
 }
 
-.my-order-item .img-wrapper {
-    display: flex;
-    align-items: center;
+.my-orders-list .order-item .header .status-tag {
+    font-size: 16px;
+    border-radius: 4px;
+    color: #2ecc71;
 }
-.my-order-item .img-wrapper img {
-    width: 80px;
-    height: 80px;
-    border-radius: 14px;
-    border: 1px solid #ccc;
+.my-orders-list .order-item .header .status-tag span {
+    text-transform: lowercase;
 }
-.products-wrapper {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-.products-wrapper .product-name p {
-    text-align: start;
+
+.my-orders-list .order-item .header p {
     margin: 0;
 }
-.products-wrapper .product-name p:first-child {
+.my-orders-list .order-item .header .order-id {
+    color: black;
     font-weight: 600;
+}
+
+.my-orders-list .order-item .content .content-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.my-orders-list .order-item .content .content-item .left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.my-orders-list .order-item .content .content-item .left img {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.my-orders-list .order-item .content .content-item .left h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.75);
+}
+.my-orders-list .order-item .content .content-item .left p {
+    margin: 0;
+}
+.my-orders-list .order-item .content .content-item .right {
+    color: #e97730;
+}
+
+.my-orders-list .order-item .footer {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-top: 24px;
+    gap: 12px;
+}
+
+.my-orders-list .order-item .footer span {
+    font-size: 16px;
+    color: #e97730;
+}
+.my-orders-list .order-item .footer p {
+    font-size: 16px;
+    margin: 0;
+}
+.my-orders-list .order-item .footer a {
+    border: none;
+    outline: none;
+    float: right;
+    padding: 8px 24px;
+    border-radius: 2px;
+    background-color: #e97730;
+    color: white;
+    cursor: pointer;
+    margin-left: 12px;
 }
 
 .payment-method-label {

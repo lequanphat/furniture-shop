@@ -24,14 +24,16 @@
                                         <div class="billing-info mb-20">
                                             <label>Phone <abbr class="required" title="required">*</abbr></label>
                                             <input id="phone_number" type="phone" name="phone_number"
-                                                value="{{ Auth::user()->default_address->phone_number }}" readonly>
+                                                value="@if (isset(Auth::user()->default_address)) {{ Auth::user()->default_address->phone_number }} @endif"
+                                                readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="billing-info mb-20">
                                             <label>Street Address <abbr class="required" title="required">*</abbr></label>
                                             <input id="address" class="billing-address" type="text" name="address"
-                                                value="{{ Auth::user()->default_address->address }}" readonly>
+                                                value="@if (isset(Auth::user()->default_address)) {{ Auth::user()->default_address->address }} @endif"
+                                                readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">

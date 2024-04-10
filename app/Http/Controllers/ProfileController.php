@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateCustomer;
 use App\Http\Requests\UpdateEmployee;
+use App\Models\Address;
 use Illuminate\Http\Request;
 use app\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -35,7 +36,7 @@ class ProfileController extends Controller
     {
         $user_id = Auth::id();
         $user = User::where('user_id', $user_id)->first();
-        $listaddress = $this->address_controller->address_user($request);
+        $listaddress = Address::where('user_id', $user_id)->get();
         if ($user) {
             $data = [
                 'page' => 'Profile',

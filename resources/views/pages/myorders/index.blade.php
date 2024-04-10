@@ -1,60 +1,64 @@
 @extends('layouts.app')
 @section('content')
     @include('components.head-banner')
-    <div class="checkout-main-area pb-100 pt-100">
+    <div class="myorders-main-area pb-100 pt-100">
         <div class="container">
-            <div class="row">
-                <div class="my-orders-filter-wrapper">
-                    <div class="filter-item active">All</div>
-                    <div class="filter-item">Unconfirm</div>
-                    <div class="filter-item">Confirmed</div>
-                    <div class="filter-item">In transit</div>
-                    <div class="filter-item">Deliverd</div>
-                    <div class="filter-item">Cancel</div>
-                </div>
+            <div class="row my-orders-list-header">
+                <h5>My orders list</h5>
             </div>
 
             <div class="row my-orders-container">
-                <div class="my-orders-header">
-                    <div>#</div>
-                    <div>Order </div>
-                    <div>Total</div>
-                    <div>Paid</div>
-                    <div>Status</div>
-                    <div>Time</div>
-                    <div>Action</div>
-                </div>
+
                 <div class="my-orders-list">
                     @foreach ($orders as $order)
-                        <div class="my-order-item">
-                            <div>#{{ $order->order_id }}</div>
-                            <div class="products-wrapper">
-                                <div class="img-wrapper">
-                                    <img src="{{ $order->order_details->first()->detailed_product->images->first()->url }}"
-                                        alt="">
-                                </div>
-                                <div class="product-name">
-                                    <p>{{ $order->order_details->first()->detailed_product->name }}</p>
-                                    <p>{{ $order->order_details->first()->quantities }} x
-                                        {{ number_format($order->order_details->first()->unit_price, 0, '.', ',') }}đ</p>
+                        <div class="order-item">
+                            <div class="header">
+                                <p><span class="order-id">#{{ $order->order_id }}</span>
+                                    <span>{{ $order->created_at }}</span>
+                                </p>
+                                <div class="tags">
+                                    <div class="status-tag">Your order is <span>{{ $order->get_status() }}</span></div>
                                 </div>
                             </div>
-                            <div class="total-price">
-                                {{ number_format(
-                                    $order->order_details->reduce(function ($carry, $detail) {
-                                        return $carry + $detail->unit_price * $detail->quantities;
-                                    }, 0),
-                                    0,
-                                    '.',
-                                    ',',
-                                ) }}đ
+                            <div class="content">
+                                @foreach ($order->order_details as $order_detail)
+                                    <div class="content-item">
+                                        <div class="left">
+                                            <img src="@if (isset($order_detail->detailed_product->images->first()->url)) {{ $order_detail->detailed_product->images->first()->url }} @endif"
+                                                alt="">
+                                            <div>
+                                                <h5>{{ $order_detail->detailed_product->name }}</h5>
+                                                <p>Phân loại hàng: bàn ghế cao cấp</p>
+                                                <span>{{ $order_detail->quantities }} x
+                                                    {{ number_format($order_detail->unit_price, 0, '.', ',') }}đ</span>
+                                            </div>
+                                        </div>
+                                        <div class="right">
+                                            {{ number_format($order_detail->quantities * $order_detail->unit_price, 0, '.', ',') }}đ
+                                        </div>
+                                    </div>
+                                @endforeach
+
+
+
                             </div>
-                            <div class="order-paid">{{ $order->is_paid }}</div>
-                            <div class="order-status">{{ $order->status }}</div>
-                            <div class="order-status">{{ $order->created_at }}</div>
-                            <div><a href="{{ route('my_detailed_order', $order->order_id) }}">View</a></div>
+                            <div class="footer">
+                                <p>Total:
+                                    <span>{{ number_format(
+                                        $order->order_details->reduce(function ($carry, $detail) {
+                                            return $carry + $detail->unit_price * $detail->quantities;
+                                        }, 0),
+                                        0,
+                                        '.',
+                                        ',',
+                                    ) }}đ</span>
+                                </p>
+                                <a href="/myorders/{{ $order->order_id }}">View details</a>
+                            </div>
                         </div>
                     @endforeach
+
+
 
                 </div>
             </div>
