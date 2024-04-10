@@ -7,47 +7,49 @@
             <div class="row checkout-container">
                 @if (isset($order->order_id))
                     <div class="col-8 checkout-left">
-                        <img class="checkout-icon" src="{{ asset('svg/checkout-success.svg') }}" />
-                        <div class="checkout-message">
-                            <h2>Thank you</h2>
-                            <h2>Your order is {{ $order->get_status }}</h2>
-                            <p>We will be sending you an email confirmation to <span>{{ Auth::user()->email }}</span>
-                                shortly
-                            </p>
+                        <div class="top">
+                            <img class="checkout-icon" src="{{ asset('svg/checkout-success.svg') }}" />
+                            <div class="checkout-message">
+                                <h2>Thank you</h2>
+                                <h2>Your order is {{ $order->get_status }}</h2>
+                                <p>We will be sending you an email confirmation to <span>{{ Auth::user()->email }}</span>
+                                    shortly
+                                </p>
+                            </div>
+                            <div class="checkout-status">
+                                <p class="title">Order <a href="">#{{ $order->order_id }}</a> was placed on
+                                    <span>{{ $order->created_at }}</span>
+                                    and is currently
+                                    in progress
+                                </p>
+                                <div class="status-progress">
+                                    @if ($order->status == 4)
+                                        <div class="progress-item active "><i class="fa-solid fa-clock"></i><span>Await
+                                                confirm</span></div>
+                                        <div class="progress-line cancel "></div>
+                                        <div class="progress-item cancel "><i
+                                                class="fa-solid fa-xmark"></i><span>Canceled</span></div>
+                                    @else
+                                        <div class="progress-item @if ($order->status >= 0) active @endif"><i
+                                                class="fa-solid fa-clock"></i><span>Await confirm</span></div>
+                                        <div class="progress-line @if ($order->status >= 1) active @endif"></div>
+                                        <div class="progress-item @if ($order->status >= 1) active @endif"><i
+                                                class="fa-solid fa-check"></i><span>Comfirmed</span></div>
+                                        <div class="progress-line @if ($order->status >= 2) active @endif"></div>
+                                        <div class="progress-item @if ($order->status >= 2) active @endif"><i
+                                                class="fa-solid fa-truck"></i><span>In transit</span></div>
+                                        <div class="progress-line @if ($order->status >= 3) active @endif"></div>
+                                        <div class="progress-item @if ($order->status >= 3) active @endif"><i
+                                                class="fa-solid fa-thumbs-up"></i><span>Deliverd</span></div>
+                                    @endif
+
+
+                                </div>
+                            </div>
                         </div>
-                        <div class="checkout-status">
-                            <p class="title">Order <a href="">#{{ $order->order_id }}</a> was placed on
-                                <span>{{ $order->created_at }}</span>
-                                and is currently
-                                in progress
-                            </p>
-                            <div class="status-progress">
-                                @if ($order->status == 4)
-                                    <div class="progress-item active "><i class="fa-solid fa-clock"></i><span>Await
-                                            confirm</span></div>
-                                    <div class="progress-line cancel "></div>
-                                    <div class="progress-item cancel "><i
-                                            class="fa-solid fa-xmark"></i><span>Canceled</span></div>
-                                @else
-                                    <div class="progress-item @if ($order->status >= 0) active @endif"><i
-                                            class="fa-solid fa-clock"></i><span>Await confirm</span></div>
-                                    <div class="progress-line @if ($order->status >= 1) active @endif"></div>
-                                    <div class="progress-item @if ($order->status >= 1) active @endif"><i
-                                            class="fa-solid fa-check"></i><span>Comfirmed</span></div>
-                                    <div class="progress-line @if ($order->status >= 2) active @endif"></div>
-                                    <div class="progress-item @if ($order->status >= 2) active @endif"><i
-                                            class="fa-solid fa-truck"></i><span>In transit</span></div>
-                                    <div class="progress-line @if ($order->status >= 3) active @endif"></div>
-                                    <div class="progress-item @if ($order->status >= 3) active @endif"><i
-                                            class="fa-solid fa-thumbs-up"></i><span>Deliverd</span></div>
-                                @endif
-
-
-                            </div>
-                            <div class="checkout-footer justify-between"><a class="btn" href="{{ route('shop') }}">Back to shop</a>
-                                <a class="btn" href="/myorders/{{ $order->order_id }}">Track your order</a>
-                            </div>
-
+                        <div class="checkout-footer justify-between">
+                            <a class="btn" href="{{ route('shop') }}">Back to shop</a>
+                            <a class="btn" href="/myorders/{{ $order->order_id }}">Track your order</a>
                         </div>
                     </div>
                     <div class="col-4 checkout-right">
