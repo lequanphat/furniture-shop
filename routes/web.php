@@ -77,6 +77,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     // my orders
     Route::get('/myorders', [PagesController::class, 'my_orders'])->name('my_orders');
     Route::get('/myorders/{order_id}', [PagesController::class, 'my_detailed_order'])->name('my_detailed_order');
+    Route::patch('/myorders/{order_id}', [OrderController::class, 'cancel_order']);
 });
 
 
@@ -116,6 +117,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::post('/admin/orders', [OrderController::class, 'create']);
     Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
+
     //order detail
     Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
     Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);

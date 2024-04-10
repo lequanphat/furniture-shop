@@ -368,7 +368,7 @@ body::-webkit-scrollbar-track {
 /* custom header action account */
 
 .header-bottom .header-action-account {
-    margin-left: 10px;
+    margin-left: 4px;
     position: relative;
 }
 .header-bottom .header-action-account > ul {
@@ -432,6 +432,7 @@ body::-webkit-scrollbar-track {
     display: flex;
     align-items: center;
     justify-content: start;
+    border: var(--bs-modal-footer-border-width) solid var(--bs-modal-footer-border-color);
 }
 .modal-title h4 {
     margin: 0;
@@ -899,4 +900,12 @@ body::-webkit-scrollbar-track {
 }
 .payment-method-label input:checked ~ .mark {
     display: block;
+}
+
+.shop-area {
+    padding-top: 60px;
+}
+
+.cancel-order-content {
+    padding: 16px;
 }

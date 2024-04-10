@@ -273,6 +273,6 @@ class PagesController extends Controller
             ];
         }
 
-        return view('pages.myorders.detailed_order', $data);
+        return view('pages.myorders.detailed-order', $data);
     }
 }
