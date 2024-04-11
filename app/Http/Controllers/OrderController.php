@@ -64,6 +64,14 @@ class OrderController extends Controller
         }
     }
 
+    //search, hàm trả json về cho bên order_api lấy làm việc trong filterOrders
+    public function search_orders_ajax()
+    {
+        $search = request()->query('search');
+        $orders = Order::with('product_detail','order')->where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+        return response()->json(['order_for_ajax' => $orders]);
+    }
+
 
     public function details(Request $request)
     {
@@ -155,7 +163,7 @@ class OrderController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         return $vnp_Url;

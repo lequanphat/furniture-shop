@@ -18,8 +18,11 @@
                 <!-- Page actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
+                        {{-- ô search và cái icon của nó --}}
                         <div class="input-icon ">
-                            <input type="text" value="" class="form-control" placeholder="Search…">
+                            <input id="search-orders" name="search" type="text" value=""
+                                class="form-control" placeholder="Search…" autocomplete="off">
+
                             <span class="input-icon-addon">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -27,10 +30,11 @@
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                                    <path d="M21 21l-6 -6" />
+                                    <path d="M21 21sl-6 -6" />
                                 </svg>
                             </span>
                         </div>
+                        {{-- tạo order mới --}}
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
                             data-bs-target="#order-modal">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -66,7 +70,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id ="employee-table">
+                                <tbody id ="order-table">
 
                                     @foreach ($orders as $order)
                                         <tr>
@@ -153,7 +157,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-end my-2">{{ $orders->render('common.pagination') }}
+                            <div class="d-flex justify-content-end my-2">{{ $orders->render('common.ajax-pagination') }}
                             </div>
                         </div>
                     </div>
