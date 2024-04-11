@@ -8,6 +8,10 @@ jQuery(document).ready(function () {
             const productContainer = $('#deal_of_day');
             productContainer.empty();
             var i = 1;
+            if(response)
+            {
+                productContainer.append(`<span>Current don't have any deal of day</span>`)
+            }
             response.forEach(function (product) {
                 var url = product.url;
                 if (!url) {
@@ -41,8 +45,8 @@ jQuery(document).ready(function () {
                         <div class="product-content">
                             <h3><a href="/products/${product.product_id}">${product.name}</a></h3>
                             <div class="product-price">
-                                <span class="old-price">$${product.old_price} </span>
-                                <span class="new-price">$${product.new_price} </span>
+                                <span class="old-price">$${product.old_price}đ </span>
+                                <span class="new-price">$${product.new_price}đ </span>
                             </div>
                         </div>
                     </div>
