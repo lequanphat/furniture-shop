@@ -8,7 +8,9 @@ use App\Models\Discount;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\ProductDiscounts;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DiscountController extends Controller
 {
@@ -54,10 +56,10 @@ class DiscountController extends Controller
 
         $productDiscounts = new ProductDiscounts();
 
-//        lay tat ca cac sku co discount_id
+        //        lay tat ca cac sku co discount_id
         $sku = $productDiscounts->getSkuForDiscountId($discount_id);
 
-//        $product_id_productDetail = ProductDetail::where('sku', $sku)->pluck('product_id');
+        //        $product_id_productDetail = ProductDetail::where('sku', $sku)->pluck('product_id');
         $product_ids = ProductDetail::whereIn('sku', $sku)->pluck('product_id');
         $checkIdProduct = Product::whereIn('product_id', $product_ids)->pluck('product_id');
 
@@ -154,7 +156,7 @@ class DiscountController extends Controller
             // Retrieve SKU directly, checking for existence
             $findSku = ProductDetail::where('product_id', $productId)->value('sku');
             $deletedRows = ProductDiscounts::where('sku', $findSku)->where('discount_id', $discountId)->forceDelete();
-//
+            //
 
 
             if ($deletedRows > 0) {
@@ -162,8 +164,7 @@ class DiscountController extends Controller
             } else {
                 return response()->json(['error' => 'No matching discount found to delete.'], 404); // Return 404 if no matching discount found
             }
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log the exception for detailed debugging
             Log::error($e);
             return response()->json(['error' => 'An error occurred while deleting the discount.'], 500);
@@ -196,14 +197,8 @@ class DiscountController extends Controller
             } else {
                 return response()->json(['message' => 'Khong Ton Tai SKU Cua San Pham Vui Long Them']);
             }
-
-
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred while saving the checkbox change']);
         }
-
-
     }
-
-
 }
