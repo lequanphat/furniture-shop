@@ -37,4 +37,11 @@ class HotDealController extends Controller
         ->get();
         return response()->json($product);
     }
+    public function get_BestSellerProduct()
+    {
+        $query = Product::with(
+            'detailed_products.images',
+            'detailed_products.product_discounts.discount',
+        )->where('is_deleted', false);
+    }
 }
