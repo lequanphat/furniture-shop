@@ -68,10 +68,7 @@ class OrderController extends Controller
     {
         $search = request()->query('search');
         $orders = Order::with('product_detail','order')->where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
-        // foreach( $warranties as $warranty ) {
-        //     $warranty->is_active = $warranty->is_active();
-        // }
-        return response()->json(['warranties' => $orders]);
+        return response()->json(['order_for_ajax' => $orders]);
     }
 
 
@@ -165,7 +162,7 @@ class OrderController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         return $vnp_Url;

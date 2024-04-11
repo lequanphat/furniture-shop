@@ -20,7 +20,7 @@
                     <div class="btn-list">
                         {{-- ô search và cái icon của nó --}}
                         <div class="input-icon ">
-                            <input id="search-warranties" name="search" type="text" value=""
+                            <input id="search-orders" name="search" type="text" value=""
                                 class="form-control" placeholder="Search…" autocomplete="off">
 
                             <span class="input-icon-addon">
@@ -70,7 +70,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id ="employee-table">
+                                <tbody id ="order-table">
 
                                     @foreach ($orders as $order)
                                         <tr>
@@ -157,7 +157,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-end my-2">{{ $orders->render('common.pagination') }}
+                            <div class="d-flex justify-content-end my-2">{{ $orders->render('common.ajax-pagination') }}
                             </div>
                         </div>
                     </div>

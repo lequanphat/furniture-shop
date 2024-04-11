@@ -36,7 +36,7 @@
                 </form> --}}
 
                 {{-- thanh search --}}
-                <input id="search-warranties" name="search" type="text" value="" class="input-group col form-control" placeholder="Search here…" autocomplete="off">
+                <input id="search-warranties" name="search" type="text" value="" class="input-group col form-control" placeholder="Search by orderID ..." autocomplete="off">
 
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">

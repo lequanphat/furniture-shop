@@ -97,6 +97,187 @@ jQuery.noConflict();
             };
         }
 
+
+        /////////////////////////////////hàm filter cho trang order chính để phân trang và earch ajax
+        const filterOrders = ({ page }) => {
+            const search = $('#search-orders').val();    //lấy value từ ô tìm kiếm bên index của orders
+            if (!page) {
+                page = 1;
+            }
+            const url = `/admin/orders/search?search=${search}&page=${page}`; //url để tìm kiếm, lấy từ route /admin/orders/search
+
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    console.log(response.order_for_ajax);
+
+                    let html = '';//khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ orders
+                    for(let item of response.order_for_ajax.data){ //từ bên controller search_warranties_ajax qua
+
+                        //phần này copy từ tbody ở index qua
+                        html+=`
+                        <tr>
+                            <td>${item.order_id}</td>
+                            <td>
+                                <div class="d-flex py-1 align-items-center">
+                                    <div class="flex-fill">
+                                        <div class="font-weight-medium">
+                                            {{ order->receiver_name . ' - ' . $order->phone_number }}
+                                            @if ($order->created_at->diffInDays() < 7)
+                                                <span
+                                                    class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            @endif
+                                        </div>
+                                        <div class="text-muted"><a href="#"
+                                                class="text-reset">{{ $order->address }}</a></div>
+                                    </div>
+                                </div>
+                            </td>
+
+
+                            <td><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span></td>
+                            <td>{{ number_format($order->total_price, 0, '.', ',') }}đ
+                            </td>
+                            <td>
+                                @switch($order->is_paid)
+                                    @case(0)
+                                        <span class="badge bg-yellow-lt">Pending Payment</span>
+                                    @break
+
+                                    @case(1)
+                                        <span class="badge bg-green-lt">Payment Received</span>
+                                    @break
+
+                                    @default
+                                @endswitch
+                            </td>
+                            <td>
+                                @switch($order->status)
+                                    @case(0)
+                                        <span class="badge bg-yellow-lt">Unconfirmed</span>
+                                    @break
+
+                                    @case(1)
+                                        <span class="badge bg-azure-lt">Confirmed</span>
+                                    @break
+
+                                    @case(2)
+                                        <span class="badge bg-purple-lt">In transit</span>
+                                    @break
+
+                                    @case(3)
+                                        <span class="badge bg-green-lt">Delivered</span>
+                                    @break
+
+                                    @case(4)
+                                        <span class="badge bg-red-lt">Canceled</span>
+                                    @break
+
+                                    @default
+                                @endswitch
+                            </td>
+                            <td>
+                                <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"
+                                    title="Details">
+                                    <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
+                                </a>
+                                <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
+                                    title="Update" data-bs-toggle="modal"
+                                    data-bs-target="#update-order-modal"
+                                    data-order-id="{{ $order->order_id }}"
+                                    data-total-price="{{ $order->total_price }}"
+                                    data-is-paid="{{ $order->is_paid }}"
+                                    data-status="{{ $order->status }}"
+                                    data-receiver-name="{{ $order->receiver_name }}"
+                                    data-address="{{ $order->address }}"
+                                    data-phone-number="{{ $order->phone_number }}"
+                                    data-customer-id="{{ $order->customer_id }}"
+                                    data-created-by="{{ $order->created_by }}">
+                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                </button>
+                            </td>
+                        </tr>`
+                    }
+                    $('#order-table').html(html); //rồi đặt lại bảng bằng dữ liệu đã được filter ra
+
+                    //thanh phân trang dưới cùng, copy đổi tên biến đã trả từ controller search_orders_ajax là đc
+                    let pagination = `<li class="page-item ${
+                        response.order_for_ajax.current_page === 1 ? 'disabled' : ''
+                    }">
+                        <a class="page-link" href="#" data-page="${response.order_for_ajax.current_page - 1}">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M15 6l-6 6l6 6" />
+                            </svg>
+                            prev
+                        </a>
+                    </li>`;
+
+                    for (let i = 0; i < response.order_for_ajax.last_page; i++) {
+                        pagination += `
+                            <li class="page-item ${
+                                response.order_for_ajax.current_page === i + 1 ? 'active mx-1' : ''
+                            }">
+                                <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
+                            </li>`;
+                    }
+
+                    pagination += `<li class="page-item ${
+                        response.order_for_ajax.current_page === response.order_for_ajax.last_page
+                            ? 'disabled'
+                            : ''
+                    }">
+                        <a class="page-link" href="#" data-page="${response.order_for_ajax.current_page + 1}">
+                            next
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M9 6l6 6l-6 6" />
+                            </svg>
+                        </a>
+                    </li>`;
+                    $('.pagination').html(pagination);//sửa lại thanh pagination ở index
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        };
+
+        // search filter
+        $('#search-orders').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+
+        // kích hoạt pagination
+        $(document).on('click', '.pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            filterOrders({ page });
+        });
+
+
+
+
+
         ///////////////////////////////// filter cho bảng dữ liệu, liên quan tới tìm kiếm và phân trang của order detail
         const filterDetailedProducts = ({ page }) => {
             const search = $('#search-detailed-products').val();    //lấy value từ ô tìm kiếm bên create_detailed_order
@@ -298,5 +479,7 @@ jQuery.noConflict();
         });
 
         // on modal show
+
+
     });
 })(jQuery);
