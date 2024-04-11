@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class ProductDetail extends Model
 {
@@ -27,4 +28,11 @@ class ProductDetail extends Model
     {
         return $this->hasMany(ProductDiscounts::class, 'sku');
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_id');
+        
+    }
+
 }

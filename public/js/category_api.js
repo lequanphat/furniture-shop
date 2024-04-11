@@ -13,7 +13,7 @@ jQuery.noConflict();
             e.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
-                url: '/admin/categories',
+                url: '/admin/categories/create',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -52,8 +52,8 @@ jQuery.noConflict();
                     $('#create_category_response').html(response.message);
                 },
                 error: function (error) {
-                    $('#create_category_response').removeClass('d-none');
-                    $('#create_category_response').removeClass('alert-success');
+
+                    $('#create_category_response').removeClass('alert-success d-none');
                     $('#create_category_response').addClass('alert-danger');
                     $('#create_category_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },

@@ -4,6 +4,7 @@ jQuery.noConflict();
     $(document).ready(function() {
 
 
+
         $('#create-discount-form').submit(function(e) {
             e.preventDefault();
             var formData = $(this).serialize();
@@ -30,7 +31,7 @@ jQuery.noConflict();
         $('.js-update-discount-btn').on('click', function() {
             $('#modal-discount-update #discount_id').val($(this).data('discount-id'))
             $('#modal-discount-update #title').val($(this).data('title'));
-            $('#modal-discount-update #editor').val($(this).data('description'));
+            $('#modal-discount-update #update_editor').val($(this).data('description'));
             $('#modal-discount-update #amount').val($(this).data('amount'));
             $('#modal-discount-update #startdate').val($(this).data('start-date'));
             $('#modal-discount-update #enddate').val($(this).data('end-date'));
