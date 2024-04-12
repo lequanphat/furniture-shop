@@ -23,7 +23,7 @@
                             <input id="search-orders" name="search" type="text" value=""
                                 class="form-control" placeholder="Search…" autocomplete="off">
 
-                            <span class="input-icon-addon">
+                            {{-- <span class="input-icon-addon">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -32,7 +32,7 @@
                                     <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                                     <path d="M21 21sl-6 -6" />
                                 </svg>
-                            </span>
+                            </span> --}}
                         </div>
                         {{-- tạo order mới --}}
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
@@ -93,8 +93,7 @@
 
 
                                             <td><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span></td>
-                                            <td>{{ number_format($order->total_price, 0, '.', ',') }}đ
-                                            </td>
+                                            <td>{{ number_format($order->total_price, 0, '.', ',') }}đ</td>
                                             <td>
                                                 @switch($order->is_paid)
                                                     @case(0)

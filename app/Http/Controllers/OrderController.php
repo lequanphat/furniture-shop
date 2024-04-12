@@ -68,7 +68,11 @@ class OrderController extends Controller
     public function search_orders_ajax()
     {
         $search = request()->query('search');
-        $orders = Order::with('product_detail','order')->where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+        $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+        foreach( $orders as $order ) {
+            $order->howmanydaysago = $order->howmanydaysago();
+            $order->money = $order->money_type();
+        }
         return response()->json(['order_for_ajax' => $orders]);
     }
 

@@ -117,6 +117,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::post('/admin/orders', [OrderController::class, 'create']);
     Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
+    Route::get('/admin/orders/search', [OrderController::class,'search_orders_ajax']);
 
     //order detail
     Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
