@@ -59,22 +59,27 @@ class DiscountController extends Controller
         //        lay tat ca cac sku co discount_id
         $sku = $productDiscounts->getSkuForDiscountId($discount_id);
 
+
         //        $product_id_productDetail = ProductDetail::where('sku', $sku)->pluck('product_id');
         $product_ids = ProductDetail::whereIn('sku', $sku)->pluck('product_id');
         $checkIdProduct = Product::whereIn('product_id', $product_ids)->pluck('product_id');
 
-
-
-
+        if ($sku) {
+            echo "The SKU for discount ID is: -----------------------------------$sku" . "<br>";
+//            echo " With $sku have $product_ids" . "<br>";
+//            echo " check  $checkIdProduct";
+        } else {
+            echo "No SKU found for discount ID $discount_id";
+        }
 
         $data = [
             'page' => 'Discount Details And List Discount Item',
             //        ,
 
             'discount' => Discount::find($discount_id),
-            'product' => Product::all(),
-
-            'Registor' => $checkIdProduct,
+//            'product' => Product::all(),
+            'product' => ProductDetail::all(),
+            'Registor' => $sku,
 
         ];
 
@@ -152,10 +157,10 @@ class DiscountController extends Controller
             $productId = $request->input('product_id');
             $isChecked = $request->input('is_checked');
             $discountId = $request->input('discount_id');
-
+            $sku = $request->input('sku');
             // Retrieve SKU directly, checking for existence
-            $findSku = ProductDetail::where('product_id', $productId)->value('sku');
-            $deletedRows = ProductDiscounts::where('sku', $findSku)->where('discount_id', $discountId)->forceDelete();
+//            $findSku = ProductDetail::where('product_id', $productId)->value('sku');
+            $deletedRows = ProductDiscounts::where('sku', $sku)->where('discount_id', $discountId)->forceDelete();
             //
 
 
@@ -178,25 +183,23 @@ class DiscountController extends Controller
             $isChecked = $request->input('is_checked');
             $discountId = $request->input('discount_id');
             $findSku_true = ProductDetail::where('product_id', $productId)->first();
+            $sku = $request->input('sku');
 
 
-            if ($findSku_true) {
-                $findSku = ProductDetail::where('product_id', $productId)->first()->sku;
+            $findSku = ProductDetail::where('product_id', $productId)->first()->sku;
 
 
-                $DiscountCheckBox =
-                    [
-                        'sku' => $findSku,
-                        'discount_id' => $discountId,
+            $DiscountCheckBox =
+                [
+                    'sku' => $sku,
+                    'discount_id' => $discountId,
 
-                    ];
+                ];
 
 
-                $Discount = ProductDiscounts::create($DiscountCheckBox);
-                return response()->json(['message' => 'Checkbox change saved successfully']);
-            } else {
-                return response()->json(['message' => 'Khong Ton Tai SKU Cua San Pham Vui Long Them']);
-            }
+            $Discount = ProductDiscounts::create($DiscountCheckBox);
+            return response()->json(['message' => 'Checkbox change saved successfully']);
+//
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred while saving the checkbox change']);
         }
