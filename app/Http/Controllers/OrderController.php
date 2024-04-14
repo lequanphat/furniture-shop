@@ -214,9 +214,6 @@ class OrderController extends Controller
         $order->update(['total_price' => $total_price]);
 
         if ($request->input('payment_method') == 'vnpay') {
-            $order->update([
-                'is_paid' => true,
-            ]);
             return OrderController::payment_with_vnpay($order->order_id, $order->total_price);
         } else {
             return config('app.url') . 'checkout/' . $order->order_id;

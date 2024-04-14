@@ -3,74 +3,109 @@ jQuery.noConflict();
     $(document).ready(function () {
         const data_asset = $('#asset').attr('data-asset');
 
-        function createEmployeeElement(employee) {
+        function createEmployeeElement({ employee, can_update, can_delete }) {
+            const newTag = employee.new
+                ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
+                : '';
+            const status = employee.is_active
+                ? '<span class="badge bg-success me-1"></span> Active'
+                : '<span class="badge bg-danger me-1"></span> Blocked';
+
+            const update_action = can_update
+                ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                        data-bs-target="#update-employee-modal"
+                        data-user-id="${employee.user_id}">
+                        <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
+                    </a>`
+                : '';
+            const delete_action = can_delete
+                ? employee.is_active
+                    ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                        data-bs-target="#delete-user-modal"
+                        data-user-id="${employee.user_id}">
+                        <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
+                    </a>`
+                    : `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                            data-bs-target="#restore-user-modal"
+                            data-user-id="${employee.user_id}">
+                            <img src="${data_asset}svg/key.svg" style="width: 18px;" />`
+                : '';
+
+            const action = `<a href="employee/${employee.user_id}/details" class="btn p-2">
+                <img src="${data_asset}svg/view.svg" style="width: 18px;" />
+            </a>
+            ${update_action}
+            ${delete_action}`;
             return `<tr>
             <td>${employee.user_id}</td>
             <td>
                 <div class="d-flex py-1 align-items-center">
-                    <span class="avatar me-2"
-                        style="background-image: url(${employee.avatar})"></span>
+                    <span class="avatar me-2" style="background-image: url(${employee.avatar})"></span>
                     <div class="flex-fill">
                         <div class="font-weight-medium">
-                        ${employee.first_name} ${employee.last_name}
-                            ${
-                                employee.new
-                                    ? `<span
-                            class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>`
-                                    : ''
-                            }
-                        </div>
+                        ${employee.first_name} ${employee.last_name} ${newTag}</div>
                         <div class="text-muted"><a href="#"
-                                class="text-reset">${employee.email}</a></div>
-                    </div>
+                                class="text-reset">${employee.email}</a></div></div>
                 </div>
             </td>
-            <td>
-                <div>
-                ${employee.gender ? 'Male' : 'Female'}
-                </div>
-            </td>
-            <td>
-            ${employee.birth_date ? employee.birth_date : 'Unset'}
-            </td>
+            <td><div>${employee.gender ? 'Male' : 'Female'}</div></td>
+            <td>${employee.birth_date ? employee.birth_date : 'Unset'}</td>
             <td class="text-muted">
-                <div>
-                ${employee.default_address.phone_number ? employee.default_address.phone_number : 'Unset'}
-                </div>
-                <div>
-                ${employee.default_address.address ? employee.default_address.address : 'Unset'}
-                </div>
+                <div>${employee.default_address?.phone_number ? employee.default_address?.phone_number : 'Unset'}</div>
+                <div>${employee.default_address?.address ? employee.default_address?.address : 'Unset'}</div>
             </td>
-            <td>
-            ${
-                employee.is_active
-                    ? '<span class="badge bg-success me-1"></span> Active'
-                    : '<span class="badge bg-danger me-1"></span> Blocked'
-            }
-            </td>
-            <td>
-                <a href="employee/${employee.user_id}/details" class="btn p-2">
-                    <img src="${data_asset}svg/view.svg" style="width: 18px;" />
-                </a>
-                <a href="#" class="btn p-2" data-bs-toggle="modal"
-                    data-bs-target="#update-employee-modal"
-                    data-user-id="${employee.user_id}">
-                    <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                </a>
-                ${
-                    employee.is_active
-                        ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
-                data-bs-target="#delete-user-modal"
-                data-user-id="${employee.user_id}">
-                <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
-            </a>`
-                        : `<a href="#" class="btn p-2" data-bs-toggle="modal"
-            data-bs-target="#restore-user-modal"
-            data-user-id="${employee.user_id}">
-            <img src="${data_asset}svg/key.svg" style="width: 18px;" />`
-                }
-            </td>
+            <td>${status}</td>
+            <td>${action}</td>
         </tr>`;
+        }
+
+        // create customer element
+        function createCustomerElement({ customer, can_delete }) {
+            const newTag = customer.new
+                ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
+                : '';
+            const status = customer.is_active
+                ? '<span class="badge bg-success me-1"></span> Active'
+                : '<span class="badge bg-danger me-1"></span> Blocked';
+            const delete_action = can_delete
+                ? customer.is_active
+                    ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                        data-bs-target="#delete-user-modal"
+                        data-user-id="${customer.user_id}">
+                        <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
+                    </a>`
+                    : `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                    data-bs-target="#restore-user-modal"
+                    data-user-id="${customer.user_id}">
+                    <img src="${data_asset}svg/key.svg" style="width: 18px;" />`
+                : '';
+            const action = `<a href="customers/${customer.user_id}/details" class="btn p-2">
+                    <img src="${data_asset}svg/view.svg" style="width: 18px;" /></a>
+                ${delete_action}`;
+            return `<tr>
+                <td>${customer.user_id}</td>
+                <td>
+                    <div class="d-flex py-1 align-items-center">
+                        <span class="avatar me-2"
+                            style="background-image: url(${customer.avatar})"></span>
+                        <div class="flex-fill">
+                            <div class="font-weight-medium">
+                            ${customer.first_name} ${customer.last_name}
+                                ${newTag}</div>
+                            <div class="text-muted"><a href="#" class="text-reset">${customer.email}</a></div>
+                        </div>
+                    </div>
+                </td>
+                <td><div>${customer.gender ? 'Male' : 'Female'}</div></td>
+                <td>${customer.birth_date ? customer.birth_date : 'Unset'}</td>
+                <td class="text-muted">
+                    <div>${
+                        customer.default_address?.phone_number ? customer.default_address?.phone_number : 'Unset'
+                    }</div>
+                    <div>${customer.default_address?.address ? customer.default_address?.address : 'Unset'}</div>
+                </td><td>${status}</td>
+                <td>${action}</td>
+            </tr>`;
         }
 
         // create employee api
@@ -90,7 +125,13 @@ jQuery.noConflict();
                     response.user.new = true;
                     response.user.is_active = true;
 
-                    $('#employee-table-body').append(createEmployeeElement(response.user));
+                    $('#employee-table-body').append(
+                        createEmployeeElement({
+                            employee: response.user,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        }),
+                    );
                 },
                 error: function (error) {
                     // Handle the error response
@@ -117,7 +158,6 @@ jQuery.noConflict();
                 url: `/admin/employee/${user_id}`,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
                     modal.find('#first_name').val(response.user.first_name);
                     modal.find('#last_name').val(response.user.last_name);
                     modal.find('#email ').val(response.user.email);
@@ -151,10 +191,13 @@ jQuery.noConflict();
                         return $(this).find('td:first').text() == response.user.user_id;
                     });
                     if (row) {
-                        let html = createEmployeeElement(response.user);
+                        let html = createEmployeeElement({
+                            employee: response.user,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        });
                         html = html.replace('<tr>', '');
                         html = html.replace('</tr>', '');
-                        console.log(html);
                         row.html(html);
                     }
                 },
@@ -184,12 +227,11 @@ jQuery.noConflict();
         // delete user
         $('#delete-user-modal').on('click', '.modal-footer button.btn-danger', function (e) {
             var userId = $(this).data('user-id');
-            console.log(userId);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
-                url: `/admin/employee/${userId}/ban`,
+                url: `/admin/users/${userId}/ban`,
                 type: 'GET',
                 success: function (response) {
                     var link = $('.js-user-table a[data-user-id="' + userId + '"]');
@@ -221,12 +263,11 @@ jQuery.noConflict();
         // restore user
         $('#restore-user-modal').on('click', '.modal-footer button.btn-primary', function (e) {
             var userId = $(this).data('user-id');
-            console.log(userId);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
-                url: `/admin/employee/${userId}/unban`,
+                url: `/admin/users/${userId}/unban`,
                 type: 'GET',
                 success: function (response) {
                     var link = $('.js-user-table a[data-user-id="' + userId + '"]');
@@ -279,7 +320,6 @@ jQuery.noConflict();
         var imageData = null;
         $('#avatar').on('change', function () {
             const file = this.files[0];
-            console.log(file);
             const reader = new FileReader();
             reader.onload = function (e) {
                 $('#imagePreview').attr('src', e.target.result);
@@ -294,7 +334,6 @@ jQuery.noConflict();
             const form = this;
             const formData = new FormData(form);
             formData.append('avatar', imageData);
-            console.log({ formData });
             $.ajax({
                 url: `/admin/profile`,
                 type: 'POST',
@@ -305,7 +344,6 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    console.log({ response });
                     // Handle the success response
                     $('#update_employee_response').removeClass('alert-successs d-none');
                     $('#update_employee_response').addClass('alert-success');
@@ -364,25 +402,35 @@ jQuery.noConflict();
             $('.pagination').html(pagination);
         }
 
+        // employee pagination
         function employeePagination({ page }) {
             const search = $('#search-employee-input').val();
-            history.pushState(null, null, `/admin/employee?page=${page}&search=${search}`);
+            const type = $('#select-employee-type').val();
+            history.pushState(null, null, `/admin/employee?page=${page}&type=${type}&search=${search}`);
             // call ajax
             $.ajax({
-                url: `/admin/employee/pagination?page=${page}&search=${search}`,
+                url: `/admin/employee/pagination?page=${page}&type=${type}&search=${search}`,
                 type: 'GET',
                 success: function (response) {
+                    if (response.employee.data.length === 0) {
+                        $('#employee-table-body').html(
+                            '<tr><td colspan="7" class="text-center text-muted">No data available</td></tr>',
+                        );
+                        return;
+                    }
                     let html = '';
                     response.employee.data.forEach((employee) => {
-                        console.log(employee);
-                        html += createEmployeeElement(employee);
+                        html += createEmployeeElement({
+                            employee,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        });
                     });
                     $('#employee-table-body').html(html);
                     renderPagination({
                         current_page: response.employee.current_page,
                         last_page: response.employee.last_page,
                     });
-                    console.log(html);
                 },
                 error: function (error) {
                     console.log(error);
@@ -390,8 +438,7 @@ jQuery.noConflict();
             });
         }
 
-        // pagination
-        $(document).on('click', '.pagination .page-link', function (event) {
+        $(document).on('click', '.js-employee-pagination .pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
             employeePagination({ page });
@@ -415,5 +462,61 @@ jQuery.noConflict();
                 employeePagination({ page: 1 });
             }, 500),
         );
+        // select type
+        $('#select-employee-type').change(function () {
+            employeePagination({ page: 1 });
+        });
+
+        // customers pagination
+
+        function customersPagination({ page }) {
+            const search = $('#search-customers-input').val();
+            const type = $('#select-customers-type').val();
+            history.pushState(null, null, `/admin/customers?page=${page}&type=${type}&search=${search}`);
+            // call ajax
+            $.ajax({
+                url: `/admin/customers/pagination?page=${page}&type=${type}&search=${search}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.customers.data.length === 0) {
+                        $('#customers-table-body').html(
+                            '<tr><td colspan="7" class="text-center text-muted">No data available</td></tr>',
+                        );
+                        return;
+                    }
+                    let html = '';
+                    response.customers.data.forEach((customer) => {
+                        html += createCustomerElement({ customer, can_delete: response.can_delete });
+                    });
+                    $('#customers-table-body').html(html);
+                    renderPagination({
+                        current_page: response.customers.current_page,
+                        last_page: response.customers.last_page,
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        }
+
+        $(document).on('click', '.js-customers-pagination .pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            customersPagination({ page });
+        });
+
+        // search with ajax
+        $('#search-customers-input').on(
+            'input',
+            debounce(function () {
+                customersPagination({ page: 1 });
+            }, 500),
+        );
+
+        // select type
+        $('#select-customers-type').change(function () {
+            customersPagination({ page: 1 });
+        });
     });
 })(jQuery);

@@ -162,45 +162,6 @@ class PagesController extends Controller
         return view('pages.account.index', $data);
     }
 
-
-    public function admin_warranties()
-    {
-        $data = [
-            'page' => 'Warranties',
-        ];
-        return view('admin.warranties.index', $data);
-    }
-
-
-    public function admin_permissions()
-    {
-        $data = [
-            'page' => 'Permissions',
-        ];
-        return view('admin.permissions.index', $data);
-    }
-    public function admin_authorization()
-    {
-        $data = [
-            'page' => 'Authorization',
-        ];
-        return view('admin.permissions.authorization', $data);
-    }
-    public function admin_profiles()
-    {
-        $data = [
-            'page' => 'Profiles',
-        ];
-        return view('admin.profiles.index', $data);
-    }
-    public function admin_settings()
-    {
-        $data = [
-            'page' => 'Settings',
-        ];
-        return view('admin.settings.index', $data);
-    }
-
     public function change_password()
     {
         return view('auth.change-password');

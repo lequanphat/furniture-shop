@@ -88,11 +88,12 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
 
     // users routes
-    Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user']);
-    Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user']);
+    Route::get('/admin/users/{user_id}/ban', [UserController::class, 'ban_user'])->middleware('can:delete user');
+    Route::get('/admin/users/{user_id}/unban', [UserController::class, 'unban_user'])->middleware('can:delete user');
     // employee routes
     Route::get('/admin/employee', [UserController::class, 'employee_ui']);
     Route::get('/admin/employee/pagination', [UserController::class, 'employee_pagination']);
+
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
     Route::get('/admin/employee/{user_id}', [UserController::class, 'employee_details']);
     Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
@@ -100,6 +101,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // customer routes
     Route::get('/admin/customers', [UserController::class, 'customers_ui']);
     Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
+    Route::get('/admin/customers/pagination', [UserController::class, 'customers_pagination']);
 
     //brand
     Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
