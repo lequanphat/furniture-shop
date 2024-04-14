@@ -90,18 +90,22 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // users routes
     Route::get('/admin/users/{user_id}/ban', [UserController::class, 'ban_user'])->middleware('can:delete user');
     Route::get('/admin/users/{user_id}/unban', [UserController::class, 'unban_user'])->middleware('can:delete user');
-    // employee routes
-    Route::get('/admin/employee', [UserController::class, 'employee_ui']);
-    Route::get('/admin/employee/pagination', [UserController::class, 'employee_pagination']);
 
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
-    Route::get('/admin/employee/{user_id}', [UserController::class, 'employee_details']);
-    Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
     Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
-    // customer routes
-    Route::get('/admin/customers', [UserController::class, 'customers_ui']);
-    Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
-    Route::get('/admin/customers/pagination', [UserController::class, 'customers_pagination']);
+
+    Route::middleware(['can:read users'])->group(function () {
+        // employee routes
+        Route::get('/admin/employee', [UserController::class, 'employee_ui']);
+        Route::get('/admin/employee/pagination', [UserController::class, 'employee_pagination']);
+        Route::get('/admin/employee/{user_id}', [UserController::class, 'employee_details']);
+        Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
+
+        // customer routes
+        Route::get('/admin/customers', [UserController::class, 'customers_ui']);
+        Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
+        Route::get('/admin/customers/pagination', [UserController::class, 'customers_pagination']);
+    });
 
     //brand
     Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
@@ -113,7 +117,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/suppliers', [SupplierController::class, 'supplier_search_ui'])->name('suppliers.search');
     Route::post('/admin/suppliers/create', [SupplierController::class, 'supplier_create']);
     Route::put('/admin/suppliers/update', [SupplierController::class, 'supplier_update'])->name('suppliers.edit');
-
 
     //order
     Route::get('/admin/orders', [OrderController::class, 'index']);
@@ -137,18 +140,23 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::delete('/admin/categories/{category_id}', [CategoryController::class, 'delete'])->name('categories.delete');
     Route::patch('/admin/categories/{category_id}', [CategoryController::class, 'update'])->name('categories.update');
 
-
-    // tag
-    Route::get('/admin/tags', [TagController::class, 'index'])->name('tags.index');
-    Route::post('/admin/tags', [TagController::class, 'create'])->name('tags.create');
-    Route::patch('/admin/tags/{tag_id}', [TagController::class, 'update'])->name('tags.update');
-    Route::delete('/admin/tags/{tag_id}', [TagController::class, 'delete'])->name('tags.delete');
-
-    // color
-    Route::get('/admin/colors', [ColorController::class, 'index'])->name('colors.index');
-    Route::post('/admin/colors', [ColorController::class, 'create'])->name('colors.create');
-    Route::patch('/admin/colors/{color_id}', [ColorController::class, 'update'])->name('colors.update');
-    Route::delete('/admin/colors/{color_id}', [ColorController::class, 'delete'])->name('colors.delete');
+    // colors and tags
+    Route::middleware(['can:read colors'])->group(function () {
+        Route::get('/admin/colors', [ColorController::class, 'index'])->name('colors.index');
+        Route::get('/admin/tags', [TagController::class, 'index'])->name('tags.index');
+    });
+    Route::middleware(['can:create color'])->group(function () {
+        Route::post('/admin/colors', [ColorController::class, 'create'])->name('colors.create');
+        Route::post('/admin/tags', [TagController::class, 'create'])->name('tags.create');
+    });
+    Route::middleware(['can:update color'])->group(function () {
+        Route::patch('/admin/colors/{color_id}', [ColorController::class, 'update'])->name('colors.update');
+        Route::patch('/admin/tags/{tag_id}', [TagController::class, 'update'])->name('tags.update');
+    });
+    Route::middleware(['can:delete color'])->group(function () {
+        Route::delete('/admin/colors/{color_id}', [ColorController::class, 'delete'])->name('colors.delete');
+        Route::delete('/admin/tags/{tag_id}', [TagController::class, 'delete'])->name('tags.delete');
+    });
 
     // product
     Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
@@ -194,14 +202,5 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
     Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
 
-
-    // *This is only temporary, use the appropriate controller
-
-
-
-
-
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
-
-    Route::get('/admin/catetest', [CategoryController::class, 'category_ui_1']);
 });

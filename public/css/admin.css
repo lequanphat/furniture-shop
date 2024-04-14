@@ -45,3 +45,7 @@ body {
     height: 40px;
     flex-shrink: 0;
 }
+
+.action-btn-icon {
+    margin: 0 !important;
+}
