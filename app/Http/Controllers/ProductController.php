@@ -13,7 +13,9 @@ use App\Models\ProductDetail;
 use App\Models\ProductImage;
 use App\Models\ProductTag;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -22,13 +24,16 @@ class ProductController extends Controller
     {
         $search = request()->query('search');
         $products = Product::with('category', 'brand', 'detailed_products.images')
-            ->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('product_id', 'LIKE', '%' . $search . '%')
-            ->orWhereHas('category', function ($query) use ($search) {
-                $query->where('name', 'LIKE', '%' . $search . '%');
-            })
-            ->orWhereHas('brand', function ($query) use ($search) {
-                $query->where('name', 'LIKE', '%' . $search . '%');
+            ->where('is_deleted', 0)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('product_id', 'LIKE', '%' . $search . '%')
+                    ->orWhereHas('category', function ($query) use ($search) {
+                        $query->where('name', 'LIKE', '%' . $search . '%');
+                    })
+                    ->orWhereHas('brand', function ($query) use ($search) {
+                        $query->where('name', 'LIKE', '%' . $search . '%');
+                    });
             })
             ->paginate(4); // 4 elements per page
         $data = [
@@ -43,15 +48,18 @@ class ProductController extends Controller
     {
         $search = request()->query('search');
         $products = Product::with('category', 'brand', 'detailed_products.images')
-            ->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('product_id', 'LIKE', '%' . $search . '%')
-            ->orWhereHas('category', function ($query) use ($search) {
-                $query->where('name', 'LIKE', '%' . $search . '%');
+            ->where('is_deleted', 0)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('product_id', 'LIKE', '%' . $search . '%')
+                    ->orWhereHas('category', function ($query) use ($search) {
+                        $query->where('name', 'LIKE', '%' . $search . '%');
+                    })
+                    ->orWhereHas('brand', function ($query) use ($search) {
+                        $query->where('name', 'LIKE', '%' . $search . '%');
+                    });
             })
-            ->orWhereHas('brand', function ($query) use ($search) {
-                $query->where('name', 'LIKE', '%' . $search . '%');
-            })
-            ->paginate(4); // 4 elements per 
+            ->paginate(4); // 4 elements per page
 
         foreach ($products as $product) {
             $average_price = 0;
@@ -69,10 +77,13 @@ class ProductController extends Controller
             }
             $product->setRelation('detailed_products', null);
         }
-
+        // get permissions for the admin
+        $user = User::where('user_id', Auth::id())->first();
         $data = [
             'page' => 'Products',
-            'products' => $products
+            'products' => $products,
+            'can_update' => $user->can('update product'),
+            'can_delete' => $user->can('delete product'),
         ];
         return response()->json($data);
     }
@@ -145,15 +156,32 @@ class ProductController extends Controller
         }
         return ['product' => $product, 'message' => 'Product updated successfully!'];
     }
+    public function delete(Request $request)
+    {
+        $product_id = $request->route('product_id');
+        $product = Product::find($product_id);
+        if ($product) {
+            $product->update([
+                'is_deleted' => true
+            ]);
+            return ['message' => 'Product deleted successfully!'];
+        }
+        return ['message' => 'Product not found!'];
+    }
     public function details(Request $request)
     {
         $product_id = $request->route('product_id');
-        $data = [
-            'page' => 'Product Details',
-            'product' => Product::with('category', 'brand', 'product_tags.tag')->find($product_id),
-            'detaild_products' => ProductDetail::where('product_id', $product_id)->with('images')->with('color')->paginate(6) // 6 elements per page
-        ];
-        return  view('admin.products.product_details', $data);
+        $product = Product::where('is_deleted', 0)->with('category', 'brand', 'product_tags.tag')->find($product_id);
+        if ($product) {
+            $detailed_products = ProductDetail::where('product_id', $product_id)->where('is_deleted', 0)->with('images')->with('color')->paginate(6); // 6 elements per page
+            $data = [
+                'page' => 'Product Details',
+                'product' => $product,
+                'detaild_products' => $detailed_products
+            ];
+            return  view('admin.products.product_details', $data);
+        }
+        return abort(404);
     }
     public function create_detailed_product_ui(Request $request)
     {
@@ -189,17 +217,24 @@ class ProductController extends Controller
             ]);
             $count++;
         }
-
         return ['detailed_product' => $detailed_product];
     }
     public function detailed_product_details(Request $request)
     {
         $sku = $request->route('sku');
-        $data = [
-            'page' => 'Product Details',
-            'detailed_product' => ProductDetail::with('images', 'color')->find($sku),
-        ];
-        return  view('admin.products.detailed_product_details', $data);
+        $product_id = $request->route('product_id');
+        $product = Product::where('product_id', $product_id)->where('is_deleted', 0)->first();
+        if ($product) {
+            $detailed_product = ProductDetail::where('is_deleted', 0)->with('images', 'color')->find($sku);
+            if ($detailed_product) {
+                $data = [
+                    'page' => 'Product Details',
+                    'detailed_product' => $detailed_product,
+                ];
+                return  view('admin.products.detailed_product_details', $data);
+            }
+        }
+        return abort(404);
     }
     public function  update_detailed_product_ui(Request $request)
     {
@@ -239,6 +274,18 @@ class ProductController extends Controller
             $count++;
         }
         return ['message' => 'Product details updated successfully!'];
+    }
+    public function delete_detailed_product(Request $request)
+    {
+        $sku = $request->route('sku');
+        $detailed_product = ProductDetail::where('sku', $sku)->first();
+        if ($detailed_product) {
+            $detailed_product->update([
+                'is_deleted' => true
+            ]);
+            return ['message' => 'Product details deleted successfully!'];
+        }
+        return ['message' => 'Product details not found!'];
     }
 
     public function get_products()
@@ -322,7 +369,6 @@ class ProductController extends Controller
             'products' => $products
         ]);
     }
-
 
     public function search_detailed_product()
     {

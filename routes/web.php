@@ -158,20 +158,37 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::delete('/admin/tags/{tag_id}', [TagController::class, 'delete'])->name('tags.delete');
     });
 
-    // product
-    Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/admin/products/pagination', [ProductController::class, 'products_pagination'])->name('products.pagination'); //-> json
-    Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
-    Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
+    // product routes
+
+    Route::middleware(['can:create product'])->group(function () {
+        Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
+        Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
+        Route::get('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product_ui'])->name('products.create_detailed_product_ui');
+        Route::post('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
+    });
+    Route::middleware(['can:update product'])->group(function () {
+        Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
+        Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
+        Route::get('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product_ui'])->name('products.update_detailed_product_ui');
+        Route::patch('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product'])->name('products.update_detailed_product');
+    });
+    Route::middleware(['can:delete product'])->group(function () {
+        Route::delete('/admin/products/{product_id}', [ProductController::class, 'delete'])->name('products.delete');
+        Route::delete('/admin/products/delete/{sku}', [ProductController::class, 'delete_detailed_product'])->name('products.delete_detailed_product');
+    });
+    Route::middleware(['can:read products'])->group(function () {
+        Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/admin/products/pagination', [ProductController::class, 'products_pagination'])->name('products.pagination'); //-> json
+        Route::get('/admin/products/{product_id}', [ProductController::class, 'details'])->name('products.details');
+        Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
+    });
+
+
+
+
     Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
-    Route::get('/admin/products/{product_id}', [ProductController::class, 'details'])->name('products.details');
-    Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
-    Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
-    Route::get('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product_ui'])->name('products.create_detailed_product_ui');
-    Route::post('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
-    Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
-    Route::get('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product_ui'])->name('products.update_detailed_product_ui');
-    Route::patch('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product'])->name('products.update_detailed_product');
+
+
 
 
     // receipts

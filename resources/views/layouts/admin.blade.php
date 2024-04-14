@@ -3,7 +3,7 @@
 @include('admin.components.head')
 
 <body data-bs-theme="dark">
-    <script src="{{ asset('vendor/theme/theme.js') }}" defer></script>
+    <script src="{{ asset('vendor/theme/theme.js') }}"></script>
     <script src="{{ asset('js/jquery.min.js') }}" defer></script>
     <script src="{{ asset('vendor/tabler/tabler.min.js') }}" defer></script>
     <div id="asset" data-asset="{{ asset('') }}"></div>
