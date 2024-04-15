@@ -211,12 +211,16 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
 
     Route::get('/admin/roles', [PermissionController::class, 'index']);
+    Route::get('/admin/roles/pagination', [PermissionController::class, 'roles_pagination']);
     Route::post('/admin/roles', [PermissionController::class, 'create']);
     Route::patch('/admin/roles/{role_id}', [PermissionController::class, 'update']);
     Route::get('/admin/roles/{role_id}', [PermissionController::class, 'get_role']);
 
 
+
+
     Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
+    Route::get('/admin/authorization/pagination', [PermissionController::class, 'authorization_pagination']);
     Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
 
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
