@@ -100,11 +100,15 @@ jQuery.noConflict();
 
         /////////////////////////////////hàm filter cho trang order chính để phân trang và earch ajax
         const filterOrders = ({ page }) => {
-            const search = $('#search-orders').val();    //lấy value từ ô tìm kiếm bên index của orders
+            const search = $('#search-orders').val();           //lấy value từ ô tìm kiếm bên index của orders
+            const search_day_first = $('#day_first').val();     //lấy ngày đầu kiếm order trong 1 khoảng thời gian
+            const search_day_last = $('#day_last').val();       //lấy ngày cuối kiếm order trong 1 khoảng thời gian
+            //alert(search_day_last);
             if (!page) {
                 page = 1;
             }
-            const url = `/admin/orders/search?search=${search}&page=${page}`; //url để tìm kiếm, lấy từ route /admin/orders/search
+            //url để tìm kiếm, lấy từ route /admin/orders/search , truyền qua hàm search_orders_ajax để nó lấy dữ liệu từ url và lọc
+            const url = `/admin/orders/search?search=${search}&dayfirst=${search_day_first}&daylast=${search_day_last}&page=${page}`;
 
 
             $.ajax({
@@ -246,6 +250,18 @@ jQuery.noConflict();
 
         // search filter của chỉ order thôi
         $('#search-orders').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+        $('#day_first').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+        $('#day_last').on(
             'input',
             debounce(function () {
                 filterOrders({ page: 1 });
