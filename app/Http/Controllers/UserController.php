@@ -13,21 +13,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function customers_ui()
-    {
-        $data = [
-            'page' => 'Customers',
-            'users' => User::where('is_staff', 0)->paginate(6) // 6 elements per page
-        ];
-        return view('admin.users.customers', $data);
-    }
-
 
 
     public function employee_ui()
     {
         $search = request()->query('search');
+        $type = request()->query('type');
         $employee = User::where('is_staff', 1)
+            ->when($type === 'active', function ($query) {
+                $query->where('is_active', 1);
+            })
+            ->when($type === 'blocked', function ($query) {
+                $query->where('is_active', 0);
+            })
             ->whereNotIn('user_id', [Auth::user()->user_id])
             ->where(function ($query) use ($search) {
                 $query->where('first_name', 'like', '%' . $search . '%')
@@ -39,15 +37,23 @@ class UserController extends Controller
 
         $data = [
             'page' => 'Employee',
+            'users' => $employee,
             'search' => $search,
-            'users' => $employee
+            'type' => $type,
         ];
         return view('admin.users.employee', $data);
     }
     public function employee_pagination()
     {
         $search = request()->query('search');
+        $type = request()->query('type');
         $employee = User::where('is_staff', 1)
+            ->when($type === 'active', function ($query) {
+                $query->where('is_active', 1);
+            })
+            ->when($type === 'blocked', function ($query) {
+                $query->where('is_active', 0);
+            })
             ->whereNotIn('user_id', [Auth::user()->user_id])
             ->where(function ($query) use ($search) {
                 $query->where('first_name', 'like', '%' . $search . '%')
@@ -61,8 +67,11 @@ class UserController extends Controller
                 $user->new = true;
             }
         }
+        $user = User::where('user_id', Auth::id())->first();
         $data = [
-            'employee' => $employee // 6 elements per page
+            'employee' => $employee,
+            'can_update' => $user->can('update user'),
+            'can_delete' => $user->can('delete user'),
         ];
         return response()->json($data);
     }
@@ -95,8 +104,17 @@ class UserController extends Controller
 
         $user->default_address = $address;
 
+        // get permission from admin user
+        $admin = User::where('user_id', Auth::id())->first();
+        $data = [
+            'message' => 'Created employee successfully!',
+            'user' => $user,
+            'address' => $address,
+            'can_update' => $admin->can('update user'),
+            'can_delete' => $admin->can('delete user'),
+        ];
         // response
-        return ['message' => 'Created employee successfully!', 'user' => $user, 'address' => $address];
+        return response()->json($data);
     }
 
     public function employee_details(Request $request)
@@ -182,7 +200,17 @@ class UserController extends Controller
                     $user->new = true;
                 }
                 // response
-                return ['message' => 'Updateted employee successfully!', 'user' => $user, 'address' => $address];
+
+                // get permission from admin user
+                $admin = User::where('user_id', Auth::id())->first();
+                $data = [
+                    'message' => 'Updateted employee successfully!',
+                    'user' => $user,
+                    'address' => $address,
+                    'can_update' => $admin->can('update user'),
+                    'can_delete' => $admin->can('delete user'),
+                ];
+                return response()->json($data);
             }
             return back()->withErrors(['address' => 'Address not found.'])->withInput($request->input());
         }
@@ -212,5 +240,67 @@ class UserController extends Controller
             return back()->withErrors(['address' => 'Address not found.'])->withInput($request->input());
         }
         return back()->withErrors(['email' => 'User not found.'])->withInput($request->input());
+    }
+    public function customers_ui()
+    {
+        $search = request()->query('search');
+        $type = request()->query('type');
+        $customers = User::where('is_staff', 0)
+            ->when($type === 'active', function ($query) {
+                $query->where('is_active', 1);
+            })
+            ->when($type === 'blocked', function ($query) {
+                $query->where('is_active', 0);
+            })
+            ->where(function ($query) use ($search) {
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->with('default_address')
+            ->paginate(6); // 6 elements per page
+        foreach ($customers as $user) {
+            if ($user->created_at->diffInDays() < 7) {
+                $user->new = true;
+            }
+        }
+
+        $data = [
+            'page' => 'Customers',
+            'users' => $customers,
+            'search' => $search,
+            'type' => $type,
+        ];
+        return view('admin.users.customers', $data);
+    }
+    public function customers_pagination(Request $request)
+    {
+        $search = request()->query('search');
+        $type = request()->query('type');
+        $customers = User::where('is_staff', 0)
+            ->when($type === 'active', function ($query) {
+                $query->where('is_active', 1);
+            })
+            ->when($type === 'blocked', function ($query) {
+                $query->where('is_active', 0);
+            })
+            ->where(function ($query) use ($search) {
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->with('default_address')
+            ->paginate(6); // 6 elements per page
+        foreach ($customers as $user) {
+            if ($user->created_at->diffInDays() < 7) {
+                $user->new = true;
+            }
+        }
+        $user = User::where('user_id', Auth::id())->first();
+        $data = [
+            'customers' => $customers,
+            'can_delete' => $user->can('delete user'),
+        ];
+        return response()->json($data);
     }
 }

@@ -3,11 +3,48 @@ jQuery.noConflict();
     $(document).ready(function () {
         const data_asset = $('#asset').attr('data-asset');
         // create tag
-
         $('#create-tag-modal').on('show.bs.modal', function (event) {
             $('#create-tag-form')[0].reset();
             $('#create_response').addClass('d-none');
         });
+
+        function createTagElement({ tag, can_update, can_delete }) {
+            const newTag = tag.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
+            const update_btn = can_update
+                ? `<a class="btn p-2" data-bs-toggle="modal" data-bs-target="#update-tag-modal"
+            data-id="${tag.tag_id}" data-name="${tag.name}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                <path d="M13.5 6.5l4 4" />
+            </svg>
+        </a>`
+                : '';
+            const delete_btn = can_delete
+                ? `<a href="#" class="js-delete-tag btn p-2"
+            data-id="${tag.tag_id}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 7l16 0" />
+                <path d="M10 11l0 6" />
+                <path d="M14 11l0 6" />
+                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+            </svg>
+        </a>`
+                : '';
+            return `<td>${tag.tag_id}</td>
+            <td><span class="badge bg-cyan-lt">#${tag.name}</span>
+           ${newTag}
+            </td>
+            <td>${update_btn} ${delete_btn}</td>`;
+        }
 
         $('#create-tag-form').submit(function (e) {
             e.preventDefault();
@@ -21,25 +58,14 @@ jQuery.noConflict();
                     $('#create_response').removeClass('alert-danger d-none');
                     $('#create_response').addClass('alert-success');
                     $('#create_response').html(response.message);
-
+                    response.tag.new = true;
                     const row = `
                         <tr>
-                        <td>${response.tag.tag_id}</td>
-                        <td><span class="badge bg-cyan-lt">#${response.tag.name}</span>
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
-                        </span>
-                        </td>
-                        <td>
-                            <a class="btn p-2">
-                                <img src="${data_asset}svg/edit.svg" style="width: 18px;"
-                                    data-bs-toggle="modal" data-bs-target="#update-tag-modal"
-                                    data-id="${response.tag.tag_id}" data-name="${response.tag.name}" />
-                            </a>
-                            <a href="#" class="js-delete-tag btn p-2"
-                                data-id="${response.tag.tag_id}">
-                                <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
-                            </a>
-                        </td>
+                        ${createTagElement({
+                            tag: response.tag,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        })}
                         </tr>`;
 
                     if ($('#tag-table1-body').find('tr').length < 8) {
@@ -91,24 +117,13 @@ jQuery.noConflict();
                         });
                     }
                     if (row) {
-                        row.html(`
-                        <td>${response.tag.tag_id}</td>
-                        <td><span class="badge bg-cyan-lt">#${response.tag.name}</span>
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
-                        </span>
-                        </td>
-                        <td>
-                            <a class="btn p-2">
-                                <img src="${data_asset}svg/edit.svg" style="width: 18px;"
-                                    data-bs-toggle="modal" data-bs-target="#update-tag-modal"
-                                    data-id="${response.tag.tag_id}" data-name="${response.tag.name}" />
-                            </a>
-                            <a href="#" class="js-delete-tag btn p-2"
-                                data-id="${response.tag.tag_id}">
-                                <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
-                            </a>
-                        </td>
-                   `);
+                        row.html(
+                            createTagElement({
+                                tag: response.tag,
+                                can_update: response.can_update,
+                                can_delete: response.can_delete,
+                            }),
+                        );
                     }
                 },
                 error: function (error) {
@@ -124,7 +139,6 @@ jQuery.noConflict();
         $(document).on('click', '.js-delete-tag', function (e) {
             e.preventDefault();
             var tag_id = $(this).data('id');
-            console.log(tag_id);
             var row = $(this).closest('tr');
             $.ajax({
                 url: `/admin/tags/${tag_id}`,

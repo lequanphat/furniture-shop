@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  app:
+    build:
+      args:
+        user: trannguyenhan
+        uid: 1000
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    restart: unless-stopped
+    working_dir: /var/www/html/
+    volumes:
+      - ./:/var/www/html/
+    networks:
+      - photos
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    ports:
+      - 8005:80
+    volumes:
+      - ./:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+    networks:
+      - photos
+  db:
+    image: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: photo_gallery_laravel
+      MYSQL_ROOT_PASSWORD: mysql12345
+      MYSQL_USER: trannguyenhan
+      MYSQL_PASSWORD: mysql12345
+    ports:
+      - "9906:3306"
+    volumes:
+      - ./database/photo-gallery-laravel-database.sql:/docker-entrypoint-initdb.d/dump.sql
+    networks:
+      - photos
+
+#Docker Networks
+networks:
+  photos:
+    driver: bridge

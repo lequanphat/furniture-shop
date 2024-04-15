@@ -117,4 +117,7 @@
             </div>
             @include('admin.components.footer')
         </div>
+
+        {{-- Script --}}
+        <script src="{{ asset('js/profile_admin.js') }}" defer></script>
     @endsection

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateColor;
 use App\Http\Requests\UpdateColor;
 use App\Models\Color;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ColorController extends Controller
 {
@@ -25,7 +27,15 @@ class ColorController extends Controller
             'name' => $request->input('name'),
             'code' => $request->input('code'),
         ]);
-        return ['message' => 'Created color successfully!', 'color' => $color];
+        // get permission of the admin
+        $admin = User::where('user_id', Auth::id())->first();
+        $data = [
+            'message' => 'Created color successfully!',
+            'color' => $color,
+            'can_update' => $admin->can('update color'),
+            'can_delete' => $admin->can('delete color'),
+        ];
+        return response()->json($data, 201);
     }
     public function update(UpdateColor $request)
     {
@@ -41,8 +51,20 @@ class ColorController extends Controller
             $color->name = $request->input('name');
             $color->code = $request->input('code');
             $color->save();
+            if ($color->created_at->diffInDays() < 7) {
+                $color->new = true;
+            }
+            // get permission of the admin
+            $admin = User::where('user_id', Auth::id())->first();
+            $data = [
+                'message' => 'Updated color successfully!',
+                'color' => $color,
+                'can_update' => $admin->can('update color'),
+                'can_delete' => $admin->can('delete color'),
+            ];
+            return response()->json($data, 200);
         }
-        return ['message' => 'Updated color successfully!', 'color' => $color];
+        return response()->json(['errors' => ['message' => ['Cannot find this color.']]], 400);
     }
     public function delete(Request $request)
     {
