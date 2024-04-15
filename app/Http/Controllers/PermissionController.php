@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateRole;
+use App\Http\Requests\UpdateRole;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,18 +73,23 @@ class PermissionController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateRole $request)
     {
         $role_id = request()->route('role_id');
-        $role = Role::find($role_id);
-        $role->name = $request->role_name;
-        $role->save();
-        $permissions = $request->input('permissions');
-        $role->syncPermissions($permissions);
-        return response()->json([
-            'message' => 'Role updated successfully',
-            'role' => $role,
-        ]);
+        // check name existed
+        $role_name_existed = Role::where('name', $request->role_name)->where('id', '!=', $role_id)->first();
+        if (!$role_name_existed) {
+            $role = Role::find($role_id);
+            $role->name = $request->role_name;
+            $role->save();
+            $permissions = $request->input('permissions');
+            $role->syncPermissions($permissions);
+            return response()->json([
+                'message' => 'Role updated successfully',
+                'role' => $role,
+            ]);
+        }
+        return response()->json(['errors' => ['message' => ['The tag name have already existed.']]], 400);
     }
     public function get_role()
     {

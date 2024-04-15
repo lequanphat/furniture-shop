@@ -1,111 +1,102 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        const data_asset = $('#asset').attr('data-asset');
-
-        function createEmployeeElement({ employee, can_update, can_delete }) {
-            const newTag = employee.new
-                ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
-                : '';
-            const status = employee.is_active
+        function createUserElement({ user, can_update = false, can_delete = false }) {
+            const type = user.is_staff ? 'employee' : 'customers';
+            const newTag = user.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
+            const status = user.is_active
                 ? '<span class="badge bg-success me-1"></span> Active'
                 : '<span class="badge bg-danger me-1"></span> Blocked';
-
-            const update_action = can_update
-                ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
+            const update_action =
+                can_update && user.is_staff
+                    ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
                         data-bs-target="#update-employee-modal"
-                        data-user-id="${employee.user_id}">
-                        <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
+                        data-user-id="${user.user_id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                            <path d="M13.5 6.5l4 4" />
+                        </svg>
                     </a>`
-                : '';
+                    : '';
             const delete_action = can_delete
-                ? employee.is_active
+                ? user.is_active
                     ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
                         data-bs-target="#delete-user-modal"
-                        data-user-id="${employee.user_id}">
-                        <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
+                        data-user-id="${user.user_id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 7l16 0" />
+                            <path d="M10 11l0 6" />
+                            <path d="M14 11l0 6" />
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                        </svg>
                     </a>`
                     : `<a href="#" class="btn p-2" data-bs-toggle="modal"
-                            data-bs-target="#restore-user-modal"
-                            data-user-id="${employee.user_id}">
-                            <img src="${data_asset}svg/key.svg" style="width: 18px;" />`
+                        data-bs-target="#restore-user-modal"
+                        data-user-id="${user.user_id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-key">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" />
+                            <path d="M15 9h.01" />
+                        </svg></a>`
                 : '';
-
-            const action = `<a href="employee/${employee.user_id}/details" class="btn p-2">
-                <img src="${data_asset}svg/view.svg" style="width: 18px;" />
-            </a>
-            ${update_action}
-            ${delete_action}`;
+            const view_action = `<a href="${type}/${user.user_id}/details" class="btn p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"
+                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                <path
+                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+            </svg>
+            </a>`;
+            const action = `
+                ${view_action}
+                ${update_action}
+                ${delete_action}`;
+            const phone_number = user.default_address?.phone_number ?? 'Unset';
+            const address = user.default_address?.address ?? 'Unset';
+            const birth_date = user.birth_date ?? 'Unset';
+            const gender = user.gender ? 'Male' : 'Female';
             return `<tr>
-            <td>${employee.user_id}</td>
+            <td>${user.user_id}</td>
             <td>
                 <div class="d-flex py-1 align-items-center">
-                    <span class="avatar me-2" style="background-image: url(${employee.avatar})"></span>
+                    <span class="avatar me-2" style="background-image: url(${user.avatar})"></span>
                     <div class="flex-fill">
                         <div class="font-weight-medium">
-                        ${employee.first_name} ${employee.last_name} ${newTag}</div>
+                        ${user.first_name} ${user.last_name} ${newTag}</div>
                         <div class="text-muted"><a href="#"
-                                class="text-reset">${employee.email}</a></div></div>
+                                class="text-reset">${user.email}</a></div></div>
                 </div>
             </td>
-            <td><div>${employee.gender ? 'Male' : 'Female'}</div></td>
-            <td>${employee.birth_date ? employee.birth_date : 'Unset'}</td>
+            <td><div>${gender}</div></td>
+            <td>${birth_date}</td>
             <td class="text-muted">
-                <div>${employee.default_address?.phone_number ? employee.default_address?.phone_number : 'Unset'}</div>
-                <div>${employee.default_address?.address ? employee.default_address?.address : 'Unset'}</div>
+                <div>${phone_number}</div>
+                <div>${address}</div>
             </td>
             <td>${status}</td>
             <td>${action}</td>
         </tr>`;
-        }
-
-        // create customer element
-        function createCustomerElement({ customer, can_delete }) {
-            const newTag = customer.new
-                ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
-                : '';
-            const status = customer.is_active
-                ? '<span class="badge bg-success me-1"></span> Active'
-                : '<span class="badge bg-danger me-1"></span> Blocked';
-            const delete_action = can_delete
-                ? customer.is_active
-                    ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
-                        data-bs-target="#delete-user-modal"
-                        data-user-id="${customer.user_id}">
-                        <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
-                    </a>`
-                    : `<a href="#" class="btn p-2" data-bs-toggle="modal"
-                    data-bs-target="#restore-user-modal"
-                    data-user-id="${customer.user_id}">
-                    <img src="${data_asset}svg/key.svg" style="width: 18px;" />`
-                : '';
-            const action = `<a href="customers/${customer.user_id}/details" class="btn p-2">
-                    <img src="${data_asset}svg/view.svg" style="width: 18px;" /></a>
-                ${delete_action}`;
-            return `<tr>
-                <td>${customer.user_id}</td>
-                <td>
-                    <div class="d-flex py-1 align-items-center">
-                        <span class="avatar me-2"
-                            style="background-image: url(${customer.avatar})"></span>
-                        <div class="flex-fill">
-                            <div class="font-weight-medium">
-                            ${customer.first_name} ${customer.last_name}
-                                ${newTag}</div>
-                            <div class="text-muted"><a href="#" class="text-reset">${customer.email}</a></div>
-                        </div>
-                    </div>
-                </td>
-                <td><div>${customer.gender ? 'Male' : 'Female'}</div></td>
-                <td>${customer.birth_date ? customer.birth_date : 'Unset'}</td>
-                <td class="text-muted">
-                    <div>${
-                        customer.default_address?.phone_number ? customer.default_address?.phone_number : 'Unset'
-                    }</div>
-                    <div>${customer.default_address?.address ? customer.default_address?.address : 'Unset'}</div>
-                </td><td>${status}</td>
-                <td>${action}</td>
-            </tr>`;
         }
 
         // create employee api
@@ -126,8 +117,8 @@ jQuery.noConflict();
                     response.user.is_active = true;
 
                     $('#employee-table-body').append(
-                        createEmployeeElement({
-                            employee: response.user,
+                        createUserElement({
+                            user: response.user,
                             can_update: response.can_update,
                             can_delete: response.can_delete,
                         }),
@@ -191,8 +182,8 @@ jQuery.noConflict();
                         return $(this).find('td:first').text() == response.user.user_id;
                     });
                     if (row) {
-                        let html = createEmployeeElement({
-                            employee: response.user,
+                        let html = createUserElement({
+                            user: response.user,
                             can_update: response.can_update,
                             can_delete: response.can_delete,
                         });
@@ -244,7 +235,16 @@ jQuery.noConflict();
                     actionCell.append(`<a href="#" class="btn p-2" data-bs-toggle="modal"
                         data-bs-target="#restore-user-modal"
                         data-user-id="${userId}">
-                        <img src="${data_asset}svg/key.svg" style="width: 18px;" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-key">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" />
+                            <path d="M15 9h.01" />
+                        </svg>
                         </a>`);
 
                     // show success modal
@@ -280,7 +280,18 @@ jQuery.noConflict();
                     actionCell.append(`<a href="#" class="btn p-2" data-bs-toggle="modal"
                         data-bs-target="#delete-user-modal"
                         data-user-id="${userId}">
-                        <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 7l16 0" />
+                            <path d="M10 11l0 6" />
+                            <path d="M14 11l0 6" />
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                        </svg>
                         </a>`);
                     // show success modal
                     $('#success-notify-modal').addClass('show');
@@ -420,8 +431,8 @@ jQuery.noConflict();
                     }
                     let html = '';
                     response.employee.data.forEach((employee) => {
-                        html += createEmployeeElement({
-                            employee,
+                        html += createUserElement({
+                            user: employee,
                             can_update: response.can_update,
                             can_delete: response.can_delete,
                         });
@@ -486,7 +497,7 @@ jQuery.noConflict();
                     }
                     let html = '';
                     response.customers.data.forEach((customer) => {
-                        html += createCustomerElement({ customer, can_delete: response.can_delete });
+                        html += createUserElement({ user: customer, can_delete: response.can_delete });
                     });
                     $('#customers-table-body').html(html);
                     renderPagination({
