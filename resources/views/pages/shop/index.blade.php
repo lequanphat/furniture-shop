@@ -23,8 +23,8 @@
                                     <option value="price_asc"
                                         @if ($sorted_by == 'price_asc') @selected(true) @endif>Sort by price
                                         ascending</option>
-                                    <option value="price_des"
-                                        @if ($sorted_by == 'price_des') @selected(true) @endif>Sort by price
+                                    <option value="price_desc"
+                                        @if ($sorted_by == 'price_desc') @selected(true) @endif>Sort by price
                                         descending</option>
                                     <option value="latest"
                                         @if ($sorted_by == 'latest') @selected(true) @endif>Sort

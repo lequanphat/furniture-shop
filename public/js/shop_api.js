@@ -126,6 +126,63 @@ jQuery(document).ready(function () {
         showToast('Add to cart successfully', 'success');
     });
 
+    function createProductElement(product) {
+        return `<div class="col-lg-4 col-md-4 col-sm-6 col-12">
+        <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
+            <div class="custom-product-img product-img img-zoom mb-25">
+                <a href="/products/${product.product_id}">
+                    <img src="${product.detailed_product.image}" alt="" style="height: 275px">
+                </a>
+                <div class="product-badge badge-top badge-right badge-pink">
+                ${
+                    product.detailed_product.total_discount_percentage > 0
+                        ? `<span>-${product.detailed_product.total_discount_percentage}%</span>`
+                        : ''
+                }
+                </div>
+                ${
+                    product.total_quantities == 0
+                        ? ` <div class="custom-product-badge product-badge badge-top badge-left badge-pink">
+                    <span>Sold out</span>
+                </div>`
+                        : ''
+                }
+                
+                <div class="product-action-wrap">
+                    <a href="/products/${product.product_id}"
+                        class="product-action-btn-1" title="Wishlist"><i
+                            class="pe-7s-like"></i></a>
+                    <button class="product-action-btn-1" title="Quick View"
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="pe-7s-look"></i>
+                    </button>
+                </div>
+                <div class="product-action-2-wrap">
+                    <button class="product-action-btn-2" title="Add To Cart"><i
+                            class="pe-7s-cart"></i> Add to cart</button>
+                </div>
+            </div>
+            <div class="product-content">
+                <h3><a
+                        href="/products/${product.product_id}">${product.name}</a>
+                </h3>
+                <div class="product-price">
+                ${
+                    product.detailed_product.total_discount_percentage > 0
+                        ? `<span class="old-price">
+                        ${formatter.format(product.detailed_product.original_price)}đ
+                        </span>`
+                        : ''
+                } 
+                
+                    <span class="new-price">
+                        ${formatter.format(product.detailed_product.original_price)}đ
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    }
     // filter
     function productFilter({ page = 1 }) {
         // search
@@ -169,64 +226,22 @@ jQuery(document).ready(function () {
             type: 'GET',
             success: function (response) {
                 let html = '';
+                // if (response.list.length !== 0) {
+                //     for (let i = 0; i < response.list.length; i++) {
+                //         let product = response.list[i];
+                //         html += createProductElement(product);
+                //     }
+                // } else {
+                //     for (let i = 0; i < response.products.data.length; i++) {
+                //         let product = response.products.data[i];
+                //         html += createProductElement(product);
+                //     }
+                // }
                 for (let i = 0; i < response.products.data.length; i++) {
                     let product = response.products.data[i];
-                    html += `<div class="col-lg-4 col-md-4 col-sm-6 col-12">
-                    <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
-                        <div class="custom-product-img product-img img-zoom mb-25">
-                            <a href="/products/${product.product_id}">
-                                <img src="${product.detailed_product.image}" alt="" style="height: 275px">
-                            </a>
-                            <div class="product-badge badge-top badge-right badge-pink">
-                            ${
-                                product.detailed_product.total_discount_percentage > 0
-                                    ? `<span>-${product.detailed_product.total_discount_percentage}%</span>`
-                                    : ''
-                            }
-                            </div>
-                            ${
-                                product.total_quantities == 0
-                                    ? ` <div class="custom-product-badge product-badge badge-top badge-left badge-pink">
-                                <span>Sold out</span>
-                            </div>`
-                                    : ''
-                            }
-                            
-                            <div class="product-action-wrap">
-                                <a href="/products/${product.product_id}"
-                                    class="product-action-btn-1" title="Wishlist"><i
-                                        class="pe-7s-like"></i></a>
-                                <button class="product-action-btn-1" title="Quick View"
-                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    <i class="pe-7s-look"></i>
-                                </button>
-                            </div>
-                            <div class="product-action-2-wrap">
-                                <button class="product-action-btn-2" title="Add To Cart"><i
-                                        class="pe-7s-cart"></i> Add to cart</button>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h3><a
-                                    href="/products/${product.product_id}">${product.name}</a>
-                            </h3>
-                            <div class="product-price">
-                            ${
-                                product.detailed_product.total_discount_percentage > 0
-                                    ? `<span class="old-price">
-                                    ${formatter.format(product.detailed_product.original_price)}đ
-                                    </span>`
-                                    : ''
-                            } 
-                            
-                                <span class="new-price">
-                                    ${formatter.format(product.detailed_product.original_price)}đ
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
+                    html += createProductElement(product);
                 }
+
                 $('#product-list').html(html);
             },
             error: function (error) {
@@ -273,4 +288,22 @@ jQuery(document).ready(function () {
         const page = $('.pagination-item.active').text();
         productFilter({ page });
     });
+
+    // price filter
+    var targetNode = $('.ui-slider-range')[0];
+    var observerOptions = {
+        attributes: true,
+        attributeFilter: ['style'],
+    };
+
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            var newWidth = $(mutation.target).width();
+            var newLeft = $(mutation.target).position().left;
+            console.log('New width: ' + newWidth);
+            console.log('New left: ' + newLeft);
+        });
+    });
+
+    observer.observe(targetNode, observerOptions);
 });

@@ -15,6 +15,8 @@ use App\Models\ProductTag;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -296,10 +298,13 @@ class ProductController extends Controller
         $sorted_by = request()->query('sorted_by');
         // query
         $query = Product::with(
-            'category',
-            'brand',
-            'detailed_products.images',
-            'detailed_products.product_discounts.discount',
+            [
+                'category',
+                'brand',
+                'detailed_products' => function ($query) {
+                    $query->where('is_deleted', 0)->with('images', 'product_discounts.discount');
+                },
+            ]
         )->where('is_deleted', false);
 
         // If categories is not 'all', filter by category_id
@@ -322,15 +327,11 @@ class ProductController extends Controller
         // sorted 
         if ($sorted_by === 'latest') {
             $query->orderBy('created_at', 'desc');
-        }
-        if ($sorted_by === 'oldest') {
+        } else if ($sorted_by === 'oldest') {
             $query->orderBy('created_at', 'asc');
         }
 
         $products = $query->paginate(9); // 9 elements per page
-        if ($sorted_by === 'price_asc') {
-        }
-
 
         foreach ($products as $product) {
             $total_discount_percentage = 0;
@@ -360,13 +361,33 @@ class ProductController extends Controller
                 $detailed_product->setRelation('images', null);
             }
             $product->detailed_product = $detailed_product;
+            $product->price = $detailed_product->original_price;
             $total_quantities = $product->detailed_products->sum('quantities');
             $product->setRelation('detailed_products', null);
             $product->total_quantities = $total_quantities;
         }
 
+        if ($sorted_by === 'price_asc' || $sorted_by === 'price_desc') {
+            if ($sorted_by === 'price_asc') {
+                $sortedItems = collect($products->items())->sortBy(function ($product) {
+                    return $product->price;
+                })->values();
+            } else if ($sorted_by === 'price_desc') {
+                $sortedItems = collect($products->items())->sortByDesc(function ($product) {
+                    return $product->price;
+                })->values();
+            }
+            $products = new LengthAwarePaginator(
+                $sortedItems,
+                $products->total(),
+                $products->perPage(),
+                $products->currentPage(),
+                ['path' => Paginator::resolveCurrentPath()]
+            );
+        }
+
         return response()->json([
-            'products' => $products
+            'products' => $products,
         ]);
     }
 

@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -33,10 +35,13 @@ class PagesController extends Controller
         $sorted_by = request()->query('sorted_by');
         // query
         $query = Product::with(
-            'category',
-            'brand',
-            'detailed_products.images',
-            'detailed_products.product_discounts.discount',
+            [
+                'category',
+                'brand',
+                'detailed_products' => function ($query) {
+                    $query->where('is_deleted', 0)->with('images', 'product_discounts.discount');
+                },
+            ]
         )->where('is_deleted', false);
 
         // If categories is not 'all', filter by category_id
@@ -93,9 +98,28 @@ class PagesController extends Controller
                 $detailed_product->setRelation('images', null);
             }
             $product->detailed_product = $detailed_product;
+            $product->price = $detailed_product->original_price;
             $total_quantities = $product->detailed_products->sum('quantities');
             $product->setRelation('detailed_products', null);
             $product->total_quantities = $total_quantities;
+        }
+        if ($sorted_by === 'price_asc' || $sorted_by === 'price_desc') {
+            if ($sorted_by === 'price_asc') {
+                $sortedItems = collect($products->items())->sortBy(function ($product) {
+                    return $product->price;
+                })->values();
+            } else if ($sorted_by === 'price_desc') {
+                $sortedItems = collect($products->items())->sortByDesc(function ($product) {
+                    return $product->price;
+                })->values();
+            }
+            $products = new LengthAwarePaginator(
+                $sortedItems,
+                $products->total(),
+                $products->perPage(),
+                $products->currentPage(),
+                ['path' => Paginator::resolveCurrentPath()]
+            );
         }
 
         $data = [
@@ -115,13 +139,18 @@ class PagesController extends Controller
     public function product_details()
     {
         $product_id = request()->route('product_id');
-
-        $data = [
-            'page' => 'Product Details',
-            'product' => Product::with('category', 'brand', 'detailed_products', 'product_tags.tag')
-                ->where('is_deleted', false)->find($product_id),
-        ];
-        return view('pages.product_details.index', $data);
+        $product = Product::with(['category', 'brand', 'product_tags.tag', 'detailed_products' => function ($query) {
+            $query->where('is_deleted', 0);
+        }])
+            ->where('is_deleted', false)->find($product_id);
+        if ($product) {
+            $data = [
+                'page' => 'Product Details',
+                'product' => $product,
+            ];
+            return view('pages.product_details.index', $data);
+        }
+        abort(404);
     }
     public function cart()
     {
