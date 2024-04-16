@@ -103,12 +103,16 @@ jQuery.noConflict();
             const search = $('#search-orders').val();           //lấy value từ ô tìm kiếm bên index của orders
             const search_day_first = $('#day_first').val();     //lấy ngày đầu kiếm order trong 1 khoảng thời gian
             const search_day_last = $('#day_last').val();       //lấy ngày cuối kiếm order trong 1 khoảng thời gian
+            const isChecked = $('#sort_by_last');               //2 dòng này lấy check để sort
+            const sort_choose = isChecked.prop('checked');
+            //alert(sort_choose);
+
             //alert(search_day_last);
             if (!page) {
                 page = 1;
             }
             //url để tìm kiếm, lấy từ route /admin/orders/search , truyền qua hàm search_orders_ajax để nó lấy dữ liệu từ url và lọc
-            const url = `/admin/orders/search?search=${search}&dayfirst=${search_day_first}&daylast=${search_day_last}&page=${page}`;
+            const url = `/admin/orders/search?search=${search}&dayfirst=${search_day_first}&daylast=${search_day_last}&sortchoose=${sort_choose}&page=${page}`;
 
 
             $.ajax({
@@ -262,6 +266,12 @@ jQuery.noConflict();
             }, 500),
         );
         $('#day_last').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+        $('#sort_by_last').on(
             'input',
             debounce(function () {
                 filterOrders({ page: 1 });

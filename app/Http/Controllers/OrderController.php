@@ -73,19 +73,27 @@ class OrderController extends Controller
         //kiếm trong 1 khoảng tg
         $day_first = request()->query('dayfirst');
         $day_last = request()->query('daylast');
+        $is_sort_choose = request()->query('sortchoose');
 
         //query dữ liệu thường
-        $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
+        $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%');
         //nếu 2 ngày được chọn
         if(isset($day_first) && isset($day_last)){
             //do wherebetween nó chỉ lấy từ ngày đầu cho tới ngày trước ngày cuối nên phải cộng
             $day_last_plus_one = Carbon::parse($day_last)->addDay();
-            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereBetween('created_at', [$day_first, $day_last_plus_one])->paginate(5);
+            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereBetween('created_at', [$day_first, $day_last_plus_one]);
         } elseif (isset($day_first) && empty($day_last)) {
-            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereDate('created_at', '>=' , $day_first)->paginate(5);
+            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereDate('created_at', '>=' , $day_first);
         } elseif (empty($day_first) && isset($day_last)) {
-            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereDate('created_at', '<=' , $day_last)->paginate(5);
+            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereDate('created_at', '<=' , $day_last);
         }
+
+        if($is_sort_choose == 'false'){
+            $orders = $orders->orderBy('created_at','asc')->paginate(5);
+        } else {
+            $orders = $orders->orderBy('created_at','desc')->paginate(5);
+        }
+
 
         foreach( $orders as $order ) {
             $order->howmanydaysago = $order->howmanydaysago();
