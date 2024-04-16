@@ -35,7 +35,7 @@ jQuery.noConflict();
                             data-description="   ${response.brand.description }"
                             data-index="${response.brand.index }"
                             data-parent-id="${response.brand.parent_id }">
-                            <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                            <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                         </button>
                     </td>`
             )},
@@ -98,7 +98,7 @@ jQuery.noConflict();
                                 data-description="   ${response.brand.description }"
                                 data-index="${response.brand.index }"
                                 data-parent-id="${response.brand.parent_id }">
-                                <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                             </button>
                         </td>`)
                     }

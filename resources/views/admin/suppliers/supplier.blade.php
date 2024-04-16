@@ -28,11 +28,6 @@
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <span class="d-none d-sm-inline">
-                            <a href="#" class="btn">
-                                New view
-                            </a>
-                        </span>
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
                             data-bs-target="#modal-simple">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -80,7 +75,7 @@
 
                                     </tr>
                                 </thead>
-                                <tbody id="employee-table">
+                                <tbody id="supplier-table">
                                     @foreach ($suppliers as $supplier)
                                         <tr>
                                             <td>{{ $supplier->supplier_id }}</td>

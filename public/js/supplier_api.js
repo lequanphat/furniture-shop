@@ -1,6 +1,7 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
+        const data_asset = $('#asset').attr('data-asset');
         $('#js-create-supplier-btn').click(() => {
             $('#createEmployeeModal').modal('show');
             $('#create-supplier-form')[0].reset();
@@ -20,6 +21,30 @@ jQuery.noConflict();
                     $('#create_supplier_response').removeClass('alert-danger');
                     $('#create_supplier_response').addClass('alert-success');
                     $('#create_supplier_response').html(response.message);
+                    $('#supplier-table').append(
+                        `<tr>
+                        <td>${response.supplier.supplier_id}</td>
+
+                        <td>${response.supplier.name }</td>
+                        <td>
+                        ${response.supplier.description }
+                        </td>
+                        <td> ${response.supplier.address }</td>
+                        <td>${response.supplier.phone_number }</td>
+                        {{-- temporary value --}}
+                        <td>
+                            <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
+                                data-bs-toggle="modal" data-bs-target="#UpdateSupplierModal"
+                                data-supplier-id="${response.supplier.supplier_id}<"
+                                data-name="${response.supplier.name }}"
+                                data-description=" ${response.supplier.description }"
+                                data-address="${response.supplier.address }"
+                                data-phone-number="${response.supplier.phone_number }">
+                                <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
+                            </button>
+
+                        </td>`
+                    )
                 },
                 error: function (error) {
                     console.log(error);
@@ -60,6 +85,34 @@ jQuery.noConflict();
                     $('#update_supplier_response').removeClass('alert-danger');
                     $('#update_supplier_response').addClass('alert-success');
                     $('#update_supplier_response').html(response.message);
+                    var row = $('#supplier-table tr').filter(function () {
+                        return $(this).find('td:first').text() == response.supplier.supplier_id;
+                    });
+                    if (row)
+                    {
+                        row.html(`
+                        <td>${response.supplier.supplier_id}</td>
+
+                        <td>${response.supplier.name }</td>
+                        <td>
+                        ${response.supplier.description }
+                        </td>
+                        <td> ${response.supplier.address }</td>
+                        <td>${response.supplier.phone_number }</td>
+                        {{-- temporary value --}}
+                        <td>
+                            <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
+                                data-bs-toggle="modal" data-bs-target="#UpdateSupplierModal"
+                                data-supplier-id="${response.supplier.supplier_id}"
+                                data-name="${response.supplier.name }"
+                                data-description=" ${response.supplier.description }"
+                                data-address="${response.supplier.address }"
+                                data-phone-number="${response.supplier.phone_number }">
+                                <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
+                            </button>
+
+                        </td>`)
+                    }
                 },
                 error: function (error) {
                     console.log({ error });
