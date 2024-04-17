@@ -59,6 +59,9 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
     Route::get('/products', [ProductController::class, 'get_products']);
     Route::get('/top5deal', [HotDealController::class, 'get_Deal_of_Date_product']);
+    Route::get('/lastproducts', [HotDealController::class, 'get_LastestProduct']);
+    Route::get('/bestseller', [HotDealController::class, 'get_BestSeller']);
+
 });
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
@@ -104,11 +107,13 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //brand
     Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
     Route::get('/admin/brands', [BrandController::class, 'brand_search_ui'])->name('brands.search');
+    Route::get('/admin/brands/pagination', [BrandController::class, 'brands_pagination'])->name('brands.search');
     Route::post('/admin/brands/create', [BrandController::class, 'brand_create'])->name('brands.create');
     Route::put('/admin/brands/update', [BrandController::class, 'brand_update'])->name('brands.edit');
+    
     //supplier
     Route::get('/admin/suppliers', [SupplierController::class, 'supplier_ui'])->name('suppliers.index');
-    Route::get('/admin/suppliers', [SupplierController::class, 'supplier_search_ui'])->name('suppliers.search');
+    Route::get('/admin/suppliers/pagination', [SupplierController::class, 'supplier_pagination'])->name('suppliers.search');
     Route::post('/admin/suppliers/create', [SupplierController::class, 'supplier_create']);
     Route::put('/admin/suppliers/update', [SupplierController::class, 'supplier_update'])->name('suppliers.edit');
 
