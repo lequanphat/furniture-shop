@@ -1,75 +1,101 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        const data_asset = $('#asset').attr('data-asset');
-
-        function createEmployeeElement(employee) {
+        function createUserElement({ user, can_update = false, can_delete = false }) {
+            const type = user.is_staff ? 'employee' : 'customers';
+            const newTag = user.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
+            const status = user.is_active
+                ? '<span class="badge bg-success me-1"></span> Active'
+                : '<span class="badge bg-danger me-1"></span> Blocked';
+            const update_action =
+                can_update && user.is_staff
+                    ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                        data-bs-target="#update-employee-modal"
+                        data-user-id="${user.user_id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                            <path d="M13.5 6.5l4 4" />
+                        </svg>
+                    </a>`
+                    : '';
+            const delete_action = can_delete
+                ? user.is_active
+                    ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                        data-bs-target="#delete-user-modal"
+                        data-user-id="${user.user_id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 7l16 0" />
+                            <path d="M10 11l0 6" />
+                            <path d="M14 11l0 6" />
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                        </svg>
+                    </a>`
+                    : `<a href="#" class="btn p-2" data-bs-toggle="modal"
+                        data-bs-target="#restore-user-modal"
+                        data-user-id="${user.user_id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-key">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" />
+                            <path d="M15 9h.01" />
+                        </svg></a>`
+                : '';
+            const view_action = `<a href="${type}/${user.user_id}/details" class="btn p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"
+                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                <path
+                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+            </svg>
+            </a>`;
+            const action = `
+                ${view_action}
+                ${update_action}
+                ${delete_action}`;
+            const phone_number = user.default_address?.phone_number ?? 'Unset';
+            const address = user.default_address?.address ?? 'Unset';
+            const birth_date = user.birth_date ?? 'Unset';
+            const gender = user.gender ? 'Male' : 'Female';
             return `<tr>
-            <td>${employee.user_id}</td>
+            <td>${user.user_id}</td>
             <td>
                 <div class="d-flex py-1 align-items-center">
-                    <span class="avatar me-2"
-                        style="background-image: url(${employee.avatar})"></span>
+                    <span class="avatar me-2" style="background-image: url(${user.avatar})"></span>
                     <div class="flex-fill">
                         <div class="font-weight-medium">
-                        ${employee.first_name} ${employee.last_name}
-                            ${
-                                employee.new
-                                    ? `<span
-                            class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>`
-                                    : ''
-                            }
-                        </div>
+                        ${user.first_name} ${user.last_name} ${newTag}</div>
                         <div class="text-muted"><a href="#"
-                                class="text-reset">${employee.email}</a></div>
-                    </div>
+                                class="text-reset">${user.email}</a></div></div>
                 </div>
             </td>
-            <td>
-                <div>
-                ${employee.gender ? 'Male' : 'Female'}
-                </div>
-            </td>
-            <td>
-            ${employee.birth_date ? employee.birth_date : 'Unset'}
-            </td>
+            <td><div>${gender}</div></td>
+            <td>${birth_date}</td>
             <td class="text-muted">
-                <div>
-                ${employee.default_address.phone_number ? employee.default_address.phone_number : 'Unset'}
-                </div>
-                <div>
-                ${employee.default_address.address ? employee.default_address.address : 'Unset'}
-                </div>
+                <div>${phone_number}</div>
+                <div>${address}</div>
             </td>
-            <td>
-            ${
-                employee.is_active
-                    ? '<span class="badge bg-success me-1"></span> Active'
-                    : '<span class="badge bg-danger me-1"></span> Blocked'
-            }
-            </td>
-            <td>
-                <a href="employee/${employee.user_id}/details" class="btn p-2">
-                    <img src="${data_asset}svg/view.svg" style="width: 18px;" />
-                </a>
-                <a href="#" class="btn p-2" data-bs-toggle="modal"
-                    data-bs-target="#update-employee-modal"
-                    data-user-id="${employee.user_id}">
-                    <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                </a>
-                ${
-                    employee.is_active
-                        ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
-                data-bs-target="#delete-user-modal"
-                data-user-id="${employee.user_id}">
-                <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
-            </a>`
-                        : `<a href="#" class="btn p-2" data-bs-toggle="modal"
-            data-bs-target="#restore-user-modal"
-            data-user-id="${employee.user_id}">
-            <img src="${data_asset}svg/key.svg" style="width: 18px;" />`
-                }
-            </td>
+            <td>${status}</td>
+            <td>${action}</td>
         </tr>`;
         }
 
@@ -90,7 +116,13 @@ jQuery.noConflict();
                     response.user.new = true;
                     response.user.is_active = true;
 
-                    $('#employee-table-body').append(createEmployeeElement(response.user));
+                    $('#employee-table-body').append(
+                        createUserElement({
+                            user: response.user,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        }),
+                    );
                 },
                 error: function (error) {
                     // Handle the error response
@@ -117,7 +149,6 @@ jQuery.noConflict();
                 url: `/admin/employee/${user_id}`,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
                     modal.find('#first_name').val(response.user.first_name);
                     modal.find('#last_name').val(response.user.last_name);
                     modal.find('#email ').val(response.user.email);
@@ -151,10 +182,13 @@ jQuery.noConflict();
                         return $(this).find('td:first').text() == response.user.user_id;
                     });
                     if (row) {
-                        let html = createEmployeeElement(response.user);
+                        let html = createUserElement({
+                            user: response.user,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        });
                         html = html.replace('<tr>', '');
                         html = html.replace('</tr>', '');
-                        console.log(html);
                         row.html(html);
                     }
                 },
@@ -184,12 +218,11 @@ jQuery.noConflict();
         // delete user
         $('#delete-user-modal').on('click', '.modal-footer button.btn-danger', function (e) {
             var userId = $(this).data('user-id');
-            console.log(userId);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
-                url: `/admin/employee/${userId}/ban`,
+                url: `/admin/users/${userId}/ban`,
                 type: 'GET',
                 success: function (response) {
                     var link = $('.js-user-table a[data-user-id="' + userId + '"]');
@@ -202,7 +235,16 @@ jQuery.noConflict();
                     actionCell.append(`<a href="#" class="btn p-2" data-bs-toggle="modal"
                         data-bs-target="#restore-user-modal"
                         data-user-id="${userId}">
-                        <img src="${data_asset}svg/key.svg" style="width: 18px;" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-key">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" />
+                            <path d="M15 9h.01" />
+                        </svg>
                         </a>`);
 
                     // show success modal
@@ -221,12 +263,11 @@ jQuery.noConflict();
         // restore user
         $('#restore-user-modal').on('click', '.modal-footer button.btn-primary', function (e) {
             var userId = $(this).data('user-id');
-            console.log(userId);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
-                url: `/admin/employee/${userId}/unban`,
+                url: `/admin/users/${userId}/unban`,
                 type: 'GET',
                 success: function (response) {
                     var link = $('.js-user-table a[data-user-id="' + userId + '"]');
@@ -239,7 +280,18 @@ jQuery.noConflict();
                     actionCell.append(`<a href="#" class="btn p-2" data-bs-toggle="modal"
                         data-bs-target="#delete-user-modal"
                         data-user-id="${userId}">
-                        <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 7l16 0" />
+                            <path d="M10 11l0 6" />
+                            <path d="M14 11l0 6" />
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                        </svg>
                         </a>`);
                     // show success modal
                     $('#success-notify-modal').addClass('show');
@@ -261,65 +313,7 @@ jQuery.noConflict();
             $('.modal-backdrop.fade.show').remove();
         });
 
-        // profile user
-        const idemployees = ['first_name', 'last_name', 'gender', 'birth_date', 'phone_number', 'address'];
-        $('#enable-edit-profile-employee').click(() => {
-            var label;
-            idemployees.forEach(function (id) {
-                label = $('label[for="' + id + '"]');
-                label.addClass('required');
-                $('#' + id).prop('readonly', false);
-                $('#' + id).prop('required', true);
-            });
-            $('#avatar').prop('disabled', false);
-            $('#btn-list-edit').removeClass('d-none');
-            $('#page-title').html('Edit Profile');
-        });
-        // for avatar change
-        var imageData = null;
-        $('#avatar').on('change', function () {
-            const file = this.files[0];
-            console.log(file);
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                $('#imagePreview').attr('src', e.target.result);
-            };
-
-            reader.readAsDataURL(file);
-        });
-        //
-
-        $('#update-profile-employee-form').submit(function (e) {
-            e.preventDefault();
-            const form = this;
-            const formData = new FormData(form);
-            formData.append('avatar', imageData);
-            console.log({ formData });
-            $.ajax({
-                url: `/admin/profile`,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function (response) {
-                    console.log({ response });
-                    // Handle the success response
-                    $('#update_employee_response').removeClass('alert-successs d-none');
-                    $('#update_employee_response').addClass('alert-success');
-                    $('#update_employee_response').html(Object.values(response.message));
-                },
-                error: function (error) {
-                    console.log({ error });
-                    // Handle the error response
-                    $('#update_employee_response').removeClass('alert-success d-none');
-                    $('#update_employee_response').addClass('alert-danger');
-                    $('#update_employee_response').html(Object.values(error.responseJSON.errors)[0][0]);
-                },
-            });
-        });
+        
 
         // user pagination
         function renderPagination({ current_page, last_page }) {
@@ -364,25 +358,35 @@ jQuery.noConflict();
             $('.pagination').html(pagination);
         }
 
+        // employee pagination
         function employeePagination({ page }) {
             const search = $('#search-employee-input').val();
-            history.pushState(null, null, `/admin/employee?page=${page}&search=${search}`);
+            const type = $('#select-employee-type').val();
+            history.pushState(null, null, `/admin/employee?page=${page}&type=${type}&search=${search}`);
             // call ajax
             $.ajax({
-                url: `/admin/employee/pagination?page=${page}&search=${search}`,
+                url: `/admin/employee/pagination?page=${page}&type=${type}&search=${search}`,
                 type: 'GET',
                 success: function (response) {
+                    if (response.employee.data.length === 0) {
+                        $('#employee-table-body').html(
+                            '<tr><td colspan="7" class="text-center text-muted">No data available</td></tr>',
+                        );
+                        return;
+                    }
                     let html = '';
                     response.employee.data.forEach((employee) => {
-                        console.log(employee);
-                        html += createEmployeeElement(employee);
+                        html += createUserElement({
+                            user: employee,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        });
                     });
                     $('#employee-table-body').html(html);
                     renderPagination({
                         current_page: response.employee.current_page,
                         last_page: response.employee.last_page,
                     });
-                    console.log(html);
                 },
                 error: function (error) {
                     console.log(error);
@@ -390,8 +394,7 @@ jQuery.noConflict();
             });
         }
 
-        // pagination
-        $(document).on('click', '.pagination .page-link', function (event) {
+        $(document).on('click', '.js-employee-pagination .pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
             employeePagination({ page });
@@ -415,5 +418,61 @@ jQuery.noConflict();
                 employeePagination({ page: 1 });
             }, 500),
         );
+        // select type
+        $('#select-employee-type').change(function () {
+            employeePagination({ page: 1 });
+        });
+
+        // customers pagination
+
+        function customersPagination({ page }) {
+            const search = $('#search-customers-input').val();
+            const type = $('#select-customers-type').val();
+            history.pushState(null, null, `/admin/customers?page=${page}&type=${type}&search=${search}`);
+            // call ajax
+            $.ajax({
+                url: `/admin/customers/pagination?page=${page}&type=${type}&search=${search}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.customers.data.length === 0) {
+                        $('#customers-table-body').html(
+                            '<tr><td colspan="7" class="text-center text-muted">No data available</td></tr>',
+                        );
+                        return;
+                    }
+                    let html = '';
+                    response.customers.data.forEach((customer) => {
+                        html += createUserElement({ user: customer, can_delete: response.can_delete });
+                    });
+                    $('#customers-table-body').html(html);
+                    renderPagination({
+                        current_page: response.customers.current_page,
+                        last_page: response.customers.last_page,
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        }
+
+        $(document).on('click', '.js-customers-pagination .pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            customersPagination({ page });
+        });
+
+        // search with ajax
+        $('#search-customers-input').on(
+            'input',
+            debounce(function () {
+                customersPagination({ page: 1 });
+            }, 500),
+        );
+
+        // select type
+        $('#select-customers-type').change(function () {
+            customersPagination({ page: 1 });
+        });
     });
 })(jQuery);
