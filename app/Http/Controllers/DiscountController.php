@@ -64,13 +64,13 @@ class DiscountController extends Controller
         $product_ids = ProductDetail::whereIn('sku', $sku)->pluck('product_id');
         $checkIdProduct = Product::whereIn('product_id', $product_ids)->pluck('product_id');
 
-        if ($sku) {
-            echo "The SKU for discount ID is: -----------------------------------$sku" . "<br>";
-//            echo " With $sku have $product_ids" . "<br>";
-//            echo " check  $checkIdProduct";
-        } else {
-            echo "No SKU found for discount ID $discount_id";
-        }
+//        if ($sku) {
+//            echo "The SKU for discount ID is: -----------------------------------$sku" . "<br>";
+////            echo " With $sku have $product_ids" . "<br>";
+////            echo " check  $checkIdProduct";
+//        } else {
+//            echo "No SKU found for discount ID $discount_id";
+//        }
 
         $data = [
             'page' => 'Discount Details And List Discount Item',
