@@ -909,3 +909,9 @@ body::-webkit-scrollbar-track {
 .cancel-order-content {
     padding: 16px;
 }
+.ui-slider-range {
+    background-color: #e97730 !important;
+}
+.sidebar-widget .price-filter #slider-range .ui-slider-handle{
+    border: 2px solid #e97730 !important;
+}

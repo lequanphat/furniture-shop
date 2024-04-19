@@ -139,5 +139,263 @@ jQuery.noConflict();
                 },
             });
         });
+
+        // pagination
+
+        function createRoleElement({ role, can_update, can_delete }) {
+            const newTag = role.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
+
+            const update_action = can_update
+                ? `<a class="btn p-2" data-role-id="${role.id}"
+                data-bs-toggle="modal" data-bs-target="#update-role-modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
+            </a>`
+                : '';
+            const delete_action = can_delete
+                ? `<a href="#" class="js-delete-tag btn p-2"
+                data-role-id="${role.id}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 7l16 0" />
+                    <path d="M10 11l0 6" />
+                    <path d="M14 11l0 6" />
+                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                </svg>
+            </a>`
+                : '';
+
+            return `<tr>
+            <td>${role.id}</td>
+            <td>${role.name} ${newTag}</td>
+            <td>${role.count} permissions</td>
+            <td>
+                ${update_action} ${delete_action}
+            </td>
+        </tr>`;
+        }
+        function renderPagination({ current_page, last_page }) {
+            let pagination = `<li class="page-item ${current_page === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page - 1}">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg>
+                prev
+            </a>
+        </li>`;
+
+            for (let i = 0; i < last_page; i++) {
+                pagination += `
+                    <li class="page-item ${current_page === i + 1 ? 'active mx-1' : ''}">
+                        <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
+                    </li>`;
+            }
+            pagination += `<li class="page-item ${current_page === last_page ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page + 1}">
+                next
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </a>
+        </li>`;
+            $('.pagination').html(pagination);
+        }
+        function rolesPagination({ page }) {
+            const search = $('#search-roles-input').val();
+            const sort = $('#select-roles-sort').val();
+            history.pushState(null, null, `/admin/roles?page=${page}&search=${search}&sort=${sort}`);
+            // call ajax
+            $.ajax({
+                url: `/admin/roles/pagination?page=${page}&search=${search}&sort=${sort}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.roles.data.length === 0) {
+                        $('#roles-table-body').html(
+                            '<tr><td colspan="4" class="text-center text-muted">No data available</td></tr>',
+                        );
+                        return;
+                    }
+                    let html = '';
+                    response.roles.data.forEach((role) => {
+                        html += createRoleElement({
+                            role,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        });
+                    });
+                    $('#roles-table-body').html(html);
+                    renderPagination({
+                        current_page: response.roles.current_page,
+                        last_page: response.roles.last_page,
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        }
+
+        $(document).on('click', '.js-roles-pagination .pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            rolesPagination({ page });
+        });
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        // search with ajax
+        $('#search-roles-input').on(
+            'input',
+            debounce(function () {
+                rolesPagination({ page: 1 });
+            }, 500),
+        );
+        // select sort
+        $('#select-roles-sort').change(function () {
+            rolesPagination({ page: 1 });
+        });
+
+        // authorization pagination
+        function createEmployeeElement({ employee, roles, can_authorize }) {
+            const phone_number = employee.default_address?.phone_number ?? 'Unset';
+            const address = employee.default_address?.address ?? 'Unset';
+            const is_active = employee.is_active
+                ? `<span class="badge bg-success me-1"></span> Active`
+                : ` <span class="badge bg-danger me-1"></span> Blocked`;
+            let roles_options = '';
+            roles.forEach((role) => {
+                if (role.name !== employee.role)
+                    roles_options += `<a class="js-change-role dropdown-item"
+                data-bs-toggle="modal"
+                data-bs-target="#assign-role-confirm-modal">${role.name}</a>`;
+            });
+            const btn_action = can_authorize
+                ? `<button class="btn dropdown-toggle align-text-top"
+                        data-bs-toggle="dropdown">
+                        ${employee.role ?? 'Unset'}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        ${roles_options}
+                    </div>`
+                : `<button class="btn dropdown-toggle align-text-top"
+                        disabled
+                        data-bs-toggle="dropdown">
+                        ${employee.role ?? 'Unset'}
+                    </button>
+           `;
+            return `<tr>
+                        <td>${employee.user_id}</td>
+                        <td data-label="Name">
+                            <div class="d-flex py-1 align-items-center">
+                                <span class="avatar me-2"
+                                    style="background-image: url(${employee.avatar})"></span>
+                                <div class="flex-fill">
+                                    <div class="js-fullname font-weight-medium">
+                                    ${employee.first_name} ${employee.last_name}</div>
+                                    <div class="text-muted"><a href="#"
+                                            class="text-reset">${employee.email}</a></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-muted">
+                            <div>${phone_number}</div>
+                            <div>${address}</div>
+                        </td>
+                        <td>${is_active}</td>
+                        <td>
+                            <div class="btn-list flex-nowrap">
+                                <div class="dropdown js-dropdown-role ">${btn_action}</div>
+                            </div>
+                        </td>
+                    </tr>`;
+        }
+        function authorizationPagination({ page }) {
+            const search = $('#search-authorization-input').val();
+            const type = $('#select-authorization-type').val();
+            history.pushState(null, null, `/admin/authorization?page=${page}&search=${search}&type=${type}`);
+            // call ajax
+            $.ajax({
+                url: `/admin/authorization/pagination?page=${page}&search=${search}&type=${type}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.employees.data.length === 0) {
+                        $('#authorization-table-body').html(
+                            '<tr><td colspan="5" class="text-center text-muted">No data available</td></tr>',
+                        );
+                        return;
+                    }
+                    let html = '';
+                    response.employees.data.forEach((employee) => {
+                        html += createEmployeeElement({
+                            employee,
+                            roles: response.roles,
+                            can_authorize: response.can_authorize,
+                        });
+                    });
+                    $('#authorization-table-body').html(html);
+                    renderPagination({
+                        current_page: response.employees.current_page,
+                        last_page: response.employees.last_page,
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        }
+        $(document).on('click', '.js-authorization-pagination .pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            authorizationPagination({ page });
+        });
+
+        // search with ajax
+        $('#search-authorization-input').on(
+            'input',
+            debounce(function () {
+                authorizationPagination({ page: 1 });
+            }, 500),
+        );
+        // select sort
+        $('#select-authorization-type').change(function () {
+            authorizationPagination({ page: 1 });
+        });
     });
 })(jQuery);

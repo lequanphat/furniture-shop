@@ -1,5 +1,4 @@
-
-const idcustomer = ['first_name', 'last_name', 'gender', 'birth_date', 'phone_number','address'];
+const idcustomer = ['first_name', 'last_name', 'gender', 'birth_date', 'phone_number', 'address'];
 jQuery(document).ready(function () {
     $('#enable-edit-profile-customer').click(() => {
         var label;
@@ -22,6 +21,7 @@ jQuery(document).ready(function () {
             success: function (response) {
                 console.log({ response });
                 // Handle the success response
+                console.log(response);
                 $('#update_address_response').removeClass('alert-successs d-none');
                 $('#update_address_response').addClass('alert-success');
                 $('#update_address_response').html(Object.values(response.message));
@@ -29,6 +29,7 @@ jQuery(document).ready(function () {
             error: function (error) {
                 console.log({ error });
                 // Handle the error response
+                console.log(error);
                 $('#update_address_response').removeClass('alert-success d-none');
                 $('#update_address_response').addClass('alert-danger');
                 $('#update_address_response').html(Object.values(error.responseJSON.errors)[0][0]);

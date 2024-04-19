@@ -88,18 +88,24 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
 
     // users routes
-    Route::get('/admin/employee/{user_id}/ban', [UserController::class, 'ban_user']);
-    Route::get('/admin/employee/{user_id}/unban', [UserController::class, 'unban_user']);
-    // employee routes
-    Route::get('/admin/employee', [UserController::class, 'employee_ui']);
-    Route::get('/admin/employee/pagination', [UserController::class, 'employee_pagination']);
+    Route::get('/admin/users/{user_id}/ban', [UserController::class, 'ban_user'])->middleware('can:delete user');
+    Route::get('/admin/users/{user_id}/unban', [UserController::class, 'unban_user'])->middleware('can:delete user');
+
     Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
-    Route::get('/admin/employee/{user_id}', [UserController::class, 'employee_details']);
-    Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
     Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
-    // customer routes
-    Route::get('/admin/customers', [UserController::class, 'customers_ui']);
-    Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
+
+    Route::middleware(['can:read users'])->group(function () {
+        // employee routes
+        Route::get('/admin/employee', [UserController::class, 'employee_ui']);
+        Route::get('/admin/employee/pagination', [UserController::class, 'employee_pagination']);
+        Route::get('/admin/employee/{user_id}', [UserController::class, 'employee_details']);
+        Route::get('/admin/employee/{user_id}/details', [UserController::class, 'employee_details_ui']);
+
+        // customer routes
+        Route::get('/admin/customers', [UserController::class, 'customers_ui']);
+        Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
+        Route::get('/admin/customers/pagination', [UserController::class, 'customers_pagination']);
+    });
 
     //brand
     Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
@@ -111,7 +117,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/suppliers', [SupplierController::class, 'supplier_search_ui'])->name('suppliers.search');
     Route::post('/admin/suppliers/create', [SupplierController::class, 'supplier_create']);
     Route::put('/admin/suppliers/update', [SupplierController::class, 'supplier_update'])->name('suppliers.edit');
-
 
     //order
     Route::get('/admin/orders', [OrderController::class, 'index']);
@@ -136,33 +141,55 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::delete('/admin/categories/{category_id}', [CategoryController::class, 'delete'])->name('categories.delete');
     Route::patch('/admin/categories/{category_id}', [CategoryController::class, 'update'])->name('categories.update');
 
+    // colors and tags
+    Route::middleware(['can:read colors'])->group(function () {
+        Route::get('/admin/colors', [ColorController::class, 'index'])->name('colors.index');
+        Route::get('/admin/tags', [TagController::class, 'index'])->name('tags.index');
+    });
+    Route::middleware(['can:create color'])->group(function () {
+        Route::post('/admin/colors', [ColorController::class, 'create'])->name('colors.create');
+        Route::post('/admin/tags', [TagController::class, 'create'])->name('tags.create');
+    });
+    Route::middleware(['can:update color'])->group(function () {
+        Route::patch('/admin/colors/{color_id}', [ColorController::class, 'update'])->name('colors.update');
+        Route::patch('/admin/tags/{tag_id}', [TagController::class, 'update'])->name('tags.update');
+    });
+    Route::middleware(['can:delete color'])->group(function () {
+        Route::delete('/admin/colors/{color_id}', [ColorController::class, 'delete'])->name('colors.delete');
+        Route::delete('/admin/tags/{tag_id}', [TagController::class, 'delete'])->name('tags.delete');
+    });
 
-    // tag
-    Route::get('/admin/tags', [TagController::class, 'index'])->name('tags.index');
-    Route::post('/admin/tags', [TagController::class, 'create'])->name('tags.create');
-    Route::patch('/admin/tags/{tag_id}', [TagController::class, 'update'])->name('tags.update');
-    Route::delete('/admin/tags/{tag_id}', [TagController::class, 'delete'])->name('tags.delete');
+    // product routes
 
-    // color
-    Route::get('/admin/colors', [ColorController::class, 'index'])->name('colors.index');
-    Route::post('/admin/colors', [ColorController::class, 'create'])->name('colors.create');
-    Route::patch('/admin/colors/{color_id}', [ColorController::class, 'update'])->name('colors.update');
-    Route::delete('/admin/colors/{color_id}', [ColorController::class, 'delete'])->name('colors.delete');
+    Route::middleware(['can:create product'])->group(function () {
+        Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
+        Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
+        Route::get('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product_ui'])->name('products.create_detailed_product_ui');
+        Route::post('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
+    });
+    Route::middleware(['can:update product'])->group(function () {
+        Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
+        Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
+        Route::get('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product_ui'])->name('products.update_detailed_product_ui');
+        Route::patch('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product'])->name('products.update_detailed_product');
+    });
+    Route::middleware(['can:delete product'])->group(function () {
+        Route::delete('/admin/products/{product_id}', [ProductController::class, 'delete'])->name('products.delete');
+        Route::delete('/admin/products/delete/{sku}', [ProductController::class, 'delete_detailed_product'])->name('products.delete_detailed_product');
+    });
+    Route::middleware(['can:read products'])->group(function () {
+        Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/admin/products/pagination', [ProductController::class, 'products_pagination'])->name('products.pagination'); //-> json
+        Route::get('/admin/products/{product_id}', [ProductController::class, 'details'])->name('products.details');
+        Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
+    });
 
-    // product
-    Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/admin/products/pagination', [ProductController::class, 'products_pagination'])->name('products.pagination'); //-> json
-    Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
-    Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
+
+
+
     Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
-    Route::get('/admin/products/{product_id}', [ProductController::class, 'details'])->name('products.details');
-    Route::get('/admin/products/{product_id}/update', [ProductController::class, 'update_ui'])->name('products.update_ui');
-    Route::patch('/admin/products/{product_id}/update', [ProductController::class, 'update'])->name('products.update');
-    Route::get('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product_ui'])->name('products.create_detailed_product_ui');
-    Route::post('/admin/products/{product_id}/create', [ProductController::class, 'create_detailed_product'])->name('products.create_detailed_product');
-    Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
-    Route::get('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product_ui'])->name('products.update_detailed_product_ui');
-    Route::patch('/admin/products/{product_id}/{sku}/update', [ProductController::class, 'update_detailed_product'])->name('products.update_detailed_product');
+
+
 
 
     // receipts
@@ -185,22 +212,17 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
 
     Route::get('/admin/roles', [PermissionController::class, 'index']);
+    Route::get('/admin/roles/pagination', [PermissionController::class, 'roles_pagination']);
     Route::post('/admin/roles', [PermissionController::class, 'create']);
     Route::patch('/admin/roles/{role_id}', [PermissionController::class, 'update']);
     Route::get('/admin/roles/{role_id}', [PermissionController::class, 'get_role']);
 
 
+
+
     Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
+    Route::get('/admin/authorization/pagination', [PermissionController::class, 'authorization_pagination']);
     Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
 
-
-    // *This is only temporary, use the appropriate controller
-
-
-
-
-
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
-
-    Route::get('/admin/catetest', [CategoryController::class, 'category_ui_1']);
 });

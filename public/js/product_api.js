@@ -230,6 +230,74 @@ jQuery.noConflict();
             });
         });
 
+        // start delete product
+        $('#delete-product-modal').on('show.bs.modal', function (event) {
+            const tr = $(event.relatedTarget).closest('tr');
+            const product_id = tr.find('td').eq(0).text().trim();
+            const product_name = tr.find('h3').text().trim();
+            $('#delete-product-modal').find('.js-message').data('product-id', product_id);
+            $('#delete-product-modal')
+                .find('.js-message')
+                .html(`Are you sure you want to delete product <strong>${product_id} - ${product_name}</strong>?`);
+        });
+
+        $('#delete-product-modal').on('click', '.js-delete', function (e) {
+            const product_id = $('#delete-product-modal').find('.js-message').data('product-id');
+            console.log('delete product', product_id);
+
+            $.ajax({
+                url: `/admin/products/${product_id}`,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    $('#product-table-body tr').each(function () {
+                        const tdText = $(this).find('td').first().text().trim();
+                        if (tdText == product_id) {
+                            $(this).remove();
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        });
+
+        $('#delete-detailed-product-modal').on('show.bs.modal', function (event) {
+            const tr = $(event.relatedTarget).closest('tr');
+            const sku = tr.find('td').eq(0).find('a.text-reset').text().trim().slice(1);
+            const name = tr.find('td').eq(0).find('h3').text().trim();
+            $('#delete-detailed-product-modal').find('.js-message').data('sku', sku);
+            $('#delete-detailed-product-modal')
+                .find('.js-message')
+                .html(`Are you sure you want to delete detailed product <strong>${sku} - ${name}</strong> ?`);
+        });
+        $('#delete-detailed-product-modal').on('click', '.js-delete', function (e) {
+            const sku = $('#delete-detailed-product-modal').find('.js-message').data('sku');
+            $.ajax({
+                url: `/admin/products/delete/${sku}`,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    $('tbody tr').each(function () {
+                        const tdText = $(this).find('td').eq(0).find('a.text-reset').text().trim().slice(1);
+                        console.log(tdText, sku);
+                        if (tdText === sku) {
+                            $(this).remove();
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        });
+        // end delete product
+
         // product pagination
         function renderPagination({ current_page, last_page }) {
             let pagination = `<li class="page-item ${current_page === 1 ? 'disabled' : ''}">
@@ -272,8 +340,55 @@ jQuery.noConflict();
         </li>`;
             $('.pagination').html(pagination);
         }
-        function createProductElement(product) {
+        function createProductElement({ product, can_update = false, can_delete = false }) {
+            const newTag = product.new
+                ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
+                : '';
+            const view_btn = `<a href="/admin/products/${product.product_id}"
+                class="btn p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path
+                        d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                </svg>
+            </a>`;
+            const update_btn = can_update
+                ? `<a href="/admin/products/${product.product_id}/update"
+                class="btn p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
+            </a>`
+                : '';
+
+            const delete_btn = can_delete
+                ? `<a class="btn p-2" data-bs-toggle="modal"
+            data-bs-target="#delete-product-modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"
+                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 7l16 0" />
+                <path d="M10 11l0 6" />
+                <path d="M14 11l0 6" />
+                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+            </svg>
+        </a>`
+                : '';
             return `<tr>
+            <td>${product.product_id}</td>
             <td>
                 <div class="d-flex py-1 align-items-center">
                     <span class="avatar me-2"
@@ -283,13 +398,7 @@ jQuery.noConflict();
                     <div class="flex-fill">
                         <div class="font-weight-medium">
                             <h3 class="m-0">${product.name}
-                                ${
-                                    product.new
-                                        ? `<span
-                                class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
-                            </span>`
-                                        : ''
-                                }</h3>
+                                ${newTag}</h3>
                         </div>
                         <div class="text-muted">
                             <a href="/admin/products/${product.product_id}"
@@ -302,12 +411,7 @@ jQuery.noConflict();
             <td>${product.sum_quantities}</td>
             <td>${product.brand.name}</td>
             <td>${product.category.name}</td>
-            <td>
-                <a href="/admin/products/${product.product_id}"
-                    class="btn p-2"><img src="${data_asset}svg/view.svg" style="width: 18px;" /></a>
-                <a href="/admin/products/${product.product_id}/update"
-                    class="btn p-2"><img src="${data_asset}svg/edit.svg" style="width: 18px;" /></a>
-            </td>
+            <td>${view_btn} ${update_btn} ${delete_btn}</td>
         </tr>`;
         }
 
@@ -319,15 +423,27 @@ jQuery.noConflict();
                 url: `/admin/products/pagination?page=${page}&search=${search}`,
                 type: 'GET',
                 success: function (response) {
-                    let html = '';
-                    response.products.data.forEach((product) => {
-                        html += createProductElement(product);
-                    });
-                    $('#product-table-body').html(html);
+                    // pagination item
                     renderPagination({
                         current_page: response.products.current_page,
                         last_page: response.products.last_page,
                     });
+                    // render product item
+                    if (response.products.data.length === 0) {
+                        $('#product-table-body').html(` <tr>
+                        <td colspan="7" class="text-center text-muted">No data available</td>
+                    </tr>`);
+                        return;
+                    }
+                    let html = '';
+                    response.products.data.forEach((product) => {
+                        html += createProductElement({
+                            product,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        });
+                    });
+                    $('#product-table-body').html(html);
                 },
                 error: function (error) {
                     console.log(error);
