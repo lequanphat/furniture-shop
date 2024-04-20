@@ -4,7 +4,51 @@ jQuery.noConflict();
         const data_asset = $('#asset').attr('data-asset');
 
         // create role
+        function createRoleElement({ role, can_update, can_delete }) {
+            const newTag = role.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
 
+            const update_action = can_update
+                ? `<a class="btn p-2" data-role-id="${role.id}"
+                data-bs-toggle="modal" data-bs-target="#update-role-modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
+            </a>`
+                : '';
+            const delete_action = can_delete
+                ? `<a href="#" class="js-delete-tag btn p-2"
+                data-role-id="${role.id}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 7l16 0" />
+                    <path d="M10 11l0 6" />
+                    <path d="M14 11l0 6" />
+                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                </svg>
+            </a>`
+                : '';
+
+            return `
+            <td>${role.id}</td>
+            <td>${role.name} ${newTag}</td>
+            <td>${role.count} permissions</td>
+            <td>
+                ${update_action} ${delete_action}
+            </td>
+        `;
+        }
         $('#create-role-form').on('submit', function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
@@ -16,12 +60,16 @@ jQuery.noConflict();
                     $('#create_role_response').html(data.message);
                     $('#create_role_response').removeClass('alert-danger d-none');
                     $('#create_role_response').addClass('alert-success');
-                    console.log(data);
+                    data.role.new = true;
+                    $('#roles-table-body').append(
+                        `<tr>${createRoleElement({
+                            role: data.role,
+                            can_update: data.can_update,
+                            can_delete: data.can_delete,
+                        })}</tr>`,
+                    );
                 },
                 error: function (error) {
-                    console.log('====================================');
-                    console.log(error);
-                    console.log('====================================');
                     $('#create_role_response').html(Object.values(error.responseJSON.errors)[0][0]);
                     $('#create_role_response').removeClass('alert-success d-none');
                     $('#create_role_response').addClass('alert-danger');
@@ -44,7 +92,16 @@ jQuery.noConflict();
                     $('#update_role_response').html(data.message);
                     $('#update_role_response').removeClass('alert-danger d-none');
                     $('#update_role_response').addClass('alert-success');
-                    console.log(data);
+                    var tr = $('#roles-table-body tr').filter(function () {
+                        return $(this).find('td:first').text() == role_id;
+                    });
+                    tr.html(
+                        createRoleElement({
+                            role: data.role,
+                            can_update: data.can_update,
+                            can_delete: data.can_delete,
+                        }),
+                    );
                 },
                 error: function (error) {
                     $('#update_role_response').html(Object.values(error.responseJSON.errors)[0][0]);
@@ -142,51 +199,6 @@ jQuery.noConflict();
 
         // pagination
 
-        function createRoleElement({ role, can_update, can_delete }) {
-            const newTag = role.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
-
-            const update_action = can_update
-                ? `<a class="btn p-2" data-role-id="${role.id}"
-                data-bs-toggle="modal" data-bs-target="#update-role-modal">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                    height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path
-                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                    <path d="M13.5 6.5l4 4" />
-                </svg>
-            </a>`
-                : '';
-            const delete_action = can_delete
-                ? `<a href="#" class="js-delete-tag btn p-2"
-                data-role-id="${role.id}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                    height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M4 7l16 0" />
-                    <path d="M10 11l0 6" />
-                    <path d="M14 11l0 6" />
-                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                </svg>
-            </a>`
-                : '';
-
-            return `<tr>
-            <td>${role.id}</td>
-            <td>${role.name} ${newTag}</td>
-            <td>${role.count} permissions</td>
-            <td>
-                ${update_action} ${delete_action}
-            </td>
-        </tr>`;
-        }
         function renderPagination({ current_page, last_page }) {
             let pagination = `<li class="page-item ${current_page === 1 ? 'disabled' : ''}">
             <a class="page-link" href="#" data-page="${current_page - 1}">
@@ -245,11 +257,11 @@ jQuery.noConflict();
                     }
                     let html = '';
                     response.roles.data.forEach((role) => {
-                        html += createRoleElement({
-                            role,
+                        html += `<tr>${createRoleElement({
+                            role: role,
                             can_update: response.can_update,
                             can_delete: response.can_delete,
-                        });
+                        })}</tr>`;
                     });
                     $('#roles-table-body').html(html);
                     renderPagination({

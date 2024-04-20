@@ -15,57 +15,52 @@
                     </h2>
                 </div>
 
-                <!-- Page actions -->
 
-                {{-- Sắp xếp theo order đc tạo gần nhất --}}
-                <div class="col-sm-6 col-md-2 ">
-                    <label class="form-check form-check-inline">
-                        <input id="sort_by_last" name="sort_by_last" class="form-check-input" type="checkbox">
-                        <span class="form-check-label">Recent created</span>
-                    </label>
-                </div>
-
-                {{-- Lấy order trong 1 khoảng thời gian --}}
-                <div class="col-sm-6 col-md-2 ">
-                    <label for="search_in_period" class="form-label">Peiod of time</label>
-                    <div class="btn-list" name="search_in_period">
-                        <input id="day_first" name="day_first" class="form-control" type="date">
-                        <input id="day_last" name="day_last" class="form-control" type="date">
-                    </div>
-                </div>
 
 
                 <div class="col-auto ms-auto d-print-none">
 
+                    <div class="row justify-content-end">
+                        <div class="col-2">
+                            <label class="form-check form-check-inline">
+                                <input id="sort_by_last" name="sort_by_last" class="form-check-input" type="checkbox">
+                                <span class="form-check-label">Recent created</span>
+                            </label>
+                        </div>
+                        <div class="col-4 row ">
+                            <div class="col-6"><input id="day_first" name="day_first" class="col-6 form-control"
+                                    type="date"></div>
+                            <div class="col-6"><input id="day_last" name="day_last" class="col-6 form-control"
+                                    type="date"></div>
 
-                    <div class="btn-list">
-                        {{-- ô search và cái icon của nó --}}
-                        <div class="input-icon ">
-                            <input id="search-orders" name="search" type="text" value="" class="form-control"
-                                placeholder="Search…" autocomplete="off">
+                        </div>
+                        <div class="col-3">
+                            <div class="input-icon ">
+                                <input id="search-orders" name="search" type="text" value="" class="form-control"
+                                    placeholder="Search…" autocomplete="off">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                        <path d="M21 21l-6 -6" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
 
-                            <span class="input-icon-addon">
+                        <div class="col-auto"><a href="#" class="btn btn-primary d-none d-sm-inline-block"
+                                data-bs-toggle="modal" data-bs-target="#order-modal">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                                    <path d="M21 21l-6 -6" />
+                                    <path d="M12 5l0 14" />
+                                    <path d="M5 12l14 0" />
                                 </svg>
-                            </span>
-                        </div>
-                        {{-- tạo order mới --}}
-                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                            data-bs-target="#order-modal">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M12 5l0 14" />
-                                <path d="M5 12l14 0" />
-                            </svg>
-                            Create new order
-                        </a>
+                                Create new order
+                            </a></div>
                     </div>
                 </div>
                 <!-- End Page actions -->

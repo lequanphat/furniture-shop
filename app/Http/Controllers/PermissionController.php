@@ -65,11 +65,17 @@ class PermissionController extends Controller
             foreach ($permissions as $permission) {
                 $role->givePermissionTo($permission);
             }
+            $role->count = count($permissions);
+        } else {
+            $role->count = 0;
         }
 
+        $admin = User::where('user_id', Auth::id())->first();
         return response()->json([
             'message' => 'Role created successfully',
             'role' => $role,
+            'can_update' => $admin->can('update role'),
+            'can_delete' => $admin->can('delete role'),
         ]);
     }
 
@@ -84,9 +90,20 @@ class PermissionController extends Controller
             $role->save();
             $permissions = $request->input('permissions');
             $role->syncPermissions($permissions);
+            if ($role->created_at->diffInDays() < 7) {
+                $role->new = true;
+            }
+            if ($permissions != null) {
+                $role->count = count($permissions);
+            } else {
+                $role->count = 0;
+            }
+            $admin = User::where('user_id', Auth::id())->first();
             return response()->json([
                 'message' => 'Role updated successfully',
                 'role' => $role,
+                'can_update' => $admin->can('update role'),
+                'can_delete' => $admin->can('delete role'),
             ]);
         }
         return response()->json(['errors' => ['message' => ['The tag name have already existed.']]], 400);
