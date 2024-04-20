@@ -31,7 +31,7 @@
                                     <div class="table-responsive" style="min-height: 344px">
                                         <table class="js-user-table table table-vcenter card-table">
                                             <thead>
-                                                <tr>
+                                                <tr>ord
                                                     <th>Product</th>
                                                     <th>Color & Size</th>
                                                     <th>Quantities</th>

@@ -16,7 +16,28 @@
                 </div>
 
                 <!-- Page actions -->
+
+                {{-- Sắp xếp theo order đc tạo gần nhất --}}
+                <div class="col-sm-6 col-md-2 ">
+                    <label class="form-check form-check-inline">
+                        <input id="sort_by_last" name="sort_by_last" class="form-check-input" type="checkbox">
+                        <span class="form-check-label">Recent created</span>
+                    </label>
+                </div>
+
+                {{-- Lấy order trong 1 khoảng thời gian --}}
+                <div class="col-sm-6 col-md-2 ">
+                    <label for="search_in_period" class="form-label">Peiod of time</label>
+                    <div class="btn-list" name="search_in_period">
+                        <input id="day_first" name="day_first" class="form-control" type="date">
+                        <input id="day_last" name="day_last" class="form-control" type="date">
+                    </div>
+                </div>
+
+
                 <div class="col-auto ms-auto d-print-none">
+
+
                     <div class="btn-list">
                         {{-- ô search và cái icon của nó --}}
                         <div class="input-icon ">
@@ -92,8 +113,7 @@
 
 
                                             <td><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span></td>
-                                            <td>{{ number_format($order->total_price, 0, '.', ',') }}đ
-                                            </td>
+                                            <td>{{ number_format($order->total_price, 0, '.', ',') }}đ</td>
                                             <td>
                                                 @switch($order->is_paid)
                                                     @case(0)

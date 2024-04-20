@@ -14,6 +14,7 @@ class SupplierController extends Controller
             'page' => 'Suppliers',
             'suppliers' =>  Supplier::query()
                 ->paginate(5),
+                 'search' => request()->query("search"),
         ];
         return view('admin.suppliers.supplier', $data);
     }
@@ -63,5 +64,16 @@ class SupplierController extends Controller
         } else {
             return ['message' => $request->input('supplier_id')];
         }
+    }
+    public function supplier_pagination()
+    {
+        $search = request()->input('search');
+        $data = [
+            'page' => 'suppliers',
+            'suppliers' =>  Supplier::where('name', 'LIKE', '%' . $search . '%')
+                ->paginate(5),
+            'search' => $search,
+        ];
+        return response()->json($data);
     }
 }

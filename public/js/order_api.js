@@ -100,22 +100,58 @@ jQuery.noConflict();
 
         /////////////////////////////////hàm filter cho trang order chính để phân trang và earch ajax
         const filterOrders = ({ page }) => {
-            const search = $('#search-orders').val();    //lấy value từ ô tìm kiếm bên index của orders
+            const search = $('#search-orders').val();           //lấy value từ ô tìm kiếm bên index của orders
+            const search_day_first = $('#day_first').val();     //lấy ngày đầu kiếm order trong 1 khoảng thời gian
+            const search_day_last = $('#day_last').val();       //lấy ngày cuối kiếm order trong 1 khoảng thời gian
+            const isChecked = $('#sort_by_last');               //2 dòng này lấy check để sort
+            const sort_choose = isChecked.prop('checked');
+            //alert(sort_choose);
+
+            //alert(search_day_last);
             if (!page) {
                 page = 1;
             }
-            const url = `/admin/orders/search?search=${search}&page=${page}`; //url để tìm kiếm, lấy từ route /admin/orders/search
+            //url để tìm kiếm, lấy từ route /admin/orders/search , truyền qua hàm search_orders_ajax để nó lấy dữ liệu từ url và lọc
+            const url = `/admin/orders/search?search=${search}&dayfirst=${search_day_first}&daylast=${search_day_last}&sortchoose=${sort_choose}&page=${page}`;
 
 
             $.ajax({
                 url: url,
                 type: 'GET',
                 success: function (response) {
-                    console.log(response);
-                    console.log(response.order_for_ajax);
+                    //console.log(response);
+                    console.log(response.order_for_ajax.data);
 
                     let html = '';//khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ orders
                     for(let item of response.order_for_ajax.data){ //từ bên controller search_warranties_ajax qua
+
+                        //tính số ngày kể từ lúc tạo để coi nó có phải new không
+                        const today = new Date();
+                        const create_day = new Date(item.created_at);
+                        const millisecondsDiff = today - create_day;
+                        const daysDiff = Math.floor(millisecondsDiff / (1000 * 60 * 60 * 24));
+                        let isnew ='';
+                        if(daysDiff < 7){
+                            isnew = '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
+                        }
+
+                        //kiểm tra trả tiền chưa
+                        let ispaid ='';
+                        switch(item.is_paid){
+                            case 0: ispaid = '<span class="badge bg-yellow-lt">Pending Payment</span>'; break;
+                            case 1: ispaid = '<span class="badge bg-green-lt">Payment Received</span>'; break;
+                            default: ispaid = '<span class="badge bg-red-lt">Cant find data</span>'; break;
+                        }
+
+                        let status = '';
+                        switch(item.status){
+                            case 0: status = '<span class="badge bg-yellow-lt">Unconfirmed</span>'; break;
+                            case 1: status = '<span class="badge bg-azure-lt">Confirmed</span>'; break;
+                            case 2: status = '<span class="badge bg-purple-lt">In transit</span>'; break;
+                            case 3: status = '<span class="badge bg-green-lt">Delivered</span>'; break;
+                            case 4: status = '<span class="badge bg-red-lt">Canceled</span>'; break;
+                            default: status = '<span class="badge bg-red-lt">Cant find data</span>'; break;
+                        }
 
                         //phần này copy từ tbody ở index qua
                         html+=`
@@ -125,78 +161,35 @@ jQuery.noConflict();
                                 <div class="d-flex py-1 align-items-center">
                                     <div class="flex-fill">
                                         <div class="font-weight-medium">
-                                            {{ order->receiver_name . ' - ' . $order->phone_number }}
-                                            @if ($order->created_at->diffInDays() < 7)
-                                                <span
-                                                    class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                            @endif
+                                            ${item.receiver_name} - ${item.phone_number}
+                                            ${isnew}
                                         </div>
-                                        <div class="text-muted"><a href="#"
-                                                class="text-reset">{{ $order->address }}</a></div>
+                                        <div class="text-muted"><a href="#" class="text-reset">${item.address}</a></div>
                                     </div>
                                 </div>
                             </td>
-
-
-                            <td><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span></td>
-                            <td>{{ number_format($order->total_price, 0, '.', ',') }}đ
-                            </td>
+                            <td><span>${item.howmanydaysago}</span></td>
+                            <td>${item.money}đ</td>
+                            <td>${ispaid}</td>
+                            <td>${status}</td>
                             <td>
-                                @switch($order->is_paid)
-                                    @case(0)
-                                        <span class="badge bg-yellow-lt">Pending Payment</span>
-                                    @break
-
-                                    @case(1)
-                                        <span class="badge bg-green-lt">Payment Received</span>
-                                    @break
-
-                                    @default
-                                @endswitch
-                            </td>
-                            <td>
-                                @switch($order->status)
-                                    @case(0)
-                                        <span class="badge bg-yellow-lt">Unconfirmed</span>
-                                    @break
-
-                                    @case(1)
-                                        <span class="badge bg-azure-lt">Confirmed</span>
-                                    @break
-
-                                    @case(2)
-                                        <span class="badge bg-purple-lt">In transit</span>
-                                    @break
-
-                                    @case(3)
-                                        <span class="badge bg-green-lt">Delivered</span>
-                                    @break
-
-                                    @case(4)
-                                        <span class="badge bg-red-lt">Canceled</span>
-                                    @break
-
-                                    @default
-                                @endswitch
-                            </td>
-                            <td>
-                                <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"
-                                    title="Details">
-                                    <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
+                                <a href="/admin/orders/${item.order_id}" class="btn p-2" title="Details">
+                                    <img src="${data_asset}svg/view.svg" style="width: 18px;" />
                                 </a>
+
                                 <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
                                     title="Update" data-bs-toggle="modal"
                                     data-bs-target="#update-order-modal"
-                                    data-order-id="{{ $order->order_id }}"
-                                    data-total-price="{{ $order->total_price }}"
-                                    data-is-paid="{{ $order->is_paid }}"
-                                    data-status="{{ $order->status }}"
-                                    data-receiver-name="{{ $order->receiver_name }}"
-                                    data-address="{{ $order->address }}"
-                                    data-phone-number="{{ $order->phone_number }}"
-                                    data-customer-id="{{ $order->customer_id }}"
-                                    data-created-by="{{ $order->created_by }}">
-                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                    data-order-id="${item.order_id}"
+                                    data-total-price="${item.total_price }"
+                                    data-is-paid="${item.is_paid }"
+                                    data-status="${item.status }"
+                                    data-receiver-name="${ item.receiver_name }"
+                                    data-address="${ item.address }"
+                                    data-phone-number="${ item.phone_number }"
+                                    data-customer-id="${ item.customer_id }"
+                                    data-created-by="${ item.created_by }">
+                                    <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                                 </button>
                             </td>
                         </tr>`
@@ -259,20 +252,32 @@ jQuery.noConflict();
             });
         };
 
-        // search filter
+        // search filter của chỉ order thôi
         $('#search-orders').on(
             'input',
             debounce(function () {
                 filterOrders({ page: 1 });
             }, 500),
         );
-
-        // kích hoạt pagination
-        $(document).on('click', '.pagination .page-link', function (event) {
-            var button = $(event.target);
-            const page = button.data('page');
-            filterOrders({ page });
-        });
+        $('#day_first').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+        $('#day_last').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+        $('#sort_by_last').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+        //phần phân trang để chung ở dưới
 
 
 
@@ -419,7 +424,7 @@ jQuery.noConflict();
                 },
             });
         };
-        // search filter
+        // search filter của detail order
         $('#search-detailed-products').on(
             'input',
             debounce(function () {
@@ -427,11 +432,12 @@ jQuery.noConflict();
             }, 500),
         );
 
-        // pagination
+        // pagination cho trang order và detail order luôn
         $(document).on('click', '.pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
             filterDetailedProducts({ page });
+            filterOrders({page});
         });
 
         $(document).on('input', '.quantities-input', function () {

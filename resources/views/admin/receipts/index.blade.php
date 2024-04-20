@@ -1,213 +1,149 @@
 @extends('layouts.admin')
 @section('content')
-    <section id="main-content">
-        <div class="row">
-            <div class="col-lg-12">
+    @php
+        use Carbon\Carbon;
+    @endphp
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <div class="page-pretitle">
+                        Overview
+                    </div>
+                    <h2 class="page-title">
+                        Receipts Management
+                    </h2>
+                </div>
 
-                <div class="card">
-                    <div class="bootstrap-data-table-panel ">
+                <!-- Page actions -->
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        {{-- ô search và cái icon của nó --}}
+                        <div class="input-icon ">
+                            <input id="search-orders" name="search" type="text" value="" class="form-control"
+                                   placeholder="Search…" autocomplete="off">
+
+                            <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                    <path d="M21 21l-6 -6" />
+                                </svg>
+                            </span>
+                        </div>
+                        {{-- tạo order mới --}}
+                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                           data-bs-target="#receipts-modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Create new Receipts
+                        </a>
+                    </div>
+                </div>
+                <!-- End Page actions -->
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row row-deck row-cards">
+                <div class="col-12">
+                    <div class="card">
                         <div class="table-responsive">
+                            <table class="table table-vcenter card-table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Receiving Report Id</th>
+                                    <th>Total Price</th>
+                                    <th>Supplier Id</th>
+                                    <th>created By</th>
+                                    <th>Created At</th>
+                                    <th>Update At</th>
+                                </tr>
+                                </thead>
+                                <tbody id="receipts-table">
 
-                            <div class="container bootdey">
-                                <div class="row">
-                                    <div class="col-sm-10 col-sm-offset-1">
-                                        <div class="widget-box">
-                                            <div class="widget-header widget-header-large">
-                                                <h3 class="widget-title grey lighter">
-                                                    <i class="ace-icon fa fa-leaf green"></i>
-                                                    Furniture receipt
-                                                </h3>
+                                @foreach ($receipts as $receiving)
+                                    <tr>
+                                        <td>{{ $receiving->receiving_report_id }}</td>
+                                        <td>
+                                            <div class="d-flex py-1 align-items-center">
+                                                <div class="flex-fill">
+                                                    <div class="font-weight-medium">
 
-                                                <div class="widget-toolbar no-border invoice-info">
-                                                    <span class="invoice-info-label">Invoice:</span>
-                                                    <span class="red">#121212</span>
-
-                                                    <br>
-                                                    <span class="invoice-info-label">Date:</span>
-                                                    <span class="blue">04/04/2014</span>
-                                                </div>
-
-                                                <div class="widget-toolbar hidden-480">
-                                                    <a href="#">
-                                                        <i class="ace-icon fa fa-print"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="widget-body">
-                                                <div class="widget-main padding-24">
-                                                    <div class="row">
-                                                        <div class="col-sm-6">
-                                                            <div class="row">
-                                                                <div
-                                                                    class="col-xs-11 label label-lg label-info arrowed-in arrowed-right">
-                                                                    <b>Company Info</b>
-                                                                </div>
-                                                            </div>
-
-                                                            <div>
-                                                                <ul class="list-unstyled spaced">
-                                                                    <li>
-                                                                        <i
-                                                                            class="ace-icon fa fa-caret-right blue"></i>Street,
-                                                                        City
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <i class="ace-icon fa fa-caret-right blue"></i>Zip
-                                                                        Code
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <i
-                                                                            class="ace-icon fa fa-caret-right blue"></i>State,
-                                                                        Country
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <i class="ace-icon fa fa-caret-right blue"></i>
-                                                                        Phone:
-                                                                        <b class="red">111-111-111</b>
-                                                                    </li>
-
-                                                                    <li class="divider"></li>
-
-                                                                    <li>
-                                                                        <i class="ace-icon fa fa-caret-right blue"></i>
-                                                                        Paymant Info
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div><!-- /.col -->
-
-                                                        <div class="col-sm-6">
-                                                            <div class="row">
-                                                                <div
-                                                                    class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
-                                                                    <b>Customer Info</b>
-                                                                </div>
-                                                            </div>
-
-                                                            <div>
-                                                                <ul class="list-unstyled  spaced">
-                                                                    <li>
-                                                                        <i
-                                                                            class="ace-icon fa fa-caret-right green"></i>Street,
-                                                                        City
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <i class="ace-icon fa fa-caret-right green"></i>Zip
-                                                                        Code
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <i
-                                                                            class="ace-icon fa fa-caret-right green"></i>State,
-                                                                        Country
-                                                                    </li>
-
-                                                                    <li class="divider"></li>
-
-                                                                    <li>
-                                                                        <i class="ace-icon fa fa-caret-right green"></i>
-                                                                        Contact Info
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div><!-- /.col -->
-                                                    </div><!-- /.row -->
-
-                                                    <div class="space"></div>
-
-                                                    <div>
-                                                        <table class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="center">#</th>
-                                                                    <th>Product</th>
-                                                                    <th class="hidden-xs">Description</th>
-                                                                    <th class="hidden-480">Discount</th>
-                                                                    <th>Total</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="center">1</td>
-
-                                                                    <td>
-                                                                        <a href="#">google.com</a>
-                                                                    </td>
-                                                                    <td class="hidden-xs">
-                                                                        1 year domain registration
-                                                                    </td>
-                                                                    <td class="hidden-480"> --- </td>
-                                                                    <td>$10</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="center">2</td>
-
-                                                                    <td>
-                                                                        <a href="#">yahoo.com</a>
-                                                                    </td>
-                                                                    <td class="hidden-xs">
-                                                                        5 year domain registration
-                                                                    </td>
-                                                                    <td class="hidden-480"> 5% </td>
-                                                                    <td>$45</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="center">3</td>
-                                                                    <td>Hosting</td>
-                                                                    <td class="hidden-xs"> 1 year basic hosting </td>
-                                                                    <td class="hidden-480"> 10% </td>
-                                                                    <td>$90</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="center">4</td>
-                                                                    <td>Design</td>
-                                                                    <td class="hidden-xs"> Theme customization </td>
-                                                                    <td class="hidden-480"> 50% </td>
-                                                                    <td>$250</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                        @if ($receiving->created_at->diffInDays() < 7)
+                                                            <span
+                                                                class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                        @endif
                                                     </div>
 
-                                                    <div class="hr hr8 hr-double hr-dotted"></div>
-
-                                                    <div class="row">
-                                                        <div class="col-sm-5 pull-right">
-                                                            <h4 class="pull-right">
-                                                                Total amount :
-                                                                <span class="red">$395</span>
-                                                            </h4>
-                                                        </div>
-                                                        <div class="col-sm-7 pull-left"> Extra Information </div>
-                                                    </div>
-
-                                                    <div class="space-6"></div>
-                                                    <div class="well">
-                                                        Thank you for choosing Ace Company products.
-                                                        We believe you will be satisfied by our services.
-                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        </td>
+
+
+                                        <td>{{ number_format($receiving->total_price, 0, '.', ',') }}đ
+
+
+                                        </td>
+                                        <td>
+                                            {{$receiving->supplier_id}}
+                                        </td>
+
+                                        <td>
+                                            {{ $receiving->created_by }}
+                                        </td>
+                                        <td>
+                                            {{$receiving->created_at}}
+                                        </td>
+                                        <td>
+                                            {{$receiving->update_at}}
+                                        </td>
+                                        <td>
+                                            {{--                                            <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"--}}
+                                            {{--                                               title="Details">--}}
+                                            {{--                                                <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />--}}
+                                            {{--                                            </a>--}}
+                                            {{--                                            <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"--}}
+                                            {{--                                                    title="Update" data-bs-toggle="modal"--}}
+                                            {{--                                                    data-bs-target="#update-order-modal"--}}
+                                            {{--                                                    data-order-id="{{ $order->order_id }}"--}}
+                                            {{--                                                    data-total-price="{{ $order->total_price }}"--}}
+                                            {{--                                                    data-is-paid="{{ $order->is_paid }}"--}}
+                                            {{--                                                    data-status="{{ $order->status }}"--}}
+                                            {{--                                                    data-receiver-name="{{ $order->receiver_name }}"--}}
+                                            {{--                                                    data-address="{{ $order->address }}"--}}
+                                            {{--                                                    data-phone-number="{{ $order->phone_number }}"--}}
+                                            {{--                                                    data-customer-id="{{ $order->customer_id }}"--}}
+                                            {{--                                                    data-created-by="{{ $order->created_by }}">--}}
+                                            {{--                                                <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />--}}
+                                            {{--                                            </button>--}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            {{--                            <div class="d-flex justify-content-end my-2">{{ $orders->render('common.ajax-pagination') }}--}}
                         </div>
                     </div>
                 </div>
-                <!-- /# card -->
             </div>
-            <!-- /# column -->
         </div>
-        @include('admin.components.footer')
-    </section>
+    </div>
+
+
+    @include('admin.components.footer')
+    </div>
+    {{-- Modal --}}
+    @include('admin.receipts.ReceiptsCreate')
+    {{-- Script --}}
+    <script src="{{ asset('js/order_api.js') }}" defer></script>
 @endsection

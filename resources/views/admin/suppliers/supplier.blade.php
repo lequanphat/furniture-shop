@@ -12,27 +12,23 @@
                         Supplier Management
                     </h2>
                 </div>
-                <!-- Search bar-->
-                <form class="input-group col" action="{{ route('suppliers.search') }}" method="GET">
-                    @if (isset($search))
-                        <input name="search" type="text" class="form-control form-control-sm" placeholder="Search..."
-                            aria-label="Search" value="{{ $search }}">
-                    @else
-                        <input name="search" type="text" class="form-control form-control-sm" placeholder="Search..."
-                            aria-label="Search">
-                    @endif
-                    <button class="btn btn-primary btn-sm" type="submit">
-                        Search
-                    </button>
-                </form>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <span class="d-none d-sm-inline">
-                            <a href="#" class="btn">
-                                New view
-                            </a>
-                        </span>
+                    <div class="input-icon ">
+                            <input id="search-supplier-input" type="text" value="{{ $search }}" class="form-control"
+                                placeholder="Search…">
+                            <span class="input-icon-addon">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                    <path d="M21 21l-6 -6" />
+                                </svg>
+                            </span>
+                        </div>
                         <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
                             data-bs-target="#modal-simple">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -80,7 +76,7 @@
 
                                     </tr>
                                 </thead>
-                                <tbody id="employee-table">
+                                <tbody id="supplier-table">
                                     @foreach ($suppliers as $supplier)
                                         <tr>
                                             <td>{{ $supplier->supplier_id }}</td>

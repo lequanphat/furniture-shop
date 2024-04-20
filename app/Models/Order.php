@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class
 Order extends Model
@@ -46,5 +47,12 @@ Order extends Model
     public function customer()
     {
         return $this->belongsTo(User::class, 'customer_id');
+    }
+    public function howmanydaysago(){
+        return $this->created_at->diffForHumans(Carbon::now());
+    }
+    public function money_type(){
+        $money = number_format( $this->total_price, 0, '.', ',');
+        return $money;
     }
 }

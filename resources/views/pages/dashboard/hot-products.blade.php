@@ -6,13 +6,12 @@
             </div>
             <div class="tab-style-1 nav" data-aos="fade-up" data-aos-delay="400">
                 <a class="active" href="#pro-1" data-bs-toggle="tab">New Arrivals </a>
-                <a href="#pro-2" data-bs-toggle="tab" class=""> Best Sellers </a>
-                <a href="#pro-3" data-bs-toggle="tab" class=""> Sale Items </a>
+                  <!-- <a href="#pro-2" data-bs-toggle="tab" class=""> Best Sellers </a>-->
             </div>
         </div>
         <div class="tab-content jump">
             <div id="pro-1" class="tab-pane active">
-                <div class="row">
+                <div class="row" id="pro-1-content">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                         <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
                             <div class="product-img img-zoom mb-25">
@@ -248,7 +247,7 @@
                 </div>
             </div>
             <div id="pro-2" class="tab-pane">
-                <div class="row">
+                <div class="row" id="pro-2-content">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                         <div class="product-wrap mb-35">
                             <div class="product-img img-zoom mb-25">
