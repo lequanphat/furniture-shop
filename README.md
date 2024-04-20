@@ -37,7 +37,13 @@
     php artisan migrate
     ```
 
-2. **Run the application:**
+2. **Run database seeders:**
+
+    ```bash
+    php artisan db:seed
+    ```
+
+3. **Run the application:**
 
     ```bash
     php artisan serve
