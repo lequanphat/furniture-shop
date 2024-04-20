@@ -6,6 +6,7 @@
                 <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
                     aria-label="Close"><i class="ti-close"></i></button>
             </div>
+            
             <div class="modal-body">
                 <!-- Form goes here -->
                 <form id="create-brand-form" action="#" method="dialog">

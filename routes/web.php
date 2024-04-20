@@ -72,7 +72,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     //address_card
     Route::post('/account/profile/addresscard/update', [AddressController::class, 'update_address']);
     Route::post('/account/profile/addresscard/create', [AddressController::class, 'create_address']);
-
+    Route::post('/account/profile/addresscard/remove', [AddressController::class, 'remove_address']);
     // checkout
     Route::post('/checkout', [OrderController::class, 'checkout_order'])->name('checkout');
     Route::get('/checkout/{order_id}', [PagesController::class, 'handle_checkout_order'])->name('checkout.handle');

@@ -31,17 +31,18 @@
                                                 <i class="fa fa-plus"></i> Create
                                                 Address</button>
                                             <h3>Billing Address</h3>
+                                            <div id="address_table">
                                             @foreach ($address_cards as $address)
                                                 <address>
+                                                <p class="d-none">{{$address->address_id}}</p>
                                                     @if ($address->is_default)
-                                                        <p> Default address
+                                                        <p class="is_default"> Default address
                                                         <p>
                                                     @endif
                                                     <p><strong>{{ $address->receiver_name }}</strong></p>
                                                     <p>{{ $address->address }}</p>
                                                     <p>{{ $address->phone_number }}</p>
-                                                </address>
-                                                <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
+                                                    <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
                                                     data-bs-target="#UpdateAddressModal"
                                                     data-address-id="{{ $address->address_id }}"
                                                     data-receiver-name="{{ $address->receiver_name }}"
@@ -50,8 +51,16 @@
                                                     data-is-default="{{ $address->is_default ? 'true' : 'false' }}">
                                                     <i class="fa fa-edit"></i> Edit
                                                     Address</button>
-                                                <h3></h3>
+                                                    <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
+                                                    data-bs-target="#RemoveAddressModal"
+                                                    data-address-id="{{ $address->address_id }}">
+                                                    <i class="fa fa-remove"></i> Remove
+                                                    Address</button>
+                                                    <h3></h3>
+                                                </address>     
                                             @endforeach
+                                            
+                                            </div>
                                         </div>
 
                                     </div>
@@ -60,27 +69,6 @@
                                     <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
                                         <div class="myaccount-content">
                                             <h3>Account Details</h3>
-                                            <div class="col-auto ms-auto d-print-none">
-                                                <div class="btn-list">
-                                                    <a href="#" class="btn btn-primary d-none d-sm-inline-block"
-                                                        id="enable-edit-profile-customer">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" viewBox="0 0 24 24" fill="none"
-                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path
-                                                                d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                                            <path
-                                                                d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
-                                                            <path d="M16 5l3 3" />
-                                                        </svg>
-                                                        Edit profile
-                                                    </a>
-                                                </div>
-                                            </div>
                                             <div class="account-details-form">
                                                 <form id="update-profile-customer-form" action="#">
                                                     @csrf
@@ -151,11 +139,19 @@
                                                         <div id="update_customer_response" class="alert m-0 d-none"></div>
                                                     </div>
                                                     <div class="modal-footer d-none" id='btn-list-edit'>
-                                                        <button type="reset" class="btn me-auto">Cancel</button>
+                                                        <button id="cancel-edit-profile-customer" type="button" class="btn btn-secondary">Cancel</button>
                                                         <button type="submit" class="btn btn-primary">Save
                                                             changes</button>
                                                     </div>
                                                 </form>
+                                                <div class="col-auto ms-auto d-print-none">
+                                            <div class="btn-list">
+                                                    <button class="btn btn-primary"
+                                                        id="enable-edit-profile-customer">
+                                                        Edit profile
+                                                    </button>
+                                                </div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div> <!-- Single Tab Content End -->
@@ -168,5 +164,6 @@
         </div>
         @include('pages.account.update_address_modal')
         @include('pages.account.create_address_modal')
+        @include('pages.account.remove_address_modal')
     </div>
 @endsection
