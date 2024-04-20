@@ -112,38 +112,58 @@
                                 <table class="js-user-table table table-vcenter card-table " >
                                     <thead>
                                     <tr>
-                                        <th> product</th>
+                                        <th> Sku</th>
+                                        <th> product id</th>
                                         <th> name</th>
-                                        <th>description</th>
-                                        <th> category</th>
-                                        <th> Quantities</th>
-                                        <th>brand id</th>
+
+                                        <th> color id</th>
+                                        <th> size</th>
+                                        <th> original price</th>
+                                        <th>warranty month</th> <th>quantities </th>
+
+
                                         <th> is delete</th>
 
                                         <th> Action</th>
-                                        <!-- 'name', 'description', 'category_id', 'quantities', 'brand_id', 'is_deleted' -->
+{{--               'sku', 'product_id', 'name', 'description', 'color_id', 'size', 'original_price', 'warranty_month', 'quantities', 'is_deleted'--}}
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach ($product as $detail_product)
                                         <tr>
+                                            <td> {{$detail_product->sku}} </td>
                                             <td> {{$detail_product->product_id}} </td>
                                             <td> {{$detail_product->name}} </td>
-                                            <td> {{$detail_product->description}} </td>
-                                            <td> {{$detail_product->category_id}} </td>
+                                            <td> {{$detail_product->color_id}} </td>
+                                            <td> {{$detail_product->size}} </td>
+                                            <td> {{$detail_product->original_price}} </td>
+                                            <td> {{$detail_product->warranty_month}} </td>
                                             <td> {{$detail_product->quantities}} </td>
-                                            <td> {{$detail_product->brand_id}} </td>
                                             <td> {{$detail_product->is_deleted}} </td>
+
+
 
 
                                             <td>
 
-                                                <input type="checkbox" id="regist-{{ $detail_product->product_id }}"
-                                                       name="registDiscount[{{ $detail_product->product_id }}]"
-                                                       value="{{ $detail_product->product_id }}" class="regist-checkbox"
-                                                       {{ in_array($detail_product->product_id, $Registor->toArray()) ? 'checked' : '' }}
+{{--                                                <input type="checkbox" id="regist-{{ $detail_product->product_id }}"--}}
+{{--                                                       name="registDiscount[{{ $detail_product->product_id }}]"--}}
+{{--                                                       value="{{ $detail_product->product_id }}" class="regist-checkbox"--}}
+{{--                                                       {{ in_array($detail_product->product_id, $Registor->toArray()) ? 'checked' : '' }}--}}
+{{--                                                       data-product-id="{{ $detail_product->product_id }}"--}}
+{{--                                                       data-discount-id ="{{$discount->discount_id}}"--}}
+{{--                                                       onchange="sendCheckboxChange(this)"--}}
+
+{{--                                                />--}}
+
+
+                                                <input type="checkbox" id="regist-{{ $detail_product->sku}}"
+                                                       name="registDiscount[{{ $detail_product->sku }}]"
+                                                       value="{{ $detail_product->sku }}" class="regist-checkbox"
+                                                       {{ in_array($detail_product->sku, $Registor->toArray()) ? 'checked' : '' }}
                                                        data-product-id="{{ $detail_product->product_id }}"
                                                        data-discount-id ="{{$discount->discount_id}}"
+                                                       data-sku={{$detail_product->sku }}
                                                        onchange="sendCheckboxChange(this)"
 
                                                 />
@@ -181,6 +201,7 @@
                     const productId = checkbox.dataset.productId;
                     const isChecked = checkbox.checked;
                     const discount_id = checkbox.dataset.discountId;
+                    const sku =checkbox.dataset.sku;
                     const csrfToken = $('meta[name="csrf-token"]').attr('content');
                     // const a=[productId,isChecked,discount_id];
                   // Get token from meta tag
@@ -191,7 +212,9 @@
                             data: {
                                 product_id: productId,
                                 is_checked: isChecked,
-                                discount_id: discount_id,
+                                discount_id: discount_id
+                                ,
+                                sku:sku,
                                 _token: csrfToken, // Include the CSRF token
                             },
                             success: function(data) {
@@ -224,6 +247,7 @@
                                 product_id: productId,
                                 is_checked: isChecked,
                                 discount_id: discount_id,
+                                sku:sku,
                                 _token: csrfToken, // Include the CSRF token
                             },
                             success: function(data) {

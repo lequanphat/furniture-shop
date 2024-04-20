@@ -92,6 +92,7 @@
                                         {{ $order->employee->default_address->phone_number }}<br>
                                     @endif
 
+
                                     <a href="mailto:#">{{ $order->employee->email }}</a>
                                 </address>
                             </div>
