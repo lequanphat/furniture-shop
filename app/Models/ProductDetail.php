@@ -34,5 +34,9 @@ class ProductDetail extends Model
         return $this->belongsTo(Product::class,'product_id');
         
     }
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetail::class, 'sku');
+    }
 
 }

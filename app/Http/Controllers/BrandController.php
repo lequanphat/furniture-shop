@@ -11,10 +11,12 @@ class BrandController extends Controller
 
     public function brand_ui(Request $request)
     {
+        $search = request()->query('search');
         $data = [
             'page' => 'Brands',
             'brands' =>  Brand::query()
                 ->paginate(5),
+                'search'=>$search,
         ];
         return view('admin.brands.brand', $data);
     }
@@ -64,5 +66,16 @@ class BrandController extends Controller
         } else {
             abort(404);
         }
+    }
+    public function brands_pagination()
+    {
+        $search = request()->query('search');
+        $data = [
+            'page' => 'Brands',
+            'brands' =>  Brand::where('name', 'LIKE', '%' . $search . '%')
+                ->paginate(5),
+            'search' => $search,
+        ];
+        return response()->json($data);
     }
 }
