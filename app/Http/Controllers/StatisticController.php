@@ -10,9 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class StatisticController extends Controller
 {
+
     //
     private $sqlDateFormat='Y-m-d';
     private $DateFormat='d-m-Y';
+    public function statistic_ui(Request $request)
+    {
+        $data = [
+            'page' => 'Statistic',
+        ];
+        return view('admin.statistics.statistics', $data);
+    }
     public function RevenueDateByDate(Request $request)
     {
         $category = request()->input('category');//All or id category

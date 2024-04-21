@@ -13,6 +13,7 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReceiptsController;
+use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
@@ -185,7 +186,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
 
-
+    Route::get('/admin/statistics', [StatisticController::class, 'statistic_ui']);
 
 
     Route::get('/admin/roles', [PermissionController::class, 'index']);
@@ -196,6 +197,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
     Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
+
 
 
     // *This is only temporary, use the appropriate controller
