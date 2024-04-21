@@ -53,18 +53,18 @@ class AuthController extends Controller
                     // authenticated
                     Auth::login($user);
                     if ($user->is_staff)
-                        return redirect()->intended('/admin');
+                        return response()->json(['message' => 'Authenticated.'], 200);
                     else
-                        return redirect()->intended('/');
+                        return response()->json(['message' => 'Authenticated.'], 200);
                     // user haven't verified
-                } else return back()->withErrors(['password' => 'This account is not verified!'])->withInput($request->input());
+                } else return response()->json(['errors' => ['message' => ['This account is not verified.']]], 400);
             } else {
                 // invalid password
-                return back()->withErrors(['password' => 'Invalid password'])->withInput($request->input());
+                return response()->json(['errors' => ['message' => ['Invalid password.']]], 400);
             }
         } else {
             // invalid email
-            return back()->withErrors(['email' => 'User not found'])->withInput($request->input());
+            return response()->json(['errors' => ['message' => ['Invalid email.']]], 400);
         }
     }
 
@@ -75,7 +75,7 @@ class AuthController extends Controller
 
         if ($user) {
             if ($user->is_verified) {
-                return back()->withErrors(['email' => 'This email already exists.'])->withInput($request->input());
+                return response()->json(['errors' => ['message' => ['The email is already exists.']]], 400);
             }
             $user->update([
                 'password' => Hash::make($request->input('password')),
@@ -97,7 +97,7 @@ class AuthController extends Controller
             });
 
             // response
-            return redirect("/account-verification/" . $user->user_id);
+            return response()->json(['message' => 'User created.', 'user_id' => $user->user_id], 200);
         } else {
             $user = User::create([
                 'email' => $request->input('email'),
@@ -118,7 +118,7 @@ class AuthController extends Controller
             });
 
             // response
-            return redirect("/account-verification/" . $user->user_id);
+            return response()->json(['message' => 'User created.', 'user_id' => $user->user_id], 200);
         }
     }
     public function account_verification(OTPVerification $request)

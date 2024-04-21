@@ -1,6 +1,51 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
+        $('#login-form input').on('input', function () {
+            $('#js-login-error').addClass('d-none');
+        });
+        // login form
+        $('#login-form').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                url: '/login',
+                method: 'POST',
+                data: formData,
+                success: function (response) {
+                    window.location.href = '/';
+                },
+                error: function (error) {
+                    console.log('====================================');
+                    console.log(error);
+                    console.log('====================================');
+                    $('#js-login-error').removeClass('d-none');
+                    $('#js-login-error').html('*' + Object.values(error.responseJSON.errors)[0][0]);
+                },
+            });
+        });
+
+        $('#register-form input').on('input', function () {
+            $('#js-register-error').addClass('d-none');
+        });
+        // register form
+        $('#register-form').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                url: '/register',
+                method: 'POST',
+                data: formData,
+                success: function (response) {
+                    window.location.href = '/account-verification/' + response.user_id;
+                },
+                error: function (error) {
+                    $('#js-register-error').removeClass('d-none');
+                    $('#js-register-error').html('*' + Object.values(error.responseJSON.errors)[0][0]);
+                },
+            });
+        });
+
         const inputs = $('.input-field');
         inputs.each(function (index) {
             $(this).on('input', function (event) {

@@ -3,7 +3,7 @@
     <div class="card card-md">
         <div class="card-body">
             <h2 class="h2 text-center mb-4">Login to your account</h2>
-            <form action="/login" method="post" autocomplete="off">
+            <form id="login-form" action="#" autocomplete="off">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
@@ -17,7 +17,7 @@
                             <a href="/forgot-password">I forgot password</a>
                         </span>
                     </label>
-                    <div class="input-group input-group-flat">
+                    <div class="input-group input-group-flat mb-4">
                         <input type="password" name="password" id="password" value="{{ old('password') }}"
                             class="form-control" placeholder="Your password" autocomplete="off" required>
                         <span class="input-group-text">
@@ -35,10 +35,8 @@
                         </span>
                     </div>
                 </div>
-                @if ($errors->any())
-                    <p class="text-danger m-0">*{{ $errors->first() }}</p>
-                @endif
-                <div class="form-footer">
+                <p id="js-login-error" class="text-danger m-0 d-none"></p>
+                <div class="form-footer mt-2">
                     <button type="submit" class="btn btn-success w-100">Sign in</button>
                 </div>
             </form>
@@ -56,7 +54,8 @@
                         </svg>
                         Login with Github
                     </a></div>
-                <div class="col"><a href="#" class="btn w-100">
+                <div class="col">
+                    <a href="#" class="btn w-100">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon text-twitter" width="24" height="24"
                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                             stroke-linejoin="round">
@@ -65,7 +64,8 @@
                                 d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013z" />
                         </svg>
                         Login with Twitter
-                    </a></div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

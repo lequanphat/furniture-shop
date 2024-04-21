@@ -1,6 +1,6 @@
 @extends('layouts.empty')
 @section('content')
-    <form class="card card-md" action="/register" method="post" autocomplete="off">
+    <form id="register-form" class="card card-md" action="#" autocomplete="off">
         @csrf
         <div class="card-body">
             <h2 class="h2 text-center mb-4">Create new account</h2>
@@ -21,7 +21,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Password</label>
-                <div class="input-group input-group-flat">
+                <div class="input-group input-group-flat mb-4">
                     <input type="password" name="password" id="password" value="{{ old('password') }}" class="form-control"
                         placeholder="Password" autocomplete="off">
                     <span class="input-group-text">
@@ -39,10 +39,8 @@
                     </span>
                 </div>
             </div>
-            @if ($errors->any())
-                <p class="text-danger m-0">*{{ $errors->first() }}</p>
-            @endif
-            <div class="form-footer">
+            <p id="js-register-error" class="text-danger m-0 "></p>
+            <div class="form-footer mt-2">
                 <button type="submit" class="btn btn-success w-100">Create new account</button>
             </div>
         </div>
