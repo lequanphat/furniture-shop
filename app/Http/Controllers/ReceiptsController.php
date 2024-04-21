@@ -13,7 +13,7 @@ class ReceiptsController extends Controller
         $data_receipts = ReceivingReport::all();
         $supplier_id = Supplier::all();
 
-        echo "$supplier_id";
+      
         $data =
             [
                 'receipts' => $data_receipts,
