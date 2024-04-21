@@ -19,10 +19,56 @@ class OrderController extends Controller
 {
     public function index()
     {
+        // query parameters
+        $search = request()->query('search');
+        $sort = request()->query('sort');
+        $type = request()->query('type');
+        $day_first = request()->query('dayfirst');
+        $day_last = request()->query('daylast');
+
+        // filter orders by start_date, end_date
+        if (!isset($day_first)) {
+            $day_first = Carbon::create(1900, 1, 1);
+        }
+
+        if (isset($day_last)) {
+            $day_last = Carbon::parse($day_last)->addDay();
+        } else {
+            $day_last = Carbon::tomorrow();
+        }
+
+        $query = Order::whereBetween('created_at', [$day_first, $day_last])
+            ->where(function ($query) use ($search) {
+                $query->where('order_id', 'LIKE', '%' . $search . '%')
+                    ->orWhere('receiver_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('phone_number', 'LIKE', '%' . $search . '%')
+                    ->orWhere('address', 'LIKE', '%' . $search . '%');
+            });
+
+        if ($type != 'all' && $type != null) {
+            $query = $query->where('status', $type);
+        }
+        // sort orders
+        if ($sort == 'oldest') {
+            $query = $query->orderBy('created_at', 'asc');
+        } else if ($sort == 'latest') {
+            $query = $query->orderBy('created_at', 'desc');
+        } else if ($sort == 'price_asc') {
+            $query = $query->orderBy('total_price', 'asc');
+        } else if ($sort == 'price_desc') {
+            $query = $query->orderBy('total_price', 'desc');
+        }
+        $orders = $query->paginate(5); // 5 orders per page
+
         $data = [
             'page' => 'Orders',
-            'orders' =>  Order::query()->paginate(5),
+            'orders' =>  $orders,
             'customers' => User::where('is_staff', false)->get(),
+            'search' => $search,
+            'type' => $type,
+            'sort' => $sort,
+            'dayfirst' => $day_first,
+            'daylast' => $day_last,
         ];
         return view('admin.orders.index', $data);
     }
@@ -65,40 +111,58 @@ class OrderController extends Controller
         }
     }
 
-    //search, hàm trả json về cho bên order_api lấy làm việc trong filterOrders
     public function search_orders_ajax()
     {
-        //kiếm dữ liệu theo biến search gửi từ ajax qua thông qua đoạn url
+        // query parameters
         $search = request()->query('search');
-        //kiếm trong 1 khoảng tg
+        $sort = request()->query('sort');
+        $type = request()->query('type');
         $day_first = request()->query('dayfirst');
         $day_last = request()->query('daylast');
-        $is_sort_choose = request()->query('sortchoose');
 
-        //query dữ liệu thường
-        $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%');
-        //nếu 2 ngày được chọn
-        if(isset($day_first) && isset($day_last)){
-            //do wherebetween nó chỉ lấy từ ngày đầu cho tới ngày trước ngày cuối nên phải cộng
-            $day_last_plus_one = Carbon::parse($day_last)->addDay();
-            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereBetween('created_at', [$day_first, $day_last_plus_one]);
-        } elseif (isset($day_first) && empty($day_last)) {
-            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereDate('created_at', '>=' , $day_first);
-        } elseif (empty($day_first) && isset($day_last)) {
-            $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereDate('created_at', '<=' , $day_last);
+        // filter orders by start_date, end_date
+        if (!isset($day_first)) {
+            $day_first = Carbon::create(1900, 1, 1);
         }
 
-        if($is_sort_choose == 'false'){
-            $orders = $orders->orderBy('created_at','asc')->paginate(5);
+        if (isset($day_last)) {
+            $day_last = Carbon::parse($day_last)->addDay();
         } else {
-            $orders = $orders->orderBy('created_at','desc')->paginate(5);
+            $day_last = Carbon::tomorrow();
         }
 
+        $query = Order::whereBetween('created_at', [$day_first, $day_last])
+            ->where(function ($query) use ($search) {
+                $query->where('order_id', 'LIKE', '%' . $search . '%')
+                    ->orWhere('receiver_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('phone_number', 'LIKE', '%' . $search . '%')
+                    ->orWhere('address', 'LIKE', '%' . $search . '%');
+            });
 
-        foreach( $orders as $order ) {
+        if ($type != 'all' && $type != null) {
+            $query = $query->where('status', $type);
+        }
+        // sort orders
+        if ($sort == 'oldest') {
+            $query = $query->orderBy('created_at', 'asc');
+        } else if ($sort == 'latest') {
+            $query = $query->orderBy('created_at', 'desc');
+        } else if ($sort == 'price_asc') {
+            $query = $query->orderBy('total_price', 'asc');
+        } else if ($sort == 'price_desc') {
+            $query = $query->orderBy('total_price', 'desc');
+        }
+        $orders = $query->paginate(5); // 5 orders per page
+
+        // serialize data
+        foreach ($orders as $order) {
             $order->howmanydaysago = $order->howmanydaysago();
             $order->money = $order->money_type();
+            if ($order->created_at->diffInDays() < 7) {
+                $order->new = true;
+            }
         }
+
         return response()->json(['order_for_ajax' => $orders]);
     }
 

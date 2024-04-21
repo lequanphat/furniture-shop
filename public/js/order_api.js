@@ -2,6 +2,99 @@ jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
         const data_asset = $('#asset').attr('data-asset');
+
+        function createOrderElement({ order }) {
+            const newTag = order.new
+                ? `<span
+            class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>`
+                : '';
+            let is_paid = '';
+            switch (order.is_paid) {
+                case 0:
+                    is_paid = '<span class="badge bg-yellow-lt">Pending Payment</span>';
+                    break;
+                case 1:
+                    is_paid = '<span class="badge bg-green-lt">Payment Received</span>';
+                    break;
+                default:
+                    is_paid = '';
+                    break;
+            }
+            let status = '';
+            switch (order.status) {
+                case 0:
+                    status = '<span class="badge bg-yellow-lt">Unconfirmed</span>';
+                    break;
+                case 1:
+                    status = '<span class="badge bg-azure-lt">Confirmed</span>';
+                    break;
+                case 2:
+                    status = '<span class="badge bg-purple-lt">In transit</span>';
+                    break;
+                case 3:
+                    status = '<span class="badge bg-green-lt">Delivered</span>';
+                    break;
+                case 4:
+                    status = '<span class="badge bg-red-lt">Canceled</span>';
+                    break;
+                default:
+                    status = '';
+                    break;
+            }
+            const view_action = `<a href="/admin/orders/${order.order_id}" class="btn p-2" title="Details">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path
+                        d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                </svg>
+            </a>`;
+            const update_action = ` <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
+                title="Update" data-bs-toggle="modal"
+                data-bs-target="#update-order-modal"
+                data-order-id="${order.order_id}"
+                data-total-price="${order.total_price}"
+                data-is-paid="${order.is_paid}"
+                data-status="${order.status}"
+                data-receiver-name="${order.receiver_name}"
+                data-address="${order.address}"
+                data-phone-number="${order.phone_number}"
+                data-customer-id="${order.customer_id}"
+                data-created-by="${order.created_by}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
+            </button>`;
+            return `<td>${order.order_id}</td>
+                <td>
+                    <div class="d-flex py-1 align-items-center">
+                        <div class="flex-fill">
+                            <div class="font-weight-medium">
+                                ${order.receiver_name} - ${order.phone_number}
+                                ${newTag}
+                            </div>
+                            <div class="text-muted"><a href="#" class="text-reset">${order.address}</a></div>
+                        </div>
+                    </div>
+                </td>
+                <td><span>${order.howmanydaysago}</span></td>
+                <td>${order.money}đ</td>
+                <td>${is_paid}</td>
+                <td>${status}</td>
+                <td>
+                    ${view_action}
+                    ${update_action}
+                
+                </td>`;
+        }
         $('#order-modal').on('show.bs.modal', function (event) {
             $('#create-order-form')[0].reset();
             $('#create_order_response').addClass('d-none');
@@ -85,7 +178,8 @@ jQuery.noConflict();
             });
         });
 
-        function debounce(func, wait) { //hàm đợi 1 thời gian rồi mới thực hiện
+        function debounce(func, wait) {
+            //hàm đợi 1 thời gian rồi mới thực hiện
             let timeout;
             return function executedFunction(...args) {
                 const later = () => {
@@ -97,156 +191,88 @@ jQuery.noConflict();
             };
         }
 
+        function renderPagination({ current_page, last_page }) {
+            let pagination = `<li class="page-item ${current_page === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page - 1}">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg>
+                prev
+            </a>
+        </li>`;
 
+            for (let i = 0; i < last_page; i++) {
+                pagination += `
+                    <li class="page-item ${current_page === i + 1 ? 'active mx-1' : ''}">
+                        <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
+                    </li>`;
+            }
+            pagination += `<li class="page-item ${current_page === last_page ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page + 1}">
+                next
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </a>
+        </li>`;
+            $('.pagination').html(pagination);
+        }
         /////////////////////////////////hàm filter cho trang order chính để phân trang và earch ajax
         const filterOrders = ({ page }) => {
-            const search = $('#search-orders').val();           //lấy value từ ô tìm kiếm bên index của orders
-            const search_day_first = $('#day_first').val();     //lấy ngày đầu kiếm order trong 1 khoảng thời gian
-            const search_day_last = $('#day_last').val();       //lấy ngày cuối kiếm order trong 1 khoảng thời gian
-            const isChecked = $('#sort_by_last');               //2 dòng này lấy check để sort
-            const sort_choose = isChecked.prop('checked');
-            //alert(sort_choose);
+            const search = $('#search-orders').val(); //lấy value từ ô tìm kiếm bên index của orders
+            const search_day_first = $('#day_first').val(); //lấy ngày đầu kiếm order trong 1 khoảng thời gian
+            const search_day_last = $('#day_last').val(); //lấy ngày cuối kiếm order trong 1 khoảng thời gian
+            const sort = $('#sort_by_last').val();
+            const type = $('#type').val();
+
+            history.pushState(
+                null,
+                null,
+                `/admin/orders?page=${page}&type=${type}&search=${search}&dayfirst=${search_day_first}&daylast=${search_day_last}&sort=${sort}`,
+            );
 
             //alert(search_day_last);
             if (!page) {
                 page = 1;
             }
             //url để tìm kiếm, lấy từ route /admin/orders/search , truyền qua hàm search_orders_ajax để nó lấy dữ liệu từ url và lọc
-            const url = `/admin/orders/search?search=${search}&dayfirst=${search_day_first}&daylast=${search_day_last}&sortchoose=${sort_choose}&page=${page}`;
-
+            const url = `/admin/orders/search?page=${page}&type=${type}&search=${search}&dayfirst=${search_day_first}&daylast=${search_day_last}&sort=${sort}`;
 
             $.ajax({
                 url: url,
                 type: 'GET',
                 success: function (response) {
                     //console.log(response);
-                    console.log(response.order_for_ajax.data);
 
-                    let html = '';//khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ orders
-                    for(let item of response.order_for_ajax.data){ //từ bên controller search_warranties_ajax qua
-
-                        //tính số ngày kể từ lúc tạo để coi nó có phải new không
-                        const today = new Date();
-                        const create_day = new Date(item.created_at);
-                        const millisecondsDiff = today - create_day;
-                        const daysDiff = Math.floor(millisecondsDiff / (1000 * 60 * 60 * 24));
-                        let isnew ='';
-                        if(daysDiff < 7){
-                            isnew = '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
-                        }
-
-                        //kiểm tra trả tiền chưa
-                        let ispaid ='';
-                        switch(item.is_paid){
-                            case 0: ispaid = '<span class="badge bg-yellow-lt">Pending Payment</span>'; break;
-                            case 1: ispaid = '<span class="badge bg-green-lt">Payment Received</span>'; break;
-                            default: ispaid = '<span class="badge bg-red-lt">Cant find data</span>'; break;
-                        }
-
-                        let status = '';
-                        switch(item.status){
-                            case 0: status = '<span class="badge bg-yellow-lt">Unconfirmed</span>'; break;
-                            case 1: status = '<span class="badge bg-azure-lt">Confirmed</span>'; break;
-                            case 2: status = '<span class="badge bg-purple-lt">In transit</span>'; break;
-                            case 3: status = '<span class="badge bg-green-lt">Delivered</span>'; break;
-                            case 4: status = '<span class="badge bg-red-lt">Canceled</span>'; break;
-                            default: status = '<span class="badge bg-red-lt">Cant find data</span>'; break;
-                        }
-
-                        //phần này copy từ tbody ở index qua
-                        html+=`
-                        <tr>
-                            <td>${item.order_id}</td>
-                            <td>
-                                <div class="d-flex py-1 align-items-center">
-                                    <div class="flex-fill">
-                                        <div class="font-weight-medium">
-                                            ${item.receiver_name} - ${item.phone_number}
-                                            ${isnew}
-                                        </div>
-                                        <div class="text-muted"><a href="#" class="text-reset">${item.address}</a></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span>${item.howmanydaysago}</span></td>
-                            <td>${item.money}đ</td>
-                            <td>${ispaid}</td>
-                            <td>${status}</td>
-                            <td>
-                                <a href="/admin/orders/${item.order_id}" class="btn p-2" title="Details">
-                                    <img src="${data_asset}svg/view.svg" style="width: 18px;" />
-                                </a>
-
-                                <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
-                                    title="Update" data-bs-toggle="modal"
-                                    data-bs-target="#update-order-modal"
-                                    data-order-id="${item.order_id}"
-                                    data-total-price="${item.total_price }"
-                                    data-is-paid="${item.is_paid }"
-                                    data-status="${item.status }"
-                                    data-receiver-name="${ item.receiver_name }"
-                                    data-address="${ item.address }"
-                                    data-phone-number="${ item.phone_number }"
-                                    data-customer-id="${ item.customer_id }"
-                                    data-created-by="${ item.created_by }">
-                                    <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                                </button>
-                            </td>
-                        </tr>`
+                    let html = ''; //khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ orders
+                    for (let item of response.order_for_ajax.data) {
+                        html += `<tr>${createOrderElement({ order: item })}</tr>`;
                     }
                     $('#order-table').html(html); //rồi đặt lại bảng bằng dữ liệu đã được filter ra
 
-                    //thanh phân trang dưới cùng, copy đổi tên biến đã trả từ controller search_orders_ajax là đc
-                    let pagination = `<li class="page-item ${
-                        response.order_for_ajax.current_page === 1 ? 'disabled' : ''
-                    }">
-                        <a class="page-link" href="#" data-page="${response.order_for_ajax.current_page - 1}">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="icon"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                fill="none"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            >
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M15 6l-6 6l6 6" />
-                            </svg>
-                            prev
-                        </a>
-                    </li>`;
-
-                    for (let i = 0; i < response.order_for_ajax.last_page; i++) {
-                        pagination += `
-                            <li class="page-item ${
-                                response.order_for_ajax.current_page === i + 1 ? 'active mx-1' : ''
-                            }">
-                                <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
-                            </li>`;
-                    }
-
-                    pagination += `<li class="page-item ${
-                        response.order_for_ajax.current_page === response.order_for_ajax.last_page
-                            ? 'disabled'
-                            : ''
-                    }">
-                        <a class="page-link" href="#" data-page="${response.order_for_ajax.current_page + 1}">
-                            next
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M9 6l6 6l-6 6" />
-                            </svg>
-                        </a>
-                    </li>`;
-                    $('.pagination').html(pagination);//sửa lại thanh pagination ở index
+                    // render pagination here
+                    renderPagination({
+                        current_page: response.order_for_ajax.current_page,
+                        last_page: response.order_for_ajax.last_page,
+                    });
                 },
                 error: function (error) {
+                    alert('error');
                     console.log(error);
                 },
             });
@@ -277,15 +303,19 @@ jQuery.noConflict();
                 filterOrders({ page: 1 });
             }, 500),
         );
+
+        $('#type').on(
+            'input',
+            debounce(function () {
+                filterOrders({ page: 1 });
+            }, 500),
+        );
+
         //phần phân trang để chung ở dưới
-
-
-
-
 
         ///////////////////////////////// filter cho bảng dữ liệu, liên quan tới tìm kiếm và phân trang của order detail
         const filterDetailedProducts = ({ page }) => {
-            const search = $('#search-detailed-products').val();    //lấy value từ ô tìm kiếm bên create_detailed_order
+            const search = $('#search-detailed-products').val(); //lấy value từ ô tìm kiếm bên create_detailed_order
             if (!page) {
                 page = 1;
             }
@@ -302,8 +332,9 @@ jQuery.noConflict();
                     let formatter = new Intl.NumberFormat('en-US', {
                         minimumFractionDigits: 0,
                     });
-                    let html = '';            //khởi tạo biến html để hiển thị cho bảng thêm sản phẩm order
-                    for (let i = 0; i < response.detailed_products.data.length; i++) {  //đối với mỗi dòng dữ liệu, tính giá tiền từ phần trăm discount
+                    let html = ''; //khởi tạo biến html để hiển thị cho bảng thêm sản phẩm order
+                    for (let i = 0; i < response.detailed_products.data.length; i++) {
+                        //đối với mỗi dòng dữ liệu, tính giá tiền từ phần trăm discount
                         const detailed_product = response.detailed_products.data[i];
                         let discount_percentage = 0;
                         for (let j = 0; j < detailed_product.product_discounts.length; j++) {
@@ -319,7 +350,7 @@ jQuery.noConflict();
                         let image = '';
                         if (detailed_product.images.length > 0) {
                             image = detailed_product.images[0].url;
-                        }                                                           //sau khi tính xong bắt đầu tạo dòng html để hiển thị lên bảng
+                        } //sau khi tính xong bắt đầu tạo dòng html để hiển thị lên bảng
                         html += `<tr data-sku="${detailed_product.sku}">
                         <td>
                             <div class="d-flex py-1 align-items-center">
@@ -368,7 +399,7 @@ jQuery.noConflict();
                         </td>
                     </tr>`;
                     }
-                    $('#detailed-products-table').html(html);   //mớ trên đó là tạo dữ liệu, giờ thì set dòng html đó vào bảng
+                    $('#detailed-products-table').html(html); //mớ trên đó là tạo dữ liệu, giờ thì set dòng html đó vào bảng
 
                     // pagination, tạo dòng phân trang sau khi đã tạo các dòng dữ liệu
                     let pagination = `<li class="page-item ${
@@ -437,7 +468,7 @@ jQuery.noConflict();
             var button = $(event.target);
             const page = button.data('page');
             filterDetailedProducts({ page });
-            filterOrders({page});
+            filterOrders({ page });
         });
 
         $(document).on('input', '.quantities-input', function () {
@@ -485,7 +516,5 @@ jQuery.noConflict();
         });
 
         // on modal show
-
-
     });
 })(jQuery);

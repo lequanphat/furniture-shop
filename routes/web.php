@@ -61,7 +61,6 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/top5deal', [HotDealController::class, 'get_Deal_of_Date_product']);
     Route::get('/lastproducts', [HotDealController::class, 'get_LastestProduct']);
     Route::get('/bestseller', [HotDealController::class, 'get_BestSeller']);
-
 });
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
@@ -110,24 +109,39 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/customers/pagination', [UserController::class, 'customers_pagination']);
     });
 
-    //brand
-    Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
-    Route::get('/admin/brands', [BrandController::class, 'brand_search_ui'])->name('brands.search');
-    Route::get('/admin/brands/pagination', [BrandController::class, 'brands_pagination'])->name('brands.search');
-    Route::post('/admin/brands/create', [BrandController::class, 'brand_create'])->name('brands.create');
-    Route::put('/admin/brands/update', [BrandController::class, 'brand_update'])->name('brands.edit');
-    
-    //supplier
-    Route::get('/admin/suppliers', [SupplierController::class, 'supplier_ui'])->name('suppliers.index');
-    Route::get('/admin/suppliers/pagination', [SupplierController::class, 'supplier_pagination'])->name('suppliers.search');
-    Route::post('/admin/suppliers/create', [SupplierController::class, 'supplier_create']);
-    Route::put('/admin/suppliers/update', [SupplierController::class, 'supplier_update'])->name('suppliers.edit');
+
+    // brands
+    Route::middleware(['can:read brands'])->group(function () {
+        Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
+        Route::get('/admin/brands', [BrandController::class, 'brand_search_ui'])->name('brands.search');
+        Route::get('/admin/brands/pagination', [BrandController::class, 'brands_pagination'])->name('brands.search');
+    });
+    Route::middleware(['can:create brand'])->group(function () {
+        Route::post('/admin/brands/create', [BrandController::class, 'brand_create'])->name('brands.create');
+    });
+    Route::middleware(['can:update brand'])->group(function () {
+        Route::put('/admin/brands/update', [BrandController::class, 'brand_update'])->name('brands.edit');
+    });
+
+
+    // suppliers
+    Route::middleware(['can:read suppliers'])->group(function () {
+        Route::get('/admin/suppliers', [SupplierController::class, 'supplier_ui'])->name('suppliers.index');
+        Route::get('/admin/suppliers/pagination', [SupplierController::class, 'supplier_pagination'])->name('suppliers.search');
+    });
+    Route::middleware(['can:create supplier'])->group(function () {
+        Route::post('/admin/suppliers/create', [SupplierController::class, 'supplier_create']);
+    });
+    Route::middleware(['can:update supplier'])->group(function () {
+        Route::put('/admin/suppliers/update', [SupplierController::class, 'supplier_update'])->name('suppliers.edit');
+    });
+
 
     //order
     Route::get('/admin/orders', [OrderController::class, 'index']);
     Route::post('/admin/orders', [OrderController::class, 'create']);
     Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
-    Route::get('/admin/orders/search', [OrderController::class,'search_orders_ajax']);
+    Route::get('/admin/orders/search', [OrderController::class, 'search_orders_ajax']);
 
     //order detail
     Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
@@ -189,13 +203,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
     });
 
-
-
-
     Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
-
-
-
 
     // receipts
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
@@ -213,16 +221,13 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
 
-
-
+    // permissions
 
     Route::get('/admin/roles', [PermissionController::class, 'index']);
     Route::get('/admin/roles/pagination', [PermissionController::class, 'roles_pagination']);
     Route::post('/admin/roles', [PermissionController::class, 'create']);
     Route::patch('/admin/roles/{role_id}', [PermissionController::class, 'update']);
     Route::get('/admin/roles/{role_id}', [PermissionController::class, 'get_role']);
-
-
 
 
     Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
