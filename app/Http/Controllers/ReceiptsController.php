@@ -26,8 +26,5 @@ class ReceiptsController extends Controller
 
     public function create_receiving(Request $request)
     {
-
-
     }
-
 }

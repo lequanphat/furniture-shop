@@ -65,6 +65,5 @@
         It may take a minute to receive your code. Haven't received it? <a href="/resend-otp/{{ $user->user_id }}">Resend a
             new code.</a>
     </div>
-    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
-    <script src="{{ asset('js/auth_api.js') }}" defer></script>
+    
 @endsection

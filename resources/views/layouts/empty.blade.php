@@ -35,6 +35,8 @@
     </div>
     <!-- Tabler Core -->
     <script src="{{ asset('vendor/tabler/tabler.min.js') }}" defer></script>
+    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
+    <script src="{{ asset('js/auth_api.js') }}" defer></script>
 </body>
 
 </html>
