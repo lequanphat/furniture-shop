@@ -137,6 +137,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
+    Route::get('/admin/categories/getall', [CategoryController::class, 'getAll']);
     Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
     Route::delete('/admin/categories/{category_id}', [CategoryController::class, 'delete'])->name('categories.delete');
     Route::patch('/admin/categories/{category_id}', [CategoryController::class, 'update'])->name('categories.update');
@@ -187,6 +188,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
 
     Route::get('/admin/statistics', [StatisticController::class, 'statistic_ui']);
+    Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
+    Route::post('/admin/statistics/getstatistic', [StatisticController::class, 'RevenueDateByDate']);
+  
 
 
     Route::get('/admin/roles', [PermissionController::class, 'index']);
