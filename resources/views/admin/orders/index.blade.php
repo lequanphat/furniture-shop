@@ -22,10 +22,12 @@
 
                     <div class="row justify-content-end">
                         <div class="col-2">
-                            <label class="form-check form-check-inline">
-                                <input id="sort_by_last" name="sort_by_last" class="form-check-input" type="checkbox">
-                                <span class="form-check-label">Recent created</span>
-                            </label>
+                            <select id="sort_by_last" name="sort_by_last" class="form-select">
+                                <option value="created_first" selected>Thời gian đơn được tạo</option>
+                                <option value="created_last">Đơn được tạo gần đây</option>
+                                <option value="highest_price">Tổng giá cao nhất</option>
+                                <option value="lowest_price">Tổng giá thấp nhất</option>
+                            </select>
                         </div>
                         <div class="col-4 row ">
                             <div class="col-6"><input id="day_first" name="day_first" class="col-6 form-control"

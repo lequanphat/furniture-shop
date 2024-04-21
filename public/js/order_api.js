@@ -103,8 +103,8 @@ jQuery.noConflict();
             const search = $('#search-orders').val();           //lấy value từ ô tìm kiếm bên index của orders
             const search_day_first = $('#day_first').val();     //lấy ngày đầu kiếm order trong 1 khoảng thời gian
             const search_day_last = $('#day_last').val();       //lấy ngày cuối kiếm order trong 1 khoảng thời gian
-            const isChecked = $('#sort_by_last');               //2 dòng này lấy check để sort
-            const sort_choose = isChecked.prop('checked');
+            const sort_choose = $('#sort_by_last').val();
+
             //alert(sort_choose);
 
             //alert(search_day_last);
@@ -277,6 +277,7 @@ jQuery.noConflict();
                 filterOrders({ page: 1 });
             }, 500),
         );
+
         //phần phân trang để chung ở dưới
 
 

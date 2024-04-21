@@ -88,11 +88,19 @@ class OrderController extends Controller
             $orders = Order::query()->where('order_id', 'LIKE', '%' . $search . '%')->whereDate('created_at', '<=' , $day_last);
         }
 
-        if($is_sort_choose == 'false'){
+        if($is_sort_choose == 'created_first'){
             $orders = $orders->orderBy('created_at','asc')->paginate(5);
-        } else {
+        }
+        if($is_sort_choose == 'created_last') {
             $orders = $orders->orderBy('created_at','desc')->paginate(5);
         }
+        if($is_sort_choose == 'lowest_price'){
+            $orders = $orders->orderBy('total_price','asc')->paginate(5);
+        }
+        if($is_sort_choose == 'highest_price'){
+            $orders = $orders->orderBy('total_price','desc')->paginate(5);
+        }
+
 
 
         foreach( $orders as $order ) {

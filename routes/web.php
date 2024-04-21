@@ -116,7 +116,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/brands/pagination', [BrandController::class, 'brands_pagination'])->name('brands.search');
     Route::post('/admin/brands/create', [BrandController::class, 'brand_create'])->name('brands.create');
     Route::put('/admin/brands/update', [BrandController::class, 'brand_update'])->name('brands.edit');
-    
+
     //supplier
     Route::get('/admin/suppliers', [SupplierController::class, 'supplier_ui'])->name('suppliers.index');
     Route::get('/admin/suppliers/pagination', [SupplierController::class, 'supplier_pagination'])->name('suppliers.search');
