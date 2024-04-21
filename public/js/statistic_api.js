@@ -13,7 +13,7 @@ jQuery.noConflict();
             data: formData,
             success: function (response) {
                 console.log({ response });
-                window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic'), {
+                window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic-2'), {
                     chart: {
                       type: "line",
                       fontFamily: 'inherit',
@@ -118,7 +118,7 @@ jQuery.noConflict();
         type: 'GET',
         success: function (response) {
           console.log(response);
-          window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic-2'), {
+          window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic'), {
             chart: {
               type: "line",
               fontFamily: 'inherit',
