@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="collapse navbar-collapse" id="sidebar-menu">
-            <ul class="navbar-nav pt-lg-3 ">
+            <ul class="custom-navbar-nav navbar-nav pt-lg-3 ">
                 <li class="nav-item">
                     <a class="nav-link" href="/">
                         <span
