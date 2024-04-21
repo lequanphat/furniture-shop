@@ -1,14 +1,60 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        const data_asset = $('#asset').attr('data-asset');
-        $('#js-create-brand-btn').click(() => {
-            $('#createEmployeeModal').modal('show');
+        function createBrandElement({ brand, can_update = false, can_delete = false }) {
+            const newTag = brand.new
+                ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>'
+                : '';
+            const update_action = can_update
+                ? `<button type="button" class="js-update-brand-btn btn  mr-2 px-2 py-1"
+                data-bs-toggle="modal" data-bs-target="#UpdateBrandModal"
+                data-brand-id="${brand.brand_id}" data-name="${brand.brand_id}"
+                data-description="   ${brand.description}"
+                data-index="${brand.index}"
+                data-parent-id="${brand.parent_id}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
+            </button>`
+                : '';
+            const delete_action = can_delete
+                ? `<a href="#" class="btn p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 7l16 0" />
+                    <path d="M10 11l0 6" />
+                    <path d="M14 11l0 6" />
+                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                </svg>
+            </a>`
+                : '';
+            return `<td>${brand.brand_id}</td>
+                <td>${brand.name} ${newTag}</td>
+                <td>
+                ${brand.description}
+                </td>
+                <td>${brand.index}</td>
+                <td>
+                ${update_action}
+                ${delete_action}
+                </td>`;
+        }
+        $('#brand-modal').on('show.bs.modal', function (event) {
             $('#create-brand-form')[0].reset();
-            // $('#create_category_response').html('');
-            // $('#create_category_response').removeClass('alert-success alert-danger');
         });
-        
+
         $('#create-brand-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
@@ -19,31 +65,22 @@ jQuery.noConflict();
                 success: function (response) {
                     console.log(response);
                     $('#create_brand_response').removeClass('alert-danger');
+                    $('#create_brand_response').removeClass('d-none');
                     $('#create_brand_response').addClass('alert-success');
                     $('#create_brand_response').html(response.message);
+                    response.brand.new = true;
                     $('#brand-table').append(`
-                    <tr>
-                    <td>${response.brand.brand_id }</td>
-                    <td>${response.brand.name }</td>
-                    <td>
-                    ${response.brand.description }
-                    </td>
-                    <td>${response.brand.index }</td>
-                    <td>
-                        <button type="button" class="js-update-brand-btn btn  mr-2 px-2 py-1"
-                            data-bs-toggle="modal" data-bs-target="#UpdateBrandModal"
-                            data-brand-id="${response.brand.brand_id }" data-name="${response.brand.brand_id }"
-                            data-description="   ${response.brand.description }"
-                            data-index="${response.brand.index }"
-                            data-parent-id="${response.brand.parent_id }">
-                            <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                        </button>
-                    </td>`
-            )},
+                    <tr>${createBrandElement({
+                        brand: response.brand,
+                        can_update: response.can_update,
+                        can_delete: response.can_delete,
+                    })}</tr>`);
+                },
                 error: function (error) {
                     console.log(error);
                     $('#create_brand_response').removeClass('alert-success');
                     $('#create_brand_response').addClass('alert-danger');
+                    $('#create_brand_response').removeClass('d-none');
                     $('#create_brand_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
@@ -76,65 +113,33 @@ jQuery.noConflict();
                     console.log({ response });
                     // Handle the success response
                     $('#update_brand_response').removeClass('alert-danger');
+                    $('#update_brand_response').removeClass('d-none');
                     $('#update_brand_response').addClass('alert-success');
                     $('#update_brand_response').html(response.message);
                     var row = $('#brand-table tr').filter(function () {
                         return $(this).find('td:first').text() == response.brand.brand_id;
                     });
-                    if (row)
-                    {
-                        row.html(`
-                        <tr>
-                        <td>${response.brand.brand_id }</td>
-    
-                        <td>${response.brand.name }</td>
-                        <td>
-                        ${response.brand.description }
-                        </td>
-                        <td>${response.brand.index }</td>
-                        <td>
-                            <button type="button" class="js-update-brand-btn btn  mr-2 px-2 py-1"
-                                data-bs-toggle="modal" data-bs-target="#UpdateBrandModal"
-                                data-brand-id="${response.brand.brand_id }" data-name="${response.brand.brand_id }"
-                                data-description="   ${response.brand.description }"
-                                data-index="${response.brand.index }"
-                                data-parent-id="${response.brand.parent_id }">
-                                <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                            </button>
-                        </td>`)
+                    if (row) {
+                        row.html(
+                            createBrandElement({
+                                brand: response.brand,
+                                can_update: response.can_update,
+                                can_delete: response.can_delete,
+                            }),
+                        );
                     }
                 },
                 error: function (error) {
                     console.log({ error });
                     // Handle the error response
+                    $('#update_brand_response').removeClass('d-none');
                     $('#update_brand_response').removeClass('alert-success');
                     $('#update_brand_response').addClass('alert-danger');
-                    // $('#update_brand_response').html(Object.values(error.responseJSON.errors)[0][0]);
+                    $('#update_brand_response').html(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });
 
-        function createBrandElement(brand) {
-            return `   <tr>
-            <td>${brand.brand_id }</td>
-
-            <td>${brand.name }</td>
-            <td>
-            ${brand.description }
-            </td>
-            <td>${brand.index }</td>
-            <td>
-                <button type="button" class="js-update-brand-btn btn  mr-2 px-2 py-1"
-                    data-bs-toggle="modal" data-bs-target="#UpdateBrandModal"
-                    data-brand-id="${brand.brand_id }" data-name="${brand.brand_id }"
-                    data-description="   ${brand.description }"
-                    data-index="${brand.index }"
-                    data-parent-id="${brand.parent_id }">
-                    <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                </button>
-            </td>`;
-        }
-        
         function BrandPagination({ page }) {
             const search = $('#search-brand-input').val();
             history.pushState(null, null, `/admin/brands?page=${page}&search=${search}`);
@@ -145,7 +150,11 @@ jQuery.noConflict();
                 success: function (response) {
                     let html = '';
                     response.brands.data.forEach((brand) => {
-                        html += createBrandElement(brand);
+                        html += `<tr>${createBrandElement({
+                            brand,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        })}</tr>`;
                     });
                     $('#brand-table').html(html);
                     renderPagination({
@@ -224,4 +233,4 @@ jQuery.noConflict();
             $('.pagination').html(pagination);
         }
     });
-})(jQuery); 
+})(jQuery);

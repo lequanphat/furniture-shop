@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="customer_id" class="form-label">Advanced select</label>
+                                    <label for="customer_id" class="form-label">Receiver Account</label>
                                     <select id="customer_id" name="customer_id" type="text" class="form-select">
                                         <option value="-1" selected>Không
                                         </option>

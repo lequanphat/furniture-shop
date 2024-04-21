@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class
-Order extends Model
+class Order extends Model
 {
     use HasFactory;
     protected $table = 'orders';
@@ -48,11 +47,13 @@ Order extends Model
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
-    public function howmanydaysago(){
-        return $this->created_at->diffForHumans(Carbon::now());
+    public function howmanydaysago()
+    {
+        return Carbon::parse($this->created_at)->diffForHumans();
     }
-    public function money_type(){
-        $money = number_format( $this->total_price, 0, '.', ',');
+    public function money_type()
+    {
+        $money = number_format($this->total_price, 0, '.', ',');
         return $money;
     }
 }

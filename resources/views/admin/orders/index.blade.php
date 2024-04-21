@@ -21,25 +21,10 @@
                 <div class="col-auto ms-auto d-print-none">
 
                     <div class="row justify-content-end">
-                        <div class="col-2">
-                            <select id="sort_by_last" name="sort_by_last" class="form-select">
-                                <option value="created_first" selected>Thời gian đơn được tạo</option>
-                                <option value="created_last">Đơn được tạo gần đây</option>
-                                <option value="highest_price">Tổng giá cao nhất</option>
-                                <option value="lowest_price">Tổng giá thấp nhất</option>
-                            </select>
-                        </div>
-                        <div class="col-4 row ">
-                            <div class="col-6"><input id="day_first" name="day_first" class="col-6 form-control"
-                                    type="date"></div>
-                            <div class="col-6"><input id="day_last" name="day_last" class="col-6 form-control"
-                                    type="date"></div>
-
-                        </div>
                         <div class="col-3">
                             <div class="input-icon ">
-                                <input id="search-orders" name="search" type="text" value="" class="form-control"
-                                    placeholder="Search…" autocomplete="off">
+                                <input id="search-orders" name="search" type="text" class="form-control"
+                                    placeholder="Search…" autocomplete="off" value="{{ $search }}">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -52,17 +37,53 @@
                             </div>
                         </div>
 
-                        <div class="col-auto"><a href="#" class="btn btn-primary d-none d-sm-inline-block"
-                                data-bs-toggle="modal" data-bs-target="#order-modal">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                        <div class="col-4 row ">
+                            <div class="col-6">
+                                <input id="day_first" name="day_first" class="col-6 form-control" type="date"
+                                    value="{{ $dayfirst }}" title="Start date">
+                            </div>
+                            <div class="col-6">
+                                <input id="day_last" name="day_last" class="col-6 form-control" type="date"
+                                    value="{{ $daylast }}" title="End date">
+                            </div>
+
+                        </div>
+
+                        <div class="col-2">
+                            <select id="type" name="type" class="form-select" title="Choose type">
+                                <option value="all" @if ($type == 'all') selected @endif>All</option>
+                                <option value="0" @if ($type == '0') selected @endif>Unconfirm</option>
+                                <option value="1" @if ($type == '1') selected @endif>Confirmed</option>
+                                <option value="2" @if ($type == '2') selected @endif>In transit</option>
+                                <option value="3" @if ($type == '3') selected @endif>Delivered</option>
+                                <option value="4" @if ($type == '4') selected @endif>Canceled</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <select id="sort_by_last" name="sort_by_last" class="form-select" title="Sort">
+                                <option value="oldest" @if ($sort == 'oldest') selected @endif>Oldest Orders
+                                </option>
+                                <option value="latest" @if ($sort == 'latest') selected @endif>Latest Orders
+                                </option>
+                                <option value="price_asc" @if ($sort == 'price_asc') selected @endif>Price ascending
+                                </option>
+                                <option value="price_desc" @if ($sort == 'price_desc') selected @endif>Price
+                                    descending</option>
+                            </select>
+                        </div>
+
+                        <div class="col-auto">
+                            <a href="#" class="btn btn-primary w-100 btn-icon" data-bs-toggle="modal"
+                                data-bs-target="#order-modal" title="Create new order">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon " width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M12 5l0 14" />
                                     <path d="M5 12l14 0" />
                                 </svg>
-                                Create new order
-                            </a></div>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <!-- End Page actions -->
@@ -152,7 +173,15 @@
                                             <td>
                                                 <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"
                                                     title="Details">
-                                                    <img src="{{ asset('svg/view.svg') }}" style="width: 18px;" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                        <path
+                                                            d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                    </svg>
                                                 </a>
                                                 <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
                                                     title="Update" data-bs-toggle="modal"
@@ -166,7 +195,14 @@
                                                     data-phone-number="{{ $order->phone_number }}"
                                                     data-customer-id="{{ $order->customer_id }}"
                                                     data-created-by="{{ $order->created_by }}">
-                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                                        <path d="M13.5 6.5l4 4" />
+                                                    </svg>
                                                 </button>
                                             </td>
                                         </tr>
