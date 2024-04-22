@@ -21,6 +21,7 @@
                 <div class="col-auto ms-auto d-print-none">
 
                     <div class="row justify-content-end">
+
                         <div class="col-3">
                             <div class="input-icon ">
                                 <input id="search-orders" name="search" type="text" class="form-control"
