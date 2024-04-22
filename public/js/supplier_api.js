@@ -138,16 +138,84 @@ jQuery.noConflict();
             <td>
                 <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
                     data-bs-toggle="modal" data-bs-target="#UpdateSupplierModal"
-                    data-supplier-id="${supplier.supplier_id}<"
+                    data-supplier-id="${supplier.supplier_id}"
                     data-name="${supplier.name }}"
                     data-description=" ${supplier.description }"
                     data-address="${supplier.address }"
                     data-phone-number="${supplier.phone_number }">
                     <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                 </button>
-
+                <button data-bs-toggle="modal" data-bs-target="#delete-confirm-modal" data-supplier-id="${supplier.supplier_id}" class="btn p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 7l16 0" />
+                    <path d="M10 11l0 6" />
+                    <path d="M14 11l0 6" />
+                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                </svg>
+            </button>
             </td>`;
         }
+        $('#delete-confirm-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var supplier_Id = button.data('supplier-id');
+            $(this)
+                .find('.modal-description')
+                .html(`If deleted, this brand will no longer be visible to users.`);
+            $(this).find('#confirm-btn').data('supplier-id', supplier_Id);
+            $(this).find('#confirm-btn').text('Yes, delete this supplier');
+        });
+        $('#delete-confirm-modal').on('click', '#confirm-btn', function (e) {
+            var supplier_id = $(this).data('supplier-id');
+            $.ajax({
+               headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: `/admin/suppliers/${supplier_id}/delete`,
+                type: 'DELETE',
+                success: function (response) {
+                    var row = $('#supplier-table tr').filter(function () {
+                        return $(this).find('td:first').text() == response.supplier.supplier_id;
+                    });
+                    if (row) {
+                        row.html(``
+                        );
+                    }
+                    // show success modal
+                    $('#success-notify-modal').addClass('show');
+                    $('#success-notify-modal').attr('style', 'display: block;');
+                    $('#success-notify-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#success-title').html('Deleted Supplier Successfully');
+                    $('#success-desc').html('This Supplier can not be able to access.');
+                },
+                error: function (error) {
+                    console.log(Object.values(error.responseJSON.errors)[0][0]);
+                    $('#error-delete-modal').addClass('show');
+                    $('#error-delete-modal').attr('style', 'display: block;');
+                    $('#error-delete-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#error-message').text(Object.values(error.responseJSON.errors)[0][0]);
+                },
+            });
+        });
+        $('.js-close-error-modal').click(function () {
+            $('#error-message').removeClass('show');
+            $('#error-message').attr('style', 'display: none;');
+            $('#error-message').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
+        });
+        $('.js-close-success-modal').click(function () {
+            $('#success-notify-modal').removeClass('show');
+            $('#success-notify-modal').attr('style', 'display: none;');
+            $('#success-notify-modal').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
+        });
     function SupplierPagination({ page }) {
         const search = $('#search-supplier-input').val();
         history.pushState(null, null, `/admin/suppliers?page=${page}&search=${search}`);
