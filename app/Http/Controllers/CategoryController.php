@@ -18,7 +18,13 @@ class CategoryController extends Controller
         ];
         return view('admin.categories.index', $data);
     }
-
+    public function getAll()
+    {
+        $categories= Category::with('parent')->get();
+        return response()->json(
+            ['categories' => $categories],
+        );
+    }
 
     public function create(CreateCategory $request)
     {

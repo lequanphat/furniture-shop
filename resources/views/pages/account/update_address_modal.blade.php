@@ -11,7 +11,7 @@
                 <form id="update-address-form" action="#" method="dialog">
                     @csrf
                     <div class="mb-3 row">
-                    <input type="text" class="form-control" id="address_id" name="address_id" readonly>
+                    <input type="text" class="form-control d-none" id="address_id" name="address_id" readonly>
                         <div class="col-md-6">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="receiver_name" name="receiver_name" required>
