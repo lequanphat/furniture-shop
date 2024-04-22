@@ -43,8 +43,10 @@
             <div class="form-footer mt-2">
                 <button type="submit" class="btn btn-success w-100">Create new account</button>
             </div>
+
         </div>
     </form>
+
     <div class="text-center text-muted mt-3">
         Already have account? <a href="/login" tabindex="-1">Sign in</a>
     </div>

@@ -8,6 +8,7 @@
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
+        "laravel/socialite": "^5.13",
         "laravel/tinker": "^2.8",
         "laravelcollective/html": "^6.4",
         "livewire/livewire": "^3.4",
