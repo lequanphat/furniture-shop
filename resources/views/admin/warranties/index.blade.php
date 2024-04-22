@@ -65,12 +65,12 @@
                         {{-- sort theo khác --}}
                         <div class="col-2">
                             <select id="sort_by" name="sort_by" class="form-select" title="Sort">
-                                <option value="oldest_warrant" selected>Oldest created</option>
-                                <option value="latest_warrant" >Latest created</option>
-                                <option value="longest_warrant" >Longest warrant time</option>
-                                <option value="shorted_warrant" >Shortest warrant time</option>
-                                <option value="sort_by_order" >Sort by order</option>
-                                <option value="sort_by_product" >Sort by product</option>
+                                <option value="oldest_warrant" @if ($sort == 'oldest_warrant') selected @endif>Oldest created</option>
+                                <option value="latest_warrant" @if ($sort == 'latest_warrant') selected @endif>Latest created</option>
+                                <option value="longest_warrant" @if ($sort == 'longest_warrant') selected @endif>Longest warrant time</option>
+                                <option value="shorted_warrant" @if ($sort == 'shorted_warrant') selected @endif>Shortest warrant time</option>
+                                <option value="sort_by_order" @if ($sort == 'sort_by_order') selected @endif>Sort by order</option>
+                                <option value="sort_by_product" @if ($sort == 'sort_by_product') selected @endif>Sort by product</option>
                             </select>
                         </div>
 
