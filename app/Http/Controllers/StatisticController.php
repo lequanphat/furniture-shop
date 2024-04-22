@@ -10,61 +10,90 @@ use Illuminate\Support\Facades\DB;
 
 class StatisticController extends Controller
 {
+
     //
     private $sqlDateFormat='Y-m-d';
     private $DateFormat='d-m-Y';
+    public function statistic_ui(Request $request)
+    {
+
+        $data = [
+            'page' => 'Statistic',
+        ];
+        return view('admin.statistics.statistics', $data);
+    }
+    public function overviewLast7day()
+    {
+        $solds=[];
+        $orders=[];
+        $revenues=[];
+        $dates=[]; 
+        for ($i = 7; $i >= 0; $i--) {
+            $time=now()->subDays($i);
+            $sold=OrderDetail::whereDate('created_at',$time)->sum('quantities');
+            $order=Order::whereDate('created_at',$time)->get()->count();
+            $date=now()->subDays(($i));
+            $revenue=Order::whereDate('created_at',$time)->sum('total_price');
+            array_push($orders,$order);
+            array_push($revenues,$revenue);
+            array_push($solds,$sold);
+            array_push($dates,$date);
+          }
+        return response()->json(
+            [
+                'solds'=>$solds,
+                'orders'=>$orders,
+                'revenues'=>$revenues,
+                'labels'=>$dates,
+            ]
+        ) ;
+        
+        
+
+    }
     public function RevenueDateByDate(Request $request)
     {
-        $category = request()->input('category');//All or id category
-        $start = request()->input('date_Start');
-        $end = request()->input('date_End');
-        
-        $startDate=Carbon::parse($start)->format($this->sqlDateFormat);
-        $endDate=Carbon::parse($end)->format($this->sqlDateFormat);
-
-
-        $label="Revenue from " +Carbon::parse($start)->format($this->DateFormat) +" to " +Carbon::parse($end)->format($this->DateFormat);
-        if($category=='All')
+        $category = request()->input('category_id');//All or id category
+        $start =Carbon::parse(request()->input('start-date'));
+        $end = Carbon::parse(request()->input('end-date'));
+        if($start>$end)
         {
-            
-            $query = DB::table('order_details as od')
-            ->select(DB::raw('DATE(o.created_at) as label'), DB::raw('SUM(quantities * unit_price) as value'))
-            ->join('orders as o', 'o.order_id', '=', 'od.order_id')
-            ->where('o.is_paid', 1)
-            ->whereBetween('o.created_at', [$startDate, $endDate])
-            ->groupBy('label')
-            ->orderBy('label','asc');
+            return response()->json(['errors' => ['message' => ['Can not statistic when start day > end day']]], 400);
         }
-        else
+        $current=$start;
+        $days=[];
+        $revenues=[];
+        $quantities=[];
+        while ($current<=$end)
         {
-            $query = DB::table('order_details as od')
-            ->select(DB::raw('DATE(o.created_at) as label'), DB::raw('SUM(quantities * unit_price) as value'))
-            ->join('orders as o', 'o.order_id', '=', 'od.order_id')
-            ->whereIn('od.sku', function ($query) {
-                $query->select('sku')
-                    ->from('product_details')
-                    ->whereIn('product_id', function ($query) {
-                        $query->select('product_id')
-                            ->from('products as p')
-                            ->join('categories as c', 'p.category_id', '=', 'c.category_id')
-                            ->join('categories as cp', 'c.category_id', '=', 'cp.category_id')
-                            ->where('c.category_id',request()->input('category'))
-                            ->orWhere('cp.category_id',request()->input('category'))
-                            ->groupBy('product_id',);
-                    });
-            })
-            ->where('o.is_paid', 1)
-            ->whereBetween('o.created_at', [$startDate, $endDate])
-            ->groupBy('label')
-            ->orderBy('label','asc');
+            if($category==-1)
+            {
+                $query=OrderDetail::whereDate('created_at',$current->format($this->sqlDateFormat));
+                $quantity=$query->sum('quantities');
+                $revenue = $quantity*$query->average('unit_price');
+                array_push($revenues,$revenue);
+                array_push($quantities,$quantity);
+                array_push($days,$current);
+            }
+            else
+            {
+                $query=OrderDetail::with('detailed_product.product.category.parent')->whereDate('created_at',$current->format($this->sqlDateFormat))
+                ->where('detailed_product.product.category.category_id', $category);
+                $quantity=$query->sum('quantities');
+                $revenue = $quantity*$query->average('unit_price');
+                array_push($revenues,$revenue);
+                array_push($quantities,$quantity);
+                array_push($days,$current);
+            }
+            $current=$current->addDay();
         }
-
-        $results = $query->get();
-        return response()->json([
-            'labels' => $results->pluck('label'),
-            'data'=> $results->pluck('value'),
-            'label'=> $label
-        ]);
+        return response()->json(
+            [
+                'labels'=>$days,
+                'solds'=>$quantities,
+                'revenues'=>$revenues,
+            ]
+        ) ;
     } 
     
 }

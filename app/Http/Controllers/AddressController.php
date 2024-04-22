@@ -64,4 +64,14 @@ class AddressController extends Controller
         }
         return ['message' => 'Created address  successfully!', 'address' => $address];
     }
+    public function remove_address(Request $request)
+    {
+        $address_id = $request->input('address_id');
+        $address = Address::where('address_id', $address_id)->first();
+        if ($address->is_default==1) {
+            return response()->json(['errors' => ['message' => ['Can not delete when this address is default.']]], 400);
+        }
+        $address->delete();
+        return ['message' => 'Deleted address card successfully!','address_id'=>$address_id];
+    }
 }

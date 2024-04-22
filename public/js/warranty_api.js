@@ -99,14 +99,110 @@ jQuery.noConflict();
             };
         }
 
+        //hàm phân trang
+        function renderPagination({ current_page, last_page }) {
+            //thanh phân trang dưới cùng, copy đổi tên biến đã trả từ controller search_warranties_ajax là đc
+            let pagination = `<li class="page-item ${current_page === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page - 1}">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg>
+                prev
+            </a>
+        </li>`;
+
+            for (let i = 0; i < last_page; i++) {
+                pagination += `
+                    <li class="page-item ${current_page === i + 1 ? 'active mx-1' : ''}">
+                        <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
+                    </li>`;
+            }
+            pagination += `<li class="page-item ${current_page === last_page ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${current_page + 1}">
+                next
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </a>
+        </li>`;
+            $('.pagination').html(pagination); //sửa lại thanh pagination ở index
+        }
+
+        //hàm tạo đối tượng để add vào bảng
+        function createWarrantyElement({ warranty }){
+            let status = '';//tính giờ gian status còn bảo hành ko
+            switch (warranty.is_active){
+                case false:
+                    status = '<span class="badge bg-red-lt">Not within</span>';
+                    break;
+                case true:
+                    status = '<span class="badge bg-green-lt">Still on</span>';
+                    break;
+                default:
+                    status = 'error';
+                    break;
+            }
+
+            const update_button = `
+            <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
+                title="Update" data-bs-toggle="modal" data-bs-target="#UpdateWarrantyModal"
+                data-warranty-id="${warranty.warranty_id}"
+                data-order-id="${warranty.order_id }"
+                data-sku="${warranty.sku }"
+                data-start-date="${warranty.start_date }"
+                data-description="${warranty.description}">
+                <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
+            </button>
+            `;
+            return `
+                <td>${warranty.warranty_id}</td>
+                <td>${warranty.order_id }</td>
+                <td>${warranty.sku }</td>
+                <td>${warranty.start_date }</td>
+                <td>${warranty.end_date }</td>
+                <td>${warranty.description}</td>
+                <td>${warranty.product_detail.warranty_month} months</td>
+                <td>${status}</td>
+                <td>${update_button}</td>
+            `;
+        }
+
 
         // filter cho bảng, phần này load lại bảng với phần dữ liệu được trả về từ controller search_warranties_ajax
         const filterWarranties = ({ page }) => {
-            const search = $('#search-warranties').val();    //lấy value từ ô tìm kiếm bên index của warranties
+            const search = $('#search-warranties').val();           //lấy value từ ô tìm kiếm bên index của warranties
+            const search_day_first = $('#search_day_first').val();  //lấy ngày đầu kiếm order trong 1 khoảng thời gian
+            const search_day_last = $('#search_day_last').val();    //lấy ngày cuối kiếm order trong 1 khoảng thời gian
+            const status_type = $('#status_type').val();            //lấy trạng thái trong hạn bảo hành hay không
+            const sort_by = $('#sort_by').val();                    //sắp xếp lại
+
+            history.pushState(  //đẩy giá trị lên thanh địa chỉ
+                null,
+                null,
+                `/admin/warranties/search?search=${search}&searchdayfirst=${search_day_first}&searchdaylast=${search_day_last}&statustype=${status_type}&sortby=${sort_by}&page=${page}`,
+            );
+
             if (!page) {
                 page = 1;
             }
-            const url = `/admin/warranties/search?search=${search}&page=${page}`; //url để tìm kiếm, lấy từ route /admin/warranties/search
+
+            //url để tìm kiếm, lấy từ route /admin/warranties/search
+            const url = `/admin/warranties/search?search=${search}&searchdayfirst=${search_day_first}&searchdaylast=${search_day_last}&statustype=${status_type}&sortby=${sort_by}&page=${page}`;
 
 
             $.ajax({
@@ -118,94 +214,24 @@ jQuery.noConflict();
 
                     let html = '';//khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ warranties
                     for(let item of response.warranties.data){ //từ bên controller search_warranties_ajax qua
-
-                        //tính ngày làm status
-                        let statusSpan;
-                        if (item.is_active) {
-                            statusSpan = '<span class="badge bg-green-lt">Still on</span>';
-                        } else {
-                            statusSpan = '<span class="badge bg-red-lt">Not within</span>';
-                        }
-
-
-                        //phần này copy từ tbody ở index qua
-                        html+=`
-                        <tr>
-                            <td>${item.warranty_id}</td>
-                            <td>${item.order_id }</td>
-                            <td>${item.sku }</td>
-                            <td>${item.start_date }</td>
-                            <td>${item.end_date }</td>
-                            <td>${item.description}</td>
-                            <td>${item.product_detail.warranty_month} months</td>
-                            <td>${statusSpan}</td>
-                            <td>
-                                <!--nút sửa-->
-                                <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
-                                    title="Update" data-bs-toggle="modal" data-bs-target="#UpdateWarrantyModal"
-                                    data-warranty-id="${item.warranty_id}"
-                                    data-order-id="${item.order_id }"
-                                    data-sku="${item.sku }"
-                                    data-start-date="${item.start_date }"
-                                    data-description="${item.description}">
-                                    <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                                </button>
-                            </td>
-                        </tr>`
+                        // let statusSpan;
+                        // if (item.is_active) {
+                        //     statusSpan = '<span class="badge bg-green-lt">Still on</span>';
+                        // } else {
+                        //     statusSpan = '<span class="badge bg-red-lt">Not within</span>';
+                        // }
+                        html+=`<tr>${createWarrantyElement({ warranty : item })}</tr>`;
                     }
                     $('#warranties-list').html(html); //rồi đặt lại bảng bằng dữ liệu đã được filter ra
 
-                    //thanh phân trang dưới cùng, copy đổi tên biến đã trả từ controller search_warranties_ajax là đc
-                    let pagination = `<li class="page-item ${
-                        response.warranties.current_page === 1 ? 'disabled' : ''
-                    }">
-                        <a class="page-link" href="#" data-page="${response.warranties.current_page - 1}">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="icon"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                fill="none"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            >
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M15 6l-6 6l6 6" />
-                            </svg>
-                            prev
-                        </a>
-                    </li>`;
-
-                    for (let i = 0; i < response.warranties.last_page; i++) {
-                        pagination += `
-                            <li class="page-item ${
-                                response.warranties.current_page === i + 1 ? 'active mx-1' : ''
-                            }">
-                                <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
-                            </li>`;
-                    }
-
-                    pagination += `<li class="page-item ${
-                        response.warranties.current_page === response.warranties.last_page
-                            ? 'disabled'
-                            : ''
-                    }">
-                        <a class="page-link" href="#" data-page="${response.warranties.current_page + 1}">
-                            next
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M9 6l6 6l-6 6" />
-                            </svg>
-                        </a>
-                    </li>`;
-                    $('.pagination').html(pagination);//sửa lại thanh pagination ở index
+                    // hàm phân trang render pagination here
+                    renderPagination({
+                        current_page: response.warranties.current_page,
+                        last_page: response.warranties.last_page,
+                    });
                 },
                 error: function (error) {
+                    alert('error')
                     console.log(error);
                 },
             });
@@ -213,6 +239,30 @@ jQuery.noConflict();
 
         // search filter
         $('#search-warranties').on(
+            'input',
+            debounce(function () {
+                filterWarranties({ page: 1 });
+            }, 500),
+        );
+        $('#search_day_first').on(
+            'input',
+            debounce(function () {
+                filterWarranties({ page: 1 });
+            }, 500),
+        );
+        $('#search_day_last').on(
+            'input',
+            debounce(function () {
+                filterWarranties({ page: 1 });
+            }, 500),
+        );
+        $('#status_type').on(
+            'input',
+            debounce(function () {
+                filterWarranties({ page: 1 });
+            }, 500),
+        );
+        $('#sort_by').on(
             'input',
             debounce(function () {
                 filterWarranties({ page: 1 });

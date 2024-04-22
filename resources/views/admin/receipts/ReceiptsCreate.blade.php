@@ -13,31 +13,31 @@
                         <div class="row row-cards">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="receiver_name" class="form-label">Receiving Report ID</label>
-                                    <input id="receiver_name" name="receiver_name" type="text" class="form-control"
+                                    <label for="receiving_report_id" class="form-label">Receiving Report ID</label>
+                                    <input id="receiving_report_id" name="receiving_report_id" type="text" class="form-control"
                                            placeholder="Enter name" value="" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="phone_number" class="form-label"> total Price</label>
-                                    <input id="phone_number" name="phone_number" type="tel" class="form-control"
-                                           placeholder="Enter phone number" value="" required>
+                                    <label for="" class="form-label"> total Price</label>
+                                    <input id="total_price" name="total_price" type="tel" class="form-control"
+                                           placeholder="" value="total_price" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="address" class="form-label"> Created By</label>
-                                    <input id="address" name="address" type="text" class="form-control"
-                                           placeholder="Enter address" value="" required>
+                                    <label for="createdBy" class="form-label"> Created By</label>
+                                    <input id="createdBy" name="createdBy" type="text" class="form-control"
+                                         value="" required>
                                 </div>
                             </div>
 
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="customer_id" class="form-label">Supplier ID</label>
-                                    <select id="customer_id" name="customer_id" type="text" class="form-select">
+                                    <label for="" class="form-label">Supplier ID</label>
+                                    <select id="supplier_id" name="supplier_id" type="text" class="form-select">
                                         <option value="-1" selected>Không
                                         </option>
                                         @foreach ($supplier as $spl)
