@@ -1,8 +1,6 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        const data_asset = $('#asset').attr('data-asset');
-
         // create role
         function createRoleElement({ role, can_update, can_delete }) {
             const newTag = role.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
@@ -23,8 +21,10 @@ jQuery.noConflict();
             </a>`
                 : '';
             const delete_action = can_delete
-                ? `<a href="#" class="js-delete-tag btn p-2"
-                data-role-id="${role.id}">
+                ? `<a href="#" class="btn p-2"
+                data-role-id="${role.id}" 
+                data-role-name="${role.name}" data-bs-toggle="modal"
+                data-bs-target="#delete-confirm-modal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -408,6 +408,56 @@ jQuery.noConflict();
         // select sort
         $('#select-authorization-type').change(function () {
             authorizationPagination({ page: 1 });
+        });
+
+        // delete role
+        $('#delete-confirm-modal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget);
+            var role_id = button.data('role-id');
+            var role_name = button.data('role-name');
+            console.log('====================================');
+            console.log(role_id);
+            console.log('====================================');
+            $(this).find('.modal-description').html(`Do you want to delete role <strong>${role_name}</strong> ?`);
+            $(this).find('#confirm-btn').text('Yes, delete this role');
+            $(this).find('#confirm-btn').data('role-id', role_id);
+        });
+
+        $(document).on('click', '#delete-confirm-modal #confirm-btn', function (e) {
+            var role_id = $(this).data('role-id');
+            console.log('====================================');
+            console.log(role_id);
+            console.log('====================================');
+            $.ajax({
+                url: `/admin/roles/${role_id}`,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (data) {
+                    $('#roles-table-body tr td')
+                        .filter(function () {
+                            return $(this).text() == role_id;
+                        })
+                        .closest('tr')
+                        .remove();
+                },
+                error: function (error) {
+                    console.log(error);
+                    $('#error-delete-modal').addClass('show');
+                    $('#error-delete-modal').attr('style', 'display: block;');
+                    $('#error-delete-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#error-message').html(Object.values(error.responseJSON.errors)[0][0]);
+                },
+            });
+        });
+        //  close error modal
+        $('.js-close-error-modal').click(function () {
+            $('#error-delete-modal').removeClass('show');
+            $('#error-delete-modal').attr('style', 'display: none;');
+            $('#error-delete-modal').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
         });
     });
 })(jQuery);

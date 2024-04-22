@@ -8,17 +8,17 @@ jQuery.noConflict();
         $('#login-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
+            $('#loading').removeClass('d-none');
             $.ajax({
                 url: '/login',
                 method: 'POST',
                 data: formData,
                 success: function (response) {
+                    $('#loading').addClass('d-none');
                     window.location.href = '/';
                 },
                 error: function (error) {
-                    console.log('====================================');
-                    console.log(error);
-                    console.log('====================================');
+                    $('#loading').addClass('d-none');
                     $('#js-login-error').removeClass('d-none');
                     $('#js-login-error').html('*' + Object.values(error.responseJSON.errors)[0][0]);
                 },
@@ -32,14 +32,18 @@ jQuery.noConflict();
         $('#register-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
+
+            $('#loading').removeClass('d-none');
             $.ajax({
                 url: '/register',
                 method: 'POST',
                 data: formData,
                 success: function (response) {
                     window.location.href = '/account-verification/' + response.user_id;
+                    $('#loading').addClass('d-none');
                 },
                 error: function (error) {
+                    $('#loading').addClass('d-none');
                     $('#js-register-error').removeClass('d-none');
                     $('#js-register-error').html('*' + Object.values(error.responseJSON.errors)[0][0]);
                 },

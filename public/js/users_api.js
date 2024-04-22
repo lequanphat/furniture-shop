@@ -27,7 +27,7 @@ jQuery.noConflict();
             const delete_action = can_delete
                 ? user.is_active
                     ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
-                        data-bs-target="#delete-user-modal"
+                        data-bs-target="#delete-confirm-modal"
                         data-user-id="${user.user_id}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" viewBox="0 0 24 24" fill="none"
@@ -202,11 +202,14 @@ jQuery.noConflict();
         });
 
         // click delete employee
-        $('#delete-user-modal').on('show.bs.modal', function (event) {
+        $('#delete-confirm-modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var userId = button.data('user-id');
-            var modal = $(this);
-            modal.find('.modal-footer button.btn-danger').data('user-id', userId);
+            $(this)
+                .find('.modal-description')
+                .html(`If deleted, users will not be able to access the system, but data will still be stored.`);
+            $(this).find('#confirm-btn').data('user-id', userId);
+            $(this).find('#confirm-btn').text('Yes, delete this user');
         });
         // click restore employee
         $('#restore-user-modal').on('show.bs.modal', function (event) {
@@ -216,7 +219,7 @@ jQuery.noConflict();
             modal.find('.modal-footer button.btn').data('user-id', userId);
         });
         // delete user
-        $('#delete-user-modal').on('click', '.modal-footer button.btn-danger', function (e) {
+        $('#delete-confirm-modal').on('click', '#confirm-btn', function (e) {
             var userId = $(this).data('user-id');
             $.ajax({
                 headers: {
@@ -312,8 +315,6 @@ jQuery.noConflict();
             $('#success-notify-modal').attr('aria-hidden', 'true');
             $('.modal-backdrop.fade.show').remove();
         });
-
-        
 
         // user pagination
         function renderPagination({ current_page, last_page }) {

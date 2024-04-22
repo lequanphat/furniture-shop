@@ -108,6 +108,22 @@ class PermissionController extends Controller
         }
         return response()->json(['errors' => ['message' => ['The tag name have already existed.']]], 400);
     }
+    public function delete()
+    {
+        $role_id = request()->route('role_id');
+        $role = Role::find($role_id);
+        if ($role) {
+            if ($role->users()->count() > 0) {
+                return response()->json(['errors' => ['message' => ['This role is currently assigned to one or more users.']]], 400);
+            }
+            $role->syncPermissions([]);
+            $role->delete();
+            return response()->json([
+                'message' => 'Role deleted successfully',
+            ]);
+        }
+        return response()->json(['errors' => ['message' => ['Can not find this role.']]], 400);
+    }
     public function get_role()
     {
         $role_id = request()->route('role_id');

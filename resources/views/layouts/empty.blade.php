@@ -10,6 +10,7 @@
     <!-- CSS files -->
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('vendor/tabler/tabler.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <style>
         @import url('https://rsms.me/inter/inter.css');
 
@@ -24,6 +25,7 @@
 </head>
 
 <body class=" d-flex flex-column">
+    @include('auth.loading')
     <div class="page page-center">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
