@@ -45,8 +45,10 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // check user exists
-        $user = User::where('email', $request->input('email'))->where('is_active', true)->first();
+        $user = User::where('email', $request->input('email'))->first();
         if ($user) {
+            if ($user->is_active == false) return response()->json(['errors' => ['message' => ['This account is not active.']]], 400);
+            if ($user->is_verified == false) return response()->json(['errors' => ['message' => ['This account is not verified.']]], 400);
             // check password
             if (Hash::check($request->input('password'), $user->password)) {
                 if ($user->is_verified) {

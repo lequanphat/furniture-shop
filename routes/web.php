@@ -40,6 +40,14 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('forgot-password', [AuthController::class, 'forgot_password_ui']);
     Route::post('forgot-password', [AuthController::class, 'forgot_password']);
     Route::get('forgot-password-verification', [AuthController::class, 'forgot_password_verification_ui'])->where('id', '[0-9]+');;
+
+    // google login
+    Route::get('auth/google', 'App\Http\Controllers\GoogleController@redirectToGoogle')->name('google.login');
+    Route::get('auth/google/callback', 'App\Http\Controllers\GoogleController@handleGoogleCallback');
+
+    // facebook login
+    Route::get('auth/facebook', 'App\Http\Controllers\FacebookController@redirectToFacebook')->name('facebook.login');
+    Route::get('auth/facebook/callback', 'App\Http\Controllers\FacebookController@handleFacebookCallback');
 });
 
 Route::get('logout', [AuthController::class, 'logout']);
