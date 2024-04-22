@@ -106,8 +106,9 @@
                                                         </a>
                                                     @endcan
                                                     @can('delete role')
-                                                        <a href="#" class="js-delete-tag btn p-2"
-                                                            data-role-id="{{ $role->id }}">
+                                                        <a href="#" class="btn p-2" data-role-id="{{ $role->id }}"
+                                                            data-role-name="{{ $role->name }}" data-bs-toggle="modal"
+                                                            data-bs-target="#delete-confirm-modal">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                 height="24" viewBox="0 0 24 24" fill="none"
                                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -142,6 +143,8 @@
     {{-- Modal --}}
     @include('admin.permissions.create_role_modal')
     @include('admin.permissions.update_role_modal')
+    @include('admin.components.delete_confirm_modal')
+    @include('admin.components.error_delete_modal')
 
     {{-- Script --}}
     <script src="{{ asset('js/permission.js') }}" defer></script>

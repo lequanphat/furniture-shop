@@ -228,6 +228,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/roles', [PermissionController::class, 'create']);
     Route::patch('/admin/roles/{role_id}', [PermissionController::class, 'update']);
     Route::get('/admin/roles/{role_id}', [PermissionController::class, 'get_role']);
+    Route::delete('/admin/roles/{role_id}', [PermissionController::class, 'delete']);
 
 
     Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
