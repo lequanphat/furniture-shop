@@ -16,4 +16,8 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(ProductDetail::class, 'sku');
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }

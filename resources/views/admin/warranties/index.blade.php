@@ -19,46 +19,82 @@
 
 
 
-
-                {{--<form class="input-group col" action="{{ route('warranty.search') }}" method="GET">
-                    @if (isset($search))
-                        <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
-                            aria-label="Search" value="{{ $search }}">
-                        <input name="start_date" type="date" class="form-control" placeholder="choose" value="{{ $search_date }}">
-                    @else
-                        <input name="search" type="text" class="form-control form-control-sm" placeholder="Search by order ID"
-                            aria-label="Search">
-                        <input name="start_date" type="date" class="form-control" placeholder="Choose start date">
-                    @endif
-                    <button class="btn btn-primary btn-sm" type="submit">
-                        Search
-                    </button>
-                </form> --}}
-
-                {{-- thanh search --}}
-                <input id="search-warranties" name="search" type="text" value="" class="input-group col form-control" placeholder="Search by orderID ..." autocomplete="off">
-
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <!--Thanh công cụ-->
-                    <div class="row g-2">
+                    <div class="row justify-content-end">
+
+                        {{-- thanh search --}}
                         <div class="col-3">
+                            <div class="input-icon ">
+                                <input id="search-warranties" name="search" type="text" class="form-control" placeholder="Search..." autocomplete="off" value="{{ $search }}">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                        <path d="M21 21l-6 -6" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+
+                        {{-- lọc theo khoảng thời gian --}}
+                        <div class="col-4 row ">
+                            <div class="col-6">
+                                <input id="search_day_first" name="search_day_first" class="col-6 form-control" type="date"
+                                    value="{{ $searchdayfirst }}" title="Start date">
+                            </div>
+                            <div class="col-6">
+                                <input id="search_day_last" name="search_day_last" class="col-6 form-control" type="date"
+                                    value="{{ $searchdaylast }}" title="End date">
+                            </div>
+
+                        </div>
+
+                        {{-- sort theo status --}}
+                        <div class="col-2">
+                            <select id="status_type" name="status_type" class="form-select" title="Choose type">
+                                <option value="all" @if ($statustype == 'all') selected @endif>All status</option>
+                                <option value="1" @if ($statustype == '1') selected @endif>Still on</option>
+                                <option value="0" @if ($statustype == '0') selected @endif>Not within</option>
+                            </select>
+                        </div>
+
+                        {{-- sort theo khác --}}
+                        <div class="col-2">
+                            <select id="sort_by" name="sort_by" class="form-select" title="Sort">
+                                <option value="oldest_warrant" selected>Oldest created</option>
+                                <option value="latest_warrant" >Latest created</option>
+                                <option value="longest_warrant" >Longest warrant time</option>
+                                <option value="shorted_warrant" >Shortest warrant time</option>
+                                <option value="sort_by_order" >Sort by order</option>
+                                <option value="sort_by_product" >Sort by product</option>
+                            </select>
+                        </div>
+
+
+
+
+
+                        <div class="col-auto">
                             <!--nút thêm-->
                             <!--Điểm đầu đường đi tạo form, nhớ tạo hàm tạo order mới và route cho nó-->
                             <!--nút tạo order mới, dẫn qua file create_order kế bên -->
-                            <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                            <a href="#" class="btn btn-primary w-100 btn-icon" data-bs-toggle="modal"
                                 data-bs-target="#warranty-modal">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon " width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M12 5l0 14" />
                                     <path d="M5 12l14 0" />
                                 </svg>
-                                Create new {{ $page }}
                             </a>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -131,10 +167,9 @@
             </div>
         </div>
 
-        @include('admin.warranties.create_warranties')
-        @include('admin.warranties.update_warranties')
-        @include('admin.components.footer')
-
     </div>
+    @include('admin.warranties.create_warranties')
+    @include('admin.warranties.update_warranties')
+    @include('admin.components.footer')
     <script src="{{ asset('js/warranty_api.js') }}" defer></script>
 @endsection

@@ -12,12 +12,44 @@ use Illuminate\Http\Request;
 
 class WarrantyController extends Controller{
     //index đã được sửa lại để lưu search khi reload trang, copy lại từ hàm search_warranties_ajax ở dưới
+    //index đã được sửa lại để lưu search khi reload trang, copy lại từ hàm search_warranties_ajax ở dưới
     public function index(){
         $search = request()->query('search');
         $day_first = request()->query('searchdayfirst');
         $day_last = request()->query('searchdaylast');
         $type = request()->query('statustype');
         $sort = request()->query('sortby');
+
+        // filter orders by start_date, end_date
+        if (!isset($day_first)) {
+            $day_first = Carbon::create(1900, 1, 1);
+        }
+        if (isset($day_last)) {
+            $day_last = Carbon::parse($day_last)->addDay();
+        } else {
+            $day_last = Carbon::tomorrow();
+        }
+
+        $query = Warranty::with('product_detail','order')->whereBetween('created_at', [$day_first, $day_last])
+            ->where(function ($query) use ($search) {
+                $query->where('warranty_id', 'LIKE', '%' . $search . '%')
+                    ->orwhere('order_id', 'LIKE', '%' . $search . '%')
+                    ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            });
+
+        $today = date('Y-m-d');
+        if($type == '0'){
+            $query = $query->whereDate('start_date', '>', $today)->orWhereDate('end_date', '<', $today);
+        } elseif ($type == '1'){
+            $query = $query->where('start_date', '<=', $today)->Where('end_date', '>=', $today);
+        }
+
+        $warranties = $query->paginate(5);
+
+        $search = request()->query('search');
+        $day_first = request()->query('searchdayfirst');
+        $day_last = request()->query('searchdaylast');
+        $type = request()->query('statustype');
 
         // filter orders by start_date, end_date
         if (!isset($day_first)) {
@@ -56,6 +88,11 @@ class WarrantyController extends Controller{
             'searchdaylast' => $day_last,
             'statustype' => $type,
 
+            //trả về để lại trên các thanh search trong view khi reload
+            'search' => $search,
+            'searchdayfirst' => $day_first,
+            'searchdaylast' => $day_last,
+            'statustype' => $type,
         ];
 
     return view('admin.warranties.index', $data);
@@ -143,6 +180,54 @@ class WarrantyController extends Controller{
     public function search_warranties_ajax()
     {
         $search = request()->query('search');
+        $day_first = request()->query('searchdayfirst');
+        $day_last = request()->query('searchdaylast');
+        $type = request()->query('statustype');
+        $sort = request()->query('sortby');
+
+        //khoảng thời gian tạo
+        if (!isset($day_first)) {
+            $day_first = Carbon::create(1900, 1, 1);
+        }
+        if (isset($day_last)) {
+            $day_last = Carbon::parse($day_last)->addDay();
+        } else {
+            $day_last = Carbon::tomorrow();
+        }
+
+        //search theo khoảng thời gian tạo và thanh tìm kiếm
+        $query = Warranty::with('product_detail','order')->whereBetween('created_at', [$day_first, $day_last])
+            ->where(function ($query) use ($search) {
+                $query->where('warranty_id', 'LIKE', '%' . $search . '%')
+                    ->orwhere('order_id', 'LIKE', '%' . $search . '%')
+                    ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            });
+
+        //search theo còn trong bảo hành ko
+        $today = date('Y-m-d');
+        if($type == '0'){
+            $query = $query->whereDate('start_date', '>', $today)->orWhereDate('end_date', '<', $today);
+        } elseif ($type == '1'){
+            $query = $query->where('start_date', '<=', $today)->Where('end_date', '>=', $today);
+        }
+
+        //search theo các loại sort
+        if($sort == 'oldest_warrant'){
+            $query = $query->orderBy('created_at', 'asc');
+        } elseif ($sort == 'latest_warrant') {
+            $query = $query->orderBy('created_at', 'desc');
+        } elseif ($sort == 'longest_warrant'){//bug
+            $query = $query->orderByRaw('product_detail.warranty_month')->get()->sortBy('product_detail.warranty_month', SORT_DESC);
+        } elseif ($sort == 'shortest_warrant'){//bug
+            $query = $query->orderByRaw('product_detail.warranty_month')->get()->sortBy('product_detail.warranty_month', SORT_ASC);
+        } elseif ($sort == 'sort_by_order') {
+            $query = $query->orderBy('order_id', 'asc');
+        } elseif ($sort == 'sort_by_product'){
+            $query = $query->orderBy('sku', 'asc');
+        }
+
+        $warranties = $query->paginate(5);
+
         $day_first = request()->query('searchdayfirst');
         $day_last = request()->query('searchdaylast');
         $type = request()->query('statustype');

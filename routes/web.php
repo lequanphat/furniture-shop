@@ -13,6 +13,7 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReceiptsController;
+use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
@@ -79,7 +80,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     //address_card
     Route::post('/account/profile/addresscard/update', [AddressController::class, 'update_address']);
     Route::post('/account/profile/addresscard/create', [AddressController::class, 'create_address']);
-
+    Route::post('/account/profile/addresscard/remove', [AddressController::class, 'remove_address']);
     // checkout
     Route::post('/checkout', [OrderController::class, 'checkout_order'])->name('checkout');
     Route::get('/checkout/{order_id}', [PagesController::class, 'handle_checkout_order'])->name('checkout.handle');
@@ -164,6 +165,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
+    Route::get('/admin/categories/getall', [CategoryController::class, 'getAll']);
     Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
     Route::delete('/admin/categories/{category_id}', [CategoryController::class, 'delete'])->name('categories.delete');
     Route::patch('/admin/categories/{category_id}', [CategoryController::class, 'update'])->name('categories.update');
@@ -215,6 +217,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // receipts
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
+    Route::post('/admin/receipts/create',[ReceiptsController::class,' create_receiving']);
+
 
     // discounts
     Route::get('/admin/discounts', [DiscountController::class, 'index']);
@@ -230,6 +234,11 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
 
     // permissions
+    Route::get('/admin/statistics', [StatisticController::class, 'statistic_ui']);
+    Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
+    Route::post('/admin/statistics/getstatistic', [StatisticController::class, 'RevenueDateByDate']);
+  
+
 
     Route::get('/admin/roles', [PermissionController::class, 'index']);
     Route::get('/admin/roles/pagination', [PermissionController::class, 'roles_pagination']);
@@ -242,6 +251,11 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
     Route::get('/admin/authorization/pagination', [PermissionController::class, 'authorization_pagination']);
     Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
+
+
+
+
+
 
     Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
 });
