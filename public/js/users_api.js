@@ -27,7 +27,7 @@ jQuery.noConflict();
             const delete_action = can_delete
                 ? user.is_active
                     ? `<a href="#" class="btn p-2" data-bs-toggle="modal"
-                        data-bs-target="#delete-user-modal"
+                        data-bs-target="#delete-confirm-modal"
                         data-user-id="${user.user_id}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" viewBox="0 0 24 24" fill="none"
