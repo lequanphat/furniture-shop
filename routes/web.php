@@ -164,7 +164,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/warranties/search', [WarrantyController::class, 'search_warranties_ajax'])->name('warranty.search');
 
     //warranty detail
-    Route::get('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warrant_details'])->name('warranties.details');
+    Route::get('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_details'])->name('warranties.details');
 
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
