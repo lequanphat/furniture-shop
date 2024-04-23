@@ -212,4 +212,16 @@ class WarrantyController extends Controller{
         return response()->json(['warranties' => $warranties]);
     }
 
+
+    //hàm trả dữ liệu cho trang warranty detail
+    public function warrant_details(Request $request){
+        $warranty_id = $request->route('warranty_id');
+        $warranty = Warranty::with('product_detail','order')->where('warranty_id', $warranty_id)->first();
+        $data = [
+            'page' => 'Warranty Details',
+            'warranty' => $warranty,
+        ];
+        return view('admin.warranties.warranty_detail', $data);
+    }
+
 }
