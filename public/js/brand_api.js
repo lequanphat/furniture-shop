@@ -102,16 +102,14 @@ jQuery.noConflict();
         $('#delete-confirm-modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var brand_Id = button.data('brand-id');
-            $(this)
-                .find('.modal-description')
-                .html(`If deleted, this brand will no longer be visible to users.`);
+            $(this).find('.modal-description').html(`If deleted, this brand will no longer be visible to users.`);
             $(this).find('#confirm-btn').data('brand-id', brand_Id);
             $(this).find('#confirm-btn').text('Yes, delete this brand');
         });
         $('#delete-confirm-modal').on('click', '#confirm-btn', function (e) {
             var brand_id = $(this).data('brand-id');
             $.ajax({
-               headers: {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 url: `/admin/brands/${brand_id}/delete`,
@@ -121,8 +119,7 @@ jQuery.noConflict();
                         return $(this).find('td:first').text() == response.brand.brand_id;
                     });
                     if (row) {
-                        row.html(``
-                        );
+                        row.html(``);
                     }
                     // show success modal
                     $('#success-notify-modal').addClass('show');
@@ -142,11 +139,12 @@ jQuery.noConflict();
                 },
             });
         });
-      
+
+        //  close error modal
         $('.js-close-error-modal').click(function () {
-            $('#error-message').removeClass('show');
-            $('#error-message').attr('style', 'display: none;');
-            $('#error-message').attr('aria-hidden', 'true');
+            $('#error-delete-modal').removeClass('show');
+            $('#error-delete-modal').attr('style', 'display: none;');
+            $('#error-delete-modal').attr('aria-hidden', 'true');
             $('.modal-backdrop.fade.show').remove();
         });
         $('.js-close-success-modal').click(function () {
