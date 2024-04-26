@@ -171,6 +171,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //Route::get('/admin/warranties', [WarrantyController::class,'warranty_search_ui'])->name('warranty.search');
     Route::get('/admin/warranties/search', [WarrantyController::class, 'search_warranties_ajax'])->name('warranty.search');
 
+    //warranty detail
+    Route::get('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_details'])->name('warranties.details');
+
     // category
     Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
     Route::get('/admin/categories/getall', [CategoryController::class, 'getAll']);
@@ -245,7 +248,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/statistics', [StatisticController::class, 'statistic_ui']);
     Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
     Route::post('/admin/statistics/getstatistic', [StatisticController::class, 'RevenueDateByDate']);
-  
+
 
 
     Route::get('/admin/roles', [PermissionController::class, 'index']);
