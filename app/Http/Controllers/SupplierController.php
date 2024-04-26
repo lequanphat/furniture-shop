@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateSupplier;
 use Illuminate\Http\Request;
-use App\Models\supplier;
+use App\Models\Supplier;
 
 class SupplierController extends Controller
 {
@@ -64,6 +64,16 @@ class SupplierController extends Controller
         } else {
             return ['message' => $request->input('supplier_id')];
         }
+    }
+    public function supplier_delete(Request $request)
+    {
+        $supplier_id = $request->route('supplier_id');
+        $supplier = Supplier::where('supplier_id', $supplier_id)->first();
+        if ($supplier->receivingReports->count() > 0) {
+            return response()->json(['errors' => ['message' => ['Can not delete this supplier because it has receivingreports.']]], 400);
+        }
+        $supplier->delete();
+        return ['message' => 'Deleted supplier successfully!','supplier'=>$supplier];
     }
     public function supplier_pagination()
     {
