@@ -17,6 +17,7 @@ class WarrantyController extends Controller{
         $day_first = request()->query('searchdayfirst');
         $day_last = request()->query('searchdaylast');
         $type = request()->query('statustype');
+        $sort = request()->query('sortby');
 
         // filter orders by start_date, end_date
         if (!isset($day_first)) {
@@ -42,7 +43,22 @@ class WarrantyController extends Controller{
             $query = $query->where('start_date', '<=', $today)->Where('end_date', '>=', $today);
         }
 
+        if($sort == 'oldest_warrant'){
+            $query = $query->orderBy('created_at', 'asc');
+        } elseif ($sort == 'latest_warrant') {
+            $query = $query->orderBy('created_at', 'desc');
+        } elseif ($sort == 'longest_warrant'){//bug
+
+        } elseif ($sort == 'shortest_warrant'){//bug
+
+        } elseif ($sort == 'sort_by_order') {
+            $query = $query->orderBy('order_id', 'asc');
+        } elseif ($sort == 'sort_by_product'){
+            $query = $query->orderBy('sku', 'asc');
+        }
+
         $warranties = $query->paginate(5);
+
 
         $data = [
             'page' => 'Warranties ',
@@ -54,6 +70,7 @@ class WarrantyController extends Controller{
             'searchdayfirst' => $day_first,
             'searchdaylast' => $day_last,
             'statustype' => $type,
+            'sort' => $sort,
         ];
 
     return view('admin.warranties.index', $data);
@@ -178,9 +195,9 @@ class WarrantyController extends Controller{
         } elseif ($sort == 'latest_warrant') {
             $query = $query->orderBy('created_at', 'desc');
         } elseif ($sort == 'longest_warrant'){//bug
-            $query = $query->orderByRaw('product_detail.warranty_month')->get()->sortBy('product_detail.warranty_month', SORT_DESC);
+            //$query = $query->orderByRaw('product_detail.warranty_month')->get()->sortBy('product_detail.warranty_month', SORT_DESC);
         } elseif ($sort == 'shortest_warrant'){//bug
-            $query = $query->orderByRaw('product_detail.warranty_month')->get()->sortBy('product_detail.warranty_month', SORT_ASC);
+            //$query = $query->orderByRaw('product_detail.warranty_month')->get()->sortBy('product_detail.warranty_month', SORT_ASC);
         } elseif ($sort == 'sort_by_order') {
             $query = $query->orderBy('order_id', 'asc');
         } elseif ($sort == 'sort_by_product'){
@@ -193,6 +210,20 @@ class WarrantyController extends Controller{
             $warranty->is_active = $warranty->is_active();
         }
         return response()->json(['warranties' => $warranties]);
+    }
+
+
+    //hàm trả dữ liệu cho trang warranty detail
+    public function warranty_details(Request $request){
+        $warranty_id = $request->route('warranty_id');
+        $warranty = Warranty::with('product_detail','order')->where('warranty_id', $warranty_id)->first();
+        $detailedOrders = $warranty->order->order_details;//$order->order_details()->with('detailed_product');
+        $data = [
+            'page' => 'Warranty Details',
+            'warranty' => $warranty,
+            'detailed_orders' => $detailedOrders,
+        ];
+        return view('admin.warranties.warranty_details', $data);
     }
 
 }

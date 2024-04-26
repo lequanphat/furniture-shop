@@ -194,7 +194,7 @@ jQuery.noConflict();
             history.pushState(  //đẩy giá trị lên thanh địa chỉ
                 null,
                 null,
-                `/admin/warranties/search?search=${search}&searchdayfirst=${search_day_first}&searchdaylast=${search_day_last}&statustype=${status_type}&sortby=${sort_by}&page=${page}`,
+                `/admin/warranties?search=${search}&searchdayfirst=${search_day_first}&searchdaylast=${search_day_last}&statustype=${status_type}&sortby=${sort_by}&page=${page}`,
             );
 
             if (!page) {
