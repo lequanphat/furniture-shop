@@ -68,7 +68,7 @@
                                 <option value="oldest_warrant" @if ($sort == 'oldest_warrant') selected @endif>Oldest created</option>
                                 <option value="latest_warrant" @if ($sort == 'latest_warrant') selected @endif>Latest created</option>
                                 <option value="longest_warrant" @if ($sort == 'longest_warrant') selected @endif>Longest warrant time</option>
-                                <option value="shorted_warrant" @if ($sort == 'shorted_warrant') selected @endif>Shortest warrant time</option>
+                                <option value="shortest_warrant" @if ($sort == 'shortest_warrant') selected @endif>Shortest warrant time</option>
                                 <option value="sort_by_order" @if ($sort == 'sort_by_order') selected @endif>Sort by order</option>
                                 <option value="sort_by_product" @if ($sort == 'sort_by_product') selected @endif>Sort by product</option>
                             </select>

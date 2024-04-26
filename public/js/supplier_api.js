@@ -8,7 +8,7 @@ jQuery.noConflict();
             // $('#create_category_response').html('');
             // $('#create_category_response').removeClass('alert-success alert-danger');
         });
-        
+
         $('#create-supplier-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
@@ -25,26 +25,26 @@ jQuery.noConflict();
                         `<tr>
                         <td>${response.supplier.supplier_id}</td>
 
-                        <td>${response.supplier.name }</td>
+                        <td>${response.supplier.name}</td>
                         <td>
-                        ${response.supplier.description }
+                        ${response.supplier.description}
                         </td>
-                        <td> ${response.supplier.address }</td>
-                        <td>${response.supplier.phone_number }</td>
+                        <td> ${response.supplier.address}</td>
+                        <td>${response.supplier.phone_number}</td>
                         {{-- temporary value --}}
                         <td>
                             <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
                                 data-bs-toggle="modal" data-bs-target="#UpdateSupplierModal"
                                 data-supplier-id="${response.supplier.supplier_id}<"
-                                data-name="${response.supplier.name }}"
-                                data-description=" ${response.supplier.description }"
-                                data-address="${response.supplier.address }"
-                                data-phone-number="${response.supplier.phone_number }">
+                                data-name="${response.supplier.name}}"
+                                data-description=" ${response.supplier.description}"
+                                data-address="${response.supplier.address}"
+                                data-phone-number="${response.supplier.phone_number}">
                                 <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                             </button>
 
-                        </td>`
-                    )
+                        </td>`,
+                    );
                 },
                 error: function (error) {
                     console.log(error);
@@ -88,30 +88,29 @@ jQuery.noConflict();
                     var row = $('#supplier-table tr').filter(function () {
                         return $(this).find('td:first').text() == response.supplier.supplier_id;
                     });
-                    if (row)
-                    {
+                    if (row) {
                         row.html(`
                         <td>${response.supplier.supplier_id}</td>
 
-                        <td>${response.supplier.name }</td>
+                        <td>${response.supplier.name}</td>
                         <td>
-                        ${response.supplier.description }
+                        ${response.supplier.description}
                         </td>
-                        <td> ${response.supplier.address }</td>
-                        <td>${response.supplier.phone_number }</td>
+                        <td> ${response.supplier.address}</td>
+                        <td>${response.supplier.phone_number}</td>
                         {{-- temporary value --}}
                         <td>
                             <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
                                 data-bs-toggle="modal" data-bs-target="#UpdateSupplierModal"
                                 data-supplier-id="${response.supplier.supplier_id}"
-                                data-name="${response.supplier.name }"
-                                data-description=" ${response.supplier.description }"
-                                data-address="${response.supplier.address }"
-                                data-phone-number="${response.supplier.phone_number }">
+                                data-name="${response.supplier.name}"
+                                data-description=" ${response.supplier.description}"
+                                data-address="${response.supplier.address}"
+                                data-phone-number="${response.supplier.phone_number}">
                                 <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                             </button>
 
-                        </td>`)
+                        </td>`);
                     }
                 },
                 error: function (error) {
@@ -123,26 +122,25 @@ jQuery.noConflict();
                 },
             });
         });
-        function createSupplierElement(supplier)
-        {
+        function createSupplierElement(supplier) {
             return `<tr>
             <td>${supplier.supplier_id}</td>
 
-            <td>${supplier.name }</td>
+            <td>${supplier.name}</td>
             <td>
-            ${supplier.description }
+            ${supplier.description}
             </td>
-            <td> ${supplier.address }</td>
-            <td>${supplier.phone_number }</td>
+            <td> ${supplier.address}</td>
+            <td>${supplier.phone_number}</td>
             {{-- temporary value --}}
             <td>
                 <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
                     data-bs-toggle="modal" data-bs-target="#UpdateSupplierModal"
                     data-supplier-id="${supplier.supplier_id}"
-                    data-name="${supplier.name }}"
-                    data-description=" ${supplier.description }"
-                    data-address="${supplier.address }"
-                    data-phone-number="${supplier.phone_number }">
+                    data-name="${supplier.name}}"
+                    data-description=" ${supplier.description}"
+                    data-address="${supplier.address}"
+                    data-phone-number="${supplier.phone_number}">
                     <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
                 </button>
                 <button data-bs-toggle="modal" data-bs-target="#delete-confirm-modal" data-supplier-id="${supplier.supplier_id}" class="btn p-2">
@@ -164,16 +162,14 @@ jQuery.noConflict();
         $('#delete-confirm-modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var supplier_Id = button.data('supplier-id');
-            $(this)
-                .find('.modal-description')
-                .html(`If deleted, this brand will no longer be visible to users.`);
+            $(this).find('.modal-description').html(`If deleted, this brand will no longer be visible to users.`);
             $(this).find('#confirm-btn').data('supplier-id', supplier_Id);
             $(this).find('#confirm-btn').text('Yes, delete this supplier');
         });
         $('#delete-confirm-modal').on('click', '#confirm-btn', function (e) {
             var supplier_id = $(this).data('supplier-id');
             $.ajax({
-               headers: {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 url: `/admin/suppliers/${supplier_id}/delete`,
@@ -183,8 +179,7 @@ jQuery.noConflict();
                         return $(this).find('td:first').text() == response.supplier.supplier_id;
                     });
                     if (row) {
-                        row.html(``
-                        );
+                        row.html(``);
                     }
                     // show success modal
                     $('#success-notify-modal').addClass('show');
@@ -216,30 +211,30 @@ jQuery.noConflict();
             $('#success-notify-modal').attr('aria-hidden', 'true');
             $('.modal-backdrop.fade.show').remove();
         });
-    function SupplierPagination({ page }) {
-        const search = $('#search-supplier-input').val();
-        history.pushState(null, null, `/admin/suppliers?page=${page}&search=${search}`);
-        // call ajax
-        $.ajax({
-            url: `/admin/suppliers/pagination?page=${page}&search=${search}`,
-            type: 'GET',
-            success: function (response) {
-                console.log(response);
-                let html = '';
-                response.suppliers.data.forEach((supplier) => {
-                    html += createSupplierElement(supplier);
-                });
-                $('#supplier-table').html(html);
-                renderPagination({
-                    current_page: response.suppliers.current_page,
-                    last_page: response.suppliers.last_page,
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            },
-        });
-    };
+        function SupplierPagination({ page }) {
+            const search = $('#search-supplier-input').val();
+            history.pushState(null, null, `/admin/suppliers?page=${page}&search=${search}`);
+            // call ajax
+            $.ajax({
+                url: `/admin/suppliers/pagination?page=${page}&search=${search}`,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    let html = '';
+                    response.suppliers.data.forEach((supplier) => {
+                        html += createSupplierElement(supplier);
+                    });
+                    $('#supplier-table').html(html);
+                    renderPagination({
+                        current_page: response.suppliers.current_page,
+                        last_page: response.suppliers.last_page,
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        }
         $(document).on('click', '.pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
@@ -302,5 +297,6 @@ jQuery.noConflict();
             </a>
         </li>`;
             $('.pagination').html(pagination);
-        }});
-    })(jQuery); 
+        }
+    });
+})(jQuery);
