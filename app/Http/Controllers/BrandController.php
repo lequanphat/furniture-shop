@@ -85,6 +85,16 @@ class BrandController extends Controller
         }
         return response()->json(['errors' => ['message' => ['Cannot find this brand.']]], 400);
     }
+    public function brand_delete(Request $request)
+    {
+        $brand_id = $request->route('brand_id');
+        $brand = Brand::where('brand_id', $brand_id)->first();
+        if ($brand->products->count() > 0) {
+            return response()->json(['errors' => ['message' => ['Can not detete this brand because it has products.']]], 400);
+        }
+        $brand->delete();
+        return ['message' => 'Deleted brand successfully!','brand'=>$brand];
+    }
     public function brands_pagination()
     {
         $search = request()->query('search');

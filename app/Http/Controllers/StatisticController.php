@@ -27,7 +27,7 @@ class StatisticController extends Controller
         $solds=[];
         $orders=[];
         $revenues=[];
-        $dates=[]; 
+        $dates=[];
         for ($i = 7; $i >= 0; $i--) {
             $time=now()->subDays($i);
             $sold=OrderDetail::whereDate('created_at',$time)->sum('quantities');
@@ -47,8 +47,8 @@ class StatisticController extends Controller
                 'labels'=>$dates,
             ]
         ) ;
-        
-        
+
+
 
     }
     public function RevenueDateByDate(Request $request)
@@ -94,6 +94,6 @@ class StatisticController extends Controller
                 'revenues'=>$revenues,
             ]
         ) ;
-    } 
-    
+    }
+
 }

@@ -11,4 +11,9 @@ class Supplier extends Model
     protected $table = 'suppliers';
     protected $primaryKey = 'supplier_id';
     protected $fillable = ['name', 'description', 'address', 'phone_number'];
+
+    public function receivingReports()
+    {
+        return $this->hasMany(ReceivingReport::class, 'supplier_id');
+    }
 }

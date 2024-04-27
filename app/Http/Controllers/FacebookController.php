@@ -16,24 +16,28 @@ class FacebookController extends Controller
 
     public function handleFacebookCallback()
     {
-        $user = Socialite::driver('facebook')->user();
-        $finduser = User::where('email', $user->id . '@facebook.com')->first();
-        if ($finduser) {
-            Auth::login($finduser);
-        } else {
-            $newUser = User::create([
-                'first_name' => $user->name,
-                'last_name' => '',
-                'email' => $user->id . '@facebook.com',
-                'password' => Hash::make($user->id),
-                'avatar' => $user->avatar,
-                'is_staff' => false,
-                'is_verified' => true,
-                'is_active' => true,
-            ]);
+        try {
+            $user = Socialite::driver('facebook')->user();
+            $finduser = User::where('email', $user->id . '@facebook.com')->first();
+            if ($finduser) {
+                Auth::login($finduser);
+            } else {
+                $newUser = User::create([
+                    'first_name' => $user->name,
+                    'last_name' => '',
+                    'email' => $user->id . '@facebook.com',
+                    'password' => Hash::make($user->id),
+                    'avatar' => $user->avatar,
+                    'is_staff' => false,
+                    'is_verified' => true,
+                    'is_active' => true,
+                ]);
 
-            Auth::login($newUser);
+                Auth::login($newUser);
+            }
+            return redirect('/');
+        } catch (\Throwable $th) {
+            abort(500, $th->getMessage());
         }
-        return redirect('/');
     }
 }

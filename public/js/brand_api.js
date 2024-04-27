@@ -25,7 +25,7 @@ jQuery.noConflict();
             </button>`
                 : '';
             const delete_action = can_delete
-                ? `<a href="#" class="btn p-2">
+                ? `<button class="btn p-2" data-bs-toggle="modal" data-bs-target="#delete-confirm-modal" data-brand-id="${brand.brand_id}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -38,7 +38,7 @@ jQuery.noConflict();
                     <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
                     <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
                 </svg>
-            </a>`
+            </button>`
                 : '';
             return `<td>${brand.brand_id}</td>
                 <td>${brand.name} ${newTag}</td>
@@ -99,7 +99,60 @@ jQuery.noConflict();
             modal.find('#description').val(button.data('description'));
             modal.find('#index').val(button.data('index'));
         });
+        $('#delete-confirm-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var brand_Id = button.data('brand-id');
+            $(this).find('.modal-description').html(`If deleted, this brand will no longer be visible to users.`);
+            $(this).find('#confirm-btn').data('brand-id', brand_Id);
+            $(this).find('#confirm-btn').text('Yes, delete this brand');
+        });
+        $('#delete-confirm-modal').on('click', '#confirm-btn', function (e) {
+            var brand_id = $(this).data('brand-id');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: `/admin/brands/${brand_id}/delete`,
+                type: 'DELETE',
+                success: function (response) {
+                    var row = $('#brand-table tr').filter(function () {
+                        return $(this).find('td:first').text() == response.brand.brand_id;
+                    });
+                    if (row) {
+                        row.html(``);
+                    }
+                    // show success modal
+                    $('#success-notify-modal').addClass('show');
+                    $('#success-notify-modal').attr('style', 'display: block;');
+                    $('#success-notify-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#success-title').html('Deleted Brand Successfully');
+                    $('#success-desc').html('This brand can not be able to access.');
+                },
+                error: function (error) {
+                    console.log(Object.values(error.responseJSON.errors)[0][0]);
+                    $('#error-delete-modal').addClass('show');
+                    $('#error-delete-modal').attr('style', 'display: block;');
+                    $('#error-delete-modal').removeAttr('aria-hidden');
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                    $('#error-message').text(Object.values(error.responseJSON.errors)[0][0]);
+                },
+            });
+        });
 
+        //  close error modal
+        $('.js-close-error-modal').click(function () {
+            $('#error-delete-modal').removeClass('show');
+            $('#error-delete-modal').attr('style', 'display: none;');
+            $('#error-delete-modal').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
+        });
+        $('.js-close-success-modal').click(function () {
+            $('#success-notify-modal').removeClass('show');
+            $('#success-notify-modal').attr('style', 'display: none;');
+            $('#success-notify-modal').attr('aria-hidden', 'true');
+            $('.modal-backdrop.fade.show').remove();
+        });
         $('#update-brand-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
