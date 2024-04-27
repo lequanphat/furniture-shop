@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateSupplier;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
 {
@@ -14,7 +16,7 @@ class SupplierController extends Controller
             'page' => 'Suppliers',
             'suppliers' =>  Supplier::query()
                 ->paginate(5),
-                 'search' => request()->query("search"),
+            'search' => request()->query("search"),
         ];
         return view('admin.suppliers.supplier', $data);
     }
@@ -40,14 +42,20 @@ class SupplierController extends Controller
     }
     public function supplier_create(CreateSupplier $request)
     {
-        $supplierData = [
+        $supplier = Supplier::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'address' => $request->input('address'),
             'phone_number' => $request->input('phone_number'),
+        ]);
+        $admin = User::where('user_id', Auth::id())->first();
+        $data = [
+            'message' => 'Created supplier successfully!',
+            'supplier' =>  $supplier,
+            'can_update' => $admin->can('update supplier'),
+            'can_delete' => $admin->can('delete supplier'),
         ];
-        $supplier = Supplier::create($supplierData);
-        return ['message' => 'Created supplier successfully!', 'supplier' => $supplier];
+        return response()->json($data);
     }
     public function supplier_update(Request $request)
     {
@@ -60,7 +68,17 @@ class SupplierController extends Controller
                 'phone_number' => $request->input('phone_number'),
 
             ]);
-            return ['message' => 'Updated brand successfully!', 'supplier' => $supplier];
+            if ($supplier->created_at->diffInDays() < 7) {
+                $supplier->new = true;
+            }
+            $admin = User::where('user_id', Auth::id())->first();
+            $data = [
+                'message' => 'Updated supplier successfully!',
+                'supplier' =>  $supplier,
+                'can_update' => $admin->can('update supplier'),
+                'can_delete' => $admin->can('delete supplier'),
+            ];
+            return response()->json($data);
         } else {
             return ['message' => $request->input('supplier_id')];
         }
@@ -73,16 +91,25 @@ class SupplierController extends Controller
             return response()->json(['errors' => ['message' => ['Can not delete this supplier because it has receivingreports.']]], 400);
         }
         $supplier->delete();
-        return ['message' => 'Deleted supplier successfully!','supplier'=>$supplier];
+        return ['message' => 'Deleted supplier successfully!', 'supplier' => $supplier];
     }
     public function supplier_pagination()
     {
         $search = request()->input('search');
+        $suppliers = Supplier::where('name', 'LIKE', '%' . $search . '%')
+            ->paginate(5);
+        foreach ($suppliers as $supplier) {
+            if ($supplier->created_at->diffInDays() < 7) {
+                $supplier->new = true;
+            }
+        }
+        $admin = User::where('user_id', Auth::id())->first();
         $data = [
             'page' => 'suppliers',
-            'suppliers' =>  Supplier::where('name', 'LIKE', '%' . $search . '%')
-                ->paginate(5),
+            'suppliers' => $suppliers,
             'search' => $search,
+            'can_update' => $admin->can('update supplier'),
+            'can_delete' => $admin->can('delete supplier'),
         ];
         return response()->json($data);
     }
