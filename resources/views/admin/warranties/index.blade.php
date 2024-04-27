@@ -27,7 +27,8 @@
                         {{-- thanh search --}}
                         <div class="col-3">
                             <div class="input-icon ">
-                                <input id="search-warranties" name="search" type="text" class="form-control" placeholder="Search..." autocomplete="off" value="{{ $search }}">
+                                <input id="search-warranties" name="search" type="text" class="form-control"
+                                    placeholder="Search..." autocomplete="off" value="{{ $search }}">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -43,8 +44,8 @@
                         {{-- lọc theo khoảng thời gian --}}
                         <div class="col-4 row ">
                             <div class="col-6">
-                                <input id="search_day_first" name="search_day_first" class="col-6 form-control" type="date"
-                                    value="{{ $searchdayfirst }}" title="Start date">
+                                <input id="search_day_first" name="search_day_first" class="col-6 form-control"
+                                    type="date" value="{{ $searchdayfirst }}" title="Start date">
                             </div>
                             <div class="col-6">
                                 <input id="search_day_last" name="search_day_last" class="col-6 form-control" type="date"
@@ -65,35 +66,35 @@
                         {{-- sort theo khác --}}
                         <div class="col-2">
                             <select id="sort_by" name="sort_by" class="form-select" title="Sort">
-                                <option value="oldest_warrant" @if ($sort == 'oldest_warrant') selected @endif>Oldest created</option>
-                                <option value="latest_warrant" @if ($sort == 'latest_warrant') selected @endif>Latest created</option>
-                                <option value="longest_warrant" @if ($sort == 'longest_warrant') selected @endif>Longest warrant time</option>
-                                <option value="shortest_warrant" @if ($sort == 'shortest_warrant') selected @endif>Shortest warrant time</option>
-                                <option value="sort_by_order" @if ($sort == 'sort_by_order') selected @endif>Sort by order</option>
-                                <option value="sort_by_product" @if ($sort == 'sort_by_product') selected @endif>Sort by product</option>
+                                <option value="oldest_warrant" @if ($sort == 'oldest_warrant') selected @endif>Oldest
+                                    created</option>
+                                <option value="latest_warrant" @if ($sort == 'latest_warrant') selected @endif>Latest
+                                    created</option>
+                                <option value="longest_warrant" @if ($sort == 'longest_warrant') selected @endif>Longest
+                                    warrant time</option>
+                                <option value="shortest_warrant" @if ($sort == 'shortest_warrant') selected @endif>Shortest
+                                    warrant time</option>
+                                <option value="sort_by_order" @if ($sort == 'sort_by_order') selected @endif>Sort by
+                                    order</option>
+                                <option value="sort_by_product" @if ($sort == 'sort_by_product') selected @endif>Sort by
+                                    product</option>
                             </select>
                         </div>
 
-
-
-
-
-                        <div class="col-auto">
-                            <!--nút thêm-->
-                            <!--Điểm đầu đường đi tạo form, nhớ tạo hàm tạo order mới và route cho nó-->
-                            <!--nút tạo order mới, dẫn qua file create_order kế bên -->
-                            <a href="#" class="btn btn-primary w-100 btn-icon" data-bs-toggle="modal"
-                                data-bs-target="#warranty-modal">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon " width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 5l0 14" />
-                                    <path d="M5 12l14 0" />
-                                </svg>
-                            </a>
-                        </div>
-
+                        @can('create order')
+                            <div class="col-auto">
+                                <a href="#" class="btn btn-primary w-100 btn-icon" data-bs-toggle="modal"
+                                    data-bs-target="#warranty-modal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon " width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M12 5l0 14" />
+                                        <path d="M5 12l14 0" />
+                                    </svg>
+                                </a>
+                            </div>
+                        @endcan
 
                     </div>
                 </div>
@@ -121,57 +122,76 @@
                                     </tr>
                                 </thead>
                                 <tbody id ="warranties-list">
-                                    @foreach ($warranties as $warranty)
+                                    @if ($warranties->isEmpty())
                                         <tr>
-                                            <td>{{ $warranty->warranty_id }}</td>
-                                            <td>{{ $warranty->order_id }}</td>
-                                            <td>{{ $warranty->sku }}</td>
-                                            <td>{{ $warranty->start_date }}</td>
-                                            <td>{{ $warranty->end_date }}</td>
-                                            <td>{{ $warranty->description }}</td>
-                                            <td>{{ $warranty->product_detail->warranty_month}} months</td>
-                                            <td>
-                                                @if ($warranty->is_active())
-                                                <span class="badge bg-green-lt">Still on</span>
-
-                                                @else
-                                                <span class="badge bg-red-lt">Not Within</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <!--nút xem chi tiết-->
-                                                <a href="{{ route('warranties.details', $warranty->warranty_id) }}" class="btn p-2"
-                                                    title="Warranty Details">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                                        <path
-                                                            d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                                                    </svg>
-                                                </a>
-                                                <!--nút sửa-->
-                                                <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
-                                                    title="Update" data-bs-toggle="modal" data-bs-target="#UpdateWarrantyModal"
-                                                    data-warranty-id="{{ $warranty->warranty_id }}"
-                                                    data-order-id="{{ $warranty->order_id }}"
-                                                    data-sku="{{ $warranty->sku }}"
-                                                    data-start-date="{{ $warranty->start_date }}"
-                                                    {{-- data-end-date="{{ $warranty->end_date }}" --}}
-                                                    data-description="{{ $warranty->description }}"
-                                                    >
-                                                    <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                </button>
-                                            </td>
+                                            <td colspan="9" class="text-center text-muted">No data available</td>
                                         </tr>
-                                    @endforeach
+                                    @else
+                                        @foreach ($warranties as $warranty)
+                                            <tr>
+                                                <td>{{ $warranty->warranty_id }}</td>
+                                                <td>{{ $warranty->order_id }}</td>
+                                                <td>{{ $warranty->sku }}</td>
+                                                <td>{{ $warranty->start_date }}</td>
+                                                <td>{{ $warranty->end_date }}</td>
+                                                <td>{{ $warranty->description }}</td>
+                                                <td>{{ $warranty->product_detail->warranty_month }} months</td>
+                                                <td>
+                                                    @if ($warranty->is_active())
+                                                        <span class="badge bg-green-lt">Still on</span>
+                                                    @else
+                                                        <span class="badge bg-red-lt">Not Within</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('warranties.details', $warranty->warranty_id) }}"
+                                                        class="btn p-2" title="Warranty Details">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                            <path
+                                                                d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                        </svg>
+                                                    </a>
+
+                                                    @can('update order')
+                                                        <button type="button" class="js-update-order-btn btn  p-2"
+                                                            title="Update" data-bs-toggle="modal"
+                                                            data-bs-target="#UpdateWarrantyModal"
+                                                            data-warranty-id="{{ $warranty->warranty_id }}"
+                                                            data-order-id="{{ $warranty->order_id }}"
+                                                            data-sku="{{ $warranty->sku }}"
+                                                            data-start-date="{{ $warranty->start_date }}"
+                                                            {{-- data-end-date="{{ $warranty->end_date }}" --}}
+                                                            data-description="{{ $warranty->description }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path d="M4 7l16 0" />
+                                                                <path d="M10 11l0 6" />
+                                                                <path d="M14 11l0 6" />
+                                                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                            </svg>
+                                                        </button>
+                                                    </td>
+                                                @endcan
+                                            </tr>
+                                        @endforeach
+                                    @endif
 
                                 </tbody>
                             </table><br><br>
                             {{-- <div class="d-flex justify-content-end my-2">{{ $warranties->render('common.pagination') }} --}}
-                            <div class="d-flex justify-content-end my-2">{{ $warranties->render('common.ajax-pagination') }}
+                            <div class="d-flex justify-content-end my-2">
+                                {{ $warranties->render('common.ajax-pagination') }}
 
                             </div>
                         </div>

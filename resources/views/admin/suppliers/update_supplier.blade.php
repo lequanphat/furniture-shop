@@ -1,5 +1,5 @@
 <div class="modal fade" id="UpdateSupplierModal" tabindex="-1" aria-labelledby="updateBrandTitle" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="updateSupplierTitle">Update_supplier </h5>
@@ -11,7 +11,7 @@
                 <form id="update-supplier-form" action="#" method="dialog">
                     @csrf
                     <div class="mb-3 row">
-                    <input type="text" class="form-control" id="supplier_id" name="supplier_id" readonly>
+                        <input type="text" class="form-control" id="supplier_id" name="supplier_id" readonly>
                         <div class="col-md-6">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -22,17 +22,17 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                            <label for="phone_number" class="form-label">Phone number</label>
-                            <input type="number" class="form-control" id="phone_number" name="phone_number"
-                                placeholder="0123123123" required>
-                        </div>
+                        <label for="phone_number" class="form-label">Phone number</label>
+                        <input type="number" class="form-control" id="phone_number" name="phone_number"
+                            placeholder="0123123123" required>
+                    </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="address" name="address"
                             placeholder="203 An Dương Vương, phường 01, quận 5, TP.HCM" required>
                     </div>
 
-                    <div id="update_supplier_response" class="alert ">
+                    <div id="update_supplier_response" class="alert d-none">
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
                 </form>

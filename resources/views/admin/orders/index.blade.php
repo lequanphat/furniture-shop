@@ -72,19 +72,21 @@
                                     descending</option>
                             </select>
                         </div>
+                        @can('create order')
+                            <div class="col-auto">
+                                <a href="#" class="btn btn-primary w-100 btn-icon" data-bs-toggle="modal"
+                                    data-bs-target="#order-modal" title="Create new order">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon " width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M12 5l0 14" />
+                                        <path d="M5 12l14 0" />
+                                    </svg>
+                                </a>
+                            </div>
+                        @endcan
 
-                        <div class="col-auto">
-                            <a href="#" class="btn btn-primary w-100 btn-icon" data-bs-toggle="modal"
-                                data-bs-target="#order-modal" title="Create new order">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon " width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 5l0 14" />
-                                    <path d="M5 12l14 0" />
-                                </svg>
-                            </a>
-                        </div>
                     </div>
                 </div>
                 <!-- End Page actions -->
@@ -172,39 +174,45 @@
                                                 @endswitch
                                             </td>
                                             <td>
-                                                <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"
-                                                    title="Details">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                                        <path
-                                                            d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                                                    </svg>
-                                                </a>
-                                                <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
-                                                    title="Update" data-bs-toggle="modal"
-                                                    data-bs-target="#update-order-modal"
-                                                    data-order-id="{{ $order->order_id }}"
-                                                    data-total-price="{{ $order->total_price }}"
-                                                    data-is-paid="{{ $order->is_paid }}"
-                                                    data-status="{{ $order->status }}"
-                                                    data-receiver-name="{{ $order->receiver_name }}"
-                                                    data-address="{{ $order->address }}"
-                                                    data-phone-number="{{ $order->phone_number }}"
-                                                    data-customer-id="{{ $order->customer_id }}"
-                                                    data-created-by="{{ $order->created_by }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                                                        <path d="M13.5 6.5l4 4" />
-                                                    </svg>
-                                                </button>
+                                                @can('update order')
+                                                    <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"
+                                                        title="Details">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                            <path
+                                                                d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                        </svg>
+                                                    </a>
+                                                @endcan
+
+                                                @can('delete order')
+                                                    <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
+                                                        title="Update" data-bs-toggle="modal"
+                                                        data-bs-target="#update-order-modal"
+                                                        data-order-id="{{ $order->order_id }}"
+                                                        data-total-price="{{ $order->total_price }}"
+                                                        data-is-paid="{{ $order->is_paid }}"
+                                                        data-status="{{ $order->status }}"
+                                                        data-receiver-name="{{ $order->receiver_name }}"
+                                                        data-address="{{ $order->address }}"
+                                                        data-phone-number="{{ $order->phone_number }}"
+                                                        data-customer-id="{{ $order->customer_id }}"
+                                                        data-created-by="{{ $order->created_by }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                                            <path d="M13.5 6.5l4 4" />
+                                                        </svg>
+                                                    </button>
+                                                @endcan
+
                                             </td>
                                         </tr>
                                     @endforeach
