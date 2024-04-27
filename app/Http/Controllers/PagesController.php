@@ -93,7 +93,7 @@ class PagesController extends Controller
                 })
                 ->first() ?? $product->detailed_products->first();
 
-            if (isset($detailed_product->images->first()->url)) {
+            if ($detailed_product->images->first()) {
                 $detailed_product->image = $detailed_product->images->first()->url;
                 $detailed_product->setRelation('images', null);
             }

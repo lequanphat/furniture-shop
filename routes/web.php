@@ -217,7 +217,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     // receipts
     Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
-    Route::post('/admin/receipts/create',[ReceiptsController::class,' create_receiving']);
+    Route::post('/admin/receipts/create',[ReceiptsController::class,'create_receiving']);
 
 
     // discounts
