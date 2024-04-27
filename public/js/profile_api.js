@@ -23,7 +23,6 @@ jQuery(document).ready(function () {
         });
         $('#btn-list-edit').addClass('d-none');
         $('#enable-edit-profile-customer').removeClass('d-none');
-
     });
     $('#update-address-form').submit(function (e) {
         e.preventDefault();
@@ -44,46 +43,45 @@ jQuery(document).ready(function () {
                     return $(this).find('p:first').text() == response.address.address_id;
                 });
                 if (row) {
-                    let is_default="";
-                let boolean="false";
-                if (response.address.is_default==true)
-                {
-                    const paragraphs = document.querySelectorAll('p.is_default');
+                    let is_default = '';
+                    let boolean = 'false';
+                    if (response.address.is_default == true) {
+                        const paragraphs = document.querySelectorAll('p.is_default');
 
-                    paragraphs.forEach(paragraph => {
-                    paragraph.classList.add('d-none');
-                    });
-                    is_default="Default address";
-                    boolean="true"
-                }
-                row.html(
-                    `
+                        paragraphs.forEach((paragraph) => {
+                            paragraph.classList.add('d-none');
+                        });
+                        is_default = 'Default address';
+                        boolean = 'true';
+                    }
+                    row.html(
+                        `
                     <address>
                     <p class="d-none">${response.address.address_id}</p>
                     <p class="is_default"> ${is_default} <p>
-                    <p><strong>${ response.address.receiver_name}</strong></p>
-                    <p>${ response.address.address}</p>
+                    <p><strong>${response.address.receiver_name}</strong></p>
+                    <p>${response.address.address}</p>
                     <p>${response.address.phone_number}</p>
                     <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
                     data-bs-target="#UpdateAddressModal"
-                    data-address-id="${ response.address.address_id}"
-                    data-receiver-name="${ response.address.receiver_name}"
-                    data-address="${ response.address.address}"
+                    data-address-id="${response.address.address_id}"
+                    data-receiver-name="${response.address.receiver_name}"
+                    data-address="${response.address.address}"
                     data-phone-number="${response.address.phone_number}"
                     data-is-default="${boolean}">
                     <i class="fa fa-edit"></i> Edit
                     Address</button>
                     <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
                     data-bs-target="#RemoveAddressModal"
-                    data-address-id="${ response.address.address_id }">
+                    data-address-id="${response.address.address_id}">
                     <i class="fa fa-remove"></i> Remove
                     Address</button>
                     <h3></h3>
                     </address>
                     
       
-                    `
-                )
+                    `,
+                    );
                 }
             },
             error: function (error) {
@@ -113,9 +111,8 @@ jQuery(document).ready(function () {
                 var row = $('#address_table address').filter(function () {
                     return $(this).find('p:first').text() == response.address_id;
                 });
-                if(row)
-                {
-                  row.html(``);
+                if (row) {
+                    row.html(``);
                 }
             },
             error: function (error) {
@@ -186,44 +183,43 @@ jQuery(document).ready(function () {
                 $('#create_customer_response').removeClass('alert-successs d-none');
                 $('#create_customer_response').addClass('alert-success');
                 $('#create_customer_response').html(Object.values(response.message));
-                let is_default="";
-                let boolean="false";
-                if (response.address.is_default==true)
-                {
+                let is_default = '';
+                let boolean = 'false';
+                if (response.address.is_default == true) {
                     const paragraphs = document.querySelectorAll('p.is_default');
 
-                    paragraphs.forEach(paragraph => {
-                    paragraph.classList.add('d-none');
+                    paragraphs.forEach((paragraph) => {
+                        paragraph.classList.add('d-none');
                     });
-                    is_default="Default address";
-                    boolean="true"
+                    is_default = 'Default address';
+                    boolean = 'true';
                 }
                 $('#address_table').append(
                     `
                     <address>
                     <p class="d-none">${response.address.address_id}</p>
                     <p class="is_default"> ${is_default} <p>
-                    <p><strong>${ response.address.receiver_name}</strong></p>
-                    <p>${ response.address.address}</p>
+                    <p><strong>${response.address.receiver_name}</strong></p>
+                    <p>${response.address.address}</p>
                     <p>${response.address.phone_number}</p>
                     <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
                     data-bs-target="#UpdateAddressModal"
-                    data-address-id="${ response.address.address_id}"
-                    data-receiver-name="${ response.address.receiver_name}"
-                    data-address="${ response.address.address}"
+                    data-address-id="${response.address.address_id}"
+                    data-receiver-name="${response.address.receiver_name}"
+                    data-address="${response.address.address}"
                     data-phone-number="${response.address.phone_number}"
                     data-is-default="${boolean}">
                     <i class="fa fa-edit"></i> Edit
                     Address</button>
                     <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
                     data-bs-target="#RemoveAddressModal"
-                    data-address-id="${ response.address.address_id }">
+                    data-address-id="${response.address.address_id}">
                     <i class="fa fa-remove"></i> Remove
                     Address</button>
                     <h3></h3>
                     </address>
-                    `
-                )
+                    `,
+                );
             },
             error: function (error) {
                 console.log({ error });

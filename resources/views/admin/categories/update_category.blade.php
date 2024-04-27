@@ -23,15 +23,11 @@
                         </div>
                     </div>
 
-
                     <div class="mb-3">
                         <div class="mb-3">
                             <label for="parent_id" class="form-label">Parent Category</label>
                             <select id="parent_id" name="parent_id" class="form-control form-select">
                                 <option value="-1">Không</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->category_id }}">{{ $category->name }}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -41,7 +37,7 @@
                         <input type="text" class="form-control" id="description" name="description" required>
                     </div>
 
-                    <div id="update_category_response" class="alert d-none">
+                    <div id="update_category_response" class="alert m-0 d-none">
                     </div>
 
                 </div>

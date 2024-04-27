@@ -42,7 +42,7 @@ class PagesController extends Controller
                     $query->where('is_deleted', 0)->with('images', 'product_discounts.discount');
                 },
             ]
-        )->where('is_deleted', false);
+        )->where('is_deleted', false)->has('detailed_products');
 
         // If categories is not 'all', filter by category_id
         if ($categories !== 'all' && $categories !== null) {
@@ -93,7 +93,7 @@ class PagesController extends Controller
                 })
                 ->first() ?? $product->detailed_products->first();
 
-            if (isset($detailed_product->images->first()->url)) {
+            if (isset($detailed_product->images)) {
                 $detailed_product->image = $detailed_product->images->first()->url;
                 $detailed_product->setRelation('images', null);
             }
