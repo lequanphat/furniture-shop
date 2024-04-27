@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateCategory;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -14,13 +16,13 @@ class CategoryController extends Controller
     {
         $data = [
             'page' => 'Categories',
-            'categories' => Category::with('parent')->paginate(9),
+            'categories' => Category::with('parent')->paginate(8),
         ];
         return view('admin.categories.index', $data);
     }
     public function getAll()
     {
-        $categories= Category::with('parent')->get();
+        $categories = Category::with('parent')->get();
         return response()->json(
             ['categories' => $categories],
         );
@@ -37,9 +39,14 @@ class CategoryController extends Controller
         $category = Category::create($categoryData);
         // Load the parent relationship
         $category->load('parent');
-
-
-        return ['message' => 'Created category successfully!', 'category' => $category];
+        $admin = User::where('user_id', Auth::id())->first();
+        $data = [
+            'message' => 'Created category successfully!',
+            'category' => $category,
+            'can_update' => $admin->can('update category'),
+            'can_delete' => $admin->can('delete category'),
+        ];
+        return response()->json($data);
     }
 
     public function delete(Request $request)
@@ -68,9 +75,30 @@ class CategoryController extends Controller
                 'parent_id' => $request->input('parent_id') == -1 ? null : $request->input('parent_id'),
             ]);
             $category->load('parent');
+            $admin = User::where('user_id', Auth::id())->first();
+            $data = [
+                'message' => 'Updated category successfully!',
+                'category' => $category,
+                'can_update' => $admin->can('update category'),
+                'can_delete' => $admin->can('delete category'),
+            ];
             // response
-            return ['message' => 'Updated category successfully!', 'category' => $category];
+            return response()->json($data);
         }
         return response()->json(['errors' => ['message' => ['Can not find this category.']]], 400);
+    }
+
+    public function getCategory(Request $request)
+    {
+        $category_id = $request->route('category_id');
+        $category = Category::where('category_id', $category_id)->first();
+        $categories = Category::all();
+        if ($category) {
+            $data = [
+                'category' => $category,
+                'categories' => $categories,
+            ];
+            return response()->json($data);
+        }
     }
 }

@@ -62,9 +62,9 @@
                         </div>
                         <div class="col-2">
                             <select id="sort_by_last" name="sort_by_last" class="form-select" title="Sort">
-                                <option value="oldest" @if ($sort == 'oldest') selected @endif>Oldest Orders
-                                </option>
                                 <option value="latest" @if ($sort == 'latest') selected @endif>Latest Orders
+                                </option>
+                                <option value="oldest" @if ($sort == 'oldest') selected @endif>Oldest Orders
                                 </option>
                                 <option value="price_asc" @if ($sort == 'price_asc') selected @endif>Price ascending
                                 </option>

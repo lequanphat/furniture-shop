@@ -402,7 +402,7 @@ jQuery.noConflict();
                         </div>
                         <div class="text-muted">
                             <a href="/admin/products/${product.product_id}"
-                                class="text-reset">${product.number_of_detailed_products}detailed products</a>
+                                class="text-reset">${product.number_of_detailed_products} detailed products</a>
                         </div>
                     </div>
                 </div>

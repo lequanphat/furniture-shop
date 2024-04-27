@@ -1,8 +1,58 @@
 jQuery.noConflict();
-
 (function ($) {
     $(document).ready(function () {
         const data_asset = $('#asset').attr('data-asset');
+
+        // create category
+        function createCategoryElement({ category, can_update = false, can_delete = false }) {
+            let parent = 'Không';
+            if (category?.parent?.category_id) {
+                parent = `${category.parent.category_id} - ${category.parent.name}`;
+            }
+            const update_btn = can_update
+                ? `<button type="button" class="btn  p-2"
+                data-bs-toggle="modal" data-bs-target="#update-category-modal"
+                data-category-id="${category.category_id}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
+            </button>`
+                : '';
+            const delete_btn = can_delete
+                ? `<a class="btn p-2" data-category-id="${category.category_id}"
+            data-category-name="${category.name}" data-bs-toggle="modal"
+            data-bs-target="#delete-confirm-modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 7l16 0" />
+                <path d="M10 11l0 6" />
+                <path d="M14 11l0 6" />
+                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+            </svg>
+        </a>`
+                : '';
+            return `<td>${category.category_id}</td>
+
+            <td>${category.name}</td>
+            <td>
+            ${category.description}
+            </td>
+            <td> ${category.index}</td>
+            <td>${parent}</td>
+            <td>
+                ${update_btn}
+                ${delete_btn}
+            </td>`;
+        }
 
         $('#create-category-modal').on('show.bs.modal', function (event) {
             $('#create-category-form')[0].reset();
@@ -13,46 +63,24 @@ jQuery.noConflict();
             e.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
-                url: '/admin/categories/create',
+                url: '/admin/categories',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    let parent = 'Không';
-                    if (response.category?.parent?.category_id) {
-                        parent = `${response.category.parent.category_id} - ${response.category.parent.name}`;
-                    }
-                    $('#category-table-body').append(`
-                    <tr>
-                        <td>${response.category.category_id}</td>
-
-                        <td>${response.category.name}</td>
-                        <td>
-                        ${response.category.description}
-                        </td>
-                        <td> ${response.category.index}</td>
-                        <td>${parent}</td>
-                        <td>
-                            <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
-                                data-bs-toggle="modal" data-bs-target="#update-category-modal"
-                                data-category-id="${response.category.category_id}"
-                                data-name="${response.category.name}"
-                                data-description="${response.category.description}"
-                                data-index="${response.category.index}"
-                                data-parent-id="${response.category.parent_id}">
-                                <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                            </button>
-                            <a href='/admin/categories/delete/${response.category.category_id}'>
-                                <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
-                            </a>
-                        </td>
-                    </tr>`);
+                    $('#category-table-body').append(
+                        `<tr>${createCategoryElement({
+                            category: response.category,
+                            can_update: response.can_update,
+                            can_delete: response.can_delete,
+                        })}</tr>`,
+                    );
                     $('#create_category_response').removeClass('d-none');
                     $('#create_category_response').removeClass('alert-danger');
                     $('#create_category_response').addClass('alert-success');
                     $('#create_category_response').html(response.message);
                 },
                 error: function (error) {
-
+                    console.log(error);
                     $('#create_category_response').removeClass('alert-success d-none');
                     $('#create_category_response').addClass('alert-danger');
                     $('#create_category_response').html(Object.values(error.responseJSON.errors)[0][0]);
@@ -60,21 +88,32 @@ jQuery.noConflict();
             });
         });
 
-        $('.js-update-category-btn').on('click', function () {
-            $('#update-category-form').data('id', $(this).data('category-id'));
-            $('#update-category-modal #updateCateTitle').html(`Update Category - ${$(this).data('category-id')}`);
-            $('#update-category-modal #category_id').val($(this).data('category-id'));
-            $('#update-category-modal #name').val($(this).data('name'));
-            $('#update-category-modal #description').val($(this).data('description'));
-            $('#update-category-modal #index').val($(this).data('index'));
-
-            const parent_id = $(this).data('parent-id') || -1;
-            $('#update-category-modal #parent_id').val(parent_id);
-            $('#update_category_response').html('');
-            $('#update_category_response').removeClass('alert-success alert-danger');
-            $('#update_category_response').addClass('d-none');
-
-            // code here
+        $('#update-category-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var category_id = button.data('category-id');
+            $.ajax({
+                url: `/admin/categories/${category_id}`,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    $('#update-category-form').data('id', response.category.category_id);
+                    $('#update-category-form input[name="name"]').val(response.category.name);
+                    $('#update-category-form input[name="description"]').val(response.category.description);
+                    $('#update-category-form input[name="index"]').val(response.category.index);
+                    let options = '<option value="-1">Không</option>';
+                    response.categories.forEach((category) => {
+                        if (category.category_id == response.category.parent_id) {
+                            options += `<option value="${category.category_id}" selected>${category.category_id} - ${category.name}</option>`;
+                        } else {
+                            options += `<option value="${category.category_id}">${category.category_id} - ${category.name}</option>`;
+                        }
+                    });
+                    $('#update-category-form select[name="parent_id"]').html(options);
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
         });
 
         // update category
@@ -96,34 +135,14 @@ jQuery.noConflict();
                     var row = $('#category-table-body tr').filter(function () {
                         return $(this).find('td:first').text() == response.category.category_id;
                     });
-
                     if (row) {
-                        let parent = 'Không';
-                        if (response.category?.parent?.category_id) {
-                            parent = `${response.category.parent.category_id} - ${response.category.parent.name}`;
-                        }
-                        row.html(`
-                            <td>${response.category.category_id}</td>
-                            <td>${response.category.name}</td>
-                            <td>
-                            ${response.category.description}
-                            </td>
-                            <td> ${response.category.index}</td>
-                            <td>${parent}</td>
-                            <td>
-                                <button type="button" class="js-update-category-btn btn  mr-2 px-2 py-1"
-                                    data-bs-toggle="modal" data-bs-target="#update-category-modal"
-                                    data-category-id="${response.category.category_id}"
-                                    data-name="${response.category.name}"
-                                    data-description="${response.category.description}"
-                                    data-index="${response.category.index}"
-                                    data-parent-id="${response.category.parent_id}">
-                                    <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
-                                </button>
-                                <a href='/admin/categories/delete/${response.category.category_id}'>
-                                    <img src="${data_asset}svg/trash.svg" style="width: 18px;" />
-                                </a>
-                            </td>`);
+                        row.html(
+                            `${createCategoryElement({
+                                category: response.category,
+                                can_update: response.can_update,
+                                can_delete: response.can_delete,
+                            })}`,
+                        );
                     }
                 },
                 error: function (error) {
@@ -137,26 +156,37 @@ jQuery.noConflict();
             });
         });
 
-        // delete category
-        $(document).on('click', '.js-delete-category', function (e) {
-            e.preventDefault();
+        // delete role
+        $('#delete-confirm-modal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget);
+            var category_id = button.data('category-id');
+            var category_name = button.data('category-name');
+
+            $(this)
+                .find('.modal-description')
+                .html(`Do you want to delete category <strong>${category_name}</strong> ?`);
+            $(this).find('#confirm-btn').text('Yes, delete this category');
+            $(this).find('#confirm-btn').data('category-id', category_id);
+        });
+
+        $(document).on('click', '#delete-confirm-modal #confirm-btn', function (e) {
             var category_id = $(this).data('category-id');
-            console.log(category_id);
-            var row = $(this).closest('tr');
             $.ajax({
                 url: `/admin/categories/${category_id}`,
                 type: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
-                success: function (response) {
-                    row.remove();
+                success: function (data) {
+                    $('#category-table-body tr td')
+                        .filter(function () {
+                            return $(this).text() == category_id;
+                        })
+                        .closest('tr')
+                        .remove();
                 },
                 error: function (error) {
-                    // show error modal
-                    console.log('====================================');
                     console.log(error);
-                    console.log('====================================');
                     $('#error-delete-modal').addClass('show');
                     $('#error-delete-modal').attr('style', 'display: block;');
                     $('#error-delete-modal').removeAttr('aria-hidden');
