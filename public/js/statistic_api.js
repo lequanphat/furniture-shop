@@ -199,6 +199,18 @@ jQuery.noConflict();
     });
 
     //Sơ đồ tròn sản phẩm bán chạy
+    function debounce(func, wait) { //hàm đợi 1 thời gian rồi mới thực hiện
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
     $.ajax({
         url: `/admin/statistics/sellingproductpie`,
         type: 'GET',
