@@ -212,31 +212,24 @@ jQuery(document).ready(function () {
         if (categoryIds.length === 0) {
             categoryIds.push('all');
         }
+
+        // price
+        let minPrice = $('.price-input .input-min').data('value');
+        let maxPrice = $('.price-input .input-max').data('value');
         history.pushState(
             null,
             null,
             `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
                 ',',
-            )}&search=${search_text}&sorted_by=${sorted_by}`,
+            )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
         );
         $.ajax({
             url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
                 ',',
-            )}&search=${search_text}&sorted_by=${sorted_by}`,
+            )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
             type: 'GET',
             success: function (response) {
                 let html = '';
-                // if (response.list.length !== 0) {
-                //     for (let i = 0; i < response.list.length; i++) {
-                //         let product = response.list[i];
-                //         html += createProductElement(product);
-                //     }
-                // } else {
-                //     for (let i = 0; i < response.products.data.length; i++) {
-                //         let product = response.products.data[i];
-                //         html += createProductElement(product);
-                //     }
-                // }
                 for (let i = 0; i < response.products.data.length; i++) {
                     let product = response.products.data[i];
                     html += createProductElement(product);
@@ -267,43 +260,47 @@ jQuery(document).ready(function () {
     $('#search-input').on(
         'input',
         debounce(function () {
-            const page = $('.pagination-item.active').text();
-            productFilter({ page });
+            productFilter({ page: 1 });
         }, 500),
     );
 
     // sorted
     $('#sort-product').change(function () {
-        const page = $('.pagination-item.active').text();
-        productFilter({ page });
+        productFilter({ page: 1 });
     });
     // category filter
     $('.js-cate-checkbox').change(function () {
-        const page = $('.pagination-item.active').text();
-        productFilter({ page });
+        productFilter({ page: 1 });
     });
 
     // color filter
     $('.js-color-checkbox').change(function () {
-        const page = $('.pagination-item.active').text();
-        productFilter({ page });
+        productFilter({ page: 1 });
     });
 
     // price filter
-    var targetNode = $('.ui-slider-range')[0];
-    var observerOptions = {
-        attributes: true,
-        attributeFilter: ['style'],
-    };
 
-    var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            var newWidth = $(mutation.target).width();
-            var newLeft = $(mutation.target).position().left;
-            console.log('New width: ' + newWidth);
-            console.log('New left: ' + newLeft);
-        });
+    function performAjaxCall() {
+        productFilter({ page: 1 });
+    }
+
+    const debouncedAjaxCall = debounce(performAjaxCall, 1000);
+    $('.range-input input').on('input', function () {
+        let minVal = parseInt($('.range-input input').first().val());
+        let maxVal = parseInt($('.range-input input').last().val());
+
+        $('.price-input .input-min').val(formatter.format(minVal < maxVal ? minVal : maxVal) + 'đ');
+        $('.price-input .input-min').data('value', minVal < maxVal ? minVal : maxVal);
+        $('.price-input .input-max').val(formatter.format(maxVal > minVal ? maxVal : minVal) + 'đ');
+        $('.price-input .input-max').data('value', maxVal > minVal ? maxVal : minVal);
+
+        let leftPercent = (minVal / parseInt($('.range-input input').first().attr('max'))) * 100;
+        let rightPercent = (maxVal / parseInt($('.range-input input').first().attr('max'))) * 100;
+        const progress = $('.slider .progress');
+        progress.css('left', `${leftPercent < rightPercent ? leftPercent : rightPercent}%`);
+        progress.css('right', `${100 - (rightPercent > leftPercent ? rightPercent : leftPercent)}%`);
+
+        // call ajax
+        debouncedAjaxCall();
     });
-
-    observer.observe(targetNode, observerOptions);
 });

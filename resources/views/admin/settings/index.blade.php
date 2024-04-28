@@ -74,8 +74,25 @@
 
                                 <div class="col-md">
                                     <div class="form-label">Birth date</div>
-                                    <input name="birth_date" type="date" class="form-control"
-                                        value="{{ Auth::user()->birth_date }}">
+                                    <div class="input-icon mb-2">
+                                        <input name="birth_date" class="form-control " placeholder="Select a date"
+                                            id="datepicker-icon" value="{{ Auth::user()->birth_date }}" />
+                                        <span class="input-icon-addon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                    d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
+                                                <path d="M16 3v4" />
+                                                <path d="M8 3v4" />
+                                                <path d="M4 11h16" />
+                                                <path d="M11 15h1" />
+                                                <path d="M12 15v3" />
+                                            </svg>
+                                        </span>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -97,6 +114,7 @@
                                 </div>
 
                             </div>
+
                             <div id="update_response" class="alert m-0 mt-3 d-none"></div>
                         </div>
                         <div class="card-footer bg-transparent mt-auto">
@@ -117,4 +135,20 @@
     </div>
     {{-- Script --}}
     <script src="{{ asset('js/settings.js') }}" defer></script>
+    <script src="{{ asset('vendor/litepicker/dist/litepicker.js') }}" defer></script>
+    <script>
+        // @formatter:off
+        document.addEventListener("DOMContentLoaded", function() {
+            window.Litepicker && (new Litepicker({
+                element: document.getElementById('datepicker-icon'),
+                buttonText: {
+                    previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                    nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+                },
+            }));
+        });
+        // @formatter:on
+    </script>
 @endsection
