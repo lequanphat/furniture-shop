@@ -109,7 +109,7 @@ jQuery.noConflict();
         error: function (error) {
             console.log(error);
         },
-       
+
 
 
     });
@@ -140,10 +140,10 @@ jQuery.noConflict();
               curve: "straight",
             },
             series: [{
-              name: "Total sold",
+              name: "Number of products ordered",
               data: response.solds,
             }, {
-              name: "Total orders",
+              name: "Orders created",
               data: response.orders
             }, {
               name: "Total Revenue",
@@ -197,4 +197,75 @@ jQuery.noConflict();
             console.log(error);
         },
     });
-    })(jQuery); 
+
+    //Sơ đồ tròn sản phẩm bán chạy
+    function debounce(func, wait) { //hàm đợi 1 thời gian rồi mới thực hiện
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    $.ajax({
+        url: `/admin/statistics/sellingproductpie`,
+        type: 'GET',
+        success: function (response){
+            console.log(response);
+            window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+                chart: {
+                    type: "donut",
+                    fontFamily: 'inherit',
+                    height: 240,
+                    sparkline: {
+                        enabled: true
+                    },
+                    animations: {
+                        enabled: false
+                    },
+                },
+                fill: {
+                    opacity: 1,
+                },
+                //series: [44, 55, 12, 2],
+                //labels: ["Direct", "Affilliate", "E-mail", "Other"],
+                series: response.number_of_product,
+                labels: response.labels,
+                tooltip: {
+                    theme: 'dark'
+                },
+                grid: {
+                    strokeDashArray: 4,
+                },
+                colors: [tabler.getColor("primary"), tabler.getColor("primary", 0.8), tabler.getColor("primary", 0.7), tabler.getColor("primary", 0.6), tabler.getColor("primary", 0.4), tabler.getColor("primary", 0.3)],
+                legend: {
+                    show: true,
+                    position: 'bottom',
+                    offsetY: 12,
+                    markers: {
+                        width: 10,
+                        height: 10,
+                        radius: 100,
+                    },
+                    itemMargin: {
+                        horizontal: 8,
+                        vertical: 8
+                    },
+                },
+                tooltip: {
+                    fillSeriesColor: false
+                },
+            })).render();
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+
+
+    })(jQuery);
