@@ -133,16 +133,28 @@
                                 <h3>Filter By Price</h3>
                             </div>
                             <div class="price-filter">
-                                <div id="slider-range"></div>
-                                <div class="price-slider-amount">
-                                    <div class="label-input">
-                                        <label>Price:</label>
-                                        <input type="text" id="amount" name="price" placeholder="Add Your Price" />
+                                <div class="price-input">
+                                    <div class="field">
+                                        <input type="text" class="input-min" value="0đ" data-value="0" readonly>
                                     </div>
-                                    <button type="button">Filter</button>
+                                    <div class="separator">-</div>
+                                    <div class="field">
+                                        <input type="text" class="input-max" value="100,000,000đ" data-value="100000000"
+                                            readonly>
+                                    </div>
+                                </div>
+                                <div class="slider">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <input type="range" name="" id="min" class="range-min"
+                                        min="0" max="100000000" value="0">
+                                    <input type="range" name="" id="max" class="range-max"
+                                        min="0" max="100000000" value="100000000">
                                 </div>
                             </div>
                         </div>
+
                         <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
                             data-aos-delay="200">
                             <div class="sidebar-widget-title mb-25">

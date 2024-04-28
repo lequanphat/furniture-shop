@@ -33,6 +33,12 @@ class PagesController extends Controller
         $color = request()->query('color');
         $search = request()->query('search');
         $sorted_by = request()->query('sorted_by');
+
+
+        $price_from = request()->query('price_from');
+        $price_to = request()->query('price_to');
+
+
         // query
         $query = Product::with(
             [
@@ -43,6 +49,15 @@ class PagesController extends Controller
                 },
             ]
         )->where('is_deleted', false)->has('detailed_products');
+
+
+
+        if ($price_from !== null && $price_to !== null) {
+            $query->whereHas('detailed_products', function ($query) use ($price_from, $price_to) {
+                $query->where('is_deleted', 0)
+                    ->whereBetween('original_price', [$price_from, $price_to]);
+            });
+        }
 
         // If categories is not 'all', filter by category_id
         if ($categories !== 'all' && $categories !== null) {
