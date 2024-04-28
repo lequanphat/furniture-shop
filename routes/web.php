@@ -292,6 +292,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/statistics', [StatisticController::class, 'statistic_ui']);
     Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
     Route::post('/admin/statistics/getstatistic', [StatisticController::class, 'RevenueDateByDate']);
+    Route::get('/admin/statistics/sellingproductpie', [StatisticController::class, 'SellingProductPie']);
 
 
 

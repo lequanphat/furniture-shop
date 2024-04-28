@@ -22,13 +22,13 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h1 id="title_chart">Overview 7 day</h1>
+                                <h1 id="title_chart">Overview 7 days lately</h1>
                                 <div id="chart-statistic" class="chart-lg"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div><br>
+            </div><br><br>
 
             <div class="container-xl">
                 <div class="row row-deck row-cards">
@@ -70,8 +70,6 @@
                                 </div>
                             </form>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -87,7 +85,34 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><br><br>
+
+
+
+
+            <div class="container-xl ">
+                <div class="row row-deck row-cards">
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 id="title_chart">Statistics by product</h1>
+                                <div id="chart-demo-pie"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 id="title_chart">Statistics by product types</h1>
+                                <div id="chart-demo-pie-type-product"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+
+
         </div>
 
 
