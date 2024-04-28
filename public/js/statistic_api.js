@@ -1,7 +1,14 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-    })
+
+      $('.js-close-error-modal').click(function () {
+        $('#error-delete-modal').removeClass('show');
+        $('#error-delete-modal').attr('style', 'display: none;');
+        $('#error-delete-modal').attr('aria-hidden', 'true');
+        $('.modal-backdrop.fade.show').remove();
+    });  
+
     $('#statistic_form').submit(function (e) {
         e.preventDefault();
         var formData = $(this).serialize();
@@ -13,9 +20,10 @@ jQuery.noConflict();
             data: formData,
             success: function (response) {
                 console.log({ response });
+                $('#chart-statistic-2').html(``);
                 window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic-2'), {
                     chart: {
-                      type: "line",
+                      type: "bar",
                       fontFamily: 'inherit',
                       height: 240,
                       parentHeightOffset: 0,
@@ -35,10 +43,10 @@ jQuery.noConflict();
                       curve: "straight",
                     },
                     series: [{
-                      name: "Total sold",
+                      name: "Total sold (unit)",
                       data: response.solds,
                     }, {
-                      name: "Total Revenue",
+                      name: "Total Revenue (million VNĐ)",
                       data: response.revenues
                     }],
                     tooltip: {
@@ -60,7 +68,7 @@ jQuery.noConflict();
                       tooltip: {
                         enabled: false
                       },
-                      type: 'datetime',
+                      type: 'date',
                     },
                     yaxis: {
                       labels: {
@@ -87,6 +95,12 @@ jQuery.noConflict();
             },
             error: function (error) {
                 console.log({ error });
+                $('#error-delete-modal').addClass('show');
+                $('#error-delete-modal').attr('style', 'display: block;');
+                $('#error-delete-modal').removeAttr('aria-hidden');
+                $('body').append('<div class="modal-backdrop fade show"></div>');
+                $('#error-message').text(Object.values(error.responseJSON.errors)[0][0]);
+                $('#error-title').text("Cannot statistic");
             },
         });
     });
@@ -120,7 +134,7 @@ jQuery.noConflict();
           console.log(response);
           window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic'), {
             chart: {
-              type: "line",
+              type: "bar",
               fontFamily: 'inherit',
               height: 240,
               parentHeightOffset: 0,
@@ -140,13 +154,13 @@ jQuery.noConflict();
               curve: "straight",
             },
             series: [{
-              name: "Number of products ordered",
+              name: "Number of products ordered (unit)",
               data: response.solds,
             }, {
-              name: "Orders created",
+              name: "Orders created (unit)",
               data: response.orders
             }, {
-              name: "Total Revenue",
+              name: "Total Revenue (million VNĐ)",
               data: response.revenues
             }],
             tooltip: {
@@ -168,7 +182,7 @@ jQuery.noConflict();
               tooltip: {
                 enabled: false
               },
-              type: 'datetime',
+              type: 'date',
             },
             yaxis: {
               labels: {
@@ -176,7 +190,7 @@ jQuery.noConflict();
               },
             },
             labels: response.labels,
-            colors: [tabler.getColor("yellow"), tabler.getColor("green"), tabler.getColor("primary")],
+            colors: [tabler.getColor("green"), tabler.getColor("yellow"), tabler.getColor("primary")],
             legend: {
               show: true,
               position: 'bottom',
@@ -267,5 +281,5 @@ jQuery.noConflict();
 
     });
 
-
+  })
     })(jQuery);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
@@ -16,6 +17,7 @@ class StatisticController extends Controller
     //
     private $sqlDateFormat='Y-m-d';
     private $DateFormat='d-m-Y';
+    private $round=1000000;
     public function statistic_ui(Request $request)
     {
 
@@ -36,10 +38,11 @@ class StatisticController extends Controller
             $order=Order::whereDate('created_at',$time)->get()->count();
             $date=now()->subDays(($i));
             $revenue=Order::whereDate('created_at',$time)->where('is_paid',1)->sum('total_price');
+            
             array_push($orders,$order);
-            array_push($revenues,$revenue);
+            array_push($revenues,$revenue/$this->round);
             array_push($solds,$sold);
-            array_push($dates,$date);
+            array_push($dates,$date->format($this->DateFormat));
         }
         return response()->json(
             [
@@ -55,7 +58,7 @@ class StatisticController extends Controller
     }
     public function RevenueDateByDate(Request $request)
     {
-        $category = request()->input('category_id');//All or id category
+        $categoryID = request()->input('category_id');
         $start =Carbon::parse(request()->input('start-date'));
         $end = Carbon::parse(request()->input('end-date'));
         if($start>$end)
@@ -66,29 +69,52 @@ class StatisticController extends Controller
         $days=[];
         $revenues=[];
         $quantities=[];
-        while ($current<=$end)
-        {
-            if($category==-1)
+       
+
+            if($categoryID==-1) //-1 mean All
             {
+                while ($current<=$end)
+                {
                 $query=OrderDetail::whereDate('created_at',$current->format($this->sqlDateFormat));
+                 //calc value
                 $quantity=$query->sum('quantities');
                 $revenue = $quantity*$query->average('unit_price');
-                array_push($revenues,$revenue);
+
+                array_push($revenues,$revenue/$this->round);
                 array_push($quantities,$quantity);
-                array_push($days,$current);
+                array_push($days,$current->format($this->DateFormat));
+                $current=$current->addDay();
+                }
+              
             }
             else
             {
-                $query=OrderDetail::with('detailed_product.product.category.parent')->whereDate('created_at',$current->format($this->sqlDateFormat))
-                ->where('detailed_product.product.category.category_id', $category);
-                $quantity=$query->sum('quantities');
-                $revenue = $quantity*$query->average('unit_price');
-                array_push($revenues,$revenue);
-                array_push($quantities,$quantity);
-                array_push($days,$current);
+                //get categories and child_categories by id
+                $categories=Category::where('category_id',$categoryID)->Orwhere('parent_id',$categoryID);
+                if($categories->count()!=0)
+                {
+                    while ($current<=$end)
+                    {
+                   
+                    $query=OrderDetail::with('detailed_product.product','detailed_product.product.category.parent')->whereDate('created_at',$current->format($this->sqlDateFormat))->get()
+                    ->whereIN('detailed_product.product.category_id', $categories->pluck('category_id'));
+                    //calc value
+                    $quantity=$query->sum('quantities');
+                    $revenue = $quantity*$query->average('unit_price');
+                    
+                    array_push($revenues,$revenue/$this->round);
+                    array_push($quantities,$quantity);
+                    array_push($days,$current->format($this->DateFormat));
+                    $current=$current->addDay();
+                    }
+                }
+                else
+                {
+                    return response()->json(['errors' => ['message' => ['Can not statistic when not found categories']]], 400);
+                }
+              
+                
             }
-            $current=$current->addDay();
-        }
         return response()->json(
             [
                 'labels'=>$days,
