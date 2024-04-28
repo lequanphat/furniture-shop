@@ -16,6 +16,7 @@ use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarrantyController;
@@ -74,6 +75,8 @@ Route::middleware([PublicMiddleware::class])->group(function () {
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
     // private api
+    Route::get('/change-password', [PagesController::class, 'change_password'])->name('change_password_ui');
+    Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
     //account
     Route::get('/account', [ProfileController::class, 'customer_ui'])->name('my_account');
     Route::post('/account/profile/update', [ProfileController::class, 'update_customer']);
@@ -95,16 +98,13 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [HomeController::class, 'index'])->name('admin');
-    Route::get('/change-password', [PagesController::class, 'change_password'])->name('change_password_ui');
-    Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
+
+    // profile routes
+    Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
+    Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
+
 
     // users routes
-    Route::get('/admin/users/{user_id}/ban', [UserController::class, 'ban_user'])->middleware('can:delete user');
-    Route::get('/admin/users/{user_id}/unban', [UserController::class, 'unban_user'])->middleware('can:delete user');
-
-    Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
-    Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
-
     Route::middleware(['can:read users'])->group(function () {
         // employee routes
         Route::get('/admin/employee', [UserController::class, 'employee_ui']);
@@ -117,9 +117,19 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/customers/{user_id}/details', [UserController::class, 'customer_details_ui']);
         Route::get('/admin/customers/pagination', [UserController::class, 'customers_pagination']);
     });
+    Route::middleware(['can:create user'])->group(function () {
+        Route::post('/admin/employee/create', [UserController::class, 'create_employee']);
+    });
+    Route::middleware(['can:update user'])->group(function () {
+        Route::post('/admin/employee/update', [UserController::class, 'update_employee']);
+    });
 
+    Route::middleware(['can:delete user'])->group(function () {
+        Route::get('/admin/users/{user_id}/ban', [UserController::class, 'ban_user'])->middleware('can:delete user');
+        Route::get('/admin/users/{user_id}/unban', [UserController::class, 'unban_user'])->middleware('can:delete user');
+    });
 
-    // brands
+    // brands routes
     Route::middleware(['can:read brands'])->group(function () {
         Route::get('/admin/brands', [BrandController::class, 'brand_ui'])->name('brands.index');
         Route::get('/admin/brands', [BrandController::class, 'brand_search_ui'])->name('brands.search');
@@ -134,8 +144,24 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::middleware(['can:delete brand'])->group(function () {
         Route::delete('/admin/brands/{brand_id}/delete', [BrandController::class, 'brand_delete'])->name('brands.delete');
     });
-   
 
+
+    // categories routes
+    Route::middleware(['can:read categories'])->group(function () {
+        Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
+
+        Route::get('/admin/categories/getall', [CategoryController::class, 'getAll']);
+
+        Route::get('/admin/categories/{category_id}', [CategoryController::class, 'getCategory']);
+    });
+    Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
+
+    Route::middleware(['can:update category'])->group(function () {
+        Route::patch('/admin/categories/{category_id}', [CategoryController::class, 'update'])->name('categories.update');
+    });
+    Route::middleware(['can:delete category'])->group(function () {
+        Route::delete('/admin/categories/{category_id}', [CategoryController::class, 'delete'])->name('categories.delete');
+    });
 
 
     // suppliers
@@ -154,32 +180,34 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
 
 
-    //order
-    Route::get('/admin/orders', [OrderController::class, 'index']);
-    Route::post('/admin/orders', [OrderController::class, 'create']);
-    Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
-    Route::get('/admin/orders/search', [OrderController::class, 'search_orders_ajax']);
+    // orders and warranty routes
+    Route::middleware(['can:read orders'])->group(function () {
+        Route::get('/admin/orders', [OrderController::class, 'index']);
+        Route::get('/admin/orders/search', [OrderController::class, 'search_orders_ajax']);
+        // order detail
+        Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
 
-    //order detail
-    Route::get('/admin/orders/{order_id}', [OrderController::class, 'details'])->name('orders.details');
-    Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
+        // warranty
+        Route::get('/admin/warranties', [WarrantyController::class, 'index']);
+        Route::get('/admin/warranties/search', [WarrantyController::class, 'search_warranties_ajax'])->name('warranty.search');
+        Route::get('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_details'])->name('warranties.details');
+    });
+    Route::middleware(['can:create order'])->group(function () {
+        Route::post('/admin/orders', [OrderController::class, 'create']);
+        Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
 
-    //warranty
-    Route::get('/admin/warranties', [WarrantyController::class, 'index']);
-    Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
-    Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
-    //Route::get('/admin/warranties', [WarrantyController::class,'warranty_search_ui'])->name('warranty.search');
-    Route::get('/admin/warranties/search', [WarrantyController::class, 'search_warranties_ajax'])->name('warranty.search');
+        Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
+    });
+    Route::middleware(['can:update order'])->group(function () {
+        Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
 
-    //warranty detail
-    Route::get('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_details'])->name('warranties.details');
 
-    // category
-    Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
-    Route::get('/admin/categories/getall', [CategoryController::class, 'getAll']);
-    Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
-    Route::delete('/admin/categories/{category_id}', [CategoryController::class, 'delete'])->name('categories.delete');
-    Route::patch('/admin/categories/{category_id}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
+    });
+
+
+
+
 
     // colors and tags
     Route::middleware(['can:read colors'])->group(function () {
@@ -224,49 +252,75 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/products/{product_id}/{sku}', [ProductController::class, 'detailed_product_details'])->name('products.detailed_product_details');
     });
 
+
     Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
 
-    // receipts
-    Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
-    Route::post('/admin/receipts/create',[ReceiptsController::class,'create_receiving']);
+
+    // receipts routes
+    Route::middleware(['can:read receipts'])->group(function () {
+        Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
+    });
+    Route::middleware(['can:create receipt'])->group(function () {
+        Route::post('/admin/receipts/create', [ReceiptsController::class, ' create_receiving']);
+    });
 
 
-    // discounts
-    Route::get('/admin/discounts', [DiscountController::class, 'index']);
-    Route::post('/admin/discounts/create', [DiscountController::class, 'create']);
-    Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
-    Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
-    Route::get('/admin/discounts/viewDetail/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
+
+
+    // discounts routes
+    Route::middleware(['can:read discounts'])->group(function () {
+        Route::get('/admin/discounts', [DiscountController::class, 'index']);
+        Route::get('/admin/discounts/viewDetail/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
+    });
+    Route::middleware(['can:create discount'])->group(function () {
+        Route::post('/admin/discounts/create', [DiscountController::class, 'create']);
+    });
+    Route::middleware(['can:update discount'])->group(function () {
+        Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
+    });
+    Route::middleware(['can:delete discount'])->group(function () {
+        Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
+    });
+
+
 
     Route::post('/admin/discounts/update-product-discount', [DiscountController::class, 'updateProductDiscount'])->name("product.Discount.checkbox");
     Route::post('/admin/discounts/deleteProductDiscount', [DiscountController::class, 'deleteProductDiscountCheck'])->name('delete.ProductDiscount.checkbox');
-    //profile
-    Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
-    Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
 
-    // permissions
+
+    // statistic routes
     Route::get('/admin/statistics', [StatisticController::class, 'statistic_ui']);
     Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
     Route::post('/admin/statistics/getstatistic', [StatisticController::class, 'RevenueDateByDate']);
 
 
 
-    Route::get('/admin/roles', [PermissionController::class, 'index']);
-    Route::get('/admin/roles/pagination', [PermissionController::class, 'roles_pagination']);
-    Route::post('/admin/roles', [PermissionController::class, 'create']);
-    Route::patch('/admin/roles/{role_id}', [PermissionController::class, 'update']);
-    Route::get('/admin/roles/{role_id}', [PermissionController::class, 'get_role']);
-    Route::delete('/admin/roles/{role_id}', [PermissionController::class, 'delete']);
+    // authorization
+    Route::middleware(['can:read roles'])->group(function () {
+        Route::get('/admin/roles', [PermissionController::class, 'index']);
+        Route::get('/admin/roles/pagination', [PermissionController::class, 'roles_pagination']);
+        Route::get('/admin/roles/{role_id}', [PermissionController::class, 'get_role']);
+    });
+    Route::middleware(['can:create role'])->group(function () {
+        Route::post('/admin/roles', [PermissionController::class, 'create']);
+    });
+    Route::middleware(['can:update role'])->group(function () {
+        Route::patch('/admin/roles/{role_id}', [PermissionController::class, 'update']);
+    });
+    Route::middleware(['can:delete role'])->group(function () {
+        Route::delete('/admin/roles/{role_id}', [PermissionController::class, 'delete']);
+    });
 
 
-    Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
-    Route::get('/admin/authorization/pagination', [PermissionController::class, 'authorization_pagination']);
-    Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
+    Route::middleware(['can:read roles,create roles,update roles,delete roles'])->group(function () {
+        Route::get('/admin/authorization', [PermissionController::class, 'authorization_ui']);
+        Route::get('/admin/authorization/pagination', [PermissionController::class, 'authorization_pagination']);
+        Route::post('/admin/authorization', [PermissionController::class, 'assign_role']);
+    });
 
 
-
-
-
-
-    Route::get('/admin/settings', [PagesController::class, 'admin_settings']);
+    Route::get('/admin/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/admin/settings/profile', [SettingController::class, 'update_profile']);
+    Route::get('/admin/settings/change-password', [SettingController::class, 'changePasswordUI'])->name('settings.change_password');
+    Route::post('/admin/settings/change-password', [SettingController::class, 'changePassword']);
 });
