@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\TryCatch;
 
+use App\Models\ProductDetail;
+
+
 class ReceiptsController extends Controller
 {
     public function index()
@@ -42,5 +45,19 @@ class ReceiptsController extends Controller
         $receipts = ReceivingReport::create($receipts_data);
 
         return ['message' => 'Created order successfully!', 'receipts' => $receipts];
+    }
+
+    public function details(Request $request)
+    {
+        $receipt_id = $request->route('receipt_id');
+        $receipt = ReceivingReport::where('receiving_report_id', $receipt_id)->with('employee.default_address')->first();
+        $detailed_Receipts = $receipt->receiving_details()->with('detailed_product')->paginate(5); // 5 items per page
+        $data = [
+            'page' => 'Order Details',
+            'receipt' => $receipt,
+            'detailed_receipts' => $detailed_Receipts,
+            'detailed_products' => ProductDetail::paginate(5),
+        ];
+        return view('admin.receipts.receipts_details', $data);
     }
 }

@@ -260,9 +260,16 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::middleware(['can:read receipts'])->group(function () {
         Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
     });
-    Route::middleware(['can:create receipt'])->group(function () {
+    Route::middleware(['can:create receipts'])->group(function () {
         Route::post('/admin/receipts/create', [ReceiptsController::class, ' create_receiving']);
     });
+
+
+    Route::middleware(['can:read receipts'])->group(function () {
+        Route::get('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'details'])->name('receipts.details');
+    });
+
+   
 
 
 
