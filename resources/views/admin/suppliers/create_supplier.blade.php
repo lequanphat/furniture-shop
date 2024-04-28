@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal-simple" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Create Supplier </h5>
@@ -31,7 +31,7 @@
                             placeholder="203 An Dương Vương, phường 01, quận 5, TP.HCM" required>
                     </div>
 
-                    <div id="create_supplier_response" class="alert ">
+                    <div id="create_supplier_response" class="alert d-none">
                     </div>
                     <button type="submit" class="btn btn-primary float-right px-4 mx-2">Submit</button>
 

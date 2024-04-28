@@ -68,7 +68,11 @@ class ProductController extends Controller
             foreach ($product->detailed_products as $detailed_product) {
                 $average_price += $detailed_product->original_price;
             }
-            $average_price = $average_price / count($product->detailed_products);
+            if (count($product->detailed_products) > 0) {
+                $average_price = $average_price / count($product->detailed_products);
+            } else {
+                $average_price = 0;
+            }
             $product->detailed_product = $product->detailed_products->first();
             $product->average_price = $average_price;
             $product->number_of_detailed_products = count($product->detailed_products);
@@ -305,7 +309,7 @@ class ProductController extends Controller
                     $query->where('is_deleted', 0)->with('images', 'product_discounts.discount');
                 },
             ]
-        )->where('is_deleted', false);
+        )->where('is_deleted', false)->has('detailed_products');
 
         // If categories is not 'all', filter by category_id
         if ($categories !== 'all' && $categories !== null) {

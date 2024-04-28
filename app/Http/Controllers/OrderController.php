@@ -51,7 +51,7 @@ class OrderController extends Controller
         // sort orders
         if ($sort == 'oldest') {
             $query = $query->orderBy('created_at', 'asc');
-        } else if ($sort == 'latest') {
+        } else if ($sort == 'latest' || $sort == null) {
             $query = $query->orderBy('created_at', 'desc');
         } else if ($sort == 'price_asc') {
             $query = $query->orderBy('total_price', 'asc');
@@ -145,7 +145,7 @@ class OrderController extends Controller
         // sort orders
         if ($sort == 'oldest') {
             $query = $query->orderBy('created_at', 'asc');
-        } else if ($sort == 'latest') {
+        } else if ($sort == 'latest'  || $sort == null) {
             $query = $query->orderBy('created_at', 'desc');
         } else if ($sort == 'price_asc') {
             $query = $query->orderBy('total_price', 'asc');
