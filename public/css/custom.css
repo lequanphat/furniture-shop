@@ -1162,3 +1162,178 @@ input[type='checkbox' i] {
     background-color: rgb(233, 119, 48, 0.8);
     color: white;
 }
+
+/* Custom edit profile */
+.btn-edit-profile {
+    padding: 24px 0 16px 0;
+}
+.edit-profile-btn {
+    background-color: #e97730;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+.edit-profile-btn:hover {
+    background-color: #e97730;
+    opacity: 0.8;
+}
+#btn-list-edit {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 12px;
+    padding-top: 24px;
+}
+#btn-list-edit button {
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#btn-list-edit button.update-profile-btn {
+    background-color: #e97730;
+}
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 24px;
+}
+.address-header h3 {
+    margin: 0;
+    border: none;
+}
+.create-address-btn {
+    background-color: #e97730;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#address_table .address-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0 18px 0;
+    border-bottom: 1px solid #ccc;
+}
+#address_table .address-item .address-info {
+    width: auto !important;
+}
+#address_table .address-item .address-action {
+    width: max-content;
+    flex: 0 !important;
+}
+#address_table .address-info .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100% !important;
+}
+#address_table .address-info .header .receiver-name {
+    position: relative;
+    font-weight: 600;
+    margin-right: 10px;
+}
+#address_table .address-info .header .receiver-name::before {
+    content: '';
+    position: absolute;
+    font-weight: 400;
+    width: 1px;
+    height: 80%;
+    background-color: #ccc;
+    top: 10%;
+    right: -10px;
+}
+#address_table .address-info .default-tag {
+    border: 1px solid #e97730;
+    color: #e97730;
+    padding: 2px 12px;
+    font-size: 12px;
+    width: max-content;
+    margin-top: 6px;
+}
+#address_table .address-action {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#address_table .address-action button {
+    border: 1px solid #e97730;
+    outline: none;
+    background-color: transparent;
+    margin: 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+#address_table .address-action button.update-btn {
+    color: #e97730;
+}
+#address_table .address-action button.remove-btn {
+    border: 1px solid red;
+    color: red;
+}
+
+.modal-address-title {
+    padding: 0 !important;
+    border: none;
+}
+.modal-address-body {
+    padding: 28px;
+}
+.address-action-modal {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+.address-action-modal button {
+    border: none;
+    outline: none;
+    padding: 12px;
+    min-width: 140px;
+    border-radius: 2px;
+    background-color: #e97730;
+    margin: 0;
+}
+.address-action-modal button:hover {
+    background-color: #e97730;
+    opacity: 0.8;
+}
+
+.delete-address-action {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 8px;
+}
+.delete-address-action button {
+    border: none;
+    outline: none;
+    padding: 12px 12px;
+    min-width: 120px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+}
+.delete-address-action button.delete-btn {
+    background-color: rgb(232, 71, 71);
+}
+.delete-address-action button.cancel-btn {
+    background-color: #ccc;
+}
+.delete-address-message {
+    font-size: 16px;
+}

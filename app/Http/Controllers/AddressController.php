@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RequestsAddress;
 use Illuminate\Http\Request;
 use App\Models\Address;
+use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
 {
@@ -48,19 +49,18 @@ class AddressController extends Controller
     }
     public function create_address(RequestsAddress $request)
     {
-        $user_id =$request->input("user_id");
+        $user_id = Auth::id();
         $address = Address::create([
             'receiver_name' => $request->input('receiver_name'),
             'address' => $request->input("address"),
             'phone_number' => $request->input('phone_number'),
-            'is_default' =>0,
+            'is_default' => 0,
             'user_id' => $user_id,
         ]);
-        $default=$request->input('is_default');
-        if($default==true)
-        {
+        $default = $request->input('is_default');
+        if ($default == true) {
             Address::where('user_id', $user_id)->where('is_default', 1)->update(['is_default' => 0]);
-            $address->update(['is_default' =>1]);
+            $address->update(['is_default' => 1]);
         }
         return ['message' => 'Created address  successfully!', 'address' => $address];
     }
@@ -68,10 +68,10 @@ class AddressController extends Controller
     {
         $address_id = $request->input('address_id');
         $address = Address::where('address_id', $address_id)->first();
-        if ($address->is_default==1) {
+        if ($address->is_default == 1) {
             return response()->json(['errors' => ['message' => ['Can not delete when this address is default.']]], 400);
         }
         $address->delete();
-        return ['message' => 'Deleted address card successfully!','address_id'=>$address_id];
+        return ['message' => 'Deleted address card successfully!', 'address_id' => $address_id];
     }
 }
