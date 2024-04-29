@@ -2,7 +2,7 @@
 @section('content')
     {{-- @include('components.head-banner') --}}
 
-    <div class="shop-area shop-page-responsive  pb-100">
+    <div id="shop" class="shop-area shop-page-responsive  pb-100">
         <div class="container">
             <div class="row flex-row-reverse">
                 <div class="col-lg-9">
@@ -50,7 +50,7 @@
                                             $detailed_product = $product->detailed_product;
                                         @endphp
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-12">
-                                            <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
+                                            <div class="product-wrap mb-35">
                                                 <div class="custom-product-img product-img img-zoom mb-25">
                                                     <a href="/products/{{ $product->product_id }}">
                                                         <img src="{{ $detailed_product->image }}" alt=""
@@ -97,17 +97,8 @@
                                     @endforeach
 
                                 </div>
-                                <div class="pagination-style-1" data-aos="fade-up" data-aos-delay="200">
-                                    <ul>
-
-                                        @for ($i = 1; $i <= $products->lastPage(); $i++)
-                                            <li>
-                                                <a class="pagination-item
-                                                    {{ $retVal = $i == $products->currentPage() ? 'active' : '' }}"
-                                                    href="">{{ $i }}</a>
-                                            </li>
-                                        @endfor
-                                    </ul>
+                                <div class="pagination-style-1">
+                                    {{ $products->render('pages.shop.pagination') }}
                                 </div>
                             </div>
                             <div id="shop-2" class="tab-pane">
@@ -118,7 +109,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="sidebar-wrapper">
-                        <div class="sidebar-widget mb-40" data-aos="fade-up" data-aos-delay="200">
+                        <div class="sidebar-widget mb-40">
                             <div class="search-wrap-2">
                                 <form class="search-2-form" action="#">
                                     <input id="search-input" placeholder="Search products..." type="text"
@@ -127,34 +118,6 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
-                            data-aos-delay="200">
-                            <div class="sidebar-widget-title mb-30">
-                                <h3>Filter By Price</h3>
-                            </div>
-                            <div class="price-filter">
-                                <div class="price-input">
-                                    <div class="field">
-                                        <input type="text" class="input-min" value="0đ" data-value="0" readonly>
-                                    </div>
-                                    <div class="separator">-</div>
-                                    <div class="field">
-                                        <input type="text" class="input-max" value="100,000,000đ" data-value="100000000"
-                                            readonly>
-                                    </div>
-                                </div>
-                                <div class="slider">
-                                    <div class="progress"></div>
-                                </div>
-                                <div class="range-input">
-                                    <input type="range" name="" id="min" class="range-min"
-                                        min="0" max="100000000" value="0">
-                                    <input type="range" name="" id="max" class="range-max"
-                                        min="0" max="100000000" value="100000000">
-                                </div>
-                            </div>
-                        </div>
-
 
 
                         <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
@@ -168,8 +131,7 @@
                                     @else
                                         @foreach ($categories as $category)
                                             @if ($selected_category == $category->category_id)
-                                                <div class="category-selected"
-                                                    data-category-id="{{ $selected_category }}">
+                                                <div class="category-selected" data-category-id="{{ $selected_category }}">
                                                     {{ $category->name }}</div>
                                             @endif
                                         @endforeach
@@ -189,8 +151,35 @@
                             </div>
                         </div>
 
-                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
-                            data-aos-delay="200">
+
+                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
+                            <div class="sidebar-widget-title mb-30">
+                                <h3>Filter By Price</h3>
+                            </div>
+                            <div class="price-filter">
+                                <div class="price-input">
+                                    <div class="field">
+                                        <input type="text" class="input-min" value="0đ" data-value="0" readonly>
+                                    </div>
+                                    <div class="separator">-</div>
+                                    <div class="field">
+                                        <input type="text" class="input-max" value="60,000,000đ" data-value="60000000"
+                                            readonly>
+                                    </div>
+                                </div>
+                                <div class="slider">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <input type="range" name="" id="min" class="range-min"
+                                        min="0" max="60000000" value="0">
+                                    <input type="range" name="" id="max" class="range-max"
+                                        min="0" max="60000000" value="60000000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
                             <div class="sidebar-widget-title mb-25">
                                 <h3>Choose Colour</h3>
                             </div>
@@ -211,7 +200,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="sidebar-widget" data-aos="fade-up" data-aos-delay="200">
+                        <div class="sidebar-widget">
                             <div class="sidebar-widget-title mb-25">
                                 <h3>Tags</h3>
                             </div>
