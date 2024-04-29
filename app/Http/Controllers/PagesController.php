@@ -12,8 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+
 
 class PagesController extends Controller
 {
@@ -23,14 +22,20 @@ class PagesController extends Controller
         $data = [
             'page' => 'Home',
         ];
+        if (session()->has('url.intended')) {
+            $url = session()->get('url.intended');
+            session()->forget('url.intended');
+            return redirect($url);
+        }
         return view('pages.dashboard.index', $data);
     }
 
 
     public function shop()
     {
-        $categories = request()->query('categories');
+        $category = request()->query('category');
         $color = request()->query('color');
+        $tag = request()->query('tag');
         $search = request()->query('search');
         $sorted_by = request()->query('sorted_by');
 
@@ -59,16 +64,23 @@ class PagesController extends Controller
             });
         }
 
-        // If categories is not 'all', filter by category_id
-        if ($categories !== 'all' && $categories !== null) {
-            $categoryIds = explode(',', $categories);
-            $query->whereIn('category_id', $categoryIds);
+        // If category is not 'all', filter by category_id
+        if ($category !== 'all' && $category !== null) {
+            $query->where('category_id', $category);
         }
         // If color is not 'all', filter by color_id
         if ($color !== 'all' && $color !== null) {
             $colorIds = explode(',', $color);
             $query->whereHas('detailed_products', function ($query) use ($colorIds) {
                 $query->whereIn('color_id', $colorIds);
+            });
+        }
+
+        // If tag is not 'all', filter by tag
+        if ($tag !== 'all' && $tag !== null) {
+            $tagIds = explode(',', $tag);
+            $query->whereHas('product_tags', function ($query) use ($tagIds) {
+                $query->whereIn('tag_id', $tagIds);
             });
         }
 
@@ -137,12 +149,14 @@ class PagesController extends Controller
             );
         }
 
+        $categories = Category::orderBy('index', 'asc')->get();
         $data = [
             'page' => 'Shop',
-            'categories' => Category::all(),
+            'categories' => $categories,
             'colors' => Color::all(),
-            'selected_categories' => $categoryIds ?? [],
+            'selected_category' => $category ?? 'all',
             'selected_colors' => $colorIds ?? [],
+            'selected_tags' => $tagIds ?? [],
             'tags' => Tag::all(),
             'products' => $products,
             'search' => $search ?? '',

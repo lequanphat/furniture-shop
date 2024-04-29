@@ -35,28 +35,34 @@ jQuery(document).ready(function () {
     $('.header-action-cart').on('click', function () {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        let html = '';
-        let total_price = 0;
-        for (let i = 0; i < cart.length; i++) {
-            item = cart[i];
-            total_price += convertCurrencyToNumber(item.unit_price) * item.quantities;
-            html += `<li>
-                    <div class="cart-item-info">
-                        <div class="cart-img">
-                            <a href="#"><img src="${item.image}" alt=""></a>
+        if (cart.length === 0) {
+            $('.js-mini-cart-checkout-btn').addClass('disable');
+            $('.js-total-price').text('0đ');
+        } else {
+            let html = '';
+            let total_price = 0;
+            for (let i = 0; i < cart.length; i++) {
+                item = cart[i];
+                total_price += convertCurrencyToNumber(item.unit_price) * item.quantities;
+                html += `<li>
+                        <div class="cart-item-info">
+                            <div class="cart-img">
+                                <a href="#"><img src="${item.image}" alt=""></a>
+                            </div>
+                            <div class="cart-title">
+                                <h4><a>${item.name}</a></h4>
+                                <span> ${item.quantities} × <span class="unit-price">${item.unit_price}</span> </span>
+                            </div>
                         </div>
-                        <div class="cart-title">
-                            <h4><a>${item.name}</a></h4>
-                            <span> ${item.quantities} × <span class="unit-price">${item.unit_price}</span> </span>
+                        <div class="cart-delete">
+                            <a class="js-delete-cart-item" data-sku="${item.sku}"><i class="ti-close"></i></a>
                         </div>
-                    </div>
-                    <div class="cart-delete">
-                        <a class="js-delete-cart-item" data-sku="${item.sku}"><i class="ti-close"></i></a>
-                    </div>
-                </li>`;
+                    </li>`;
+            }
+            $('#cart-list').html(html);
+            $('.js-total-price').text(formatter.format(total_price) + 'đ');
+            $('.js-mini-cart-checkout-btn').removeClass('disable');
         }
-        $('#cart-list').html(html);
-        $('.js-total-price').text(formatter.format(total_price) + 'đ');
     });
     // delete cart item
     $(document).on('click', '.js-delete-cart-item', function (e) {
@@ -80,32 +86,40 @@ jQuery(document).ready(function () {
     function loadCart() {
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let html = '';
-        for (let i = 0; i < cart.length; i++) {
-            let item = cart[i];
-            html += `<div class="js-cart-item cart-item">
-            <div class="product-cart-item">
-                <input class="js-check-cart-item" type="checkbox" name="" id="">
-                <img src="${item.image}" alt="">
-                <div class="info">
-                    <p> ${item.name} </p>
-                    <p class="js-sku">${item.sku}</p>
+        if (cart.length === 0) {
+            const emptyCart = `<div class="empty-cart">
+            <img class="" src="storage/defaults/empty-cart.webp" />
+            <p>Your cart is currently empty.</p>
+        </div>`;
+            $('#js-cart-table').html(emptyCart);
+        } else {
+            for (let i = 0; i < cart.length; i++) {
+                let item = cart[i];
+                html += `<div class="js-cart-item cart-item">
+                <div class="product-cart-item">
+                    <input class="js-check-cart-item" type="checkbox" name="" id="">
+                    <img src="${item.image}" alt="">
+                    <div class="info">
+                        <p> ${item.name} </p>
+                        <p class="js-sku">${item.sku}</p>
+                    </div>
                 </div>
-            </div>
-            <div><span class="js-unit-price">${item.unit_price}</span></div>
-            <div>
-                <div class="quantities-wrapper">
-                    <button class="js-quantities-minus" ><i class="ti-minus"></i></button>
-                    <input class="js-cart-quantities-input" type="number" value="${item.quantities}">
-                    <button class="js-quantities-plus" ><i class="ti-plus"></i></button>
+                <div><span class="js-unit-price">${item.unit_price}</span></div>
+                <div>
+                    <div class="quantities-wrapper">
+                        <button class="js-quantities-minus" ><i class="ti-minus"></i></button>
+                        <input class="js-cart-quantities-input" type="number" value="${item.quantities}">
+                        <button class="js-quantities-plus" ><i class="ti-plus"></i></button>
+                    </div>
                 </div>
-            </div>
-            <div><span class="js-subtotal-price">${formatter.format(
-                convertCurrencyToNumber(item.unit_price) * item.quantities,
-            )}đ</span></div>
-            <div class="js-delete-cart-item delete-item"><i class="ti-close"></i></div>
-            </div>`;
+                <div><span class="js-subtotal-price">${formatter.format(
+                    convertCurrencyToNumber(item.unit_price) * item.quantities,
+                )}đ</span></div>
+                <div class="js-delete-cart-item delete-item"><i class="ti-close"></i></div>
+                </div>`;
+            }
+            $('#js-cart-table').html(html);
         }
-        $('#js-cart-table').html(html);
     }
     loadCart();
     $(document).on('click', '.js-quantities-minus', function () {
@@ -214,29 +228,38 @@ jQuery(document).ready(function () {
         });
         $('.js-checkout-content').html(html);
         $('.js-cart-order-total-price').text(formatter.format(total_price) + 'đ');
+        if (cart_items.length === 0) {
+            $('.js-cart-checkout-btn').addClass('disable');
+        } else {
+            $('.js-cart-checkout-btn').removeClass('disable');
+        }
     }
     $(document).on('click', '.js-check-cart-item', function () {
         loadCartCheckout();
     });
 
     $(document).on('click', '.js-cart-checkout-btn', function () {
-        let checkout_items = $('.checkout-item');
-        let checkout = [];
-        for (let i = 0; i < checkout_items.length; i++) {
-            const item = checkout_items[i];
-            const sku = $(item).data('sku');
-            const name = $(item).find('span').eq(1).text();
-            const unit_price = $(item).data('unit-price');
-            const quantities = $(item).data('quantities');
-            checkout.push({ sku, name, unit_price, quantities });
+        if (!$(this).hasClass('disable')) {
+            let checkout_items = $('.checkout-item');
+            let checkout = [];
+            for (let i = 0; i < checkout_items.length; i++) {
+                const item = checkout_items[i];
+                const sku = $(item).data('sku');
+                const name = $(item).find('span').eq(1).text();
+                const unit_price = $(item).data('unit-price');
+                const quantities = $(item).data('quantities');
+                checkout.push({ sku, name, unit_price, quantities });
+            }
+            localStorage.setItem('checkout', JSON.stringify(checkout));
+            window.location.href = '/checkout';
         }
-        localStorage.setItem('checkout', JSON.stringify(checkout));
-        window.location.href = '/checkout';
     });
     $(document).on('click', '.js-mini-cart-checkout-btn', function () {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        localStorage.setItem('checkout', JSON.stringify(cart));
-        window.location.href = '/checkout';
+        if (!$(this).hasClass('disable')) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            localStorage.setItem('checkout', JSON.stringify(cart));
+            window.location.href = '/checkout';
+        }
     });
 
     function loadCheckoutProduct() {
@@ -307,7 +330,6 @@ jQuery(document).ready(function () {
                 console.log(response);
                 console.log('====================================');
                 window.location.href = response;
-                // window.location.href = `/checkout/${response.order.order_id}`;
             },
             error: function (error) {
                 console.log(error);

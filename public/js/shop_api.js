@@ -191,26 +191,29 @@ jQuery(document).ready(function () {
         const sorted_by = $('#sort-product').val();
 
         // category
-        const categories = $('.js-cate-checkbox');
-        const categoryIds = [];
-        for (let category of categories) {
-            if (category.checked) {
-                categoryIds.push(category.dataset.id);
-            }
-        }
+        const category = $('.category-selected').data('category-id');
         // color
-        const colors = $('.js-color-checkbox');
+        const colors = $('.form-colorinput-input');
         const colorIds = [];
         for (let color of colors) {
             if (color.checked) {
                 colorIds.push(color.dataset.id);
             }
         }
+
         if (colorIds.length === 0) {
             colorIds.push('all');
         }
-        if (categoryIds.length === 0) {
-            categoryIds.push('all');
+        // tag
+        const tags = $('.form-taginput-input');
+        const tagIds = [];
+        for (let tag of tags) {
+            if (tag.checked) {
+                tagIds.push(tag.dataset.id);
+            }
+        }
+        if (tagIds.length === 0) {
+            tagIds.push('all');
         }
 
         // price
@@ -219,12 +222,12 @@ jQuery(document).ready(function () {
         history.pushState(
             null,
             null,
-            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+            `/shop?page=${page}&category=${category}&color=${colorIds.join(',')}&tag=${tagIds.join(
                 ',',
             )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
         );
         $.ajax({
-            url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+            url: `/products?page=${page}&category=${category}&color=${colorIds.join(',')}&tag=${tagIds.join(
                 ',',
             )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
             type: 'GET',
@@ -269,12 +272,20 @@ jQuery(document).ready(function () {
         productFilter({ page: 1 });
     });
     // category filter
-    $('.js-cate-checkbox').change(function () {
+    $('.categories-options .option').click(function () {
+        const category_id = $(this).data('category-id');
+        $('.category-selected').text($(this).text());
+        $('.category-selected').data('category-id', category_id);
         productFilter({ page: 1 });
     });
 
     // color filter
-    $('.js-color-checkbox').change(function () {
+    $('.form-colorinput-input').change(function () {
+        productFilter({ page: 1 });
+    });
+
+    // tag filter
+    $('.form-taginput-input').change(function () {
         productFilter({ page: 1 });
     });
 

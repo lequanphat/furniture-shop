@@ -155,54 +155,60 @@
                             </div>
                         </div>
 
-                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
-                            data-aos-delay="200">
+
+
+                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
                             <div class="sidebar-widget-title mb-25">
                                 <h3>Product Categories</h3>
                             </div>
                             <div class="sidebar-list-style">
-                                <ul>
-                                    @foreach ($categories as $category)
-                                        <li>
-                                            <a><label for="category_{{ $loop->index }}">{{ $category->name }}
-                                                </label><span>
-                                                    <input id="category_{{ $loop->index }}"
-                                                        data-id="{{ $category->category_id }}" class="js-cate-checkbox"
-                                                        type="checkbox"
-                                                        @if (in_array($category->category_id, $selected_categories)) @checked(true) @endif>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                <div class="categories-select">
+                                    @if ($selected_category == 'all' || $selected_category == null)
+                                        <div class="category-selected" data-category-id="all">All</div>
+                                    @else
+                                        @foreach ($categories as $category)
+                                            @if ($selected_category == $category->category_id)
+                                                <div class="category-selected"
+                                                    data-category-id="{{ $selected_category }}">
+                                                    {{ $category->name }}</div>
+                                            @endif
+                                        @endforeach
+                                    @endif
+
+                                    <div class="categories-options">
+                                        <div class="option" data-category-id="all">All</div>
+
+                                        @foreach ($categories as $category)
+                                            <div class="option" data-category-id="{{ $category->category_id }}">
+                                                {{ $category->name }}
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
+
                         <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
                             data-aos-delay="200">
                             <div class="sidebar-widget-title mb-25">
                                 <h3>Choose Colour</h3>
                             </div>
                             <div class="sidebar-widget-color sidebar-list-style">
-                                <ul>
-
+                                <div class="row g-2">
                                     @foreach ($colors as $color)
-                                        <li><a class="black">
-                                                <div class="d-flex">
-                                                    <div class="color" style="background-color: {{ $color->code }}">
-                                                    </div>
-                                                    <label for="color_{{ $loop->index }}">{{ $color->name }}</label>
-                                                </div>
-                                                <span>
-                                                    <input id="color_{{ $loop->index }}"
-                                                        data-id="{{ $color->color_id }}" class="js-color-checkbox"
-                                                        type="checkbox"
-                                                        @if (in_array($color->color_id, $selected_colors)) @checked(true) @endif>
-                                                </span>
-                                            </a></li>
+                                        <div class="col-auto">
+                                            <label class="form-colorinput form-colorinput-light">
+                                                <input name="color" type="checkbox" value=""
+                                                    class="form-colorinput-input" data-id="{{ $color->color_id }}"
+                                                    @if (in_array($color->color_id, $selected_colors)) @checked(true) @endif />
+                                                <span class="form-colorinput-color "
+                                                    style="background-color: {{ $color->code }}"></span>
+                                            </label>
+                                        </div>
                                     @endforeach
 
-
-                                </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="sidebar-widget" data-aos="fade-up" data-aos-delay="200">
@@ -210,9 +216,19 @@
                                 <h3>Tags</h3>
                             </div>
                             <div class="sidebar-widget-tag">
-                                @foreach ($tags as $tag)
-                                    <a>#{{ $tag->name }}</a>
-                                @endforeach
+                                <div class="row g-2">
+                                    @foreach ($tags as $tag)
+                                        <div class="col-auto">
+                                            <label class="form-taginput form-taginput-light">
+                                                <input name="color" type="checkbox" value="white"
+                                                    class="form-taginput-input" data-id="{{ $tag->tag_id }}"
+                                                    @if (in_array($tag->tag_id, $selected_tags)) @checked(true) @endif />
+                                                <span class="form-taginput-tag">#{{ $tag->name }}</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+
+                                </div>
                             </div>
                         </div>
                     </div>

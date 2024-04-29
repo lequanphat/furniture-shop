@@ -265,7 +265,6 @@ class OrderController extends Controller
     public function checkout_order(CheckoutOrder $request)
     {
         // validate data
-
         $checkout = json_decode($request->input('checkout'), true);
         foreach ($checkout as $item) {
             $product = ProductDetail::where('sku', $item['sku'])->first();
@@ -278,7 +277,6 @@ class OrderController extends Controller
         }
 
         // create order
-
         $order = Order::create([
             'total_price' => 0,
             'is_paid' => false,
@@ -301,7 +299,6 @@ class OrderController extends Controller
                 'unit_price' => $item['unit_price'],
             ]);
             ProductDetail::where('sku', $item['sku'])->decrement('quantities', $item['quantities']);
-
             $total_price += $order_detail->quantities * $order_detail->unit_price;
         }
         // Update the total_price in the order
