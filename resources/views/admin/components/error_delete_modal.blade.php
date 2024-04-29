@@ -15,7 +15,7 @@
                     <path d="M12 9v4" />
                     <path d="M12 17h.01" />
                 </svg>
-                <h3>Delete Error</h3>
+                <h3 id="error-title">Delete Error</h3>
                 <div id="error-message" class="text-muted"></div>
             </div>
         </div>

@@ -155,6 +155,7 @@
 
 
         @include('admin.components.footer')
+        @include('admin.components.error_delete_modal')
         <script src="{{ asset('vendor/apexcharts/apexcharts.min.js') }}"></script>
         <script src="{{ asset('js/statistic_api.js') }}" defer></script>
     </section>
