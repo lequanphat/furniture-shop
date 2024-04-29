@@ -12,8 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+
 
 class PagesController extends Controller
 {
@@ -23,6 +22,11 @@ class PagesController extends Controller
         $data = [
             'page' => 'Home',
         ];
+        if (session()->has('url.intended')) {
+            $url = session()->get('url.intended');
+            session()->forget('url.intended');
+            return redirect($url);
+        }
         return view('pages.dashboard.index', $data);
     }
 

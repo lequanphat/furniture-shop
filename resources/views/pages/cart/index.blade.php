@@ -16,6 +16,7 @@
                     </div>
                     <div id="js-cart-table" class="cart-content">
                         {{-- render cart here --}}
+                        
                     </div>
                 </div>
                 <div id="checkout-cart" class="col-lg-4 col-md-12 col-12">
@@ -29,7 +30,7 @@
                         <p class="js-cart-order-total-price total-price">0đ</p>
                     </div>
                     <div class="separate"></div>
-                    <button class="js-cart-checkout-btn checkout">Checkout</button>
+                    <button class="js-cart-checkout-btn checkout disable">Checkout</button>
 
                     <a href="/shop" class="continue-shopping">Continue Shopping</a>
                 </div>
