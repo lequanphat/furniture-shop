@@ -25,7 +25,16 @@ class ProductController extends Controller
     public function index()
     {
         $search = request()->query('search');
-        $products = Product::with('category', 'brand', 'detailed_products.images')
+        $brand = request()->query('brand');
+        $category = request()->query('category');
+        $query = Product::with('category', 'brand', 'detailed_products.images');
+        if ($category !== null && $category !== 'all') {
+            $query = $query->where('category_id', $category);
+        }
+        if ($brand !== null && $brand !== 'all') {
+            $query = $query->where('brand_id', $brand);
+        }
+        $query = $query
             ->where('is_deleted', 0)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%' . $search . '%')
@@ -36,12 +45,18 @@ class ProductController extends Controller
                     ->orWhereHas('brand', function ($query) use ($search) {
                         $query->where('name', 'LIKE', '%' . $search . '%');
                     });
-            })
-            ->paginate(4); // 4 elements per page
+            });
+        $products = $query->paginate(4); // 4 elements per page
+        $brands = Brand::orderBy('index', 'asc')->get();
+        $categories = Category::orderBy('index', 'asc')->get();
         $data = [
             'page' => 'Products',
             'search' => $search,
             'products' => $products,
+            'selected_category' => $category,
+            'selected_brand' => $brand,
+            'categories' => $categories,
+            'brands' => $brands,
         ];
         return view('admin.products.index', $data);
     }
@@ -49,7 +64,16 @@ class ProductController extends Controller
     public function products_pagination()
     {
         $search = request()->query('search');
-        $products = Product::with('category', 'brand', 'detailed_products.images')
+        $brand = request()->query('brand');
+        $category = request()->query('category');
+        $query = Product::with('category', 'brand', 'detailed_products.images');
+        if ($category !== null && $category !== 'all') {
+            $query = $query->where('category_id', $category);
+        }
+        if ($brand !== null && $brand !== 'all') {
+            $query = $query->where('brand_id', $brand);
+        }
+        $query = $query
             ->where('is_deleted', 0)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%' . $search . '%')
@@ -60,8 +84,8 @@ class ProductController extends Controller
                     ->orWhereHas('brand', function ($query) use ($search) {
                         $query->where('name', 'LIKE', '%' . $search . '%');
                     });
-            })
-            ->paginate(4); // 4 elements per page
+            });
+        $products = $query->paginate(4); // 4 elements per page
 
         foreach ($products as $product) {
             $average_price = 0;

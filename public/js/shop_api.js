@@ -18,15 +18,6 @@ jQuery(document).ready(function () {
         }).showToast();
     }
 
-    // product pagination
-    $('.pagination-item').click((e) => {
-        e.preventDefault();
-        $('.pagination-item.active').removeClass('active');
-        $(e.target).addClass('active');
-        const page = $(e.target).text();
-        productFilter({ page });
-    });
-
     // helper function
     function enableOrderActionButton(enable) {
         if (enable) {
@@ -126,9 +117,66 @@ jQuery(document).ready(function () {
         showToast('Add to cart successfully', 'success');
     });
 
+    // product pagination
+    $(document).on('click', '.pagination-item', function (e) {
+        if ($(this).hasClass('disabled')) return;
+
+        const page = $(this).data('page');
+        console.log('page', page);
+        productFilter({ page });
+    });
+
+    function ProductPagination({ currentPage, lastPage }) {
+        const prevBtn = `<li>
+            <a class="pagination-item ${currentPage == 1 ? 'disabled' : ''}" href="#shop"
+                data-page="${currentPage - 1}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg>
+            </a>
+        </li>`;
+        const nextBtn = `<li>
+            <a class="pagination-item ${currentPage == lastPage ? 'disabled' : ''}" href="#shop"
+                data-page="${currentPage + 1}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </a>
+        </li>`;
+
+        const firstBtn = currentPage > 3 ? '<li><a class="pagination-item" data-page="1" href="#shop">1</a></li>' : '';
+        const firstDot = currentPage > 4 ? '<li><a class="pagination-item disabled" href="#shop">...</a></li>' : '';
+
+        const lastBtn =
+            currentPage < lastPage - 2
+                ? `<li><a class="pagination-item" href="#shop" data-page="${lastPage}">${lastPage}</a></li>`
+                : '';
+
+        const lastDot =
+            currentPage < lastPage - 3 ? '<li><a class="pagination-item disabled" href="#shop">...</a></li>' : '';
+
+        let pageElements = '';
+        for (let i = currentPage - 2 >= 1 ? currentPage - 2 : 1; i <= currentPage + 2 && i <= lastPage; i++) {
+            pageElements += `<li> <a class="pagination-item ${
+                i == currentPage ? 'active disabled' : ''
+            }" href="#shop" data-page="${i}">${i}</a></li>`;
+        }
+        return `${prevBtn}
+            ${firstBtn}
+            ${firstDot}
+            ${pageElements}
+            ${lastDot}
+            ${lastBtn}
+            ${nextBtn}`;
+    }
+
     function createProductElement(product) {
         return `<div class="col-lg-4 col-md-4 col-sm-6 col-12">
-        <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
+        <div class="product-wrap mb-35" >
             <div class="custom-product-img product-img img-zoom mb-25">
                 <a href="/products/${product.product_id}">
                     <img src="${product.detailed_product.image}" alt="" style="height: 275px">
@@ -239,6 +287,12 @@ jQuery(document).ready(function () {
                 }
 
                 $('#product-list').html(html);
+                $('#pagination').html(
+                    ProductPagination({
+                        currentPage: response.products.current_page,
+                        lastPage: response.products.last_page,
+                    }),
+                );
             },
             error: function (error) {
                 console.log(error);

@@ -417,10 +417,16 @@ jQuery.noConflict();
 
         function productPagination({ page }) {
             const search = $('#search-product-input').val();
-            history.pushState(null, null, `/admin/products?page=${page}&search=${search}`);
+            const brand = $('#brands_select').val();
+            const category = $('#categories_select').val();
+            history.pushState(
+                null,
+                null,
+                `/admin/products?page=${page}&category=${category}&brand=${brand}&search=${search}`,
+            );
             // call ajax
             $.ajax({
-                url: `/admin/products/pagination?page=${page}&search=${search}`,
+                url: `/admin/products/pagination?page=${page}&category=${category}&brand=${brand}&search=${search}`,
                 type: 'GET',
                 success: function (response) {
                     // pagination item
@@ -476,5 +482,11 @@ jQuery.noConflict();
                 productPagination({ page: 1 });
             }, 500),
         );
+        $('#categories_select').on('change', function () {
+            productPagination({ page: 1 });
+        });
+        $('#brands_select').on('change', function () {
+            productPagination({ page: 1 });
+        });
     });
 })(jQuery);
