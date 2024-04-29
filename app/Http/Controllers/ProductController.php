@@ -296,8 +296,9 @@ class ProductController extends Controller
 
     public function get_products()
     {
-        $categories = request()->query('categories');
+        $category = request()->query('category');
         $color = request()->query('color');
+        $tag = request()->query('tag');
         $search = request()->query('search');
         $sorted_by = request()->query('sorted_by');
         $price_from = request()->query('price_from');
@@ -320,10 +321,9 @@ class ProductController extends Controller
                     ->whereBetween('original_price', [$price_from, $price_to]);
             });
         }
-        // If categories is not 'all', filter by category_id
-        if ($categories !== 'all' && $categories !== null) {
-            $categoryIds = explode(',', $categories);
-            $query->whereIn('category_id', $categoryIds);
+        // If category is not 'all', filter by category_id
+        if ($category !== 'all' && $category !== null) {
+            $query->where('category_id', $category);
         }
         // If color is not 'all', filter by color_id
         if ($color !== 'all' && $color !== null) {
@@ -332,6 +332,15 @@ class ProductController extends Controller
                 $query->whereIn('color_id', $colorIds);
             });
         }
+
+        // If tag is not 'all', filter by tag
+        if ($tag !== 'all' && $tag !== null) {
+            $tagIds = explode(',', $tag);
+            $query->whereHas('product_tags', function ($query) use ($tagIds) {
+                $query->whereIn('tag_id', $tagIds);
+            });
+        }
+
 
         // If search is not null, filter by name
         if ($search !== null) {

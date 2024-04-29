@@ -54,7 +54,7 @@ body::-webkit-scrollbar-track {
     color: white;
 }
 .product-details-action-wrap .buy-now.disable {
-    opacity: 0.5!important;
+    opacity: 0.5 !important;
 }
 .product-details-action-wrap .buy-now:hover {
     opacity: 0.8;
@@ -335,7 +335,7 @@ body::-webkit-scrollbar-track {
     color: white;
 }
 #checkout-cart button.checkout.disable {
-    opacity: 0.5!important;
+    opacity: 0.5 !important;
 }
 #checkout-cart button.checkout:hover {
     opacity: 0.8;
@@ -1014,4 +1014,151 @@ body::-webkit-scrollbar-track {
     border-radius: 50%;
     pointer-events: auto;
     background-color: #e97730;
+}
+
+/* Custom color input */
+.sidebar-widget-color .row {
+    margin: 0;
+}
+.sidebar-widget-color .col-auto {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+.form-colorinput {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    line-height: 1;
+    cursor: pointer;
+}
+input[type='checkbox' i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 3px 3px 0px 5px;
+    padding: initial;
+    border: initial;
+}
+.form-colorinput-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.form-colorinput-color {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.form-colorinput-color:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    background: no-repeat center center / 1rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16'%3e%3cpath fill='none' stroke='%23eee' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8.5l2.5 2.5l5.5 -5.5'/%3e%3c/svg%3e");
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.form-colorinput-input:checked ~ .form-colorinput-color:before {
+    opacity: 1;
+}
+
+/* Custom tag input */
+.sidebar-widget-tag .row {
+    margin: 0;
+}
+.sidebar-widget-tag .col-auto {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+.form-taginput {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    line-height: 1;
+    cursor: pointer;
+    border: 1px solid #0ca678;
+    border-radius: 4px;
+}
+input[type='checkbox' i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 3px 3px 0px 5px;
+    padding: initial;
+    border: initial;
+}
+.form-taginput-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.form-taginput-tag {
+    display: block;
+    width: max-content;
+    height: max-content;
+    padding: 4px 8px;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    color: #0ca678;
+}
+.form-taginput-tag:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+.form-taginput-input:checked ~ .form-taginput-tag:before {
+    opacity: 1;
+    background-color: #0ca678;
+}
+.form-taginput-input:checked ~ .form-taginput-tag {
+    color: white;
+}
+
+/* Custom categories select */
+.categories-select {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    position: relative;
+    z-index: 99;
+}
+.categories-select:hover .categories-options {
+    opacity: 1;
+    visibility: visible;
+}
+.categories-select .categories-options {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+}
+.categories-options .option {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ccc;
+    transition: 0.1s;
+    cursor: pointer;
+}
+.categories-options .option:hover {
+    background-color: rgb(233, 119, 48, 0.8);
+    color: white;
 }
