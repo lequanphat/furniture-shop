@@ -37,7 +37,7 @@
                                                     placeholder="High quality plastic tables and chairs" value="">
                                             </div>
                                         </div>
-                                        <div class="col-sm-6 col-md-4">
+                                        <!-- <div class="col-sm-6 col-md-4">
                                             <div class="mb-3">
                                                 <label for="amount" class="form-label">amount</label>
                                                 <input id="amount" name="amount" class="form-control"
@@ -45,7 +45,7 @@
 
 
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-sm-6 col-md-4">
                                             <div class="mb-3">
                                                 <label for="active" class="form-label">is active</label>

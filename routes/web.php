@@ -295,6 +295,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/admin/discounts/deleteProductDiscount', [DiscountController::class, 'deleteProductDiscountCheck'])->name('delete.ProductDiscount.checkbox');
 
 
+    Route::post('/save-discount-changes', [DiscountController::class, 'saveChanges'])->name('save_discount_changes');
+
+
     // statistic routes
     Route::get('/admin/statistics', [StatisticController::class, 'statistic_ui']);
     Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
