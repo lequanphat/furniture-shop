@@ -16,56 +16,14 @@
                                 <div class="myaccount-tab-menu nav" role="tablist">
                                     <a href="#dashboard" class="active" data-bs-toggle="tab">Dashboard</a>
                                     <a href="#address-edit" data-bs-toggle="tab">Address</a>
+                                    <a href="/change-password">Change password</a>
                                 </div>
                             </div>
                             <!-- My Account Tab Menu End -->
                             <!-- My Account Tab Content Start -->
                             <div class="col-lg-9 col-md-8">
                                 <div class="tab-content" id="myaccountContent">
-                                    <!-- Single Tab Content End -->
-                                    <!-- Single Tab Content Start -->
-                                    <div class="tab-pane fade" id="address-edit" role="tabpanel">
-                                        <div class="myaccount-content">
-                                            <button class="check-btn sqr-btn " data-bs-toggle="modal"
-                                                data-bs-target="#CreateAddressModal" data-user-id="{{ $user->user_id }}">
-                                                <i class="fa fa-plus"></i> Create
-                                                Address</button>
-                                            <h3>Billing Address</h3>
-                                            <div id="address_table">
-                                            @foreach ($address_cards as $address)
-                                                <address>
-                                                <p class="d-none">{{$address->address_id}}</p>
-                                                    @if ($address->is_default)
-                                                        <p class="is_default"> Default address
-                                                        <p>
-                                                    @endif
-                                                    <p><strong>{{ $address->receiver_name }}</strong></p>
-                                                    <p>{{ $address->address }}</p>
-                                                    <p>{{ $address->phone_number }}</p>
-                                                    <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
-                                                    data-bs-target="#UpdateAddressModal"
-                                                    data-address-id="{{ $address->address_id }}"
-                                                    data-receiver-name="{{ $address->receiver_name }}"
-                                                    data-address="{{ $address->address }}"
-                                                    data-phone-number="{{ $address->phone_number }}"
-                                                    data-is-default="{{ $address->is_default ? 'true' : 'false' }}">
-                                                    <i class="fa fa-edit"></i> Edit
-                                                    Address</button>
-                                                    <button href="#" class="check-btn sqr-btn " data-bs-toggle="modal"
-                                                    data-bs-target="#RemoveAddressModal"
-                                                    data-address-id="{{ $address->address_id }}">
-                                                    <i class="fa fa-remove"></i> Remove
-                                                    Address</button>
-                                                    <h3></h3>
-                                                </address>     
-                                            @endforeach
-                                            
-                                            </div>
-                                        </div>
 
-                                    </div>
-                                    <!-- Single Tab Content End -->
-                                    <!-- Single Tab Content Start -->
                                     <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
                                         <div class="myaccount-content">
                                             <h3>Account Details</h3>
@@ -114,17 +72,16 @@
                                                             <div class="col-md-6">
                                                                 <label for="birth_date" class="form-label">Birth
                                                                     Date</label>
-                                                                <input type="date" class="form-control"
-                                                                    id="birth_date" name="birth_date" readonly
+                                                                <input type="date" class="form-control" id="birth_date"
+                                                                    name="birth_date" readonly
                                                                     value="{{ $user->birth_date }}">
                                                             </div>
 
                                                             <div class="col-md-6">
                                                                 <label for="phone_number" class="form-label">Phone
                                                                     number</label>
-                                                                <input type="phone" class="form-control"
-                                                                    id="phone_number" name="phone_number" readonly
-                                                                    placeholder="0123123123"
+                                                                <input type="phone" class="form-control" id="phone_number"
+                                                                    name="phone_number" readonly placeholder="0123123123"
                                                                     value="@if (isset($user->default_address->phone_number)) {{ $user->default_address->phone_number }} @endif">
                                                             </div>
                                                         </div>
@@ -139,22 +96,77 @@
                                                         <div id="update_customer_response" class="alert m-0 d-none"></div>
                                                     </div>
                                                     <div class="modal-footer d-none" id='btn-list-edit'>
-                                                        <button id="cancel-edit-profile-customer" type="button" class="btn btn-secondary">Cancel</button>
-                                                        <button type="submit" class="btn btn-primary">Save
+                                                        <button id="cancel-edit-profile-customer" type="button"
+                                                            class="btn btn-secondary">Cancel</button>
+                                                        <button type="submit"
+                                                            class="btn btn-primary update-profile-btn">Save
                                                             changes</button>
                                                     </div>
                                                 </form>
                                                 <div class="col-auto ms-auto d-print-none">
-                                            <div class="btn-list">
-                                                    <button class="btn btn-primary"
-                                                        id="enable-edit-profile-customer">
-                                                        Edit profile
-                                                    </button>
+                                                    <div class="btn-list btn-edit-profile">
+                                                        <button class="btn btn-primary edit-profile-btn"
+                                                            id="enable-edit-profile-customer">
+                                                            Edit profile
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <!-- Single Tab Content Start -->
+                                    <div class="tab-pane fade " id="address-edit" role="tabpanel">
+                                        <div class="myaccount-content">
+                                            <div class="address-header">
+                                                <h3>Billing Address</h3>
+                                                <button class="check-btn sqr-btn create-address-btn"
+                                                    data-bs-toggle="modal" data-bs-target="#CreateAddressModal"
+                                                    data-user-id="{{ $user->user_id }}">
+                                                    <i class="fa fa-plus"></i> Create
+                                                    Address</button>
+                                            </div>
+
+
+                                            <div id="address_table">
+
+                                                @foreach ($address_cards as $address)
+                                                    <div class="address-item {{ $address->address_id }}">
+                                                        <div class="address-info">
+                                                            <div class="header">
+                                                                <p class="receiver-name">{{ $address->receiver_name }}</p>
+                                                                <p>{{ $address->phone_number }}</p>
+                                                            </div>
+                                                            <p>{{ $address->address }}</p>
+                                                            @if ($address->is_default)
+                                                                <div class="default-tag">Default</div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="address-action">
+                                                            <button class="update-btn" data-bs-toggle="modal"
+                                                                data-bs-target="#UpdateAddressModal"
+                                                                data-address-id="{{ $address->address_id }}"
+                                                                data-receiver-name="{{ $address->receiver_name }}"
+                                                                data-address="{{ $address->address }}"
+                                                                data-phone-number="{{ $address->phone_number }}"
+                                                                data-is-default="{{ $address->is_default ? 'true' : 'false' }}"><i
+                                                                    class="fa fa-edit"></i> Update</button>
+                                                            <button class="remove-btn" data-bs-toggle="modal"
+                                                                data-bs-target="#RemoveAddressModal"
+                                                                data-address-id="{{ $address->address_id }}"><i
+                                                                    class="fa fa-remove"></i>
+                                                                Remove</button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+
                                             </div>
                                         </div>
-                                    </div> <!-- Single Tab Content End -->
+
+                                    </div>
+                                    <!-- Single Tab Content End -->
+                                    <!-- Single Tab Content Start -->
+
+                                    <!-- Single Tab Content End -->
                                 </div>
                             </div> <!-- My Account Tab Content End -->
                         </div>
