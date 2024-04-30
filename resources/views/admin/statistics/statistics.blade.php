@@ -16,80 +16,10 @@
                 </div>
             </div>
         </div>
+        {{-- Begin Statistic --}}
         <div class="page-body mb-2">
-            <div class="container-xl ">
-                <div class="row row-deck row-cards">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1 id="title_chart">Overview 7 days lately</h1>
-                                <div id="chart-statistic" class="chart-lg"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><br><br>
 
-            <div class="container-xl">
-                <div class="row row-deck row-cards">
-                    <div class="col-12">
-                        <div class="card">
-                            <form class="row justify-content-end" id="statistic_form">
-                                @csrf
-                                <div class="card-body">
-                                    <h1 id="title_chart">Product</h1>
-                                    <div class="row row-cards">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="combobox-categories">Category:</label>
-                                                <select id="combobox-categories" name="category_id" class="form-control">
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="start-date">Start Date:</label>
-                                                <input type="date" id="start-date" name="start-date" required
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="end-date">End Date:</label>
-                                                <input type="date" id="end-date" name="end-date" required
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-xl ">
-                <div class="row row-deck row-cards">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1 id="title_chart">Result</h1>
-                                <div id="chart-statistic-2" class="chart-lg"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><br><br>
-
-
-
-
+            {{-- Sản phẩm bán chạy biểu đồ tròn--}}
             <div class="container-xl">
                 <div class="row row-deck row-cards">
                     <div class="col-auto">
@@ -99,7 +29,7 @@
 
                                     {{-- dòng filter --}}
                                     <div class="row row-cards" >
-                                        <h1 id="title_chart">Filter product sales</h1>
+                                        <h1 id="title_chart">Number of sales</h1>
                                         <div class="col-auto row ">
                                             <div class="col-6">
                                                 <input id="search_first_pc" name="search_first_pc" class="col-6 form-control"
@@ -150,7 +80,115 @@
                         </div>
                     </div>
                 </div>
-            </div><br>
+            </div><br><br>
+
+
+            {{--Thống kê product Chart --}}
+            <div class="container-xl ">
+                <div class="row row-deck row-cards">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 id="title_chart">Overview 7 days lately</h1>
+                                <div id="chart-statistic" class="chart-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-xl ">
+                <div class="row row-deck row-cards">
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 id="title_chart">Product Ordered (unit)</h3>
+                                <div id="chart-completion-tasks-3"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 id="title_chart">Order Created (unit)</h3>
+                                <div id="chart-completion-tasks-3-abc"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 id="title_chart">Revenue (million VNĐ)</h3>
+                                <div id="chart-completion-tasks-3-123"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br><br>
+
+
+            <div class="container-xl">
+                <div class="row row-deck row-cards">
+                    <div class="col-12">
+                        <div class="card">
+                            <form class="row justify-content-end" id="statistic_form">
+                                @csrf
+                                <div class="card-body">
+                                    <h1 id="title_chart">Product Filter</h1>
+                                    <div class="row row-cards">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="combobox-categories">Category:</label>
+                                                <select id="combobox-categories" name="category_id" class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="start-date">Start Date:</label>
+                                                <input type="date" id="start-date" name="start-date" required
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="end-date">End Date:</label>
+                                                <input type="date" id="end-date" name="end-date" required
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-xl ">
+                <div class="row row-deck row-cards">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 id="title_chart">Result</h3>
+                                <div id="chart-statistic-2" class="chart-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br><br>
+
+
+
+
+
 
 
         </div>

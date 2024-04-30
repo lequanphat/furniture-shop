@@ -206,6 +206,206 @@ jQuery.noConflict();
               },
             },
           })).render();
+
+          //3 biểu đồ nhỏ của 7 days
+          //biểu đồ 1 của số lượng sp đc đặt //////////////////////////////////////////////
+          window.ApexCharts && (new ApexCharts(document.getElementById('chart-completion-tasks-3'), {
+            chart: {
+                type: "area",
+                fontFamily: 'inherit',
+                height: 240,
+                parentHeightOffset: 0,
+                toolbar: {
+                    show: false,
+                },
+                animations: {
+                    enabled: false
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                opacity: .16,
+                type: 'solid'
+            },
+            stroke: {
+                width: 2,
+                lineCap: "round",
+                curve: "smooth",
+            },
+            series: [{
+                /*
+                name: "Total sold (unit)",
+                data: response.solds, */
+                name: "Total sold (unit)",
+                data: response.solds,
+            }],
+            tooltip: {
+                theme: 'dark'
+            },
+            grid: {
+                padding: {
+                    top: -20,
+                    right: 0,
+                    left: -4,
+                    bottom: -4
+                },
+                strokeDashArray: 4,
+            },
+            xaxis: {
+                labels: {
+                    padding: 0,
+                },
+                tooltip: {
+                    enabled: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                type: 'date',
+            },
+            yaxis: {
+                labels: {
+                    padding: 4
+                },
+            },
+            labels: response.labels,
+            colors: [tabler.getColor("green")],
+            legend: {
+                show: false,
+            },
+        })).render();
+        //biểu đồ 2////////////////////////////////////////////////////////
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-completion-tasks-3-abc'), {
+            chart: {
+                type: "area",
+                fontFamily: 'inherit',
+                height: 240,
+                parentHeightOffset: 0,
+                toolbar: {
+                    show: false,
+                },
+                animations: {
+                    enabled: false
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                opacity: .16,
+                type: 'solid'
+            },
+            stroke: {
+                width: 2,
+                lineCap: "round",
+                curve: "smooth",
+            },
+            series: [{
+                name: "Orders created (unit)",
+                data: response.orders
+            }],
+            tooltip: {
+                theme: 'dark'
+            },
+            grid: {
+                padding: {
+                    top: -20,
+                    right: 0,
+                    left: -4,
+                    bottom: -4
+                },
+                strokeDashArray: 4,
+            },
+            xaxis: {
+                labels: {
+                    padding: 0,
+                },
+                tooltip: {
+                    enabled: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                type: 'date',
+            },
+            yaxis: {
+                labels: {
+                    padding: 4
+                },
+            },
+            labels: response.labels,
+            colors: [tabler.getColor("yellow")],
+            legend: {
+                show: false,
+            },
+        })).render();
+        //biểu đồ 3////////////////////////////////////////////////////////////
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-completion-tasks-3-123'), {
+            chart: {
+                type: "area",
+                fontFamily: 'inherit',
+                height: 240,
+                parentHeightOffset: 0,
+                toolbar: {
+                    show: false,
+                },
+                animations: {
+                    enabled: false
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                opacity: .16,
+                type: 'solid'
+            },
+            stroke: {
+                width: 2,
+                lineCap: "round",
+                curve: "smooth",
+            },
+            series: [{
+                name: "Total Revenue (million VNĐ)",
+                data: response.revenues
+            }],
+            tooltip: {
+                theme: 'dark'
+            },
+            grid: {
+                padding: {
+                    top: -20,
+                    right: 0,
+                    left: -4,
+                    bottom: -4
+                },
+                strokeDashArray: 4,
+            },
+            xaxis: {
+                labels: {
+                    padding: 0,
+                },
+                tooltip: {
+                    enabled: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                type: 'date',
+            },
+            yaxis: {
+                labels: {
+                    padding: 4
+                },
+            },
+            labels: response.labels,
+            colors: [tabler.getColor("primary")],
+            legend: {
+                show: false,
+            },
+        })).render();
         },
         error: function (error) {
             console.log(error);
@@ -214,6 +414,8 @@ jQuery.noConflict();
 
 
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Sơ đồ tròn sản phẩm bán chạy
     function debounce(func, wait) { //hàm đợi 1 thời gian rồi mới thực hiện
         let timeout;
