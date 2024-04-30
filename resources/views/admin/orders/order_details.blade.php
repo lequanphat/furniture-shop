@@ -31,6 +31,16 @@
                             </svg>
                             Add product
                         </a>
+                        <a data-bs-toggle="modal" data-bs-target="#create-detailed-order-modal"
+                            class="btn btn-primary d-sm-none btn-icon" aria-label="Create new report">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -124,8 +134,8 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Color</th>
-                                            <th>Size</th>
+                                            <th>Color & Size</th>
+
                                             <th>Unit Price</th>
                                             <th>Quantities</th>
                                             <th>Warranty</th>
@@ -139,7 +149,7 @@
                                                 <td>
                                                     <div class="d-flex py-1 align-items-center">
                                                         <span class="avatar me-2"
-                                                            style="background-image: url(@if (isset($detailed_order->detailed_product->images->first()->url)) {{ $detailed_order->detailed_product->images->first()->url }} @endif); width: 80px; height: 80px;">
+                                                            style="background-image: url(@if (isset($detailed_order->detailed_product->images->first()->url)) {{ $detailed_order->detailed_product->images->first()->url }} @endif); width: 80px; height: 80px; flex-shrink: 0;">
                                                         </span>
                                                         <div class="flex-fill">
                                                             <div class="font-weight-medium">
@@ -161,11 +171,12 @@
 
                                                 </td>
                                                 <td>
-                                                    <div class="col-auto rounded"
-                                                        style="background: {{ $detailed_order->detailed_product->color->code }}; width: 20px; height: 20px;">
-                                                    </div>
+                                                    <p class="m-0">Color:
+                                                        {{ $detailed_order->detailed_product->color->name }}
+                                                    </p>
+                                                    <p class="my-1">Size:
+                                                        {{ $detailed_order->detailed_product->size }}</p>
                                                 </td>
-                                                <td>{{ $detailed_order->detailed_product->size }}</td>
                                                 <td>{{ number_format($detailed_order->unit_price) }}đ
                                                 </td>
                                                 <td>{{ $detailed_order->quantities }}</td>
@@ -173,16 +184,25 @@
                                                 <td class="text-success">
                                                     {{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
                                                 <td>
-                                                    <!--nút sửa, order detail chỉ nên ửa được quantity-->
-                                                    <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
-                                                        title="Update" data-bs-toggle="modal"
-                                                        data-bs-target="#UpdateOrderDetailModal"
-                                                        data-order-id="{{ $order->order_id }}"
-                                                        data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
-                                                        data-quantities="{{ $detailed_order->quantities }}"
-                                                        data-unit-price="{{ $detailed_order->unit_price }}">
-                                                        <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                    </button>
+                                                    @can('update order')
+                                                        <button type="button" class="btn p-2" title="Update"
+                                                            data-bs-toggle="modal" data-bs-target="#"
+                                                            data-order-id="{{ $order->order_id }}"
+                                                            data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
+                                                            data-quantities="{{ $detailed_order->quantities }}"
+                                                            data-unit-price="{{ $detailed_order->unit_price }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path
+                                                                    d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                                                <path d="M13.5 6.5l4 4" />
+                                                            </svg>
+                                                        </button>
+                                                    @endcan
                                                 </td>
                                             </tr>
                                         @endforeach

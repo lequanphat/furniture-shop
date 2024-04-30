@@ -440,10 +440,22 @@ class ProductController extends Controller
     public function search_detailed_product()
     {
         $search = request()->query('search');
-        $detailed_products = ProductDetail::with('product_discounts.discount', 'images', 'color')
-            ->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('sku', 'LIKE', '%' . $search . '%')
-            ->paginate(4); // 4 elements per page
+        $detailed_products = ProductDetail::where('is_deleted', 0)
+            ->with('product_discounts.discount', 'images', 'color')
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            })
+            ->paginate(5);
+        foreach ($detailed_products as $detailed_product) {
+            $total_discount_percentage = 0;
+            foreach ($detailed_product->product_discounts as $product_discount) {
+                if ($product_discount->discount->is_currently_active()) {
+                    $total_discount_percentage += $product_discount->discount->percentage;
+                }
+            }
+            $detailed_product->total_discount_percentage = $total_discount_percentage;
+        }
         return response()->json(['detailed_products' => $detailed_products]);
     }
 }

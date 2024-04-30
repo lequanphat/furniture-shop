@@ -10,6 +10,8 @@ use App\Http\Controllers\HotDealController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\FacebookController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReceiptsController;
@@ -44,12 +46,12 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('forgot-password-verification', [AuthController::class, 'forgot_password_verification_ui'])->where('id', '[0-9]+');;
 
     // google login
-    Route::get('auth/google', 'App\Http\Controllers\GoogleController@redirectToGoogle')->name('google.login');
-    Route::get('auth/google/callback', 'App\Http\Controllers\GoogleController@handleGoogleCallback');
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
     // facebook login
-    Route::get('auth/facebook', 'App\Http\Controllers\FacebookController@redirectToFacebook')->name('facebook.login');
-    Route::get('auth/facebook/callback', 'App\Http\Controllers\FacebookController@handleFacebookCallback');
+    Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->name('facebook.login');
+    Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
 });
 
 Route::get('logout', [AuthController::class, 'logout']);
@@ -196,11 +198,13 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::post('/admin/orders', [OrderController::class, 'create']);
         Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
 
+
+
+
         Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
     });
     Route::middleware(['can:update order'])->group(function () {
         Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
-
 
         Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
     });
@@ -228,7 +232,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
 
     // product routes
-
+    Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
     Route::middleware(['can:create product'])->group(function () {
         Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
         Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -253,24 +257,19 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
 
 
-    Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
+
 
 
     // receipts routes
     Route::middleware(['can:read receipts'])->group(function () {
         Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
-    });
-    Route::middleware(['can:create receipts'])->group(function () {
-        Route::post('/admin/receipts/create', [ReceiptsController::class, ' create_receiving']);
-    });
-
-
-    Route::middleware(['can:read receipts'])->group(function () {
+        Route::get('/admin/receipts/pagination', [ReceiptsController::class, 'receipt_pagination']); // => json
         Route::get('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'details'])->name('receipts.details');
     });
-
-   
-
+    Route::middleware(['can:create receipt'])->group(function () {
+        Route::post('/admin/receipts/create', [ReceiptsController::class, 'create']);
+        Route::post('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'create_detailed_receipt']);
+    });
 
 
 
@@ -293,6 +292,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     Route::post('/admin/discounts/update-product-discount', [DiscountController::class, 'updateProductDiscount'])->name("product.Discount.checkbox");
     Route::post('/admin/discounts/deleteProductDiscount', [DiscountController::class, 'deleteProductDiscountCheck'])->name('delete.ProductDiscount.checkbox');
+
+
+    Route::post('/save-discount-changes', [DiscountController::class, 'saveChanges'])->name('save_discount_changes');
 
 
     // statistic routes

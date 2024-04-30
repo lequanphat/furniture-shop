@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\User;
+use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -58,7 +59,7 @@ class OrderController extends Controller
         } else if ($sort == 'price_desc') {
             $query = $query->orderBy('total_price', 'desc');
         }
-        $orders = $query->paginate(5); // 5 orders per page
+        $orders = $query->paginate(6); // 6 orders per page
 
         $data = [
             'page' => 'Orders',
@@ -94,7 +95,7 @@ class OrderController extends Controller
     {
 
         $order_id = $request->route('order_id');
-        $order = order::where('order_id', $order_id)->first();
+        $order = Order::where('order_id', $order_id)->first();
         if ($order) {
             $isPaid = $request->input('paid') === 'on' ? true : false;
             $order->update([
@@ -105,6 +106,34 @@ class OrderController extends Controller
                 'phone_number' => $request->input('phone_number'),
                 'customer_id' => $request->input('customer_id') == -1 ? null : $request->input('customer_id'),
             ]);
+
+            $order->howmanydaysago = $order->howmanydaysago();
+            $order->money = $order->money_type();
+            if ($order->created_at->diffInDays() < 7) {
+                $order->new = true;
+            }
+
+            // create warranty when delivered and paid
+            if ($request->input('status') == '3' && $isPaid) {
+                $order_details = OrderDetail::where('order_id', $order_id)->get();
+                $start_date = now();
+                foreach ($order_details as $order_detail) {
+                    $detailed_product = ProductDetail::where('sku', $order_detail->sku)->first();
+                    $end_date = $start_date->copy()->addMonths($detailed_product->warranty_month);
+                    Warranty::create([
+                        'order_id' => $order_id,
+                        'sku' => $order_detail->sku,
+                        'start_date' => $start_date,
+                        'end_date' => $end_date,
+                        'description' => 'auto create',
+                    ]);
+                }
+            } else {
+                $warranties = Warranty::where('order_id', $order_id)->get();
+                foreach ($warranties as $warranty) {
+                    $warranty->delete();
+                }
+            }
             return ['message' => 'Update order successfully', 'order' => $order];
         } else {
             response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
@@ -152,7 +181,7 @@ class OrderController extends Controller
         } else if ($sort == 'price_desc') {
             $query = $query->orderBy('total_price', 'desc');
         }
-        $orders = $query->paginate(5); // 5 orders per page
+        $orders = $query->paginate(6); // 6 orders per page
 
         // serialize data
         foreach ($orders as $order) {
@@ -163,7 +192,8 @@ class OrderController extends Controller
             }
         }
 
-        return response()->json(['order_for_ajax' => $orders]);
+        $admin = User::where('user_id', Auth::id())->first();
+        return response()->json(['orders' => $orders, 'can_update' => $admin->can('update order')]);
     }
 
 
@@ -172,16 +202,16 @@ class OrderController extends Controller
         $order_id = $request->route('order_id');
         $order = Order::where('order_id', $order_id)->with('employee.default_address')->first();
         $detailedOrders = $order->order_details()->with('detailed_product')->paginate(5); // 5 items per page
+
+        $detailed_products = ProductDetail::where('is_deleted', 0)->paginate(5);
         $data = [
             'page' => 'Order Details',
             'order' => $order,
             'detailed_orders' => $detailedOrders,
-            'detailed_products' => ProductDetail::paginate(4),
+            'detailed_products' => $detailed_products,
         ];
         return view('admin.orders.order_details', $data);
     }
-
-
 
     public function create_detailed_order(CreateDetailedOrder $request)
     {
@@ -189,6 +219,11 @@ class OrderController extends Controller
         $sku = $request->input('sku');
         $quantities = $request->input('quantities');
         $unit_price = $request->input('unit_price');
+
+        $order = Order::where('order_id', $order_id)->first();
+        if (!$order) {
+            return response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
+        }
         $detailed_order_exist = OrderDetail::where('order_id', $order_id)->where('sku', $sku)->first();
         if ($detailed_order_exist) {
             OrderDetail::where('order_id', $order_id)->where('sku', $sku)->update([
@@ -196,6 +231,7 @@ class OrderController extends Controller
                 'unit_price' => $unit_price,
             ]);
             ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+            $order->update(['total_price' => $order->total_price + $quantities * $unit_price]);
             return ['message' => 'Created order detail successfully!', 'detailed_order' => $detailed_order_exist];
         } else {
             $order_detail = OrderDetail::create([
@@ -204,9 +240,10 @@ class OrderController extends Controller
                 'quantities' => $quantities,
                 'unit_price' => $unit_price,
             ]);
+            $order->update(['total_price' => $order->total_price + $quantities * $unit_price]);
+            ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+            return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
         }
-        ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
-        return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
     }
 
 

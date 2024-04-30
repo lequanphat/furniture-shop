@@ -407,7 +407,7 @@ jQuery.noConflict();
                     </div>
                 </div>
             </td>
-            <td>${formatter.format(product.average_price)}đ</td>
+            <td  class="text-danger">${formatter.format(product.average_price)}đ</td>
             <td>${product.sum_quantities}</td>
             <td>${product.brand.name}</td>
             <td>${product.category.name}</td>

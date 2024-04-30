@@ -1,11 +1,11 @@
-<div class="modal fade" id="create-detailed-order-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="create-detailed-receipt-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <form id="create-order-form" action="#" method="dialog" class="w-full h-full">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add products into order</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add products into receipt</h5>
                     <button type="button" class="btn-close border-none bg-transparent" data-bs-dismiss="modal"
                         aria-label="Close"><i class="ti-close"></i></button>
                 </div>
@@ -34,25 +34,12 @@
                                                 <tr>
                                                     <th>Product</th>
                                                     <th>Color & Size</th>
-                                                    <th>Quantities</th>
-                                                    <th>Price</th>
+                                                    <th>Unit Price</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="detailed-products-table">
                                                 @foreach ($detailed_products as $detailed_product)
-                                                    @php
-                                                        $today = now();
-                                                        $discount_percentage = $detailed_product->product_discounts
-                                                            ->where('discount.start_date', '<=', $today)
-                                                            ->where('discount.end_date', '>=', $today)
-                                                            ->sum('discount.percentage');
-
-                                                        $unit_price =
-                                                            $detailed_product->original_price -
-                                                            ($detailed_product->original_price * $discount_percentage) /
-                                                                100;
-                                                    @endphp
                                                     <tr data-sku="{{ $detailed_product->sku }}">
                                                         <td>
                                                             <div class="d-flex py-1 align-items-center">
@@ -82,28 +69,17 @@
                                                                 </p>
                                                             </div>
                                                         </td>
-                                                        <td class="js-detailed-product-quantities">
-                                                            {{ $detailed_product->quantities }}</td>
-                                                        <td>
-                                                            @if ($discount_percentage > 0)
-                                                                <del>{{ number_format($detailed_product->original_price, 0, '.', ',') }}đ</del>
-                                                            @endif
-                                                            <p class="js-unit-price text-danger m-0"
-                                                                data-unit-price="{{ $unit_price }}">
-                                                                {{ number_format($unit_price, 0, '.', ',') }}đ
-                                                            </p>
 
+                                                        <td>
+                                                            <input class="js-unit-price-input unit-price-input"
+                                                                type="number">
                                                         </td>
                                                         </td>
                                                         <td>
                                                             <div class="custom-table-action">
-                                                                @if ($detailed_product->quantities > 0)
-                                                                    <input class="quantities-input" type="number"
-                                                                        max="{{ $detailed_product->quantities }}">
-                                                                @endif
-
-                                                                <button class="js-add-product btn p-2"
-                                                                    @if ($detailed_product->quantities == 0) disabled @endif>
+                                                                <input class="js-quantities-input quantities-input"
+                                                                    type="number">
+                                                                <button class="js-add-product btn p-2">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         width="24" height="24"
                                                                         viewBox="0 0 24 24" fill="none"

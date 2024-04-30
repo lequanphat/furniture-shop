@@ -17,6 +17,29 @@ body {
     border: 1px solid #333;
     border-radius: 4px;
 }
+.quantities-input.danger {
+    border: 1px solid red;
+}
+.unit-price-input {
+    width: 140px;
+    height: 30px;
+    text-align: center;
+    outline: none;
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+.unit-price-input.danger {
+    border: 1px solid red;
+}
+
+.unit-price-input::-webkit-outer-spin-button,
+.unit-price-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+
 .custom-table-action {
     display: flex;
     align-items: center;
