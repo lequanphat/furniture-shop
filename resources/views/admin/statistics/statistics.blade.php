@@ -95,29 +95,32 @@
                     <div class="col-auto">
                         <div class="card">
                             <div class="row justify-content-end">
-                                <div class="card-body">
+                                <div class="card-body" >
 
                                     {{-- dòng filter --}}
-                                    <div class="row row-cards">
+                                    <div class="row row-cards" >
                                         <h1 id="title_chart">Filter product sales</h1>
                                         <div class="col-auto row ">
                                             <div class="col-6">
-                                                <input id="search_day_first" name="search_day_first" class="col-6 form-control"
+                                                <input id="search_first_pc" name="search_first_pc" class="col-6 form-control"
                                                     type="date" value="" title="Start date">
                                             </div>
                                             <div class="col-6">
-                                                <input id="search_day_last" name="search_day_last" class="col-6 form-control" type="date"
+                                                <input id="search_last_pc" name="search_last_pc" class="col-6 form-control" type="date"
                                                     value="" title="End date">
                                             </div>
                                         </div>
                                         <div class="col-auto row">
-                                            <select id="status_ty" name="status_ty" class="form-select" title="Choose type">
-                                                <option value="all" selected>All</option>
-                                                <option value="" >Last week</option>
-                                                <option value="" >Last 1 months</option>
-                                                <option value="" >Last quarter</option>
+                                            <select id="time_frame_pc" name="time_frame_pc" class="form-select" title="Choose type">
+                                                <option value="1w" >Last week</option>
+                                                <option value="1m" >Last 1 months</option>
+                                                <option value="3m" >Last quarter</option>
+                                                <option value="1y" >Last year</option>
                                             </select>
                                         </div>
+                                        {{-- <div class="col-auto row">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div> --}}
                                     </div>
 
                                 </div>
