@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\User;
+use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -105,6 +106,26 @@ class OrderController extends Controller
                 'phone_number' => $request->input('phone_number'),
                 'customer_id' => $request->input('customer_id') == -1 ? null : $request->input('customer_id'),
             ]);
+
+            //sau khi update xong mà tình trạng của order đã paid và delivered thì tự tạo cái phiếu bảo hành cho sản phẩm trong order
+            if($request->input('status') == '3' && $request->input('paid') == 'on'){
+                $order_details = OrderDetail::where('order_id', $order_id);
+                foreach($order_details as $order_detail){
+                    $start_date = now();
+                    $product_info = ProductDetail::query()->where('sku', $order_detail->sku)->first();
+                    $end_date = $start_date->addMonths($product_info->warranty_month);
+
+                    $warranty_data = [
+                        'order_id' => $order_detail->order_id,
+                        'sku' => $order_detail->sku,
+                        'start_date ' => $start_date,
+                        'end_date' => $end_date,
+                        'description' => 'finish',//'Order #' + $order_detail->order_id + ', ' + $product_info->name,
+                    ];
+                    $warranty = Warranty::create($warranty_data);
+                }
+            }
+
             return ['message' => 'Update order successfully', 'order' => $order];
         } else {
             response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
