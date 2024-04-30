@@ -89,6 +89,12 @@ jQuery(document).ready(function () {
         }
     });
 
+    // btn on product shop
+    $(document).on('click', '.js-add-to-cart-shop', function (e) {
+        // show toast
+        showToast('Add to cart successfully', 'success');
+    });
+
     $('.js-add-to-cart').on('click', function (e) {
         const quantity_input = $('.js-quantity-input');
         let quantities = parseInt(quantity_input.val());
@@ -198,17 +204,21 @@ jQuery(document).ready(function () {
                 
                 <div class="product-action-wrap">
                     <a href="/products/${product.product_id}"
-                        class="product-action-btn-1" title="Wishlist"><i
+                        class="product-action-btn-1" title="View"><i
                             class="pe-7s-like"></i></a>
-                    <button class="product-action-btn-1" title="Quick View"
-                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <a href="/products/${product.product_id}" class="product-action-btn-1" title="View">
                         <i class="pe-7s-look"></i>
-                    </button>
+                    </a>
                 </div>
-                <div class="product-action-2-wrap">
-                    <button class="product-action-btn-2" title="Add To Cart"><i
-                            class="pe-7s-cart"></i> Add to cart</button>
-                </div>
+                ${
+                    product.total_quantities > 0
+                        ? `<div class="product-action-2-wrap">
+                <button class="js-add-to-cart-shop product-action-btn-2" title="Add To Cart"><i
+                        class="pe-7s-cart"></i> Add to cart</button>
+            </div>`
+                        : ''
+                }
+                
             </div>
             <div class="product-content">
                 <h3><a

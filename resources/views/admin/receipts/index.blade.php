@@ -111,7 +111,7 @@
                                                         {{ $receipt->supplier->address }}
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td class="text-muted">
                                                     {{ Carbon::parse($receipt->created_at)->diffForHumans() }}
                                                 </td>
                                                 <td class="text-danger">

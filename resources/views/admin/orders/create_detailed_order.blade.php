@@ -1,7 +1,7 @@
 <div class="modal fade" id="create-detailed-order-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <form id="create-order-form" action="#" method="dialog" class="w-full h-full">
+        <div method="dialog" class="w-full h-full">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -134,6 +134,6 @@
                     </div>
                 </div>
             </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>

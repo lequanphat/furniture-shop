@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7 col-md-7">
-                <div class="banner-wrap mb-30" data-aos="fade-up" data-aos-delay="200">
+                <div class="banner-wrap mb-30">
                     <a href="/products/1"><img src="{{ asset('images/banner/banner-4.png') }}" alt=""></a>
                     <div class="banner-content-2">
                         <span>Sale 30%</span>
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="col-lg-5 col-md-5">
-                <div class="banner-wrap mb-30" data-aos="fade-up" data-aos-delay="400">
+                <div class="banner-wrap mb-30">
                     <a href="/products/1"><img src="{{ asset('images/banner/banner-5.png') }}" alt=""></a>
                     <div class="banner-content-3">
                         <h3>Up To 30% <img src="{{ asset('images/icon-img/sale.png') }}" alt=""> Every Item
@@ -28,7 +28,7 @@
         </div>
     </div>
 </div>
-<div class="banner-area pb-95" data-aos="fade-up" data-aos-delay="200">
+<div class="banner-area pb-95">
     <div class="container">
         <div class="bg-img bg-padding-1" style="background-image:url({{ asset('images/bg/bg-1.png') }})">
             <div class="banner-content-4">

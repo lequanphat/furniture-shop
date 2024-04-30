@@ -81,7 +81,7 @@ jQuery.noConflict();
                 ${receipt.supplier.address}
                 </div>
             </td>
-            <td>
+            <td class="text-muted">
             ${receipt.date_time}
             </td>
             <td class="text-danger">${receipt.total_price}đ

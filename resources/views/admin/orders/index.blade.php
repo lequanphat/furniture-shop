@@ -131,7 +131,7 @@
                                                 </td>
 
 
-                                                <td><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span>
+                                                <td class="text-muted"><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span>
                                                 </td>
                                                 <td class="text-danger">
                                                     {{ number_format($order->total_price, 0, '.', ',') }}đ

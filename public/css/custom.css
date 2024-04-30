@@ -1084,7 +1084,7 @@ input[type='checkbox' i] {
     margin: 0;
     line-height: 1;
     cursor: pointer;
-    border: 1px solid #0ca678;
+    border: 1px solid #e97730;
     border-radius: 4px;
 }
 input[type='checkbox' i] {
@@ -1108,7 +1108,7 @@ input[type='checkbox' i] {
     padding: 4px 8px;
     border-radius: 3px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    color: #0ca678;
+    color: #e97730;
 }
 .form-taginput-tag:before {
     position: absolute;
@@ -1123,7 +1123,7 @@ input[type='checkbox' i] {
 }
 .form-taginput-input:checked ~ .form-taginput-tag:before {
     opacity: 1;
-    background-color: #0ca678;
+    background-color: #e97730;
 }
 .form-taginput-input:checked ~ .form-taginput-tag {
     color: white;
@@ -1337,3 +1337,10 @@ input[type='checkbox' i] {
 .delete-address-message {
     font-size: 16px;
 }
+
+.custom-deal-of-day-product {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+}
+

@@ -46,7 +46,6 @@
                                 <div id="product-list" class="row">
                                     @foreach ($products as $product)
                                         @php
-                                            $today = now();
                                             $detailed_product = $product->detailed_product;
                                         @endphp
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-12">
@@ -66,17 +65,21 @@
                                                         </div>
                                                     @endif
                                                     <div class="product-action-wrap">
-                                                        <a class="product-action-btn-1" title="Wishlist"><i
+                                                        <a href="/products/{{ $product->product_id }}"
+                                                            class="product-action-btn-1" title="Wishlist"><i
                                                                 class="pe-7s-like"></i></a>
-                                                        <button class="product-action-btn-1" title="Quick View"
-                                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                        <a href="/products/{{ $product->product_id }}"
+                                                            class="product-action-btn-1" title="Quick View">
                                                             <i class="pe-7s-look"></i>
-                                                        </button>
+                                                        </a>
                                                     </div>
-                                                    <div class="product-action-2-wrap">
-                                                        <button class="product-action-btn-2" title="Add To Cart"><i
-                                                                class="pe-7s-cart"></i> Add to cart</button>
-                                                    </div>
+                                                    @if ($product->total_quantities > 0)
+                                                        <div class="product-action-2-wrap ">
+                                                            <button class="js-add-to-cart-shop product-action-btn-2" title="Add To Cart"><i
+                                                                    class="pe-7s-cart"></i> Add to cart</button>
+                                                        </div>
+                                                    @endif
+
                                                 </div>
                                                 <div class="product-content">
                                                     <h3><a>{{ $product->name }}</a>
