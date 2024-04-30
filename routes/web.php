@@ -10,6 +10,8 @@ use App\Http\Controllers\HotDealController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\FacebookController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReceiptsController;
@@ -44,12 +46,12 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('forgot-password-verification', [AuthController::class, 'forgot_password_verification_ui'])->where('id', '[0-9]+');;
 
     // google login
-    Route::get('auth/google', 'App\Http\Controllers\GoogleController@redirectToGoogle')->name('google.login');
-    Route::get('auth/google/callback', 'App\Http\Controllers\GoogleController@handleGoogleCallback');
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
     // facebook login
-    Route::get('auth/facebook', 'App\Http\Controllers\FacebookController@redirectToFacebook')->name('facebook.login');
-    Route::get('auth/facebook/callback', 'App\Http\Controllers\FacebookController@handleFacebookCallback');
+    Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->name('facebook.login');
+    Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
 });
 
 Route::get('logout', [AuthController::class, 'logout']);
@@ -269,7 +271,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'details'])->name('receipts.details');
     });
 
-   
+
 
 
 
