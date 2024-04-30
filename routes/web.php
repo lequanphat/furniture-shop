@@ -198,11 +198,13 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::post('/admin/orders', [OrderController::class, 'create']);
         Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
 
+
+
+
         Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
     });
     Route::middleware(['can:update order'])->group(function () {
         Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
-
 
         Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
     });
@@ -230,7 +232,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
 
     // product routes
-
+    Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
     Route::middleware(['can:create product'])->group(function () {
         Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
         Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -255,24 +257,19 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
 
 
-    Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
+
 
 
     // receipts routes
     Route::middleware(['can:read receipts'])->group(function () {
         Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
-    });
-    Route::middleware(['can:create receipts'])->group(function () {
-        Route::post('/admin/receipts/create', [ReceiptsController::class, ' create_receiving']);
-    });
-
-
-    Route::middleware(['can:read receipts'])->group(function () {
+        Route::get('/admin/receipts/pagination', [ReceiptsController::class, 'receipt_pagination']); // => json
         Route::get('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'details'])->name('receipts.details');
     });
-
-
-
+    Route::middleware(['can:create receipt'])->group(function () {
+        Route::post('/admin/receipts/create', [ReceiptsController::class, 'create']);
+        Route::post('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'create_detailed_receipt']);
+    });
 
 
 

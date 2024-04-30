@@ -1,8 +1,6 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        const data_asset = $('#asset').attr('data-asset');
-
         function createOrderElement({ order }) {
             const newTag = order.new
                 ? `<span
@@ -86,7 +84,7 @@ jQuery.noConflict();
                     </div>
                 </td>
                 <td><span>${order.howmanydaysago}</span></td>
-                <td>${order.money}đ</td>
+                <td class="text-danger">${order.money}đ</td>
                 <td>${is_paid}</td>
                 <td>${status}</td>
                 <td>
@@ -230,7 +228,7 @@ jQuery.noConflict();
                 </svg>
             </a>
         </li>`;
-            $('.pagination').html(pagination);
+            return pagination;
         }
         /////////////////////////////////hàm filter cho trang order chính để phân trang và earch ajax
         const filterOrders = ({ page }) => {
@@ -259,17 +257,24 @@ jQuery.noConflict();
                 success: function (response) {
                     //console.log(response);
 
-                    let html = ''; //khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ orders
-                    for (let item of response.order_for_ajax.data) {
-                        html += `<tr>${createOrderElement({ order: item })}</tr>`;
+                    let html = '';
+                    if (response.order_for_ajax.data.length == 0) {
+                        html = '<tr><td colspan="7" class="text-center text-muted">No data available</td></tr>';
+                    } else {
+                        html = '';
+                        for (let item of response.order_for_ajax.data) {
+                            html += `<tr>${createOrderElement({ order: item })}</tr>`;
+                        }
                     }
-                    $('#order-table').html(html); //rồi đặt lại bảng bằng dữ liệu đã được filter ra
+                    $('#order-table').html(html);
 
                     // render pagination here
-                    renderPagination({
-                        current_page: response.order_for_ajax.current_page,
-                        last_page: response.order_for_ajax.last_page,
-                    });
+                    $('.js-orders-pagination .pagination').html(
+                        renderPagination({
+                            current_page: response.order_for_ajax.current_page,
+                            last_page: response.order_for_ajax.last_page,
+                        }),
+                    );
                 },
                 error: function (error) {
                     alert('error');
@@ -311,11 +316,16 @@ jQuery.noConflict();
             }, 500),
         );
 
+        $(document).on('click', '.js-orders-pagination .pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            filterOrders({ page });
+        });
+
         //phần phân trang để chung ở dưới
 
-        ///////////////////////////////// filter cho bảng dữ liệu, liên quan tới tìm kiếm và phân trang của order detail
         const filterDetailedProducts = ({ page }) => {
-            const search = $('#search-detailed-products').val(); //lấy value từ ô tìm kiếm bên create_detailed_order
+            const search = $('#search-detailed-products').val();
             if (!page) {
                 page = 1;
             }
@@ -324,33 +334,17 @@ jQuery.noConflict();
                 url: url,
                 type: 'GET',
                 success: function (response) {
-                    console.log('====================================');
-                    console.log(response.detailed_products.data);
-                    console.log('====================================');
-                    const now = new Date();
-                    now.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
                     let formatter = new Intl.NumberFormat('en-US', {
                         minimumFractionDigits: 0,
                     });
-                    let html = ''; //khởi tạo biến html để hiển thị cho bảng thêm sản phẩm order
+                    let html = '';
                     for (let i = 0; i < response.detailed_products.data.length; i++) {
-                        //đối với mỗi dòng dữ liệu, tính giá tiền từ phần trăm discount
                         const detailed_product = response.detailed_products.data[i];
-                        let discount_percentage = 0;
-                        for (let j = 0; j < detailed_product.product_discounts.length; j++) {
-                            const startDate = new Date(detailed_product.product_discounts[j].discount.start_date);
-                            const endDate = new Date(detailed_product.product_discounts[j].discount.end_date);
-                            if (startDate.getTime() <= now.getTime() && now.getTime() <= endDate.getTime()) {
-                                discount_percentage += detailed_product.product_discounts[j].discount.percentage;
-                            }
-                        }
-                        let unit_price =
+                        const image = detailed_product.images.length > 0 ? detailed_product.images[0].url : '';
+                        const total_discount_percentage = detailed_product.total_discount_percentage;
+                        const unit_price =
                             detailed_product.original_price -
-                            (detailed_product.original_price * discount_percentage) / 100;
-                        let image = '';
-                        if (detailed_product.images.length > 0) {
-                            image = detailed_product.images[0].url;
-                        } //sau khi tính xong bắt đầu tạo dòng html để hiển thị lên bảng
+                            detailed_product.original_price * (total_discount_percentage / 100);
                         html += `<tr data-sku="${detailed_product.sku}">
                         <td>
                             <div class="d-flex py-1 align-items-center">
@@ -374,7 +368,7 @@ jQuery.noConflict();
                         <td class="js-detailed-product-quantities">${detailed_product.quantities}</td>
                         <td>
                         ${
-                            discount_percentage > 0
+                            total_discount_percentage > 0
                                 ? `<del>${formatter.format(detailed_product.original_price)}đ</del>`
                                 : ''
                         }
@@ -392,8 +386,17 @@ jQuery.noConflict();
                             }
                                 <button class="js-add-product btn p-2"
                                 ${detailed_product.quantities == 0 ? 'disabled' : ''} >
-                                    <img src="${data_asset}svg/plus.svg"
-                                        style="width: 18px;" />
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24"
+                                viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                                <path stroke="none" d="M0 0h24v24H0z"
+                                    fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
                                 </button>
                             </div>
                         </td>
@@ -401,54 +404,12 @@ jQuery.noConflict();
                     }
                     $('#detailed-products-table').html(html); //mớ trên đó là tạo dữ liệu, giờ thì set dòng html đó vào bảng
 
-                    // pagination, tạo dòng phân trang sau khi đã tạo các dòng dữ liệu
-                    let pagination = `<li class="page-item ${
-                        response.detailed_products.current_page === 1 ? 'disabled' : ''
-                    }">
-                    <a class="page-link" href="#" data-page="${response.detailed_products.current_page - 1}">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="icon"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M15 6l-6 6l6 6" />
-                        </svg>
-                        prev
-                    </a>
-                </li>`;
-
-                    for (let i = 0; i < response.detailed_products.last_page; i++) {
-                        pagination += `
-                            <li class="page-item ${
-                                response.detailed_products.current_page === i + 1 ? 'active mx-1' : ''
-                            }">
-                                <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
-                            </li>`;
-                    }
-                    pagination += `<li class="page-item ${
-                        response.detailed_products.current_page === response.detailed_products.last_page
-                            ? 'disabled'
-                            : ''
-                    }">
-                    <a class="page-link" href="#" data-page="${response.detailed_products.current_page + 1}">
-                        next
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M9 6l6 6l-6 6" />
-                        </svg>
-                    </a>
-                </li>`;
-                    $('.pagination').html(pagination);
+                    $('.js-detailed-products-pagination .pagination').html(
+                        renderPagination({
+                            current_page: response.detailed_products.current_page,
+                            last_page: response.detailed_products.last_page,
+                        }),
+                    );
                 },
                 error: function (error) {
                     console.log(error);
@@ -463,12 +424,10 @@ jQuery.noConflict();
             }, 500),
         );
 
-        // pagination cho trang order và detail order luôn
-        $(document).on('click', '.pagination .page-link', function (event) {
+        $(document).on('click', ' .js-detailed-products-pagination .pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
             filterDetailedProducts({ page });
-            filterOrders({ page });
         });
 
         $(document).on('input', '.quantities-input', function () {
@@ -479,12 +438,15 @@ jQuery.noConflict();
                 $(this).val(parseInt($(this).val()));
             }
         });
+
+        $(document).on('input', '.quantities-input', function (event) {
+            $(this).removeClass('danger');
+        });
+
         $(document).on('click', '.js-add-product', function (event) {
-            const _this = this;
             let quantities = $(this).closest('tr').find('.quantities-input').val();
             if (quantities === '' || quantities <= 0) {
-                alert('Please input quantities');
-                return;
+                $(this).closest('tr').find('.quantities-input').addClass('danger');
             }
             quantities = parseInt(quantities);
             const sku = $(this).closest('tr').data('sku');
@@ -504,10 +466,7 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    console.log(response);
-                    const quantities_instance = $(_this).closest('tr').find('.js-detailed-product-quantities');
-                    quantities_instance.text(parseInt(quantities_instance.text()) - quantities);
-                    $(_this).closest('tr').find('.quantities-input').val(0);
+                    window.location.reload();
                 },
                 error: function (error) {
                     console.log(error);

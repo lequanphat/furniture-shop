@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,10 +21,16 @@ class ReceivingReport extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-    public function customer()
+    public function supplier()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
-   
-    
+    public function format_created_at()
+    {
+        return Carbon::parse($this->created_at)->diffForHumans();
+    }
+    public function format_total_price()
+    {
+        return number_format($this->total_price, 0, '.', ',');
+    }
 }

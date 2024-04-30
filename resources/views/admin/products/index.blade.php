@@ -139,7 +139,7 @@
                                                     </div>
                                                 </td>
 
-                                                <td>{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
+                                                <td class="text-danger">{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
                                                 </td>
                                                 <td>{{ $product->detailed_products->sum('quantities') }}</td>
 

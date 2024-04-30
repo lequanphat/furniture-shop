@@ -124,8 +124,8 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Color</th>
-                                            <th>Size</th>
+                                            <th>Color & Size</th>
+
                                             <th>Unit Price</th>
                                             <th>Quantities</th>
                                             <th>Warranty</th>
@@ -161,11 +161,12 @@
 
                                                 </td>
                                                 <td>
-                                                    <div class="col-auto rounded"
-                                                        style="background: {{ $detailed_order->detailed_product->color->code }}; width: 20px; height: 20px;">
-                                                    </div>
+                                                    <p class="m-0">Color:
+                                                        {{ $detailed_order->detailed_product->color->name }}
+                                                    </p>
+                                                    <p class="my-1">Size:
+                                                        {{ $detailed_order->detailed_product->size }}</p>
                                                 </td>
-                                                <td>{{ $detailed_order->detailed_product->size }}</td>
                                                 <td>{{ number_format($detailed_order->unit_price) }}đ
                                                 </td>
                                                 <td>{{ $detailed_order->quantities }}</td>
@@ -173,16 +174,25 @@
                                                 <td class="text-success">
                                                     {{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
                                                 <td>
-                                                    <!--nút sửa, order detail chỉ nên ửa được quantity-->
-                                                    <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
-                                                        title="Update" data-bs-toggle="modal"
-                                                        data-bs-target="#UpdateOrderDetailModal"
-                                                        data-order-id="{{ $order->order_id }}"
-                                                        data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
-                                                        data-quantities="{{ $detailed_order->quantities }}"
-                                                        data-unit-price="{{ $detailed_order->unit_price }}">
-                                                        <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                    </button>
+                                                    @can('update order')
+                                                        <button type="button" class="btn p-2" title="Update"
+                                                            data-bs-toggle="modal" data-bs-target="#"
+                                                            data-order-id="{{ $order->order_id }}"
+                                                            data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
+                                                            data-quantities="{{ $detailed_order->quantities }}"
+                                                            data-unit-price="{{ $detailed_order->unit_price }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path
+                                                                    d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                                                <path d="M13.5 6.5l4 4" />
+                                                            </svg>
+                                                        </button>
+                                                    @endcan
                                                 </td>
                                             </tr>
                                         @endforeach

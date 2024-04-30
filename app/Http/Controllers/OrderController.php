@@ -108,9 +108,9 @@ class OrderController extends Controller
             ]);
 
             //sau khi update xong mà tình trạng của order đã paid và delivered thì tự tạo cái phiếu bảo hành cho sản phẩm trong order
-            if($request->input('status') == '3' && $request->input('paid') == 'on'){
+            if ($request->input('status') == '3' && $request->input('paid') == 'on') {
                 $order_details = OrderDetail::where('order_id', $order_id);
-                foreach($order_details as $order_detail){
+                foreach ($order_details as $order_detail) {
                     $start_date = now();
                     $product_info = ProductDetail::query()->where('sku', $order_detail->sku)->first();
                     $end_date = $start_date->addMonths($product_info->warranty_month);
@@ -120,12 +120,11 @@ class OrderController extends Controller
                         'sku' => $order_detail->sku,
                         'start_date ' => $start_date,
                         'end_date' => $end_date,
-                        'description' => 'finish',//'Order #' + $order_detail->order_id + ', ' + $product_info->name,
+                        'description' => 'finish', //'Order #' + $order_detail->order_id + ', ' + $product_info->name,
                     ];
                     $warranty = Warranty::create($warranty_data);
                 }
             }
-
             return ['message' => 'Update order successfully', 'order' => $order];
         } else {
             response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
@@ -193,16 +192,16 @@ class OrderController extends Controller
         $order_id = $request->route('order_id');
         $order = Order::where('order_id', $order_id)->with('employee.default_address')->first();
         $detailedOrders = $order->order_details()->with('detailed_product')->paginate(5); // 5 items per page
+
+        $detailed_products = ProductDetail::where('is_deleted', 0)->paginate(5);
         $data = [
             'page' => 'Order Details',
             'order' => $order,
             'detailed_orders' => $detailedOrders,
-            'detailed_products' => ProductDetail::paginate(4),
+            'detailed_products' => $detailed_products,
         ];
         return view('admin.orders.order_details', $data);
     }
-
-
 
     public function create_detailed_order(CreateDetailedOrder $request)
     {
@@ -210,6 +209,11 @@ class OrderController extends Controller
         $sku = $request->input('sku');
         $quantities = $request->input('quantities');
         $unit_price = $request->input('unit_price');
+
+        $order = Order::where('order_id', $order_id)->first();
+        if (!$order) {
+            return response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
+        }
         $detailed_order_exist = OrderDetail::where('order_id', $order_id)->where('sku', $sku)->first();
         if ($detailed_order_exist) {
             OrderDetail::where('order_id', $order_id)->where('sku', $sku)->update([
@@ -217,6 +221,7 @@ class OrderController extends Controller
                 'unit_price' => $unit_price,
             ]);
             ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+            $order->update(['total_price' => $order->total_price + $quantities * $unit_price]);
             return ['message' => 'Created order detail successfully!', 'detailed_order' => $detailed_order_exist];
         } else {
             $order_detail = OrderDetail::create([
@@ -225,9 +230,10 @@ class OrderController extends Controller
                 'quantities' => $quantities,
                 'unit_price' => $unit_price,
             ]);
+            $order->update(['total_price' => $order->total_price + $quantities * $unit_price]);
+            ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+            return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
         }
-        ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
-        return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
     }
 
 
