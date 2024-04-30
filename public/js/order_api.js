@@ -1,7 +1,7 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        function createOrderElement({ order }) {
+        function createOrderElement({ order, can_update = false }) {
             const newTag = order.new
                 ? `<span
             class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>`
@@ -9,9 +9,11 @@ jQuery.noConflict();
             let is_paid = '';
             switch (order.is_paid) {
                 case 0:
+                case false:
                     is_paid = '<span class="badge bg-yellow-lt">Pending Payment</span>';
                     break;
                 case 1:
+                case true:
                     is_paid = '<span class="badge bg-green-lt">Payment Received</span>';
                     break;
                 default:
@@ -21,18 +23,23 @@ jQuery.noConflict();
             let status = '';
             switch (order.status) {
                 case 0:
+                case '0':
                     status = '<span class="badge bg-yellow-lt">Unconfirmed</span>';
                     break;
                 case 1:
+                case '1':
                     status = '<span class="badge bg-azure-lt">Confirmed</span>';
                     break;
                 case 2:
+                case '2':
                     status = '<span class="badge bg-purple-lt">In transit</span>';
                     break;
                 case 3:
+                case '3':
                     status = '<span class="badge bg-green-lt">Delivered</span>';
                     break;
                 case 4:
+                case '4':
                     status = '<span class="badge bg-red-lt">Canceled</span>';
                     break;
                 default:
@@ -50,7 +57,8 @@ jQuery.noConflict();
                         d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
                 </svg>
             </a>`;
-            const update_action = ` <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
+            const update_action = can_update
+                ? ` <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
                 title="Update" data-bs-toggle="modal"
                 data-bs-target="#update-order-modal"
                 data-order-id="${order.order_id}"
@@ -70,7 +78,8 @@ jQuery.noConflict();
                     <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
                     <path d="M13.5 6.5l4 4" />
                 </svg>
-            </button>`;
+            </button>`
+                : '';
             return `<td>${order.order_id}</td>
                 <td>
                     <div class="d-flex py-1 align-items-center">
@@ -112,6 +121,7 @@ jQuery.noConflict();
                     $('#create_order_response').removeClass('alert-danger');
                     $('#create_order_response').addClass('alert-success');
                     $('#create_order_response').html(response.message);
+                    window.location.href = `/admin/orders/${response.order.order_id}`;
                 },
                 error: function (error) {
                     console.log(error);
@@ -137,11 +147,14 @@ jQuery.noConflict();
             modal.find('#totalPrice').val(button.data('total-price'));
             if (button.data('is-paid')) {
                 modal.find('#paid').attr('checked', true);
-            } else modal.find('#paid').attr('checked', false);
+            } else {
+                modal.find('#paid').attr('checked', false);
+            }
             modal.find('#status').val(button.data('status'));
             modal.find('#receiver_name').val(button.data('receiver-name'));
             modal.find('#address').val(button.data('address'));
             modal.find('#phone_number').val(button.data('phone-number'));
+
             if (button.data('customer-id') === '') {
                 modal.find('#customer_id').val(-1);
             } else {
@@ -161,10 +174,17 @@ jQuery.noConflict();
                 success: function (response) {
                     console.log({ response });
                     // Handle the success response
+
                     $('#update_order_response').removeClass('d-none');
                     $('#update_order_response').removeClass('alert-danger');
                     $('#update_order_response').addClass('alert-success');
                     $('#update_order_response').html(response.message);
+
+                    const tr = $('#order-table tr').filter(function () {
+                        return $(this).find('td:first').text() == order_id;
+                    });
+
+                    tr.html(createOrderElement({ order: response.order, can_update: true }));
                 },
                 error: function (error) {
                     console.log({ error });
@@ -258,12 +278,12 @@ jQuery.noConflict();
                     //console.log(response);
 
                     let html = '';
-                    if (response.order_for_ajax.data.length == 0) {
+                    if (response.orders.data.length == 0) {
                         html = '<tr><td colspan="7" class="text-center text-muted">No data available</td></tr>';
                     } else {
                         html = '';
-                        for (let item of response.order_for_ajax.data) {
-                            html += `<tr>${createOrderElement({ order: item })}</tr>`;
+                        for (let item of response.orders.data) {
+                            html += `<tr>${createOrderElement({ order: item, can_update: response.can_update })}</tr>`;
                         }
                     }
                     $('#order-table').html(html);
@@ -271,8 +291,8 @@ jQuery.noConflict();
                     // render pagination here
                     $('.js-orders-pagination .pagination').html(
                         renderPagination({
-                            current_page: response.order_for_ajax.current_page,
-                            last_page: response.order_for_ajax.last_page,
+                            current_page: response.orders.current_page,
+                            last_page: response.orders.last_page,
                         }),
                     );
                 },

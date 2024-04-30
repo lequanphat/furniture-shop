@@ -42,8 +42,6 @@ jQuery.noConflict();
             $('#create_warranty_response').addClass('d-none');
         });
 
-
-
         //hàm sửa warranty
         $('#UpdateWarrantyModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
@@ -84,10 +82,10 @@ jQuery.noConflict();
             });
         });
 
-
         //////////////////////////////////////////////////////////////////////////
         // Phần search và phân trang bằng ajax bắt đầu từ đây
-        function debounce(func, wait) { //hàm đợi 1 thời gian rồi mới thực hiện
+        function debounce(func, wait) {
+            //hàm đợi 1 thời gian rồi mới thực hiện
             let timeout;
             return function executedFunction(...args) {
                 const later = () => {
@@ -144,9 +142,9 @@ jQuery.noConflict();
         }
 
         //hàm tạo đối tượng để add vào bảng
-        function createWarrantyElement({ warranty }){
-            let status = '';//tính giờ gian status còn bảo hành ko
-            switch (warranty.is_active){
+        function createWarrantyElement({ warranty }) {
+            let status = ''; //tính giờ gian status còn bảo hành ko
+            switch (warranty.is_active) {
                 case false:
                     status = '<span class="badge bg-red-lt">Not within</span>';
                     break;
@@ -157,41 +155,64 @@ jQuery.noConflict();
                     status = 'error';
                     break;
             }
+            const view_button = `<a href="/admin/warranties/${warranty.warranty_id}"
+            class="btn p-2" title="Warranty Details">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"
+                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                <path
+                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+            </svg>
+        </a>
+`;
 
             const update_button = `
             <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
                 title="Update" data-bs-toggle="modal" data-bs-target="#UpdateWarrantyModal"
                 data-warranty-id="${warranty.warranty_id}"
-                data-order-id="${warranty.order_id }"
-                data-sku="${warranty.sku }"
-                data-start-date="${warranty.start_date }"
+                data-order-id="${warranty.order_id}"
+                data-sku="${warranty.sku}"
+                data-start-date="${warranty.start_date}"
                 data-description="${warranty.description}">
-                <img src="${data_asset}svg/edit.svg" style="width: 18px;" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                </svg>
             </button>
             `;
             return `
                 <td>${warranty.warranty_id}</td>
-                <td>${warranty.order_id }</td>
-                <td>${warranty.sku }</td>
-                <td>${warranty.start_date }</td>
-                <td>${warranty.end_date }</td>
+                <td>${warranty.order_id}</td>
+                <td>${warranty.sku}</td>
+                <td>${warranty.start_date}</td>
+                <td>${warranty.end_date}</td>
                 <td>${warranty.description}</td>
                 <td>${warranty.product_detail.warranty_month} months</td>
                 <td>${status}</td>
-                <td>${update_button}</td>
+                <td> ${view_button} ${update_button}</td>
             `;
         }
 
-
         // filter cho bảng, phần này load lại bảng với phần dữ liệu được trả về từ controller search_warranties_ajax
         const filterWarranties = ({ page }) => {
-            const search = $('#search-warranties').val();           //lấy value từ ô tìm kiếm bên index của warranties
-            const search_day_first = $('#search_day_first').val();  //lấy ngày đầu kiếm order trong 1 khoảng thời gian
-            const search_day_last = $('#search_day_last').val();    //lấy ngày cuối kiếm order trong 1 khoảng thời gian
-            const status_type = $('#status_type').val();            //lấy trạng thái trong hạn bảo hành hay không
-            const sort_by = $('#sort_by').val();                    //sắp xếp lại
+            const search = $('#search-warranties').val(); //lấy value từ ô tìm kiếm bên index của warranties
+            const search_day_first = $('#search_day_first').val(); //lấy ngày đầu kiếm order trong 1 khoảng thời gian
+            const search_day_last = $('#search_day_last').val(); //lấy ngày cuối kiếm order trong 1 khoảng thời gian
+            const status_type = $('#status_type').val(); //lấy trạng thái trong hạn bảo hành hay không
+            const sort_by = $('#sort_by').val(); //sắp xếp lại
 
-            history.pushState(  //đẩy giá trị lên thanh địa chỉ
+            history.pushState(
+                //đẩy giá trị lên thanh địa chỉ
                 null,
                 null,
                 `/admin/warranties?search=${search}&searchdayfirst=${search_day_first}&searchdaylast=${search_day_last}&statustype=${status_type}&sortby=${sort_by}&page=${page}`,
@@ -204,7 +225,6 @@ jQuery.noConflict();
             //url để tìm kiếm, lấy từ route /admin/warranties/search
             const url = `/admin/warranties/search?search=${search}&searchdayfirst=${search_day_first}&searchdaylast=${search_day_last}&statustype=${status_type}&sortby=${sort_by}&page=${page}`;
 
-
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -212,15 +232,16 @@ jQuery.noConflict();
                     console.log(response);
                     console.log(response.warranties);
 
-                    let html = '';//khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ warranties
-                    for(let item of response.warranties.data){ //từ bên controller search_warranties_ajax qua
+                    let html = ''; //khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ warranties
+                    for (let item of response.warranties.data) {
+                        //từ bên controller search_warranties_ajax qua
                         // let statusSpan;
                         // if (item.is_active) {
                         //     statusSpan = '<span class="badge bg-green-lt">Still on</span>';
                         // } else {
                         //     statusSpan = '<span class="badge bg-red-lt">Not within</span>';
                         // }
-                        html+=`<tr>${createWarrantyElement({ warranty : item })}</tr>`;
+                        html += `<tr>${createWarrantyElement({ warranty: item })}</tr>`;
                     }
                     $('#warranties-list').html(html); //rồi đặt lại bảng bằng dữ liệu đã được filter ra
 
@@ -231,7 +252,7 @@ jQuery.noConflict();
                     });
                 },
                 error: function (error) {
-                    alert('error')
+                    alert('error');
                     console.log(error);
                 },
             });
@@ -275,6 +296,5 @@ jQuery.noConflict();
             const page = button.data('page');
             filterWarranties({ page });
         });
-
     });
 })(jQuery);

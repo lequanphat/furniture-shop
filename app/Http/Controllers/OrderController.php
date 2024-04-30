@@ -59,7 +59,7 @@ class OrderController extends Controller
         } else if ($sort == 'price_desc') {
             $query = $query->orderBy('total_price', 'desc');
         }
-        $orders = $query->paginate(5); // 5 orders per page
+        $orders = $query->paginate(6); // 6 orders per page
 
         $data = [
             'page' => 'Orders',
@@ -95,7 +95,7 @@ class OrderController extends Controller
     {
 
         $order_id = $request->route('order_id');
-        $order = order::where('order_id', $order_id)->first();
+        $order = Order::where('order_id', $order_id)->first();
         if ($order) {
             $isPaid = $request->input('paid') === 'on' ? true : false;
             $order->update([
@@ -107,22 +107,31 @@ class OrderController extends Controller
                 'customer_id' => $request->input('customer_id') == -1 ? null : $request->input('customer_id'),
             ]);
 
-            //sau khi update xong mà tình trạng của order đã paid và delivered thì tự tạo cái phiếu bảo hành cho sản phẩm trong order
-            if ($request->input('status') == '3' && $request->input('paid') == 'on') {
-                $order_details = OrderDetail::where('order_id', $order_id);
-                foreach ($order_details as $order_detail) {
-                    $start_date = now();
-                    $product_info = ProductDetail::query()->where('sku', $order_detail->sku)->first();
-                    $end_date = $start_date->addMonths($product_info->warranty_month);
+            $order->howmanydaysago = $order->howmanydaysago();
+            $order->money = $order->money_type();
+            if ($order->created_at->diffInDays() < 7) {
+                $order->new = true;
+            }
 
-                    $warranty_data = [
-                        'order_id' => $order_detail->order_id,
+            // create warranty when delivered and paid
+            if ($request->input('status') == '3' && $isPaid) {
+                $order_details = OrderDetail::where('order_id', $order_id)->get();
+                $start_date = now();
+                foreach ($order_details as $order_detail) {
+                    $detailed_product = ProductDetail::where('sku', $order_detail->sku)->first();
+                    $end_date = $start_date->copy()->addMonths($detailed_product->warranty_month);
+                    Warranty::create([
+                        'order_id' => $order_id,
                         'sku' => $order_detail->sku,
-                        'start_date ' => $start_date,
+                        'start_date' => $start_date,
                         'end_date' => $end_date,
-                        'description' => 'finish', //'Order #' + $order_detail->order_id + ', ' + $product_info->name,
-                    ];
-                    $warranty = Warranty::create($warranty_data);
+                        'description' => 'auto create',
+                    ]);
+                }
+            } else {
+                $warranties = Warranty::where('order_id', $order_id)->get();
+                foreach ($warranties as $warranty) {
+                    $warranty->delete();
                 }
             }
             return ['message' => 'Update order successfully', 'order' => $order];
@@ -172,7 +181,7 @@ class OrderController extends Controller
         } else if ($sort == 'price_desc') {
             $query = $query->orderBy('total_price', 'desc');
         }
-        $orders = $query->paginate(5); // 5 orders per page
+        $orders = $query->paginate(6); // 6 orders per page
 
         // serialize data
         foreach ($orders as $order) {
@@ -183,7 +192,8 @@ class OrderController extends Controller
             }
         }
 
-        return response()->json(['order_for_ajax' => $orders]);
+        $admin = User::where('user_id', Auth::id())->first();
+        return response()->json(['orders' => $orders, 'can_update' => $admin->can('update order')]);
     }
 
 
