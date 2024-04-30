@@ -135,78 +135,81 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Color & Size</th>
-
-                                            <th>Unit Price</th>
-                                            <th>Quantities</th>
+                                            <th>Quantities x Unit Price</th>
                                             <th>Warranty</th>
                                             <th>Total price</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($detailed_orders as $detailed_order)
+                                        @if ($detailed_orders->isEmpty())
                                             <tr>
-                                                <td>
-                                                    <div class="d-flex py-1 align-items-center">
-                                                        <span class="avatar me-2"
-                                                            style="background-image: url(@if (isset($detailed_order->detailed_product->images->first()->url)) {{ $detailed_order->detailed_product->images->first()->url }} @endif); width: 80px; height: 80px; flex-shrink: 0;">
-                                                        </span>
-                                                        <div class="flex-fill">
-                                                            <div class="font-weight-medium">
-                                                                <h3 class="m-0">
-                                                                    {{ $detailed_order->detailed_product->name }}
-                                                                    @if ($detailed_order->detailed_product->created_at->diffInDays() < 7)
-                                                                        <span
-                                                                            class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
-                                                                        </span>
-                                                                    @endif
-                                                                </h3>
-                                                            </div>
-                                                            <div class="text-muted">
-                                                                <a href="#"
-                                                                    class="text-reset">#{{ $detailed_order->detailed_product->sku }}</a>
+                                                <td colspan="6" class="text-center text-muted">No data available</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($detailed_orders as $detailed_order)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex py-1 align-items-center">
+                                                            <span class="avatar me-2"
+                                                                style="background-image: url(@if (isset($detailed_order->detailed_product->images->first()->url)) {{ $detailed_order->detailed_product->images->first()->url }} @endif); width: 80px; height: 80px; flex-shrink: 0;">
+                                                            </span>
+                                                            <div class="flex-fill">
+                                                                <div class="font-weight-medium">
+                                                                    <h3 class="m-0">
+                                                                        {{ $detailed_order->detailed_product->name }}
+                                                                        @if ($detailed_order->detailed_product->created_at->diffInDays() < 7)
+                                                                            <span
+                                                                                class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
+                                                                            </span>
+                                                                        @endif
+                                                                    </h3>
+                                                                </div>
+                                                                <div class="text-muted">
+                                                                    <a href="#"
+                                                                        class="text-reset">#{{ $detailed_order->detailed_product->sku }}</a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                </td>
-                                                <td>
-                                                    <p class="m-0">Color:
-                                                        {{ $detailed_order->detailed_product->color->name }}
-                                                    </p>
-                                                    <p class="my-1">Size:
-                                                        {{ $detailed_order->detailed_product->size }}</p>
-                                                </td>
-                                                <td>{{ number_format($detailed_order->unit_price) }}đ
-                                                </td>
-                                                <td>{{ $detailed_order->quantities }}</td>
-                                                <td>{{ $detailed_order->detailed_product->warranty_month }} Months</td>
-                                                <td class="text-success">
-                                                    {{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
-                                                <td>
-                                                    @can('update order')
-                                                        <button type="button" class="btn p-2" title="Update"
-                                                            data-bs-toggle="modal" data-bs-target="#"
-                                                            data-order-id="{{ $order->order_id }}"
-                                                            data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
-                                                            data-quantities="{{ $detailed_order->quantities }}"
-                                                            data-unit-price="{{ $detailed_order->unit_price }}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                <path
-                                                                    d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                                                                <path d="M13.5 6.5l4 4" />
-                                                            </svg>
-                                                        </button>
-                                                    @endcan
-                                                </td>
-                                            </tr>
-                                        @endforeach
-
+                                                    </td>
+                                                    <td>
+                                                        <p class="m-0">Color:
+                                                            {{ $detailed_order->detailed_product->color->name }}
+                                                        </p>
+                                                        <p class="my-1">Size:
+                                                            {{ $detailed_order->detailed_product->size }}</p>
+                                                    </td>
+                                                    <td>{{ $detailed_order->quantities }} x
+                                                        {{ number_format($detailed_order->unit_price) }}đ
+                                                    </td>
+                                                    <td>{{ $detailed_order->detailed_product->warranty_month }} Months</td>
+                                                    <td class="text-danger">
+                                                        {{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
+                                                    <td>
+                                                        @can('update order')
+                                                            <button type="button" class="btn p-2" title="Update"
+                                                                data-bs-toggle="modal" data-bs-target="#"
+                                                                data-order-id="{{ $order->order_id }}"
+                                                                data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
+                                                                data-quantities="{{ $detailed_order->quantities }}"
+                                                                data-unit-price="{{ $detailed_order->unit_price }}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path
+                                                                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                                                    <path d="M13.5 6.5l4 4" />
+                                                                </svg>
+                                                            </button>
+                                                        @endcan
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                                 <div class="d-flex justify-content-end my-2">

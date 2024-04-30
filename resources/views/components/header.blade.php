@@ -11,17 +11,9 @@
                     <div class="main-menu text-center">
                         <nav>
                             <ul>
-                                <li><a href="/">HOME</a>
-                                </li>
-                                <li><a href="/shop">SHOP</a>
-                                </li>
-                                <li><a href="#">PAGES</a>
-                                    <ul class="sub-menu-style">
-                                        <li><a href="#">about us </a></li>
-                                        <li><a href="#">cart page</a></li>
-                                        <li><a href="#">checkout </a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="/">HOME</a> </li>
+                                <li><a href="/shop">SHOP</a> </li>
+                                <li><a href="/myorders">MY ORDERS</a></li>
                                 <li><a href="/about">ABOUT</a></li>
                                 <li><a href="/contact">CONTACT US</a></li>
                             </ul>

@@ -230,7 +230,9 @@ class OrderController extends Controller
                 'quantities' => $detailed_order_exist->quantities + $quantities,
                 'unit_price' => $unit_price,
             ]);
-            ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+            $detailed_product = ProductDetail::where('sku', $sku)->first();
+            $detailed_product->decrement('quantities', $request->input('quantities'));
+            Product::where('product_id', $detailed_product->product_id)->increment('amount_sold', $request->input('quantities'));
             $order->update(['total_price' => $order->total_price + $quantities * $unit_price]);
             return ['message' => 'Created order detail successfully!', 'detailed_order' => $detailed_order_exist];
         } else {
@@ -241,7 +243,9 @@ class OrderController extends Controller
                 'unit_price' => $unit_price,
             ]);
             $order->update(['total_price' => $order->total_price + $quantities * $unit_price]);
-            ProductDetail::where('sku', $sku)->decrement('quantities', $request->input('quantities'));
+            $detailed_product = ProductDetail::where('sku', $sku)->first();
+            $detailed_product->decrement('quantities', $request->input('quantities'));
+            Product::where('product_id', $detailed_product->product_id)->increment('amount_sold', $request->input('quantities'));
             return ['message' => 'Created order detail successfully!', 'detailed_order' => $order_detail];
         }
     }
@@ -335,7 +339,9 @@ class OrderController extends Controller
                 'quantities' => $item['quantities'],
                 'unit_price' => $item['unit_price'],
             ]);
-            ProductDetail::where('sku', $item['sku'])->decrement('quantities', $item['quantities']);
+            $detailed_product = ProductDetail::where('sku', $item['sku'])->first();
+            $detailed_product->decrement('quantities', $item['quantities']);
+            Product::where('product_id', $detailed_product->product_id)->increment('amount_sold', $item['quantities']);
             $total_price += $order_detail->quantities * $order_detail->unit_price;
         }
         // Update the total_price in the order

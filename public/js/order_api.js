@@ -92,7 +92,7 @@ jQuery.noConflict();
                         </div>
                     </div>
                 </td>
-                <td><span>${order.howmanydaysago}</span></td>
+                <td class="text-muted"><span>${order.howmanydaysago}</span></td>
                 <td class="text-danger">${order.money}đ</td>
                 <td>${is_paid}</td>
                 <td>${status}</td>

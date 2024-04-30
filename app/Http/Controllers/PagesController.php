@@ -12,15 +12,151 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 
 class PagesController extends Controller
 {
     //
+
+    public function getDealProducts()
+    {
+        $deal_products = Product::select([
+            'products.product_id',
+            'products.name',
+            'product_details.sku',
+            'product_images.url',
+            DB::raw('round(product_details.original_price,0) AS old_price'),
+            DB::raw('round(product_details.original_price * (1 - discounts.percentage/100),0) AS new_price'),
+            DB::raw('round(discounts.percentage,0) AS discount_percent'),
+        ])
+            ->distinct()
+            ->join('product_details', 'products.product_id', '=', 'product_details.product_id')
+            ->leftjoin('product_images', 'product_details.sku', '=', 'product_images.sku')
+            ->join('product_discounts', 'product_details.sku', '=', 'product_discounts.sku')
+            ->join('discounts', 'product_discounts.discount_id', '=', 'discounts.discount_id')
+            ->where(function ($query) {
+                $query->where('discounts.is_active', '!=', 0)
+                    ->whereDate('discounts.start_date', '<=', now())
+                    ->whereDate('discounts.end_date', '>=', now());
+            })
+            ->where('products.is_deleted', false)
+            ->orderBy('discounts.percentage', 'desc')
+            ->get();
+
+
+
+        return $deal_products;
+    }
+    public function getLatestProducts()
+    {
+        // latest product
+        $query = Product::with(
+            [
+                'detailed_products' => function ($query) {
+                    $query->where('is_deleted', 0)->with('images', 'product_discounts.discount');
+                },
+            ]
+        )->where('is_deleted', false)->has('detailed_products');
+
+
+        $latest_products = $query->orderByDesc('created_at')->paginate(8);
+        foreach ($latest_products as $product) {
+            $total_discount_percentage = 0;
+            foreach ($product->detailed_products as $detailed_product) {
+                foreach ($detailed_product->product_discounts as $product_discount) {
+                    if ($product_discount->discount->is_currently_active()) {
+                        $total_discount_percentage += $product_discount->discount->percentage;
+                    }
+                }
+                $detailed_product->total_discount_percentage = $total_discount_percentage;
+            }
+        }
+
+        $today = now();
+        foreach ($latest_products as $product) {
+            $detailed_product =
+                $product->detailed_products
+                ->sortByDesc(function ($detailed_product) use ($today) {
+                    return $detailed_product->product_discounts
+                        ->where('discount.start_date', '<=', $today)
+                        ->where('discount.end_date', '>=', $today)
+                        ->sum('discount.percentage');
+                })
+                ->first() ?? $product->detailed_products->first();
+
+            if (isset($detailed_product->images)) {
+                $detailed_product->image = $detailed_product->images->first()->url;
+                $detailed_product->setRelation('images', null);
+            }
+            $product->detailed_product = $detailed_product;
+            $product->price = $detailed_product->original_price;
+            $total_quantities = $product->detailed_products->sum('quantities');
+            $product->setRelation('detailed_products', null);
+            $product->total_quantities = $total_quantities;
+        }
+        return $latest_products;
+    }
+
+    public function getBestSellerProducts()
+    {
+        // best seller
+        $query = Product::with(
+            [
+                'detailed_products' => function ($query) {
+                    $query->where('is_deleted', 0)->with('images', 'product_discounts.discount');
+                },
+            ]
+        )->where('is_deleted', false)->has('detailed_products');
+
+
+        $best_seller_products = $query->orderByDesc('amount_sold')->paginate(8);
+        foreach ($best_seller_products as $product) {
+            $total_discount_percentage = 0;
+            foreach ($product->detailed_products as $detailed_product) {
+                foreach ($detailed_product->product_discounts as $product_discount) {
+                    if ($product_discount->discount->is_currently_active()) {
+                        $total_discount_percentage += $product_discount->discount->percentage;
+                    }
+                }
+                $detailed_product->total_discount_percentage = $total_discount_percentage;
+            }
+        }
+
+        $today = now();
+        foreach ($best_seller_products as $product) {
+            $detailed_product =
+                $product->detailed_products
+                ->sortByDesc(function ($detailed_product) use ($today) {
+                    return $detailed_product->product_discounts
+                        ->where('discount.start_date', '<=', $today)
+                        ->where('discount.end_date', '>=', $today)
+                        ->sum('discount.percentage');
+                })
+                ->first() ?? $product->detailed_products->first();
+
+            if (isset($detailed_product->images)) {
+                $detailed_product->image = $detailed_product->images->first()->url;
+                $detailed_product->setRelation('images', null);
+            }
+            $product->detailed_product = $detailed_product;
+            $product->price = $detailed_product->original_price;
+            $total_quantities = $product->detailed_products->sum('quantities');
+            $product->setRelation('detailed_products', null);
+            $product->total_quantities = $total_quantities;
+        }
+        return $best_seller_products;
+    }
     public function index()
     {
+        $deal_products = $this->getDealProducts();
+        $latest_products = $this->getLatestProducts();
+        $best_seller_products = $this->getBestSellerProducts();
+
         $data = [
             'page' => 'Home',
+            'deal_products' => $deal_products,
+            'latest_products' => $latest_products,
+            'best_seller_products' => $best_seller_products,
         ];
         if (session()->has('url.intended')) {
             $url = session()->get('url.intended');

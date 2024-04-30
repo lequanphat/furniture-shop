@@ -70,7 +70,6 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/checkout', [PagesController::class, 'checkout'])->name('checkout');;
 
     Route::get('/products', [ProductController::class, 'get_products']);
-    Route::get('/top5deal', [HotDealController::class, 'get_Deal_of_Date_product']);
     Route::get('/lastproducts', [HotDealController::class, 'get_LastestProduct']);
     Route::get('/bestseller', [HotDealController::class, 'get_BestSeller']);
 });

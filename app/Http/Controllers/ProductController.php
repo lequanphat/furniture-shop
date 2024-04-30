@@ -135,7 +135,7 @@ class ProductController extends Controller
             'category_id' => $request->input('category'),
             'brand_id' => $request->input('brand'),
             'description' => $request->input('description'),
-            'quantities' => 0,
+            'amount_sold' => 0,
         ]);
         // create tags
         $tags = json_decode($request->input('tags'));
