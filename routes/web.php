@@ -269,7 +269,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'details'])->name('receipts.details');
     });
 
-   
+
 
 
 

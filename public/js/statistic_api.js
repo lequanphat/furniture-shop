@@ -7,7 +7,7 @@ jQuery.noConflict();
         $('#error-delete-modal').attr('style', 'display: none;');
         $('#error-delete-modal').attr('aria-hidden', 'true');
         $('.modal-backdrop.fade.show').remove();
-    });  
+    });
 
     $('#statistic_form').submit(function (e) {
         e.preventDefault();
@@ -31,7 +31,7 @@ jQuery.noConflict();
                         show: false,
                       },
                       animations: {
-                        enabled: false
+                        enabled: true
                       },
                     },
                     fill: {
@@ -212,6 +212,8 @@ jQuery.noConflict();
         },
     });
 
+
+
     //Sơ đồ tròn sản phẩm bán chạy
     function debounce(func, wait) { //hàm đợi 1 thời gian rồi mới thực hiện
         let timeout;
@@ -225,61 +227,146 @@ jQuery.noConflict();
         };
     }
 
-    $.ajax({
-        url: `/admin/statistics/sellingproductpie`,
-        type: 'GET',
-        success: function (response){
-            console.log(response);
-            window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
-                chart: {
-                    type: "donut",
-                    fontFamily: 'inherit',
-                    height: 240,
-                    sparkline: {
-                        enabled: true
-                    },
-                    animations: {
-                        enabled: false
-                    },
-                },
-                fill: {
-                    opacity: 1,
-                },
-                //series: [44, 55, 12, 2],
-                //labels: ["Direct", "Affilliate", "E-mail", "Other"],
-                series: response.number_of_product,
-                labels: response.labels,
-                tooltip: {
-                    theme: 'dark'
-                },
-                grid: {
-                    strokeDashArray: 4,
-                },
-                colors: [tabler.getColor("primary"), tabler.getColor("primary", 0.8), tabler.getColor("primary", 0.7), tabler.getColor("primary", 0.6), tabler.getColor("primary", 0.4), tabler.getColor("primary", 0.3)],
-                legend: {
-                    show: true,
-                    position: 'bottom',
-                    offsetY: 12,
-                    markers: {
-                        width: 10,
-                        height: 10,
-                        radius: 100,
-                    },
-                    itemMargin: {
-                        horizontal: 8,
-                        vertical: 8
-                    },
-                },
-                tooltip: {
-                    fillSeriesColor: false
-                },
-            })).render();
-        },
-        error: function (error) {
-            console.log(error);
-        },
+    const filterPieChart = () => {
+        const day_first = $('#search_first_pc').val();  //lấy ngày đầu kiếm order trong 1 khoảng thời gian
+        const day_last = $('#search_last_pc').val();    //lấy ngày cuối kiếm order trong 1 khoảng thời gian
+        const time_frame = $('#time_frame_pc').val();
 
-    });
+        const url = `/admin/statistics/sellingproductpie?dayfirst=${day_first}&daylast=${day_last}&timeframe=${time_frame}`;
+
+        //sơ đồ sản phẩm bán chạy
+        $.ajax({
+            url: `/admin/statistics/sellingproductpie?dayfirst=${day_first}&daylast=${day_last}&timeframe=${time_frame}&piechart=1`,
+            type: 'GET',
+            success: function (response){
+                console.log(response);
+                window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+                    chart: {
+                        type: "donut",
+                        fontFamily: 'inherit',
+                        height: 240,
+                        sparkline: {
+                            enabled: true
+                        },
+                        animations: {
+                            enabled: true
+                        },
+                    },
+                    fill: {
+                        opacity: 1,
+                    },
+                    //series: [44, 55, 12, 2],
+                    //labels: ["Direct", "Affilliate", "E-mail", "Other"],
+                    series: response.number_of_product,
+                    labels: response.labels,
+                    tooltip: {
+                        theme: 'dark'
+                    },
+                    grid: {
+                        strokeDashArray: 4,
+                    },
+                    colors: [tabler.getColor("primary"), tabler.getColor("primary", 0.8), tabler.getColor("primary", 0.7), tabler.getColor("primary", 0.6), tabler.getColor("primary", 0.4), tabler.getColor("primary", 0.3)],
+                    legend: {
+                        show: true,
+                        position: 'bottom',
+                        offsetY: 12,
+                        markers: {
+                            width: 10,
+                            height: 10,
+                            radius: 100,
+                        },
+                        itemMargin: {
+                            horizontal: 8,
+                            vertical: 8
+                        },
+                    },
+                    tooltip: {
+                        fillSeriesColor: false
+                    },
+                })).render();
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+
+        //sơ đồ các loại sản phẩm
+        $.ajax({
+            url: `/admin/statistics/sellingproductpie?dayfirst=${day_first}&daylast=${day_last}&timeframe=${time_frame}&piechart=2`,
+            type: 'GET',
+            success: function (response){
+                console.log(response);
+                window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie-type-product'), {
+                    chart: {
+                        type: "donut",
+                        fontFamily: 'inherit',
+                        height: 240,
+                        sparkline: {
+                            enabled: true
+                        },
+                        animations: {
+                            enabled: true
+                        },
+                    },
+                    fill: {
+                        opacity: 1,
+                    },
+                    //series: [44, 55, 12, 2],
+                    //labels: ["Direct", "Affilliate", "E-mail", "Other"],
+                    series: response.number_of_product,
+                    labels: response.labels,
+                    tooltip: {
+                        theme: 'dark'
+                    },
+                    grid: {
+                        strokeDashArray: 4,
+                    },
+                    colors: [tabler.getColor("primary"), tabler.getColor("primary", 0.8), tabler.getColor("primary", 0.7), tabler.getColor("primary", 0.6), tabler.getColor("primary", 0.4), tabler.getColor("primary", 0.3)],
+                    legend: {
+                        show: true,
+                        position: 'bottom',
+                        offsetY: 12,
+                        markers: {
+                            width: 10,
+                            height: 10,
+                            radius: 100,
+                        },
+                        itemMargin: {
+                            horizontal: 8,
+                            vertical: 8
+                        },
+                    },
+                    tooltip: {
+                        fillSeriesColor: false
+                    },
+                })).render();
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+    filterPieChart();
+
+    $('#search_first_pc').on(
+        'input',
+        debounce(function () {
+            filterPieChart();
+        }, 500),
+    );
+    $('#search_last_pc').on(
+        'input',
+        debounce(function () {
+            filterPieChart();
+        }, 500),
+    );
+    $('#time_frame_pc').on(
+        'input',
+        debounce(function () {
+            filterPieChart();
+        }, 500),
+    );
+
 
   })
     })(jQuery);
