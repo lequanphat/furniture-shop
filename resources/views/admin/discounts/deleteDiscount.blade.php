@@ -1,5 +1,5 @@
 
-<div class="modal fade" id="discount.delete{{$discount_item->discount_id}}" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" {{--id="discount.delete{{$discount_item->discount_id}}"--}} id="delete_discount_pop" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -22,7 +22,7 @@ jQuery.noConflict();
                 : '';
             const delete_action = can_delete
                 ? `<a href="#" class="btn p-2"
-                data-role-id="${role.id}" 
+                data-role-id="${role.id}"
                 data-role-name="${role.name}" data-bs-toggle="modal"
                 data-bs-target="#delete-confirm-modal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24"

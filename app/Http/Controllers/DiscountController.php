@@ -19,15 +19,70 @@ class DiscountController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $search = request()->query('search');
+        $type = request()->query('type');
+        $status = request()->query('status');
+        $discount=Discount::when($type === 'active', function ($query) {
+            $query->where('is_active', 1);
+        })
+            ->when($type === 'blocked', function ($query) {
+                $query->where('is_active', 0);
+            })
+            ->when($status==='indate',function ($query)
+            {
+                $query->where('start_date', '<=',date('Y-m-d'))->Where('end_date', '>=', date('Y-m-d'));
+            })
+            ->when($status==='outdate',function ($query)
+            {
+                $query->where('start_date', '<',date('Y-m-d'))->Where('end_date', '<', date('Y-m-d'));
+            })
+            ->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('start_date', 'like', '%' . $search . '%')
+                    ->orWhere('end_date', 'like', '%' . $search . '%');
+            })->paginate(4);
+        foreach ($discount as $item) {
+            if ($item->created_at->diffInDays() < 7) {
+                $item->new = true;
+            }
+        }
         $data = [
-            'page' => 'Discount Site',
-            'discounts' => Discount::paginate(8),
+
+//            'discounts' => $discounts_2,
+            'discounts' => $discount,
+            'search' => $search,
+            'status'=>$status,
+
+'type'  =>  $type,
         ];
+
+//        return response()->json(['discounts' => $discounts]);
+//        return response()->json($data);
+
+//        $data = [
+//            'page' => 'Discount Site',
+////            'discounts' => Discount::paginate(2),
+//        'discounts'=>Discount::query()->paginate(2),
+//            'search' => request()->query("search"),
+//'type'=>$type,
+//        ];
+
         return view('admin.discounts.discountUI', $data);
     }
+
+    function fetch_data_paginate(Request $request)
+    {
+     if($request->ajax())
+     {
+      $datapagi = DB::table('discounts')->paginate(2);
+      return view('admin.discounts.discountUI',   $datapagi = DB::table('discounts')->paginate(2))->render();
+     }
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -40,7 +95,7 @@ class DiscountController extends Controller
         $DiscountData =
             [
                 'title' => $request->input('title'),
-               
+
                 'is_active' => $request->input('active'),
                 'start_date' => $request->input('startdate'),
                 'end_date' => $request->input('enddate'),
@@ -146,7 +201,10 @@ class DiscountController extends Controller
     {
         //
         $discount = Discount::find($id);
-        $discount->delete();
+        if ($discount) {
+            $discount->is_active = 0;
+            $discount->save();
+        }
 
         return redirect('/admin/discounts');
         //        return "Take It";
@@ -177,7 +235,7 @@ class DiscountController extends Controller
             return response()->json(['error' => 'An error occurred while deleting the discount.'], 500);
         }
     }
-    
+
     public function saveChanges(Request $request)
     {
 
@@ -297,4 +355,171 @@ class DiscountController extends Controller
             return response()->json(['error' => 'An error occurred while saving the checkbox change']);
         }
     }
+
+    function Discount_pagination(Request $request)
+    {
+        $search = request()->query('search');
+        $sort = request()->query('sort');
+        $rolesQuery = Discount::withCount('permissions as count')->where('name', 'LIKE', '%' . $search . '%');
+
+        if ($sort == 'asc' || $sort == 'desc') {
+            $rolesQuery = $rolesQuery->orderBy('count', $sort);
+        }
+        $roles = $rolesQuery->paginate(8);
+        foreach ($roles as $role) {
+            if ($role->created_at->diffInDays() < 7) {
+                $role->new = true;
+            }
+        }
+        // $admin = User::where('user_id', Auth::id())->first();
+        $data = [
+            'roles' => $roles,
+
+        ];
+        return response()->json($data);
+    }
+
+    function fetch_data(Request $request)
+    {
+        if ($request->ajax()) {
+            $sort_by = $request->get('sortby');
+            $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $data = DB::table('discounts')
+                ->where('id', 'like', '%' . $query . '%')
+                ->orWhere('title', 'like', '%' . $query . '%')
+
+                ->orWhere('description', 'like', '%' . $query . '%')
+                ->orWhere('percentage', 'like', '%' . $query . '%')
+                ->orWhere('start_date', 'like', '%' . $query . '%')
+                ->orWhere('end_date', 'like', '%' . $query . '%')
+                ->orWhere('is_active', 'like', '%' . $query . '%')
+                ->orWhere('created_at', 'like', '%' . $query . '%')
+                ->orWhere('updated_at', 'like', '%' . $query . '%')
+                ->orderBy($sort_by, $sort_type)
+                ->paginate(5);
+            return view('pagination_data', compact('data'))->render();
+        }
+    }
+
+
+    public function  live_search(Request $request)
+    {
+        if ($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if ($query != '') {
+                $data = DB::table('discounts')
+                    ->where('title', 'like', '%' . $query . '%')
+                    ->orWhere('percentage', 'like', '%' . $query . '%')
+                    ->orWhere('start_date', 'like', '%' . $query . '%')
+                    ->orWhere('end_date', 'like', '%' . $query . '%')
+                    ->orWhere('is_active', 'like', '%' . $query . '%')
+
+                    ->orWhere('created_at', 'like', '%' . $query . '%')
+                    ->orWhere('updated_at', 'like', '%' . $query . '%')
+                    ->orderBy('discount_id', 'desc')
+                    ->get();
+            } else {
+                $data = DB::table('discounts')
+                    ->orderBy('discount_id', 'desc')
+                    ->get();
+            }
+
+            $total_row = $data->count();
+            if ($total_row > 0) {
+                foreach ($data as $row) {
+                    $output .= '
+                    <tr>
+                    <td>' . $row->discount_id . '</td>
+                    <td>' . $row->title . '</td>
+                    <td>' . $row->percentage . '</td>
+
+                    <td>' . $row->start_date . '</td>
+                    <td>' . $row->end_date . '</td>
+                    <td>';
+
+                    // Active or Blocked badge
+                    if ($row->is_active) {
+                        $output .= '<span class="badge bg-success me-1"></span> Active';
+                    } else {
+                        $output .= '<span class="badge bg-danger me-1"></span> Blocked';
+                    }
+
+                    $output .= '</td>
+
+
+
+                </td>
+
+                    </tr>
+                    ';
+                }
+            } else {
+                $output = '
+
+                <tr>
+                    <td align="center" colspan="5">No Data Found</td>
+                </tr>
+                ';
+            }
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+            echo json_encode($data);
+        }
+    }
+
+
+
+    public function search_discount_ajax()
+    {
+         $search = request()->query('search');
+         $type = request()->query("type");
+         $status=request()->query("status");
+//
+//       $discounts_2 = Discount::where('title', 'LIKE', '%' . $search . '%')
+//           ->paginate(2);
+        $today =date ('Y-m-d');
+$discount=Discount::when($type === 'active', function ($query) {
+        $query->where('is_active', 1);
+    })
+    ->when($type === 'blocked', function ($query) {
+        $query->where('is_active', 0);
+    })
+    ->when($status==='indate',function ($query)
+    {
+        $query->where('start_date', '<=',date('Y-m-d'))->Where('end_date', '>=', date('Y-m-d'));
+    })
+    ->when($status==='outdate',function ($query)
+    {
+        $query->where('start_date', '<',date('Y-m-d'))->Where('end_date', '<', date('Y-m-d'));
+    })
+    ->where(function ($query) use ($search) {
+        $query->where('title', 'like', '%' . $search . '%')
+            ->orWhere('start_date', 'like', '%' . $search . '%')
+            ->orWhere('end_date', 'like', '%' . $search . '%');
+    })->paginate(4);
+        foreach ($discount as $item) {
+            if ($item->created_at->diffInDays() < 7) {
+                $item->new = true;
+            }
+        }
+        $data = [
+
+//            'discounts' => $discounts_2,
+            'discounts' => $discount,
+            'search' => $search,
+
+
+        ];
+
+//        return response()->json(['discounts' => $discounts]);
+        return response()->json($data);
+
+
+        }
+
 }

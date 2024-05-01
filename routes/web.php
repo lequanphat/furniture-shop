@@ -24,6 +24,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\PrivateMiddleware;
 use App\Http\Middleware\PublicMiddleware;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Route;
 
 // auth api
@@ -269,7 +270,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'details'])->name('receipts.details');
     });
 
-   
+
 
 
 
@@ -289,7 +290,12 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
     });
 
+    Route::get('/admin/discount/search', [DiscountController::class, 'search_discount_ajax'])->name('discount.search');
 
+
+Route::get('admin/discount/pagination/fetch_data',  [DiscountController::class, 'fetch_data_paginate']);
+
+    Route::get('/admin/discount/liveSearch', [DiscountController::class, 'live_search'])->name('discount.liveSearch');
 
     Route::post('/admin/discounts/update-product-discount', [DiscountController::class, 'updateProductDiscount'])->name("product.Discount.checkbox");
     Route::post('/admin/discounts/deleteProductDiscount', [DiscountController::class, 'deleteProductDiscountCheck'])->name('delete.ProductDiscount.checkbox');

@@ -81,7 +81,7 @@
                                 </div>
                             </div>
 
-                            
+
                         </div>
 
 
@@ -154,7 +154,7 @@
 
                                 </table>
                                 <div class="modal-footer">
-                                  
+
                                     <button type="submit" class="btn btn-primary">Save changes</button>
                                 </div>
 
@@ -173,87 +173,7 @@
         <script src="{{ asset('js/product_api.js') }}" defer></script>
         <script src="{{ asset('js/jquery.min.js') }}"></script>
 
-        <!-- <script>
-             
 
-
-                function sendCheckboxChange(checkbox) {
-                    const productId = checkbox.dataset.productId;
-                    const isChecked = checkbox.checked;
-                    const discount_id = checkbox.dataset.discountId;
-                    const sku =checkbox.dataset.sku;
-                    const csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    // const a=[productId,isChecked,discount_id];
-                  // Get token from meta tag
-              
-                    if (isChecked) {
-                        
-                        $(window).on('load',function()
-                        {
-                            $('#delete-confirm-modal').modal('show')
-                        });
-                       
-                     
-                $('#confirm-btn').on('click', function() {
-                        $.ajax({
-                            url: '{{ route('product.Discount.checkbox') }}', // Replace with actual route name
-                            method: 'POST',
-                            data: {
-                                product_id: productId,
-                                is_checked: isChecked,
-                                discount_id: discount_id
-                                ,
-                                sku:sku,
-                                _token: csrfToken, // Include the CSRF token
-                            },
-                            success: function(data) {
-                                // Handle successful response (optional)
-                                // console.log('Checkbox change sent successfully:', data);
-                                if (data.message === 'Checkbox change saved successfully') {
-                                    // Handle successful update
-                                    console.log(data.message);
-                                } else if (data.message === 'Khong Ton Tai SKU Cua San Pham Vui Long Them') {
-                                    // Display popup message
-                                    alert(data.message); // Replace with your preferred popup mechanism
-                                    $(checkbox).prop("checked", false);
-
-                                }
-                            },
-                            error: function(error) {
-                                console.error('Error sending checkbox change:', error);
-
-                            },
-                        });
-                    });
-
-                    }
-                    else
-                    {
-                        $.ajax({
-                            url: '{{ route('delete.ProductDiscount.checkbox') }}', // Replace with actual route name
-                            method: 'POST',
-                            data: {
-                                product_id: productId,
-                                is_checked: isChecked,
-                                discount_id: discount_id,
-                                sku:sku,
-                                _token: csrfToken, // Include the CSRF token
-                            },
-                            success: function(data) {
-                                // Handle successful response (optional)
-                                console.log('Checkbox change sent successfully:', data);
-                            },
-                            error: function(error) {
-                                console.error('Error sending checkbox change:', error);
-
-                            },
-                        });
-
-
-                    }
-                }
-            </script> -->
-        {{-- scroll--}}
         <script>
             var x = 0;
             $(document).ready(function() {
@@ -314,7 +234,76 @@
                 });
             });
         </script>
+<script>
+$(document).ready(function(){
 
+ function clear_icon()
+ {
+  $('#id_icon').html('');
+  $('#post_title_icon').html('');
+ }
+
+ function fetch_data(page, sort_type, sort_by, query)
+ {
+  $.ajax({
+   url:"/pagination/fetch_data?page="+page+"&sortby="+sort_by+"&sorttype="+sort_type+"&query="+query,
+   success:function(data)
+   {
+    $('tbody').html('');
+    $('tbody').html(data);
+   }
+  })
+ }
+
+ $(document).on('keyup', '#serach', function(){
+  var query = $('#serach').val();
+  var column_name = $('#hidden_column_name').val();
+  var sort_type = $('#hidden_sort_type').val();
+  var page = $('#hidden_page').val();
+  fetch_data(page, sort_type, column_name, query);
+ });
+
+ $(document).on('click', '.sorting', function(){
+  var column_name = $(this).data('column_name');
+  var order_type = $(this).data('sorting_type');
+  var reverse_order = '';
+  if(order_type == 'asc')
+  {
+   $(this).data('sorting_type', 'desc');
+   reverse_order = 'desc';
+   clear_icon();
+   $('#'+column_name+'_icon').html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+  }
+  if(order_type == 'desc')
+  {
+   $(this).data('sorting_type', 'asc');
+   reverse_order = 'asc';
+   clear_icon
+   $('#'+column_name+'_icon').html('<span class="glyphicon glyphicon-triangle-top"></span>');
+  }
+  $('#hidden_column_name').val(column_name);
+  $('#hidden_sort_type').val(reverse_order);
+  var page = $('#hidden_page').val();
+  var query = $('#serach').val();
+  fetch_data(page, reverse_order, column_name, query);
+ });
+
+ $(document).on('click', '.pagination a', function(event){
+  event.preventDefault();
+  var page = $(this).attr('href').split('page=')[1];
+  $('#hidden_page').val(page);
+  var column_name = $('#hidden_column_name').val();
+  var sort_type = $('#hidden_sort_type').val();
+
+  var query = $('#serach').val();
+
+  $('li').removeClass('active');
+        $(this).parent().addClass('active');
+  fetch_data(page, sort_type, column_name, query);
+ });
+
+});
+</script>
 
 
 
