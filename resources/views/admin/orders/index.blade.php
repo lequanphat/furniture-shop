@@ -131,7 +131,8 @@
                                                 </td>
 
 
-                                                <td class="text-muted"><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span>
+                                                <td class="text-muted">
+                                                    <span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span>
                                                 </td>
                                                 <td class="text-danger">
                                                     {{ number_format($order->total_price, 0, '.', ',') }}đ
@@ -237,6 +238,8 @@
     {{-- Modal --}}
     @include('admin.orders.create_order_modal')
     @include('admin.orders.update_order_modal')
+
+    
     {{-- Script --}}
     <script src="{{ asset('js/order_api.js') }}" defer></script>
 @endsection

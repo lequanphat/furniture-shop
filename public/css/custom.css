@@ -473,9 +473,10 @@ body::-webkit-scrollbar-track {
 .modal-footer button {
     border: none;
     outline: none;
-    padding: 10px;
+    padding: 8px 12px;
     min-width: 140px;
-    border-radius: 2px;
+    border-radius: 5px;
+    font-size: 14px;
 }
 .modal-footer button:hover {
     opacity: 0.8;
@@ -939,9 +940,24 @@ body::-webkit-scrollbar-track {
 }
 
 .cancel-order-content {
-    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 24px;
+    gap: 12px;
+    font-size: 16px;
+}
+.cancel-order-content h4 {
+    font-size: 18px;
+    font-weight: 500;
 }
 
+.cancel-order-content textarea {
+    border-radius: 4px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+}
 /* custom slider */
 .price-input {
     width: 100%;
@@ -1215,6 +1231,7 @@ input[type='checkbox' i] {
     padding: 8px 24px;
     border-radius: 4px;
     cursor: pointer;
+    box-shadow: 0 1px 1px rgba(24, 36, 51, 0.06);
 }
 
 #address_table .address-item {
@@ -1344,3 +1361,34 @@ input[type='checkbox' i] {
     padding: 12px;
 }
 
+.empty-order-list {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 24px 0;
+}
+.empty-order-list img {
+    width: 20%;
+    height: 20%;
+}
+.empty-order-list p {
+    font-size: 16px;
+    margin: 0;
+}
+.empty-order-list a {
+    background-color: #e97730;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+h1.custom-title-font {
+    font-family: 'Great Vibes', cursive;
+    color: #e97730;
+    -webkit-text-stroke: none;
+    font-size: 60px;
+}

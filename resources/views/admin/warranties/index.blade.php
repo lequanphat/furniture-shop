@@ -112,10 +112,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Order ID</th>
+                                        <th>Customer</th>
                                         <th>Product</th>
-                                        <th>Start day</th>
-                                        <th>End day</th>
-                                        <th>Description</th>
                                         <th>Time</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -131,11 +129,27 @@
                                             <tr>
                                                 <td>{{ $warranty->warranty_id }}</td>
                                                 <td>{{ $warranty->order_id }}</td>
-                                                <td>{{ $warranty->sku }}</td>
-                                                <td>{{ $warranty->start_date }}</td>
-                                                <td>{{ $warranty->end_date }}</td>
-                                                <td>{{ $warranty->description }}</td>
-                                                <td>{{ $warranty->product_detail->warranty_month }} months</td>
+
+
+                                                <td class="text-muted">
+                                                    <div>
+                                                        <strong>{{ $warranty->order->receiver_name }}</strong>
+                                                    </div>
+                                                    <div>
+                                                        {{ $warranty->order->phone_number }}
+                                                    </div>
+                                                </td>
+                                                <td class="text-muted">
+                                                    <div>
+                                                        <strong>{{ $warranty->product_detail->name }}</strong>
+                                                    </div>
+                                                    <div>
+                                                        {{ $warranty->product_detail->sku }}
+                                                    </div>
+                                                </td>
+
+                                                <td>{{ $warranty->start_date }} -> {{ $warranty->end_date }}</td>
+
                                                 <td>
                                                     @if ($warranty->is_active())
                                                         <span class="badge bg-green-lt">Still on</span>

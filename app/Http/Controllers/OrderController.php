@@ -15,6 +15,7 @@ use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -98,6 +99,37 @@ class OrderController extends Controller
         $order = Order::where('order_id', $order_id)->first();
         if ($order) {
             $isPaid = $request->input('paid') === 'on' ? true : false;
+
+            $note = $order->note;
+
+            // create warranty when delivered and paid
+            if ($request->input('status') == '3' && $isPaid) {
+                if ($order->status != 3 || $order->is_paid == false) {
+                    $order_details = OrderDetail::where('order_id', $order_id)->get();
+                    $start_date = now();
+                    foreach ($order_details as $order_detail) {
+                        $detailed_product = ProductDetail::where('sku', $order_detail->sku)->first();
+                        $end_date = $start_date->copy()->addMonths($detailed_product->warranty_month);
+                        Warranty::create([
+                            'order_id' => $order_id,
+                            'sku' => $order_detail->sku,
+                            'start_date' => $start_date,
+                            'end_date' => $end_date,
+                            'description' => 'auto create',
+                        ]);
+                    }
+                }
+            } else {
+                if ($request->input('status') == '4' && $order->status != '4') {
+                    $admin = User::where('user_id', Auth::id())->first();
+                    $note =  $order->note . '<br>* Cancelled by employee: <strong><a href="/admin/employee/' . $admin->user_id . '/details">' . $admin->full_name() . '<a/></strong>';
+                }
+                $warranties = Warranty::where('order_id', $order_id)->get();
+                foreach ($warranties as $warranty) {
+                    $warranty->delete();
+                }
+            }
+
             $order->update([
                 'is_paid' => $isPaid,
                 'status' => $request->input('status'),
@@ -105,34 +137,13 @@ class OrderController extends Controller
                 'address' => $request->input('address'),
                 'phone_number' => $request->input('phone_number'),
                 'customer_id' => $request->input('customer_id') == -1 ? null : $request->input('customer_id'),
+                'note' => $note,
             ]);
 
             $order->howmanydaysago = $order->howmanydaysago();
             $order->money = $order->money_type();
             if ($order->created_at->diffInDays() < 7) {
                 $order->new = true;
-            }
-
-            // create warranty when delivered and paid
-            if ($request->input('status') == '3' && $isPaid) {
-                $order_details = OrderDetail::where('order_id', $order_id)->get();
-                $start_date = now();
-                foreach ($order_details as $order_detail) {
-                    $detailed_product = ProductDetail::where('sku', $order_detail->sku)->first();
-                    $end_date = $start_date->copy()->addMonths($detailed_product->warranty_month);
-                    Warranty::create([
-                        'order_id' => $order_id,
-                        'sku' => $order_detail->sku,
-                        'start_date' => $start_date,
-                        'end_date' => $end_date,
-                        'description' => 'auto create',
-                    ]);
-                }
-            } else {
-                $warranties = Warranty::where('order_id', $order_id)->get();
-                foreach ($warranties as $warranty) {
-                    $warranty->delete();
-                }
             }
             return ['message' => 'Update order successfully', 'order' => $order];
         } else {
@@ -361,10 +372,23 @@ class OrderController extends Controller
         if ($order) {
             $order->update([
                 'status' => 4,
-                'note' => $order->note . ' - Cancelled by customer',
+                'note' => $order->note . '<br>* Cancelled by customer with reason: ' . $request->input('reason'),
             ]);
             return ['message' => 'Cancel order successfully', 'order' => $order];
         }
         return response()->json(['errors' => ['message' => ['Cannot find this order.']]], 400);
+    }
+
+    public function remove_detailed_order(Request $request)
+    {
+        $order_id = $request->route('order_id');
+        $sku = $request->route('sku');
+        $detailed_order = OrderDetail::where('order_id', $order_id)->where('sku', $sku)->first();
+        if ($detailed_order) {
+            Order::where('order_id', $order_id)->decrement('total_price', $detailed_order->quantities * $detailed_order->unit_price);
+            DB::statement("DELETE FROM order_details WHERE order_id = :order_id AND sku = :sku", ['order_id' => $order_id, 'sku' => $sku]);
+            return ['message' => 'Remove detailed order successfully'];
+        }
+        return ['message' => 'Can not find this detailed order'];
     }
 }

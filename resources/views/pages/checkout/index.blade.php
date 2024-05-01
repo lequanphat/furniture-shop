@@ -12,65 +12,70 @@
                         <div class="billing-info-wrap">
                             <h3>Billing Details</h3>
                             @if (Auth::user())
-                                <div class="row close-toggle">
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="billing-info mb-20">
-                                            <label>Receiver name <abbr class="required" title="required">*</abbr></label>
-                                            <input id="receiver_name" type="text" name="receiver_name"
-                                                value="{{ Auth::user()->full_name() }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="billing-info mb-20">
-                                            <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                            <input id="phone_number" type="phone" name="phone_number"
-                                                value="@if (isset(Auth::user()->default_address)) {{ Auth::user()->default_address->phone_number }} @endif"
-                                                readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="billing-info mb-20">
-                                            <label>Street Address <abbr class="required" title="required">*</abbr></label>
-                                            <input id="address" class="billing-address" type="text" name="address"
-                                                value="@if (isset(Auth::user()->default_address)) {{ Auth::user()->default_address->address }} @endif"
-                                                readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="change-address-wrapper">
-                                            <button type="button" data-bs-toggle="modal"
-                                                data-bs-target="#select-address-modal"><i class="ti-pencil-alt"></i> Another
-                                                address</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="checkout-account mt-25">
-                                    <input class="checkout-toggle" type="checkbox" name="using_different_address">
-                                    <span>Ship to a different address?</span>
-                                </div>
-                                <div class="different-address open-toggle mt-30">
-                                    <div class="row">
+                                @if (isset(Auth::user()->default_address))
+                                    <div class="row close-toggle">
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
-                                                <label>Receiver name</label>
-                                                <input type="text">
+                                                <label>Receiver name <abbr class="required"
+                                                        title="required">*</abbr></label>
+                                                <input id="receiver_name" type="text" name="receiver_name"
+                                                    value="{{ Auth::user()->full_name() }}" readonly>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
-                                                <label>Phone</label>
-                                                <input type="text">
+                                                <label>Phone <abbr class="required" title="required">*</abbr></label>
+                                                <input id="phone_number" type="phone" name="phone_number"
+                                                    value="{{ Auth::user()->default_address->phone_number }}" readonly>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="billing-info mb-20">
-                                                <label>Street Address</label>
-                                                <input class="billing-address" type="text">
+                                                <label>Street Address <abbr class="required"
+                                                        title="required">*</abbr></label>
+                                                <input id="address" class="billing-address" type="text" name="address"
+                                                    value="{{ Auth::user()->default_address->address }}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="change-address-wrapper">
+                                                <button type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#select-address-modal"><i class="ti-pencil-alt"></i>
+                                                    Another
+                                                    address</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="row close-toggle">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>Receiver name <abbr class="required"
+                                                        title="required">*</abbr></label>
+                                                <input id="receiver_name" type="text" name="receiver_name" value=""
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="billing-info mb-20">
+                                                <label>Phone <abbr class="required" title="required">*</abbr></label>
+                                                <input id="phone_number" type="phone" name="phone_number" value=""
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="billing-info mb-20">
+                                                <label>Street Address <abbr class="required"
+                                                        title="required">*</abbr></label>
+                                                <input id="address" class="billing-address" type="text" name="address"
+                                                    value="" placeholder="">
+                                            </div>
+                                        </div>
+
+                                        <p id="checkout-error" class="text-danger d-none"></p>
+
+                                    </div>
+                                @endif
                             @endif
                             <div class="additional-info-wrap">
                                 <label>Order notes</label>

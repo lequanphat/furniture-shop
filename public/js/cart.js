@@ -33,36 +33,50 @@ jQuery(document).ready(function () {
 
     // load mini cart
     $('.header-action-cart').on('click', function () {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        if (cart.length === 0) {
-            $('.js-mini-cart-checkout-btn').addClass('disable');
-            $('.js-total-price').text('0đ');
-        } else {
-            let html = '';
-            let total_price = 0;
-            for (let i = 0; i < cart.length; i++) {
-                item = cart[i];
-                total_price += convertCurrencyToNumber(item.unit_price) * item.quantities;
-                html += `<li>
-                        <div class="cart-item-info">
-                            <div class="cart-img">
-                                <a href="#"><img src="${item.image}" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a>${item.name}</a></h4>
-                                <span> ${item.quantities} × <span class="unit-price">${item.unit_price}</span> </span>
-                            </div>
-                        </div>
-                        <div class="cart-delete">
-                            <a class="js-delete-cart-item" data-sku="${item.sku}"><i class="ti-close"></i></a>
-                        </div>
-                    </li>`;
-            }
-            $('#cart-list').html(html);
-            $('.js-total-price').text(formatter.format(total_price) + 'đ');
-            $('.js-mini-cart-checkout-btn').removeClass('disable');
-        }
+        $.ajax({
+            url: `/cart/async?cart=${JSON.stringify(cart)}`,
+            method: 'GET',
+            success: function (response) {
+                console.log(response);
+                cart = response.cart;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                if (cart.length === 0) {
+                    $('.js-mini-cart-checkout-btn').addClass('disable');
+                    $('.js-total-price').text('0đ');
+                } else {
+                    let html = '';
+                    let total_price = 0;
+                    for (let i = 0; i < cart.length; i++) {
+                        item = cart[i];
+                        total_price += item.unit_price * item.quantities;
+                        html += `<li>
+                                <div class="cart-item-info">
+                                    <div class="cart-img">
+                                        <a href="#"><img src="${item.image}" alt=""></a>
+                                    </div>
+                                    <div class="cart-title">
+                                        <h4><a>${item.name}</a></h4>
+                                        <span> ${item.quantities} × <span class="unit-price">${
+                            formatter.format(item.unit_price) + 'đ'
+                        }</span> </span>
+                                    </div>
+                                </div>
+                                <div class="cart-delete">
+                                    <a class="js-delete-cart-item" data-sku="${item.sku}"><i class="ti-close"></i></a>
+                                </div>
+                            </li>`;
+                    }
+                    $('#cart-list').html(html);
+                    $('.js-total-price').text(formatter.format(total_price) + 'đ');
+                    $('.js-mini-cart-checkout-btn').removeClass('disable');
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
     });
     // delete cart item
     $(document).on('click', '.js-delete-cart-item', function (e) {
@@ -104,7 +118,7 @@ jQuery(document).ready(function () {
                         <p class="js-sku">${item.sku}</p>
                     </div>
                 </div>
-                <div><span class="js-unit-price">${item.unit_price}</span></div>
+                <div><span class="js-unit-price">${formatter.format(item.unit_price)}đ</span></div>
                 <div>
                     <div class="quantities-wrapper">
                         <button class="js-quantities-minus" ><i class="ti-minus"></i></button>
@@ -113,7 +127,7 @@ jQuery(document).ready(function () {
                     </div>
                 </div>
                 <div><span class="js-subtotal-price">${formatter.format(
-                    convertCurrencyToNumber(item.unit_price) * item.quantities,
+                    item.unit_price * item.quantities,
                 )}đ</span></div>
                 <div class="js-delete-cart-item delete-item"><i class="ti-close"></i></div>
                 </div>`;
@@ -332,6 +346,8 @@ jQuery(document).ready(function () {
                 window.location.href = response;
             },
             error: function (error) {
+                $('#checkout-error').removeClass('d-none');
+                $('#checkout-error').text('*'+Object.values(error.responseJSON.errors)[0][0]);
                 console.log(error);
             },
         });

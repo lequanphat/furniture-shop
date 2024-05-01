@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->decimal('percentage', 10, 2);
-            $table->decimal('amount', 10, 2);
             $table->date('start_date')->default(now());
             $table->date('end_date');
             $table->boolean('is_active')->default(true);

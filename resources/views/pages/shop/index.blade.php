@@ -75,8 +75,10 @@
                                                     </div>
                                                     @if ($product->total_quantities > 0)
                                                         <div class="product-action-2-wrap ">
-                                                            <button class="js-add-to-cart-shop product-action-btn-2" title="Add To Cart"><i
-                                                                    class="pe-7s-cart"></i> Add to cart</button>
+                                                            <button data-sku="{{ $detailed_product->sku }}"
+                                                                class="js-add-to-cart-shop product-action-btn-2"
+                                                                title="Add To Cart"><i class="pe-7s-cart"></i> Add to
+                                                                cart</button>
                                                         </div>
                                                     @endif
 

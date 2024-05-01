@@ -495,5 +495,41 @@ jQuery.noConflict();
         });
 
         // on modal show
+        $('#delete-confirm-modal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget);
+            var sku = button.data('sku');
+            var order_id = button.data('order-id');
+            var name = button.data('name');
+            console.log(sku, name);
+            $(this)
+                .find('.modal-description')
+                .html(`Do you want to remove product <strong>${sku} - ${name}</strong> from this order ?`);
+            $(this).find('#confirm-btn').text('Yes, remove this product');
+            $(this).find('#confirm-btn').data('sku', sku);
+            $(this).find('#confirm-btn').data('order-id', order_id);
+        });
+
+        $(document).on('click', '#delete-confirm-modal #confirm-btn', function (e) {
+            const sku = $(this).data('sku');
+            const order_id = $(this).data('order-id');
+            $.ajax({
+                url: `/admin/orders/${order_id}/delete/${sku}`,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (data) {
+                    $('#detailed-order-table tr td a.js-sku')
+                        .filter(function () {
+                            return $(this).text() == `#${sku}`;
+                        })
+                        .closest('tr')
+                        .remove();
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        });
     });
 })(jQuery);

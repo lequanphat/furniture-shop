@@ -307,7 +307,7 @@ class PagesController extends Controller
         $product = Product::with(['category', 'brand', 'product_tags.tag', 'detailed_products' => function ($query) {
             $query->where('is_deleted', 0);
         }])
-            ->where('is_deleted', false)->find($product_id);
+            ->where('is_deleted', false)->where('product_id', $product_id)->first();
         if ($product) {
             $data = [
                 'page' => 'Product Details',
@@ -429,5 +429,34 @@ class PagesController extends Controller
         }
 
         return view('pages.myorders.detailed-order', $data);
+    }
+
+
+
+    public function asyncCart(Request $request)
+    {
+        $cart = $request->query('cart');
+        $cart = json_decode($cart);
+
+        $new_cart = [];
+        foreach ($cart as $item) {
+            $detailed_product = ProductDetail::where('sku', $item->sku)->with('images', 'product_discounts.discount')->first();
+            if ($detailed_product) {
+                $total_discount_percentage = 0;
+                foreach ($detailed_product->product_discounts as $product_discount) {
+                    if ($product_discount->discount->is_currently_active()) {
+                        $total_discount_percentage += $product_discount->discount->percentage;
+                    }
+                }
+                if (isset($detailed_product->images->first()->url)) {
+                    $item->image = $detailed_product->images->first()->url;
+                }
+                $item->unit_price = $detailed_product->original_price -  $detailed_product->original_price * $total_discount_percentage / 100;
+                $item->name = $detailed_product->name;
+                $new_cart[] = $item;
+            }
+        }
+
+        return response()->json(['cart' => $new_cart]);
     }
 }

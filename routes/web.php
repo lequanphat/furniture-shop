@@ -72,6 +72,9 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/products', [ProductController::class, 'get_products']);
     Route::get('/lastproducts', [HotDealController::class, 'get_LastestProduct']);
     Route::get('/bestseller', [HotDealController::class, 'get_BestSeller']);
+
+
+    Route::get('/cart/async', [PagesController::class, 'asyncCart']);
 });
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
@@ -196,10 +199,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::middleware(['can:create order'])->group(function () {
         Route::post('/admin/orders', [OrderController::class, 'create']);
         Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
-
-
-
-
         Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
     });
     Route::middleware(['can:update order'])->group(function () {
@@ -208,9 +207,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
         Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
     });
 
-
-
-
+    Route::middleware(['can:delete order'])->group(function () {
+        Route::delete('/admin/orders/{order_id}/delete/{sku}', [OrderController::class, 'remove_detailed_order']);
+    });
 
     // colors and tags
     Route::middleware(['can:read colors'])->group(function () {
@@ -268,6 +267,10 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::middleware(['can:create receipt'])->group(function () {
         Route::post('/admin/receipts/create', [ReceiptsController::class, 'create']);
         Route::post('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'create_detailed_receipt']);
+    });
+
+    Route::middleware(['can:delete receipt'])->group(function () {
+        Route::delete('/admin/receipts/{receipt_id}/delete/{sku}', [ReceiptsController::class, 'delete_detailed_receipt']);
     });
 
 

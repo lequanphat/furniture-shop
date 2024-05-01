@@ -9,13 +9,14 @@
                     <h4>CANCEL ORDER</h4>
                 </div>
                 <div class="cancel-order-content">
+                    <h4>Are you sure you want to cancel this order?</h4>
                     <div>
-                        <label for="">Order ID</label>
-                        <input id="order_id" type="text" value="{{ $order->order_id }}">
+                        <label for="">Order: <strong>#{{ $order->order_id }}</strong></label>
+                        <input id="order_id" type="text" value="{{ $order->order_id }}" class="d-none">
                     </div>
                     <div>
-                        <label for="">Reason</label>
-                        <textarea name="note" id="note" cols="30" rows="5" required></textarea>
+                        <label for="reason">What is the reason you want to cancel tihs order?</label>
+                        <textarea name="reason" id="reason" cols="30" rows="5" required></textarea>
                     </div>
 
                 </div>
