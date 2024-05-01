@@ -19,7 +19,7 @@ class CreateOrder extends FormRequest
             'status' => 'required',
             'receiver_name' => 'required',
             'address' => 'required',
-            'phone_number' => 'required',
+            'phone_number' => ['required', 'regex:/^0[0-9]{9,10}$/'],
             'customer_id' => 'required',
         ];
     }
@@ -31,7 +31,9 @@ class CreateOrder extends FormRequest
             'receiver_name.required' => 'The customer name field is required',
             'address.required' => 'The address field is required',
             'phone_number.required' => 'The phone number field is required',
+            'phone_number.regex' => 'The phone number format is invalid',
             'customer_id.required' => 'The customer field is required',
+
         ];
     }
 }

@@ -5,15 +5,10 @@ jQuery(document).ready(function () {
     });
     // show toast function
     function showToast(message, type) {
-        let background = '#0097e6';
-        if (type === 'success') background = '#4cd137';
-        else if (type === 'error') background = '#e84118';
         Toastify({
+            className: `toastify-custom ${type}`,
             text: message,
             close: true,
-            style: {
-                background,
-            },
             duration: 3000,
         }).showToast();
     }
@@ -100,7 +95,7 @@ jQuery(document).ready(function () {
                 cart[i].quantities += quantities;
                 localStorage.setItem('cart', JSON.stringify(cart));
                 // show toast
-                showToast('Add to cart successfully', 'success');
+                showToast('Add to cart successfully!', 'success');
                 return;
             }
         }
@@ -109,7 +104,7 @@ jQuery(document).ready(function () {
         $('.js-total-cart').addClass('bg-black');
         localStorage.setItem('cart', JSON.stringify(cart));
         // show toast
-        showToast('Add to cart successfully', 'success');
+        showToast('Add to cart successfully!', 'success');
     });
 
     $('.js-add-to-cart').on('click', function (e) {
@@ -123,7 +118,7 @@ jQuery(document).ready(function () {
                 cart[i].quantities += quantities;
                 localStorage.setItem('cart', JSON.stringify(cart));
                 // show toast
-                showToast('Add to cart successfully', 'success');
+                showToast('Add to cart successfully!', 'success');
                 return;
             }
         }
@@ -132,7 +127,7 @@ jQuery(document).ready(function () {
         $('.js-total-cart').addClass('bg-black');
         localStorage.setItem('cart', JSON.stringify(cart));
         // show toast
-        showToast('Add to cart successfully', 'success');
+        showToast('Add to cart successfully!', 'success');
     });
 
     // product pagination

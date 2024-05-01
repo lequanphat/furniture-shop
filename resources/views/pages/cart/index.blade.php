@@ -2,7 +2,6 @@
 @section('content')
     {{-- Head banner --}}
     @include('components.head-banner')
-
     <div class="cart-area pt-100 pb-100">
         <div class="container">
             <div class="row">
@@ -16,7 +15,6 @@
                     </div>
                     <div id="js-cart-table" class="cart-content">
                         {{-- render cart here --}}
-                        
                     </div>
                 </div>
                 <div id="checkout-cart" class="col-lg-4 col-md-12 col-12">

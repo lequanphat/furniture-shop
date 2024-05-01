@@ -21,7 +21,7 @@ class UpdateDetailedProduct extends FormRequest
             'color_id' => 'required',
             'size' => 'required',
             'original_price' => 'required',
-            'warranty_month' => 'required',
+            'warranty_month' => 'required|numeric',
         ];
     }
     public function messages()
@@ -34,6 +34,7 @@ class UpdateDetailedProduct extends FormRequest
             'size.required' => 'The size field is required.',
             'original_price.required' => 'The original price field is required.',
             'warranty_month.required' => 'The warranty month field is required.',
+            'warranty_month.numeric' => 'The warranty month field must be a number.',
         ];
     }
 }
