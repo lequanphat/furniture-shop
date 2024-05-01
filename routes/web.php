@@ -102,6 +102,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [HomeController::class, 'index'])->name('admin');
+    Route::get('/admin/dashboard/orders-statistic', [HomeController::class, 'getOrdersStatistic']);
 
     // profile routes
     Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
