@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\ProductDetail;
 use App\Models\ReceivingReportDetails;
+use Illuminate\Support\Facades\DB;
 
 class ReceiptsController extends Controller
 {
@@ -153,5 +154,26 @@ class ReceiptsController extends Controller
             ]);
             return ['message' => 'Created detailed receipt successfully!', 'detailed_receipt' => $detailed_receipt];
         }
+    }
+
+    public function delete_detailed_receipt(Request $request)
+    {
+        $receipt_id = $request->route('receipt_id');
+        $sku = $request->route('sku');
+        $detailed_receipt = ReceivingReportDetails::where('receiving_report_id', $receipt_id)->where('sku', $sku)->first();
+        if ($detailed_receipt) {
+            ReceivingReport::where('receiving_report_id', $receipt_id)->decrement('total_price', $detailed_receipt->quantities * $detailed_receipt->unit_price);
+
+
+            $detailed_product = ProductDetail::where('sku', $sku)->first();
+            $total_quantities = $detailed_product->quantities - $detailed_receipt->quantities;
+            if ($total_quantities < 0) {
+                return response()->json(['errors' => ['message' => ['Quantities of this product is not enough.']]], 400);
+            }
+            $detailed_product->decrement('quantities', $detailed_receipt->quantities);
+            DB::statement("DELETE FROM receiving_report_details WHERE receiving_report_id = :receipt_id AND sku = :sku", ['receipt_id' => $receipt_id, 'sku' => $sku]);
+            return ['message' => 'Remove detailed receipt successfully'];
+        }
+        return ['message' => 'Can not find this detailed receipt'];
     }
 }

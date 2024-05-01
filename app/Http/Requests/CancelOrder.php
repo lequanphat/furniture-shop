@@ -15,14 +15,14 @@ class CancelOrder extends FormRequest
     public function rules()
     {
         return [
-            'note' => 'required',
+            'reason' => 'required',
         ];
     }
     public function messages()
     {
         // response message here
         return [
-            'note.required' => 'The note field is required',
+            'reason.required' => 'The reason field is required',
         ];
     }
 }

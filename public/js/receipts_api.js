@@ -310,4 +310,41 @@ jQuery.noConflict();
         const page = button.data('page');
         filterDetailedProducts({ page });
     });
+
+    // on modal show
+    $('#delete-confirm-modal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var sku = button.data('sku');
+        var receipt_id = button.data('receipt-id');
+        var name = button.data('name');
+        $(this)
+            .find('.modal-description')
+            .html(`Do you want to remove product <strong>${sku} - ${name}</strong> from this receipt ?`);
+        $(this).find('#confirm-btn').text('Yes, remove this product');
+        $(this).find('#confirm-btn').data('sku', sku);
+        $(this).find('#confirm-btn').data('receipt-id', receipt_id);
+    });
+
+    $(document).on('click', '#delete-confirm-modal #confirm-btn', function (e) {
+        const sku = $(this).data('sku');
+        const receipt_id = $(this).data('receipt-id');
+        $.ajax({
+            url: `/admin/receipts/${receipt_id}/delete/${sku}`,
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function (data) {
+                $('#detailed-receipt-table tr td a.js-sku')
+                    .filter(function () {
+                        return $(this).text() == `#${sku}`;
+                    })
+                    .closest('tr')
+                    .remove();
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    });
 })(jQuery);

@@ -86,7 +86,7 @@
                             @if (isset($order->note))
                                 <div class="order-note">
                                     <h3>Order Note</h3>
-                                    <p>{{ $order->note }}</p>
+                                    <p>{!! $order->note !!}</p>
                                 </div>
                             @endif
 

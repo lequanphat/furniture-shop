@@ -37,6 +37,14 @@ class WarrantyController extends Controller
                 $query->where('warranty_id', 'LIKE', '%' . $search . '%')
                     ->orwhere('order_id', 'LIKE', '%' . $search . '%')
                     ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('order', function ($query) use ($search) {
+                $query->where('phone_number', 'LIKE', '%' . $search . '%')
+                    ->orwhere('receiver_name', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('product_detail', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orwhere('sku', 'LIKE', '%' . $search . '%');
             });
 
         $today = date('Y-m-d');
@@ -150,12 +158,20 @@ class WarrantyController extends Controller
             $day_last = Carbon::tomorrow();
         }
 
-        //search theo khoảng thời gian tạo và thanh tìm kiếm
+        // search theo khoảng thời gian tạo và thanh tìm kiếm
         $query = Warranty::with('product_detail', 'order')->whereBetween('created_at', [$day_first, $day_last])
             ->where(function ($query) use ($search) {
                 $query->where('warranty_id', 'LIKE', '%' . $search . '%')
                     ->orwhere('order_id', 'LIKE', '%' . $search . '%')
                     ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('order', function ($query) use ($search) {
+                $query->where('phone_number', 'LIKE', '%' . $search . '%')
+                    ->orwhere('receiver_name', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('product_detail', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orwhere('sku', 'LIKE', '%' . $search . '%');
             });
 
         //search theo còn trong bảo hành ko

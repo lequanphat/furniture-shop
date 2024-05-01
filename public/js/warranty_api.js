@@ -23,6 +23,8 @@ jQuery.noConflict();
                     $('#create_warranty_response').removeClass('alert-danger'); //bỏ class css alert-danger để hiển thị cái mới
                     $('#create_warranty_response').addClass('alert-success'); //thêm class css để thông báo cái mới
                     $('#create_warranty_response').html(response.message); //chỉnh lại trên file html ở cái id đó với cái message gửi từ respone của server
+
+                    window.location.href = `/admin/warranties/${response.warranty.warranty_id}`; //chuyển hướng trang sang trang chi tiết warranty vừa tạo
                 },
                 error: function (error) {
                     //hàm nếu lỗi, tương tự như trên
@@ -71,6 +73,8 @@ jQuery.noConflict();
                     $('#update_warranty_response').removeClass('alert-danger');
                     $('#update_warranty_response').addClass('alert-success');
                     $('#update_warranty_response').html(response.message);
+
+                    window.location.href = `/admin/warranties/${response.warranty.warranty_id}`;
                 },
                 error: function (error) {
                     console.log({ error });
@@ -171,7 +175,7 @@ jQuery.noConflict();
 `;
 
             const update_button = `
-            <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
+            <button type="button" class="js-update-order-btn btn  p-2"
                 title="Update" data-bs-toggle="modal" data-bs-target="#UpdateWarrantyModal"
                 data-warranty-id="${warranty.warranty_id}"
                 data-order-id="${warranty.order_id}"
@@ -191,13 +195,29 @@ jQuery.noConflict();
             </button>
             `;
             return `
+
+            
+
+           
                 <td>${warranty.warranty_id}</td>
                 <td>${warranty.order_id}</td>
-                <td>${warranty.sku}</td>
-                <td>${warranty.start_date}</td>
-                <td>${warranty.end_date}</td>
-                <td>${warranty.description}</td>
-                <td>${warranty.product_detail.warranty_month} months</td>
+                <td class="text-muted">
+                <div>
+                    <strong>${warranty.order.receiver_name}</strong>
+                </div>
+                <div>
+                    ${warranty.order.phone_number}
+                </div>
+                </td>
+                <td class="text-muted">
+                    <div>
+                        <strong>${warranty.product_detail.name}</strong>
+                    </div>
+                    <div>
+                    ${warranty.product_detail.sku}
+                    </div>
+                </td>
+                <td>${warranty.start_date} -> ${warranty.end_date}</td>
                 <td>${status}</td>
                 <td> ${view_button} ${update_button}</td>
             `;
@@ -296,5 +316,7 @@ jQuery.noConflict();
             const page = button.data('page');
             filterWarranties({ page });
         });
+
+       
     });
 })(jQuery);

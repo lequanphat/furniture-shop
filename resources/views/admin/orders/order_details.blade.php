@@ -116,7 +116,7 @@
                             <div class="card-body">
                                 <h3>Order note</h3>
                                 <address>
-                                    {{ $order->note }}
+                                    {!! $order->note !!}
                                 </address>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="detailed-order-table">
                                         @if ($detailed_orders->isEmpty())
                                             <tr>
                                                 <td colspan="6" class="text-center text-muted">No data available</td>
@@ -167,7 +167,7 @@
                                                                 </div>
                                                                 <div class="text-muted">
                                                                     <a href="#"
-                                                                        class="text-reset">#{{ $detailed_order->detailed_product->sku }}</a>
+                                                                        class="text-reset js-sku">#{{ $detailed_order->detailed_product->sku }}</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -187,25 +187,32 @@
                                                     <td class="text-danger">
                                                         {{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
                                                     <td>
-                                                        @can('update order')
-                                                            <button type="button" class="btn p-2" title="Update"
-                                                                data-bs-toggle="modal" data-bs-target="#"
-                                                                data-order-id="{{ $order->order_id }}"
-                                                                data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
-                                                                data-quantities="{{ $detailed_order->quantities }}"
-                                                                data-unit-price="{{ $detailed_order->unit_price }}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round"
-                                                                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                    <path
-                                                                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                                                                    <path d="M13.5 6.5l4 4" />
-                                                                </svg>
-                                                            </button>
-                                                        @endcan
+                                                        @if ($order->created_by != null)
+                                                            @can('delete order')
+                                                                <a href="#" class="btn p-2"
+                                                                    data-sku="{{ $detailed_order->detailed_product->sku }}"
+                                                                    data-order-id="{{ $detailed_order->order_id }}"
+                                                                    data-name="{{ $detailed_order->detailed_product->name }}"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#delete-confirm-modal">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                                                                        <path stroke="none" d="M0 0h24v24H0z"
+                                                                            fill="none" />
+                                                                        <path d="M4 7l16 0" />
+                                                                        <path d="M10 11l0 6" />
+                                                                        <path d="M14 11l0 6" />
+                                                                        <path
+                                                                            d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                                    </svg>
+                                                                </a>
+                                                            @endcan
+                                                        @endif
+
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -219,11 +226,13 @@
                     </div>
                 </div>
             </div>
-
             @include('admin.components.footer')
         </div>
         {{-- Modal --}}
         @include('admin.orders.create_detailed_order')
+
+        <div>@include('admin.components.delete_confirm_modal')</div>
         {{-- Script --}}
         <script src="{{ asset('js/order_api.js') }}" defer></script>
+
     @endsection

@@ -91,19 +91,8 @@ jQuery(document).ready(function () {
 
     // btn on product shop
     $(document).on('click', '.js-add-to-cart-shop', function (e) {
-        // show toast
-        showToast('Add to cart successfully', 'success');
-    });
-
-    $('.js-add-to-cart').on('click', function (e) {
-        const quantity_input = $('.js-quantity-input');
-        let quantities = parseInt(quantity_input.val());
-        const sku = $('.detailed-product-tag.active').data('sku');
-        const unit_price = $('.js-product-name-price:not(.d-none) .js-unit-price').text();
-        const name = $('.js-product-name-price:not(.d-none) .js-product-name').text();
-        const image = $('.detailed-product-tag.active img').attr('src');
-        console.log('add to cart', { quantities, sku, unit_price, name, image });
-
+        let quantities = 1;
+        const sku = $(this).data('sku');
         // save to local storage
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         for (let i = 0; i < cart.length; i++) {
@@ -115,7 +104,30 @@ jQuery(document).ready(function () {
                 return;
             }
         }
-        cart.push({ sku, quantities, unit_price, name, image });
+        cart.push({ sku, quantities });
+        $('.js-total-cart').text(cart.length);
+        $('.js-total-cart').addClass('bg-black');
+        localStorage.setItem('cart', JSON.stringify(cart));
+        // show toast
+        showToast('Add to cart successfully', 'success');
+    });
+
+    $('.js-add-to-cart').on('click', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        let quantities = parseInt(quantity_input.val());
+        const sku = $('.detailed-product-tag.active').data('sku');
+        // save to local storage
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].sku === sku) {
+                cart[i].quantities += quantities;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                // show toast
+                showToast('Add to cart successfully', 'success');
+                return;
+            }
+        }
+        cart.push({ sku, quantities });
         $('.js-total-cart').text(cart.length);
         $('.js-total-cart').addClass('bg-black');
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -213,7 +225,7 @@ jQuery(document).ready(function () {
                 ${
                     product.total_quantities > 0
                         ? `<div class="product-action-2-wrap">
-                <button class="js-add-to-cart-shop product-action-btn-2" title="Add To Cart"><i
+                <button data-sku="${product.detailed_product.sku}" class="js-add-to-cart-shop product-action-btn-2" title="Add To Cart"><i
                         class="pe-7s-cart"></i> Add to cart</button>
             </div>`
                         : ''
