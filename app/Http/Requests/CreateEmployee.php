@@ -21,7 +21,7 @@ class CreateEmployee extends FormRequest
             'gender' => 'required',
             'address' => 'required',
             'birth_date' => 'required|date',
-            'phone_number' => 'required|string|numeric',
+            'phone_number' => ['required', 'regex:/^0[0-9]{9,10}$/'],
             'first_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
             'last_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
         ];
@@ -42,8 +42,8 @@ class CreateEmployee extends FormRequest
             'gender.max' => 'The gender field is required.',
             'address.max' => 'The address field is required.',
             'birth_date.max' => 'The birth date field is required.',
-            'phone_number.max' => 'The phone number field is required.',
-            'phone_number.numeric' => 'The phone number only contains number',
+            'phone_number.required' => 'The phone number field is required.',
+            'phone_number.regex' => 'The phone number format is invalid.',
         ];
     }
 }

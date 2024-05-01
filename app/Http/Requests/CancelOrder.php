@@ -15,7 +15,7 @@ class CancelOrder extends FormRequest
     public function rules()
     {
         return [
-            'reason' => 'required',
+            'reason' => 'required|max:400',
         ];
     }
     public function messages()
@@ -23,6 +23,7 @@ class CancelOrder extends FormRequest
         // response message here
         return [
             'reason.required' => 'The reason field is required',
+            'reason.max' => 'The reason may not be greater than 400 characters',
         ];
     }
 }

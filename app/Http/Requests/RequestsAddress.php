@@ -19,7 +19,7 @@ class RequestsAddress extends FormRequest
         return [
             'receiver_name' => 'required',
             'address' => 'required',
-            'phone_number' => 'required|string|numeric',
+            'phone_number' => ['required', 'regex:/^0[0-9]{9,10}$/'],
         ];
     }
     public function messages()
@@ -28,8 +28,8 @@ class RequestsAddress extends FormRequest
         return [
             'receiver_name.required' => 'First name field is required.',
             'address.max' => 'The address field is required.',
-            'phone_number.max' => 'The phone number field is required.',
-            'phone_number.numeric' => 'The phone number only contains number',
+            'phone_number.required' => 'The phone number field is required.',
+            'phone_number.regex' => 'The phone number format is invalid.',
         ];
     }
 }

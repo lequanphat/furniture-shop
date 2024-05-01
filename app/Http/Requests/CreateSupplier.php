@@ -25,7 +25,7 @@ class CreateSupplier extends FormRequest
             'name'=>'required',
             'description'=>'required',
             'address'=>'required',
-            'phone_number' => 'required|string|numeric',
+            'phone_number' => ['required', 'regex:/^0[0-9]{9,10}$/'],
         ];
     }
 
@@ -38,8 +38,7 @@ class CreateSupplier extends FormRequest
             'description.required'=>'This Description Is required',
             'address.required'=>'This address Is required',
             'phone_number.required'=>'This address Is required',
-            'phone_number.max' => 'The phone number field is required.',
-            'phone_number.numeric' => 'The phone number only contains number',
+            'phone_number.regex' => 'The phone number format is invalid',
         ];
     }
 }

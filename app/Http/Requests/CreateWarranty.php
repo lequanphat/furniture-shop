@@ -17,9 +17,9 @@ class CreateWarranty extends FormRequest
         // validate here, là id các ô trên form tạo
         return [
             'orderID' => 'required',
-            'product_detail_ID'=> 'required',
+            'product_detail_ID' => 'required',
             'start_date' => 'required',
-            'description'=> 'required',
+            'description' => 'required',
         ];
     }
     public function messages()

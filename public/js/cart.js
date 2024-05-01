@@ -9,7 +9,7 @@ jQuery(document).ready(function () {
             style: {
                 background,
             },
-            duration: 3000,
+            duration: 20000,
         }).showToast();
     }
     // init cart
@@ -86,13 +86,22 @@ jQuery(document).ready(function () {
         const newCart = cart.filter((item) => item.sku !== sku);
         localStorage.setItem('cart', JSON.stringify(newCart));
         $('.js-total-cart').text(newCart.length);
-        if (newCart.length === 0) $('.js-total-cart').removeClass('bg-black');
 
         let total_price = 0;
-        for (let i = 0; i < newCart.length; i++) {
-            item = cart[i];
-            total_price += convertCurrencyToNumber(item.unit_price) * item.quantities;
+        if (newCart.length === 0) {
+            $('.js-total-cart').removeClass('bg-black');
+            $('.js-mini-cart-checkout-btn').addClass('disable');
+            $('#cart-list').html(` <div class="empty-cart">
+                    <img class="" src="/storage/defaults/empty-cart.webp" />
+                    <p>Your cart is currently empty.</p>
+                </div>`);
+        } else {
+            for (let i = 0; i < newCart.length; i++) {
+                item = newCart[i];
+                total_price += item.unit_price * item.quantities;
+            }
         }
+        console.log(total_price);
         $('.js-total-price').text(formatter.format(total_price) + 'đ');
     });
 
@@ -347,7 +356,7 @@ jQuery(document).ready(function () {
             },
             error: function (error) {
                 $('#checkout-error').removeClass('d-none');
-                $('#checkout-error').text('*'+Object.values(error.responseJSON.errors)[0][0]);
+                $('#checkout-error').text('*' + Object.values(error.responseJSON.errors)[0][0]);
                 console.log(error);
             },
         });

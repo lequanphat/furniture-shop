@@ -16,11 +16,9 @@ class CreateDiscount extends FormRequest
     {
         return [
             'title' => 'required',
-            // 'description' => 'required',
             'percentage' => 'required|numeric',
-
             'startdate' => 'required|date',
-            'enddate' => 'required|date|after:startdate', // Đảm bảo enddate lớn hơn startdate
+            'enddate' => 'required|date|after:startdate',
             'active' => 'required',
         ];
     }
@@ -29,10 +27,8 @@ class CreateDiscount extends FormRequest
         // response message here
         return [
             'title.required' => 'The title field is required.',
-            // 'description.required' => 'The  Description field is required.',
             'percentage.required' => 'The percentage is Required.',
             'percentage.numeric' => 'The percentage is numeric.',
-
             'startdate.required' => 'start date is required',
             'startdate.date' => 'startdate must be date',
             'enddate.required' => 'end date is required',
