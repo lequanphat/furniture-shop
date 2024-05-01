@@ -378,6 +378,10 @@ body::-webkit-scrollbar-track {
     padding: 2px 16px;
 }
 
+.your-order-area {
+    border: 1px solid #ccc !important;
+    border-radius: 6px;
+}
 .place-order-btn {
     width: 100%;
     padding: 12px;
@@ -390,7 +394,7 @@ body::-webkit-scrollbar-track {
     margin-bottom: 16px;
     background-color: #e97730;
     color: white;
-    border-radius: 2px;
+    border-radius: 6px;
 }
 .custom-product-img {
     border: 1px solid #ccc;

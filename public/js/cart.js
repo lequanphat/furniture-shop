@@ -1,15 +1,10 @@
 jQuery(document).ready(function () {
     function showToast(message, type) {
-        let background = '#0097e6';
-        if (type === 'success') background = '#4cd137';
-        else if (type === 'error') background = '#e84118';
         Toastify({
+            className: `toastify-custom ${type}`,
             text: message,
             close: true,
-            style: {
-                background,
-            },
-            duration: 20000,
+            duration: 3000,
         }).showToast();
     }
     // init cart
@@ -323,7 +318,7 @@ jQuery(document).ready(function () {
 
         let checkout = JSON.parse(localStorage.getItem('checkout')) || [];
         if (checkout.length === 0) {
-            showToast('No product in cart', 'error');
+            showToast('You have no product to checkout!', 'error');
             return;
         }
         checkout = checkout.map((item) => ({

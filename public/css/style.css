@@ -11791,3 +11791,58 @@ textarea {
     text-align: center;
     z-index: 1;
 }
+.toastify.toastify-custom {
+    background-color: white;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 12px 10px 24px !important;
+    gap: 24px !important;
+    overflow: hidden;
+    font-weight: 600;
+}
+.toastify.success {
+    border: 1px solid green !important;
+    color: green !important;
+}
+
+.toastify.error {
+    border: 1px solid red !important;
+    color: red !important;
+}
+.toastify.success::before {
+    position: absolute;
+    content: '';
+    width: 4px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: green;
+}
+
+.toastify.error::before {
+    position: absolute;
+    content: '';
+    width: 4px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: red;
+}
+.toastify.success button.toast-close {
+    color: green !important;
+}
+
+.toastify.error button.toast-close {
+    color: red !important;
+}
+
+.billing-info input {
+    border: 1px solid #ccc !important;
+    border-radius: 4px;
+}
+
+.additional-info-wrap textarea {
+    border: 1px solid #ccc !important;
+    border-radius: 4px;
+}

@@ -100,8 +100,13 @@ jQuery.noConflict();
             modal.find('#description').val(button.data('description'));
             modal.find('#address').val(button.data('address'));
             modal.find('#phone_number').val(button.data('phone-number'));
+            $('#update_supplier_response').addClass('d-none');
         });
 
+        $('#modal-simple').on('hidden.bs.modal', function (e) {
+            $(this).find('form').trigger('reset');
+            $('#create_supplier_response').addClass('d-none');
+        });
         $('#update-supplier-form').submit(function (e) {
             e.preventDefault();
             var formData = $(this).serialize();

@@ -15,7 +15,7 @@ class SupplierController extends Controller
         $data = [
             'page' => 'Suppliers',
             'suppliers' =>  Supplier::query()
-                ->paginate(5),
+                ->paginate(6),
             'search' => request()->query("search"),
         ];
         return view('admin.suppliers.supplier', $data);
@@ -26,7 +26,7 @@ class SupplierController extends Controller
         $data = [
             'page' => 'suppliers',
             'suppliers' =>  Supplier::where('name', 'LIKE', '%' . $search . '%')
-                ->paginate(5),
+                ->paginate(6),
             'search' => $search,
         ];
         return view('admin.suppliers.supplier', $data);
