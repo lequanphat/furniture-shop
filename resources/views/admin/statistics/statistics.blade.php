@@ -17,18 +17,6 @@
             </div>
         </div>
         <div class="page-body mb-2">
-            <div class="container-xl ">
-                <div class="row row-deck row-cards">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1 id="title_chart">Overview 7 days lately</h1>
-                                <div id="chart-statistic" class="chart-lg"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><br><br>
 
             <div class="container-xl">
                 <div class="row row-deck row-cards">
@@ -37,7 +25,7 @@
                             <form class="row justify-content-end" id="statistic_form">
                                 @csrf
                                 <div class="card-body">
-                                    <h1 id="title_chart">Product</h1>
+                                    <h1 id="title_chart">Statistic</h1>
                                     <div class="row row-cards">
                                         <div class="col-md-4">
                                             <div class="form-group">

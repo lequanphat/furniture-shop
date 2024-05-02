@@ -132,7 +132,7 @@ jQuery.noConflict();
         type: 'GET',
         success: function (response) {
           console.log(response);
-          window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic'), {
+          window.ApexCharts && (new ApexCharts(document.getElementById('chart-statistic-2'), {
             chart: {
               type: "bar",
               fontFamily: 'inherit',
@@ -156,9 +156,6 @@ jQuery.noConflict();
             series: [{
               name: "Number of products ordered (unit)",
               data: response.solds,
-            }, {
-              name: "Orders created (unit)",
-              data: response.orders
             }, {
               name: "Total Revenue (million VNĐ)",
               data: response.revenues
