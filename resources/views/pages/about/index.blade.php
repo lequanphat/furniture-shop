@@ -81,5 +81,4 @@
         </div>
     </div>
     {{-- Our staff --}}
-    @include('pages.about.our-staff')
 @endsection

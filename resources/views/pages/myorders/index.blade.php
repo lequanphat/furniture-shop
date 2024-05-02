@@ -21,7 +21,7 @@
                             <div class="order-item">
                                 <div class="header">
                                     <p><span class="order-id">#{{ $order->order_id }}</span>
-                                        <span>{{ $order->created_at }}</span>
+                                        <span class="text-orange">{{ $order->date_time }}</span>
                                     </p>
                                     <div class="tags">
                                         <div class="status-tag">Your order is <span>{{ $order->get_status() }}</span></div>

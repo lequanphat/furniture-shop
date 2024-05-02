@@ -404,6 +404,11 @@ class PagesController extends Controller
     public function my_orders()
     {
         $orders = Order::where('customer_id', Auth::id())->with('order_details')->orderBy('created_at', 'desc')->get();
+
+        foreach ($orders as $order) {
+            $order->date_time = $order->howmanydaysago();
+        }
+
         $data = [
             'page' => 'My orders',
             'orders' => $orders,
