@@ -239,7 +239,7 @@
     @include('admin.orders.create_order_modal')
     @include('admin.orders.update_order_modal')
 
-    
+
     {{-- Script --}}
     <script src="{{ asset('js/order_api.js') }}" defer></script>
 @endsection

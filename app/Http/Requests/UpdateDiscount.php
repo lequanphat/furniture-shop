@@ -20,22 +20,20 @@ class UpdateDiscount extends FormRequest
             'percentage' => 'required|numeric',
             'startdate' => 'required|date',
             'enddate' => 'required|date|after:startdate',
-            'active' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'title.required' => 'The title field is required.',
-            'percentage.required' => 'The percentage is Required.',
-            'percentage.numeric' => 'The percentage is numeric.',
-            'startdate.required' => 'start date is required',
-            'startdate.date' => 'startdate must be date',
-            'enddate.required' => 'end-date is required',
-            'enddate.date' => 'Must be date',
-            'enddate.after:startdate' => "must be larger Than  Start Date",
-            'active.required' => "must be Fill",
+            'title.required' => 'The title is eequired.',
+            'percentage.required' => 'The percentage is required.',
+            'percentage.numeric' => 'Percentage must be a number.',
+            'startdate.required' => 'Start date is required.',
+            'startdate.date' => 'Start date must be date.',
+            'enddate.required' => 'End date is required.',
+            'enddate.date' => 'End date must be date.',
+            'enddate.after:startdate' => "End date must be after start date.",
         ];
     }
 }

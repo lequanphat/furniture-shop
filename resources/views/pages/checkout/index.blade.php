@@ -107,17 +107,55 @@
                                     </div>
                                 </div>
                                 <div class="payment-method">
-                                    <label class="payment-method-label" for="payment-method-1">
+                                    <label class="payment-method-label" for="cash-on-delivery">
                                         <i class="fa-solid fa-truck-fast"></i>
                                         <span>Cash on delivery</span>
-                                        <input type="radio" name="payment_method" id="payment-method-1"
+                                        <input type="radio" name="payment_method" id="cash-on-delivery"
                                             value="cash-on-delivery" checked>
                                         <div class="mark"></div>
                                     </label>
-                                    <label class="payment-method-label" for="payment-method-2">
+                                    <label class="payment-method-label" for="payment-with-vnpay">
                                         <i class="fa-solid fa-credit-card"></i>
                                         <span>Payment with VNPay</span>
-                                        <input type="radio" name="payment_method" id="payment-method-2" value="vnpay">
+                                        <input type="radio" name="payment_method" id="payment-with-vnpay" value="vnpay">
+                                        <div class="mark"></div>
+                                    </label>
+                                </div>
+                                <div id="bank-select-option" class="back-wrapper d-none">
+                                    <label class="bank-option-label" for="ncb">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>NCB</span>
+                                        <input type="radio" name="bank" id="ncb" value="vnpay" checked>
+                                        <div class="mark"></div>
+                                    </label>
+                                    <label class="bank-option-label" for="mbb">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>MBB</span>
+                                        <input type="radio" name="bank" id="mbb" value="vnpay">
+                                        <div class="mark"></div>
+                                    </label>
+                                    <label class="bank-option-label" for="tcb">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>TCB</span>
+                                        <input type="radio" name="bank" id="tcb" value="vnpay">
+                                        <div class="mark"></div>
+                                    </label>
+                                    <label class="bank-option-label" for="agb">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>AGB</span>
+                                        <input type="radio" name="bank" id="agb" value="vnpay">
+                                        <div class="mark"></div>
+                                    </label>
+                                    <label class="bank-option-label" for="scb">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>SCB</span>
+                                        <input type="radio" name="bank" id="scb" value="vnpay">
+                                        <div class="mark"></div>
+                                    </label>
+                                    <label class="bank-option-label" for="nab">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                        <span>NAB</span>
+                                        <input type="radio" name="bank" id="nab" value="vnpay">
                                         <div class="mark"></div>
                                     </label>
                                 </div>
