@@ -241,7 +241,12 @@ jQuery(document).ready(function () {
                 } 
                 
                     <span class="new-price">
-                        ${formatter.format(product.detailed_product.original_price)}đ
+                        ${formatter.format(
+                            product.detailed_product.original_price -
+                                (product.detailed_product.original_price *
+                                    product.detailed_product.total_discount_percentage) /
+                                    100,
+                        )}đ
                     </span>
                 </div>
             </div>
@@ -384,5 +389,12 @@ jQuery(document).ready(function () {
 
         // call ajax
         debouncedAjaxCall();
+    });
+
+    $('#cash-on-delivery').on('input', function () {
+        if ($(this)[0].checked == true) $('#bank-select-option').addClass('d-none');
+    });
+    $('#payment-with-vnpay').on('input', function () {
+        if ($(this)[0].checked == true) $('#bank-select-option').removeClass('d-none');
     });
 });

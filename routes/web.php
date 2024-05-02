@@ -10,6 +10,7 @@ use App\Http\Controllers\HotDealController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FacebookController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
@@ -26,6 +27,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\PrivateMiddleware;
 use App\Http\Middleware\PublicMiddleware;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Route;
 
 // auth api
@@ -102,6 +104,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [HomeController::class, 'index'])->name('admin');
+
     Route::get('/admin/dashboard/orders-statistic', [HomeController::class, 'getOrdersStatistic']);
 
     // profile routes
@@ -279,25 +282,21 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // discounts routes
     Route::middleware(['can:read discounts'])->group(function () {
         Route::get('/admin/discounts', [DiscountController::class, 'index']);
-        Route::get('/admin/discounts/viewDetail/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
+        Route::get('/admin/discounts/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
     });
     Route::middleware(['can:create discount'])->group(function () {
-        Route::post('/admin/discounts/create', [DiscountController::class, 'create']);
+        Route::post('/admin/discounts', [DiscountController::class, 'create']);
     });
     Route::middleware(['can:update discount'])->group(function () {
-        Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
+        Route::put('/admin/discounts/{discount_id}', [DiscountController::class, 'update'])->name('discounts.update');
     });
     Route::middleware(['can:delete discount'])->group(function () {
-        Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
+        Route::delete('admin/discounts/{discount_id}', [DiscountController::class, 'destroy'])->name('discount.delete');
+        Route::patch('admin/discounts/{discount_id}', [DiscountController::class, 'restore'])->name('discount.restore');
     });
-
-
-
-    Route::post('/admin/discounts/update-product-discount', [DiscountController::class, 'updateProductDiscount'])->name("product.Discount.checkbox");
-    Route::post('/admin/discounts/deleteProductDiscount', [DiscountController::class, 'deleteProductDiscountCheck'])->name('delete.ProductDiscount.checkbox');
-
-
-    Route::post('/save-discount-changes', [DiscountController::class, 'saveChanges'])->name('save_discount_changes');
+    Route::get('/admin/discount/{discount_id}/get_products_not_in_discount', [DiscountController::class, 'get_products_not_in_discount']);
+    Route::post('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'add_product_to_discount']);
+    Route::delete('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'remove_product_from_discount']);
 
 
     // statistic routes
