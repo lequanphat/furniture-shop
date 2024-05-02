@@ -10,6 +10,7 @@ use App\Http\Controllers\HotDealController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FacebookController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
@@ -102,6 +103,7 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
 Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [HomeController::class, 'index'])->name('admin');
+
     Route::get('/admin/dashboard/orders-statistic', [HomeController::class, 'getOrdersStatistic']);
 
     // profile routes

@@ -371,6 +371,10 @@
         </div>
         {{-- End row --}}
         @include('admin.components.footer')
+
+
+        {{-- Modal --}}
+        @include('admin.dashboard.create_report_modal')
     </div>
     <script src="{{ asset('vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}" defer></script>
