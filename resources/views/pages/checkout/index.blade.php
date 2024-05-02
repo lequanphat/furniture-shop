@@ -121,44 +121,6 @@
                                         <div class="mark"></div>
                                     </label>
                                 </div>
-                                <div id="bank-select-option" class="back-wrapper d-none">
-                                    <label class="bank-option-label" for="ncb">
-                                        <i class="fa-solid fa-credit-card"></i>
-                                        <span>NCB</span>
-                                        <input type="radio" name="bank" id="ncb" value="vnpay" checked>
-                                        <div class="mark"></div>
-                                    </label>
-                                    <label class="bank-option-label" for="mbb">
-                                        <i class="fa-solid fa-credit-card"></i>
-                                        <span>MBB</span>
-                                        <input type="radio" name="bank" id="mbb" value="vnpay">
-                                        <div class="mark"></div>
-                                    </label>
-                                    <label class="bank-option-label" for="tcb">
-                                        <i class="fa-solid fa-credit-card"></i>
-                                        <span>TCB</span>
-                                        <input type="radio" name="bank" id="tcb" value="vnpay">
-                                        <div class="mark"></div>
-                                    </label>
-                                    <label class="bank-option-label" for="agb">
-                                        <i class="fa-solid fa-credit-card"></i>
-                                        <span>AGB</span>
-                                        <input type="radio" name="bank" id="agb" value="vnpay">
-                                        <div class="mark"></div>
-                                    </label>
-                                    <label class="bank-option-label" for="scb">
-                                        <i class="fa-solid fa-credit-card"></i>
-                                        <span>SCB</span>
-                                        <input type="radio" name="bank" id="scb" value="vnpay">
-                                        <div class="mark"></div>
-                                    </label>
-                                    <label class="bank-option-label" for="nab">
-                                        <i class="fa-solid fa-credit-card"></i>
-                                        <span>NAB</span>
-                                        <input type="radio" name="bank" id="nab" value="vnpay">
-                                        <div class="mark"></div>
-                                    </label>
-                                </div>
                             </div>
                             <button type="submit" class="place-order-btn">Place order</button>
                         </div>

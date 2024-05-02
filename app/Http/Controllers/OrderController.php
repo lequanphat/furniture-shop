@@ -266,7 +266,7 @@ class OrderController extends Controller
     {
         $vnp_TxnRef = $order_id;
         $vnp_Locale = "vn"; // language
-        $vnp_BankCode = "NCB";  // bank code
+        $vnp_BankCode = '';  // bank code
         $vnp_IpAddr = request()->ip();  // ip address of client
         $vnp_TmnCode = env('VNP_TMN_CODE');
 

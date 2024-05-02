@@ -157,9 +157,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // categories routes
     Route::middleware(['can:read categories'])->group(function () {
         Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
-
         Route::get('/admin/categories/getall', [CategoryController::class, 'getAll']);
-
         Route::get('/admin/categories/{category_id}', [CategoryController::class, 'getCategory']);
     });
     Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
@@ -207,7 +205,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
     Route::middleware(['can:update order'])->group(function () {
         Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
-
         Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
     });
 
@@ -283,20 +280,18 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::middleware(['can:read discounts'])->group(function () {
         Route::get('/admin/discounts', [DiscountController::class, 'index']);
         Route::get('/admin/discounts/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
+        Route::get('/admin/discount/{discount_id}/get_products_not_in_discount', [DiscountController::class, 'get_products_not_in_discount'])->middleware('can:read discount');
     });
-    Route::middleware(['can:create discount'])->group(function () {
-        Route::post('/admin/discounts', [DiscountController::class, 'create']);
-    });
-    Route::middleware(['can:update discount'])->group(function () {
-        Route::put('/admin/discounts/{discount_id}', [DiscountController::class, 'update'])->name('discounts.update');
-    });
+
+    Route::post('/admin/discounts', [DiscountController::class, 'create'])->middleware('can:create discount');
+    Route::put('/admin/discounts/{discount_id}', [DiscountController::class, 'update'])->name('discounts.update')->middleware('can:update discount');
     Route::middleware(['can:delete discount'])->group(function () {
         Route::delete('admin/discounts/{discount_id}', [DiscountController::class, 'destroy'])->name('discount.delete');
         Route::patch('admin/discounts/{discount_id}', [DiscountController::class, 'restore'])->name('discount.restore');
     });
-    Route::get('/admin/discount/{discount_id}/get_products_not_in_discount', [DiscountController::class, 'get_products_not_in_discount']);
-    Route::post('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'add_product_to_discount']);
-    Route::delete('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'remove_product_from_discount']);
+
+    Route::post('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'add_product_to_discount'])->middleware('can:update discount');
+    Route::delete('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'remove_product_from_discount'])->middleware('can:delete discount');
 
 
     // statistic routes
