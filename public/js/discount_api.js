@@ -200,6 +200,10 @@ const status =$('#status').val();
         </li>`;
             $('.pagination').html(pagination);
         }
+        function ceateDiscountDetail({discount_datail})
+        {
+
+        }
 
         function createDiscountElement({ discount_item }) {
             // const newTag = discount.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';

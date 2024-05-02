@@ -521,5 +521,9 @@ $discount=Discount::when($type === 'active', function ($query) {
 
 
         }
+        function detail_pagination()
+        {
+
+        }
 
 }
