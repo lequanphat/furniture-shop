@@ -280,7 +280,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::middleware(['can:read discounts'])->group(function () {
         Route::get('/admin/discounts', [DiscountController::class, 'index']);
         Route::get('/admin/discounts/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
-        Route::get('/admin/discount/{discount_id}/get_products_not_in_discount', [DiscountController::class, 'get_products_not_in_discount'])->middleware('can:read discount');
+        Route::get('/admin/discount/{discount_id}/get_products_not_in_discount', [DiscountController::class, 'get_products_not_in_discount']);
     });
 
     Route::post('/admin/discounts', [DiscountController::class, 'create'])->middleware('can:create discount');
@@ -299,6 +299,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
     Route::post('/admin/statistics/getstatistic', [StatisticController::class, 'RevenueDateByDate']);
     Route::get('/admin/statistics/sellingproductpie', [StatisticController::class, 'SellingProductPie']);
+
+    Route::get('/admin/statistics/getBestSellerProducts', [StatisticController::class, 'getBestSellerProducts']);
 
 
 

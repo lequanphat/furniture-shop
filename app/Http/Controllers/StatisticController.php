@@ -15,9 +15,9 @@ class StatisticController extends Controller
 {
 
     //
-    private $sqlDateFormat='Y-m-d';
-    private $DateFormat='d-m-Y';
-    private $round=1000000;
+    private $sqlDateFormat = 'Y-m-d';
+    private $DateFormat = 'd-m-Y';
+    private $round = 1000000;
     public function statistic_ui(Request $request)
     {
 
@@ -28,115 +28,102 @@ class StatisticController extends Controller
     }
     public function overviewLast7day()
     {
-        $solds=[];
-        $orders=[];
-        $revenues=[];
-        $dates=[];
+        $solds = [];
+        $orders = [];
+        $revenues = [];
+        $dates = [];
         for ($i = 7; $i >= 0; $i--) {
-            $time=now()->subDays($i);
-            $sold=OrderDetail::whereDate('created_at',$time)->sum('quantities');
-            $order=Order::whereDate('created_at',$time)->get()->count();
-            $date=now()->subDays(($i));
-            $revenue=Order::whereDate('created_at',$time)->where('is_paid',1)->sum('total_price');
+            $time = now()->subDays($i);
+            $sold = OrderDetail::whereDate('created_at', $time)->sum('quantities');
+            $order = Order::whereDate('created_at', $time)->get()->count();
+            $date = now()->subDays(($i));
+            $revenue = Order::whereDate('created_at', $time)->where('is_paid', 1)->sum('total_price');
 
-            array_push($orders,$order);
-            array_push($revenues,$revenue/$this->round);
-            array_push($solds,$sold);
-            array_push($dates,$date->format($this->DateFormat));
+            array_push($orders, $order);
+            array_push($revenues, $revenue / $this->round);
+            array_push($solds, $sold);
+            array_push($dates, $date->format($this->DateFormat));
         }
         return response()->json(
             [
-                'solds'=>$solds,
-                'orders'=>$orders,
-                'revenues'=>$revenues,
-                'labels'=>$dates,
+                'solds' => $solds,
+                'orders' => $orders,
+                'revenues' => $revenues,
+                'labels' => $dates,
             ]
-        ) ;
-
-
-
+        );
     }
     public function RevenueDateByDate(Request $request)
     {
         $categoryID = request()->input('category_id');
-        $start =Carbon::parse(request()->input('start-date'));
+        $start = Carbon::parse(request()->input('start-date'));
         $end = Carbon::parse(request()->input('end-date'));
-        if($start>$end)
-        {
+        if ($start > $end) {
             return response()->json(['errors' => ['message' => ['Can not statistic when start day > end day']]], 400);
         }
-        $current=$start;
-        $days=[];
-        $revenues=[];
-        $quantities=[];
+        $current = $start;
+        $days = [];
+        $revenues = [];
+        $quantities = [];
 
 
-            if($categoryID==-1) //-1 mean All
-            {
-                while ($current<=$end)
-                {
-                $query=OrderDetail::whereDate('created_at',$current->format($this->sqlDateFormat));
-                 //calc value
-                $quantity=$query->sum('quantities');
-                $revenue = $quantity*$query->average('unit_price');
+        if ($categoryID == -1) //-1 mean All
+        {
+            while ($current <= $end) {
+                $query = OrderDetail::whereDate('created_at', $current->format($this->sqlDateFormat));
+                //calc value
+                $quantity = $query->sum('quantities');
+                $revenue = $quantity * $query->average('unit_price');
 
-                array_push($revenues,$revenue/$this->round);
-                array_push($quantities,$quantity);
-                array_push($days,$current->format($this->DateFormat));
-                $current=$current->addDay();
-                }
-
+                array_push($revenues, $revenue / $this->round);
+                array_push($quantities, $quantity);
+                array_push($days, $current->format($this->DateFormat));
+                $current = $current->addDay();
             }
-            else
-            {
-                //get categories and child_categories by id
-                $categories=Category::where('category_id',$categoryID)->Orwhere('parent_id',$categoryID);
-                if($categories->count()!=0)
-                {
-                    while ($current<=$end)
-                    {
+        } else {
+            //get categories and child_categories by id
+            $categories = Category::where('category_id', $categoryID)->Orwhere('parent_id', $categoryID);
+            if ($categories->count() != 0) {
+                while ($current <= $end) {
 
-                    $query=OrderDetail::with('detailed_product.product','detailed_product.product.category.parent')->whereDate('created_at',$current->format($this->sqlDateFormat))->get()
-                    ->whereIN('detailed_product.product.category_id', $categories->pluck('category_id'));
+                    $query = OrderDetail::with('detailed_product.product', 'detailed_product.product.category.parent')->whereDate('created_at', $current->format($this->sqlDateFormat))->get()
+                        ->whereIN('detailed_product.product.category_id', $categories->pluck('category_id'));
                     //calc value
-                    $quantity=$query->sum('quantities');
-                    $revenue = $quantity*$query->average('unit_price');
+                    $quantity = $query->sum('quantities');
+                    $revenue = $quantity * $query->average('unit_price');
 
-                    array_push($revenues,$revenue/$this->round);
-                    array_push($quantities,$quantity);
-                    array_push($days,$current->format($this->DateFormat));
-                    $current=$current->addDay();
-                    }
+                    array_push($revenues, $revenue / $this->round);
+                    array_push($quantities, $quantity);
+                    array_push($days, $current->format($this->DateFormat));
+                    $current = $current->addDay();
                 }
-                else
-                {
-                    return response()->json(['errors' => ['message' => ['Can not statistic when not found categories']]], 400);
-                }
-
-
+            } else {
+                return response()->json(['errors' => ['message' => ['Can not statistic when not found categories']]], 400);
             }
+        }
         return response()->json(
             [
-                'labels'=>$days,
-                'solds'=>$quantities,
-                'revenues'=>$revenues,
+                'labels' => $days,
+                'solds' => $quantities,
+                'revenues' => $revenues,
             ]
-        ) ;
+        );
     }
 
-    public function SellingProductPie(Request $request){
+    public function SellingProductPie(Request $request)
+    {
         $day_first = $request->query('dayfirst');
         $day_last = $request->query('daylast');
         $time_frame = $request->query('timeframe');
         $whichpiechart = $request->query('piechart');
 
-        $name=[];
-        $quantities=[];
-        $other=0;
-        $time=null;
-        $time2=null;
+        $name = [];
+        $quantities = [];
+        $other = 0;
+        $time = null;
+        $time2 = null;
 
-        if(isset($time_frame)){
+        if (isset($time_frame)) {
             switch ($time_frame) {
                 case '1w':
                     $time = now()->subWeek();
@@ -151,11 +138,11 @@ class StatisticController extends Controller
                     $time = now()->subYear();
                     break;
             }
-            $time2=now();
+            $time2 = now();
         }
 
         //thanh tìm kiếm
-        if(isset($day_first) || isset($day_last)){
+        if (isset($day_first) || isset($day_last)) {
             if (!isset($day_first)) {
                 $day_first = Carbon::create(1900, 1, 1);
             }
@@ -171,38 +158,36 @@ class StatisticController extends Controller
 
         //lấy tổng sl để tính %, dưới 5% tổng sản phẩm thì vô other hết
         $total_quantities = OrderDetail::all()->whereBetween('created_at', [$time, $time2])->sum('quantities');
-        if($whichpiechart == '1'){//dữ liệu cho biểu đồ tròn thứ nhất
+        if ($whichpiechart == '1') { //dữ liệu cho biểu đồ tròn thứ nhất
             //lấy các product tồn tại, cho vào lặp trên từng loại product để tính số lượng
-            $products = Product::with('detailed_products.order_details')->get();//eager load mối quan hệ liên kết với model Product, là khi truy xuất mỗi Product, dữ liệu liên quan từ các bảng detailed_products và order_details được tải cùng luôn.
+            $products = Product::with('detailed_products.order_details')->get(); //eager load mối quan hệ liên kết với model Product, là khi truy xuất mỗi Product, dữ liệu liên quan từ các bảng detailed_products và order_details được tải cùng luôn.
             //xét trên mỗi product và tính tổng
-            foreach($products as $product){
+            foreach ($products as $product) {
                 $order = OrderDetail::with('detailed_product.product')->get()->whereBetween('created_at', [$time, $time2])->where('detailed_product.product.product_id', $product->product_id);
                 $quantity = $order->sum('quantities');
-                if(($quantity/$total_quantities) < 0.05){
+                if (($quantity / $total_quantities) < 0.05) {
                     $other = $other + $quantity;
                 } else {
                     array_push($name, $product->name);
                     array_push($quantities, $quantity);
                 }
             }
-
-        } elseif($whichpiechart == '2') {//dữ liệu cho biểu đồ tròn thứ hai
+        } elseif ($whichpiechart == '2') { //dữ liệu cho biểu đồ tròn thứ hai
             //lấy các loại category tồn tại, lặp để tính số lượng
             $categories = Category::with('products.detailed_products.order_details')->get();
-            foreach($categories as $category){
+            foreach ($categories as $category) {
                 $order = OrderDetail::with('detailed_product.product.category')->get()->whereBetween('created_at', [$time, $time2])->where('detailed_product.product.category.category_id', $category->category_id);
                 $quantity = $order->sum('quantities');
-                if(($quantity/$total_quantities) < 0.05){
+                if (($quantity / $total_quantities) < 0.05) {
                     $other = $other + $quantity;
                 } else {
                     array_push($name, $category->name);
                     array_push($quantities, $quantity);
                 }
             }
-
         }
         //nếu có các sản phẩm nhỏ quá
-        if($other > 0){
+        if ($other > 0) {
             array_push($name, 'Others');
             array_push($quantities, $other);
         }
@@ -213,10 +198,61 @@ class StatisticController extends Controller
         //$product_name = $products->pluck('name');
         return response()->json(
             [
-                'labels'=>$name,
-                'number_of_product'=>$quantities,
+                'labels' => $name,
+                'number_of_product' => $quantities,
             ]
         );
     }
 
+
+    public function getBestSellerProducts(Request $request)
+
+    {
+        $numbers = $request->query('numbers') ?? 5;
+        $query = Product::with(
+            [
+                'detailed_products' => function ($query) {
+                    $query->where('is_deleted', 0)->with('images', 'product_discounts.discount');
+                },
+            ]
+        )->where('is_deleted', false)->has('detailed_products');
+
+
+        $best_seller_products = $query->orderByDesc('amount_sold')->paginate($numbers);
+        foreach ($best_seller_products as $product) {
+            $total_discount_percentage = 0;
+            foreach ($product->detailed_products as $detailed_product) {
+                foreach ($detailed_product->product_discounts as $product_discount) {
+                    if ($product_discount->discount->is_currently_active()) {
+                        $total_discount_percentage += $product_discount->discount->percentage;
+                    }
+                }
+                $detailed_product->total_discount_percentage = $total_discount_percentage;
+            }
+        }
+
+        $today = now();
+        foreach ($best_seller_products as $product) {
+            $detailed_product =
+                $product->detailed_products
+                ->sortByDesc(function ($detailed_product) use ($today) {
+                    return $detailed_product->product_discounts
+                        ->where('discount.start_date', '<=', $today)
+                        ->where('discount.end_date', '>=', $today)
+                        ->sum('discount.percentage');
+                })
+                ->first() ?? $product->detailed_products->first();
+
+            if (isset($detailed_product->images)) {
+                $detailed_product->image = $detailed_product->images->first()->url;
+                $detailed_product->setRelation('images', null);
+            }
+            $product->detailed_product = $detailed_product;
+            $product->price = $detailed_product->original_price;
+            $total_quantities = $product->detailed_products->sum('quantities');
+            $product->setRelation('detailed_products', null);
+            $product->total_quantities = $total_quantities;
+        }
+        return response()->json(['products' => $best_seller_products]);
+    }
 }
