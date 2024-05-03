@@ -21,7 +21,7 @@
 
             {{-- Sản phẩm bán chạy biểu đồ tròn --}}
             <div class="container-xl">
-                <div class="row row-deck row-cards " >
+                <div class="row row-deck row-cards ">
                     <div class="col-12">
                         <div class="card">
                             <div class="row justify-content-end">
@@ -29,24 +29,13 @@
                                     {{-- dòng filter --}}
                                     <div class="row row-cards">
                                         <h1 id="title_chart">Number of sales</h1>
-                                        <div class="col-auto row ">
-                                            <div class="col-6">
-                                                <input id="search_first_pc" name="search_first_pc"
-                                                    class="col-6 form-control" type="date" value=""
-                                                    title="Start date">
-                                            </div>
-                                            <div class="col-6">
-                                                <input id="search_last_pc" name="search_last_pc" class="col-6 form-control"
-                                                    type="date" value="" title="End date">
-                                            </div>
-                                        </div>
                                         <div class="col-auto row">
-                                            <select id="time_frame_pc" name="time_frame_pc" class="form-select"
+                                            <select id="number_of_products" name="number_of_products" class="form-select"
                                                 title="Choose type">
-                                                <option value="1w">Last week</option>
-                                                <option value="1m">Last 1 months</option>
-                                                <option value="3m">Last quarter</option>
-                                                <option value="1y">Last year</option>
+                                                <option value="5">5</option>
+                                                <option value="10">10</option>
+                                                <option value="15">15</option>
+                                                <option value="30">30</option>
                                             </select>
                                         </div>
                                         {{-- <div class="col-auto row">
@@ -61,6 +50,57 @@
                 </div>
             </div>
             <br>
+
+
+            {{-- Start tabler --}}
+            <div class="container-xl">
+                <div class="row row-deck row-cards">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="table-responsive">
+                                <table class="table table-vcenter card-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Product</th>
+                                            <th>Quantities</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="product-statistic-body">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="table-responsive">
+                                <table class="table table-vcenter card-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Product</th>
+                                            <th>Quantities</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>123</td>
+                                            <td>123</td>
+                                            <td>123</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            {{-- End tabler --}}
             <div class="container-xl ">
                 <div class="row row-deck row-cards">
                     <div class="col-lg-10 col-xl-6">
