@@ -43,7 +43,13 @@
     php artisan db:seed
     ```
 
-3. **Run the application:**
+3. **Link storage directory to public:**
+
+    ```bash
+    php artisan storage:link
+    ```
+
+4. **Run the application:**
 
     ```bash
     php artisan serve
