@@ -485,9 +485,37 @@ class PagesController extends Controller
         abort(404);
     }
 
-    public function update_profile(UpdateEmployee $requset)
+    public function update_profile(UpdateEmployee $request)
     {
-        $userController = new UserController();
-        return $userController->update_employee($requset);
+        $user = User::where('user_id', Auth::id())->first();
+        $user->update([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'gender' => ($request->input('gender') == 'male' || $request->input('gender') == null),
+            'birth_date' => $request->input('birth_date'),
+        ]);
+
+        $address = Address::where('user_id', $user->user_id)->where('is_default', 1)->first();
+        if ($address) {
+            $address->update([
+                'address' => $request->input('address'),
+                'phone_number' => $request->input('phone_number'),
+            ]);
+        } else {
+            Address::create([
+                'user_id' => $user->user_id,
+                'address' => $request->input('address'),
+                'phone_number' => $request->input('phone_number'),
+                'receiver_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'is_default' => 1,
+            ]);
+        }
+
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $path = config('app.url') . 'storage/' . $file->store('uploads/avatars', 'public');
+            $user->update(['avatar' => $path]);
+        }
+        return response()->json(['message' => 'Profile updated successfully!']);
     }
 }
