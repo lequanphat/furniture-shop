@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedInteger('order_id');
             $table->string('sku');
             $table->unsignedInteger('quantities');
-            $table->decimal('total_price', 14, 2);
+            $table->decimal('unit_price', 14, 2);
             $table->timestamps();
 
             $table->primary(['sku', 'order_id']);

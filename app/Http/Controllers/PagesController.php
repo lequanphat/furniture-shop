@@ -138,7 +138,7 @@ class PagesController extends Controller
                 })
                 ->first() ?? $product->detailed_products->first();
 
-            if (isset($detailed_product->images)) {
+            if (isset($detailed_product->images->first()->url)) {
                 $detailed_product->image = $detailed_product->images->first()->url;
                 $detailed_product->setRelation('images', null);
             }
@@ -169,7 +169,6 @@ class PagesController extends Controller
         }
         return view('pages.dashboard.index', $data);
     }
-
 
     public function shop()
     {
@@ -260,7 +259,7 @@ class PagesController extends Controller
                 })
                 ->first() ?? $product->detailed_products->first();
 
-            if (isset($detailed_product->images)) {
+            if (isset($detailed_product->images->first()->url)) {
                 $detailed_product->image = $detailed_product->images->first()->url;
                 $detailed_product->setRelation('images', null);
             }

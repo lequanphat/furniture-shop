@@ -86,7 +86,7 @@ class UserController extends Controller
             'last_name' => $request->input('last_name'),
             'gender' => ($request->input('gender') == 'male'),
             'birth_date' => $request->input('birth_date'),
-            'avatar' => config('app.url') . 'storage/defaults/default_avatar.jpg',
+            'avatar' => config('app.url') . 'images/default/default_avatar.jpg',
             'is_staff' => 1,
             'is_verified' => 1,
         ];
