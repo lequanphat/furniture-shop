@@ -25,6 +25,7 @@ class PagesController extends Controller
             'products.name',
             'product_details.sku',
             'product_images.url',
+            'percentage',
             DB::raw('round(product_details.original_price,0) AS old_price'),
             DB::raw('round(product_details.original_price * (1 - discounts.percentage/100),0) AS new_price'),
             DB::raw('round(discounts.percentage,0) AS discount_percent'),

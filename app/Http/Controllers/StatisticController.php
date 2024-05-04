@@ -116,6 +116,7 @@ class StatisticController extends Controller
         $day_last = $request->query('daylast');
         $time_frame = $request->query('timeframe');
         $whichpiechart = $request->query('piechart');
+        //$number_of_products = $request->query('numberofproducts') ?? 5;
 
         $name = [];
         $quantities = [];
@@ -192,9 +193,6 @@ class StatisticController extends Controller
             array_push($quantities, $other);
         }
 
-
-
-
         //$product_name = $products->pluck('name');
         return response()->json(
             [
@@ -216,43 +214,7 @@ class StatisticController extends Controller
                 },
             ]
         )->where('is_deleted', false)->has('detailed_products');
-
-
         $best_seller_products = $query->orderByDesc('amount_sold')->paginate($numbers);
-        foreach ($best_seller_products as $product) {
-            $total_discount_percentage = 0;
-            foreach ($product->detailed_products as $detailed_product) {
-                foreach ($detailed_product->product_discounts as $product_discount) {
-                    if ($product_discount->discount->is_currently_active()) {
-                        $total_discount_percentage += $product_discount->discount->percentage;
-                    }
-                }
-                $detailed_product->total_discount_percentage = $total_discount_percentage;
-            }
-        }
-
-        $today = now();
-        foreach ($best_seller_products as $product) {
-            $detailed_product =
-                $product->detailed_products
-                ->sortByDesc(function ($detailed_product) use ($today) {
-                    return $detailed_product->product_discounts
-                        ->where('discount.start_date', '<=', $today)
-                        ->where('discount.end_date', '>=', $today)
-                        ->sum('discount.percentage');
-                })
-                ->first() ?? $product->detailed_products->first();
-
-            if (isset($detailed_product->images)) {
-                $detailed_product->image = $detailed_product->images->first()->url;
-                $detailed_product->setRelation('images', null);
-            }
-            $product->detailed_product = $detailed_product;
-            $product->price = $detailed_product->original_price;
-            $total_quantities = $product->detailed_products->sum('quantities');
-            $product->setRelation('detailed_products', null);
-            $product->total_quantities = $total_quantities;
-        }
         return response()->json(['products' => $best_seller_products]);
     }
 }

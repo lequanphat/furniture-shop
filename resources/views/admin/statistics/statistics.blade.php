@@ -29,20 +29,31 @@
                                     {{-- dòng filter --}}
                                     <div class="row row-cards">
                                         <h1 id="title_chart">Number of sales</h1>
+                                        <div class="col-auto row ">
+                                            <div class="col-6">
+                                                <input id="search_first_pc" name="search_first_pc"
+                                                    class="col-6 form-control" type="date" value=""
+                                                    title="Start date">
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="search_last_pc" name="search_last_pc" class="col-6 form-control"
+                                                    type="date" value="" title="End date">
+                                            </div>
+                                        </div>
                                         <div class="col-auto row">
-                                            <select id="number_of_products" name="number_of_products" class="form-select"
+                                            <select id="time_frame_pc" name="time_frame_pc" class="form-select col-6"
                                                 title="Choose type">
-                                                <option value="5">5</option>
-                                                <option value="10">10</option>
-                                                <option value="15">15</option>
-                                                <option value="30">30</option>
+                                                <option value="1w">Last week</option>
+                                                <option value="1m">Last 1 months</option>
+                                                <option value="3m">Last quarter</option>
+                                                <option value="1y">Last year</option>
                                             </select>
                                         </div>
                                         {{-- <div class="col-auto row">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <input id="number_of_products" name="number_of_products" class="form-control col-6"
+                                            type="text" placeholder="Number of top products">
                                         </div> --}}
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -53,7 +64,7 @@
 
 
             {{-- Start tabler --}}
-            <div class="container-xl">
+            {{-- <div class="container-xl">
                 <div class="row row-deck row-cards">
                     <div class="col-6">
                         <div class="card">
@@ -84,12 +95,7 @@
                                             <th>Quantities</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>123</td>
-                                            <td>123</td>
-                                            <td>123</td>
-                                        </tr>
+                                    <tbody id="type_of_product_table">
                                     </tbody>
                                 </table>
                             </div>
@@ -99,7 +105,7 @@
                 </div>
             </div>
 
-            <br>
+            <br> --}}
             {{-- End tabler --}}
             <div class="container-xl ">
                 <div class="row row-deck row-cards">
