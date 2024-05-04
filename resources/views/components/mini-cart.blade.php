@@ -6,7 +6,7 @@
              <ul id="cart-list">
                  {{-- render cart here --}}
                  <div class="empty-cart">
-                     <img class="" src="{{ asset('storage/defaults/empty-cart.webp') }}" />
+                     <img class="" src="{{ asset('images/default/empty-cart.webp') }}" />
                      <p>Your cart is currently empty.</p>
                  </div>
 
