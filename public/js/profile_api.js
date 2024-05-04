@@ -100,11 +100,13 @@ jQuery(document).ready(function () {
     });
     $('#update-profile-customer-form').submit(function (e) {
         e.preventDefault();
-        var formData = $(this).serialize();
+        const formData = new FormData(this);
         $.ajax({
             url: `/account/profile/update`,
             type: 'POST',
             data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 // Handle the success response
                 $('#update_customer_response').removeClass('alert-danger d-none');

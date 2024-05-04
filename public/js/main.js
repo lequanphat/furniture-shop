@@ -565,4 +565,14 @@
         once: true,
         duration: 1000,
     });
+
+    $('#search-header-form').submit(function (e) {
+        e.preventDefault();
+        let search = $('#search-header-form input').val();
+        window.location.href = `/shop?page=1&category=all&color=all&tag=all&search=${search}&price_from=0&price_to=60000000&sorted_by=default`;
+    });
+
+    $('#avatar-input').change(function (e) {
+        $('#avatar-image').attr('src', URL.createObjectURL(e.target.files[0]));
+    });
 })(jQuery);
