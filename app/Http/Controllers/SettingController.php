@@ -6,6 +6,7 @@ use App\Http\Requests\ChangePassword;
 use App\Http\Requests\UpdateEmployee;
 use App\Models\Address;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 

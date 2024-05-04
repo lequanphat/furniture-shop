@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateEmployee;
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -464,5 +467,27 @@ class PagesController extends Controller
         }
 
         return response()->json(['cart' => $new_cart]);
+    }
+
+    public function profile(Request $request)
+    {
+        $user = User::where('user_id', Auth::id())->first();
+
+        if ($user) {
+            $listaddress = Address::where('user_id', $user->user_id)->get();
+            $data = [
+                'page' => 'Profile',
+                'user' => $user,
+                'address_cards' => $listaddress
+            ];
+            return view("pages.account.profile", $data);
+        }
+        abort(404);
+    }
+
+    public function update_profile(UpdateEmployee $requset)
+    {
+        $userController = new UserController();
+        return $userController->update_employee($requset);
     }
 }

@@ -3,7 +3,6 @@ jQuery.noConflict();
     $(document).ready(function () {
         $('#update-profile-form').submit(function (e) {
             e.preventDefault();
-            console.log('hello');
             const formData = new FormData(this);
             $.ajax({
                 url: '/admin/settings/profile',

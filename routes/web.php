@@ -84,8 +84,8 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     Route::get('/change-password', [PagesController::class, 'change_password'])->name('change_password_ui');
     Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
     //account
-    Route::get('/account', [ProfileController::class, 'customer_ui'])->name('my_account');
-    Route::post('/account/profile/update', [ProfileController::class, 'update_customer']);
+    Route::get('/account', [PagesController::class, 'profile'])->name('my_account');
+    Route::post('/account/profile/update', [PagesController::class, 'update_profile']);
     //address_card
     Route::post('/account/profile/addresscard/update', [AddressController::class, 'update_address']);
     Route::post('/account/profile/addresscard/create', [AddressController::class, 'create_address']);
@@ -106,11 +106,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin', [HomeController::class, 'index'])->name('admin');
 
     Route::get('/admin/dashboard/orders-statistic', [HomeController::class, 'getOrdersStatistic']);
-
-    // profile routes
-    Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
-    Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
-
+    
 
     // users routes
     Route::middleware(['can:read users'])->group(function () {
