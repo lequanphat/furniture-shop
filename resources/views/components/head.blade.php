@@ -3,8 +3,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Furniture Shop</title>
     <meta name="robots" content="noindex, follow" />
-    <meta name="description"
-        content="SayyamCode eCommerce Bootstrap 5 Template is a stunning eCommerce website template that is the best choice for any online store.">
+    <meta name="description" content="Furniture Shop - Ecommerce">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <link rel="canonical" href="#" />
@@ -12,12 +11,11 @@
 
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="sayyamcode eCommerce HTML Template" />
+    <meta property="og:title" content="Furniture Shop - Ecommerce" />
     <meta property="og:url" content="#" />
-    <meta property="og:site_name" content="sayyamcode eCommerce HTML Template" />
+    <meta property="og:site_name" content="Furniture Shop - Ecommerce" />
     <meta property="og:image" content="#" />
-    <meta property="og:description"
-        content="SayyamCode eCommerce Bootstrap 5 Template is a stunning eCommerce website template that is the best choice for any online store." />
+    <meta property="og:description" content="The best furniture selling website in the world" />
 
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}" />
