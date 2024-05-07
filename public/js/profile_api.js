@@ -58,7 +58,7 @@ jQuery(document).ready(function () {
             data: formData,
             success: function (response) {
                 // Handle the success response
-                $('#update_address_response').removeClass('alert-successs d-none');
+                $('#update_address_response').removeClass('alert-danger d-none');
                 $('#update_address_response').addClass('alert-success');
                 $('#update_address_response').html(Object.values(response.message));
                 var row = $(`#address_table .address-item.${response.address.address_id}`);
@@ -100,14 +100,16 @@ jQuery(document).ready(function () {
     });
     $('#update-profile-customer-form').submit(function (e) {
         e.preventDefault();
-        var formData = $(this).serialize();
+        const formData = new FormData(this);
         $.ajax({
             url: `/account/profile/update`,
             type: 'POST',
             data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 // Handle the success response
-                $('#update_customer_response').removeClass('alert-successs d-none');
+                $('#update_customer_response').removeClass('alert-danger d-none');
                 $('#update_customer_response').addClass('alert-success');
                 $('#update_customer_response').html('Updated profile successfully');
             },
@@ -148,7 +150,7 @@ jQuery(document).ready(function () {
             data: formData,
             success: function (response) {
                 // Handle the success response
-                $('#create_address_response').removeClass('alert-successs d-none');
+                $('#create_address_response').removeClass('alert-danger d-none');
                 $('#create_address_response').addClass('alert-success');
                 $('#create_address_response').html(Object.values(response.message));
                 if (response.address.is_default == true) {

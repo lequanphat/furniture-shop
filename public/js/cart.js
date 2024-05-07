@@ -87,7 +87,7 @@ jQuery(document).ready(function () {
             $('.js-total-cart').removeClass('bg-black');
             $('.js-mini-cart-checkout-btn').addClass('disable');
             $('#cart-list').html(` <div class="empty-cart">
-                    <img class="" src="/storage/defaults/empty-cart.webp" />
+                    <img class="" src="/images/default/empty-cart.webp" />
                     <p>Your cart is currently empty.</p>
                 </div>`);
         } else {
@@ -106,7 +106,7 @@ jQuery(document).ready(function () {
         let html = '';
         if (cart.length === 0) {
             const emptyCart = `<div class="empty-cart">
-            <img class="" src="storage/defaults/empty-cart.webp" />
+            <img class="" src="/images/default/empty-cart.webp" />
             <p>Your cart is currently empty.</p>
         </div>`;
             $('#js-cart-table').html(emptyCart);

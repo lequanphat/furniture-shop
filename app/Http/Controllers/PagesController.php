@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateEmployee;
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -25,6 +28,7 @@ class PagesController extends Controller
             'products.name',
             'product_details.sku',
             'product_images.url',
+            'percentage',
             DB::raw('round(product_details.original_price,0) AS old_price'),
             DB::raw('round(product_details.original_price * (1 - discounts.percentage/100),0) AS new_price'),
             DB::raw('round(discounts.percentage,0) AS discount_percent'),
@@ -134,7 +138,7 @@ class PagesController extends Controller
                 })
                 ->first() ?? $product->detailed_products->first();
 
-            if (isset($detailed_product->images)) {
+            if (isset($detailed_product->images->first()->url)) {
                 $detailed_product->image = $detailed_product->images->first()->url;
                 $detailed_product->setRelation('images', null);
             }
@@ -165,7 +169,6 @@ class PagesController extends Controller
         }
         return view('pages.dashboard.index', $data);
     }
-
 
     public function shop()
     {
@@ -264,7 +267,7 @@ class PagesController extends Controller
                 })
                 ->first() ?? $product->detailed_products->first();
 
-            if (isset($detailed_product->images)) {
+            if (isset($detailed_product->images->first()->url)) {
                 $detailed_product->image = $detailed_product->images->first()->url;
                 $detailed_product->setRelation('images', null);
             }
@@ -472,5 +475,55 @@ class PagesController extends Controller
         }
 
         return response()->json(['cart' => $new_cart]);
+    }
+
+    public function profile(Request $request)
+    {
+        $user = User::where('user_id', Auth::id())->first();
+
+        if ($user) {
+            $listaddress = Address::where('user_id', $user->user_id)->get();
+            $data = [
+                'page' => 'Profile',
+                'user' => $user,
+                'address_cards' => $listaddress
+            ];
+            return view("pages.account.profile", $data);
+        }
+        abort(404);
+    }
+
+    public function update_profile(UpdateEmployee $request)
+    {
+        $user = User::where('user_id', Auth::id())->first();
+        $user->update([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'gender' => ($request->input('gender') == 'male' || $request->input('gender') == null),
+            'birth_date' => $request->input('birth_date'),
+        ]);
+
+        $address = Address::where('user_id', $user->user_id)->where('is_default', 1)->first();
+        if ($address) {
+            $address->update([
+                'address' => $request->input('address'),
+                'phone_number' => $request->input('phone_number'),
+            ]);
+        } else {
+            Address::create([
+                'user_id' => $user->user_id,
+                'address' => $request->input('address'),
+                'phone_number' => $request->input('phone_number'),
+                'receiver_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'is_default' => 1,
+            ]);
+        }
+
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $path = config('app.url') . 'storage/' . $file->store('uploads/avatars', 'public');
+            $user->update(['avatar' => $path]);
+        }
+        return response()->json(['message' => 'Profile updated successfully!']);
     }
 }

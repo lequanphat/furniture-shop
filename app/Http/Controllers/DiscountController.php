@@ -65,7 +65,6 @@ class DiscountController extends Controller
             'start_date' => $request->input('startdate'),
             'end_date' => $request->input('enddate'),
             'percentage' => $request->input('percentage'),
-            'amount' => 0,
             'description' => 'no description',
         ]);
         return ['message' => 'Created discount successfully!'];
@@ -149,7 +148,6 @@ class DiscountController extends Controller
                 'title' => $request->input('title'),
                 'description' => 'no description',
                 'percentage' => $request->input('percentage'),
-                'amount' => 0,
                 'start_date' => $request->input('startdate'),
                 'end_date' => $request->input('enddate'),
             ]);

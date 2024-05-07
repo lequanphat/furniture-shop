@@ -31,6 +31,12 @@
                                                 <form id="update-profile-customer-form" action="#">
                                                     @csrf
                                                     <div class="col-12">
+                                                        <div class="mb-3 row avatar-update-wrapper">
+                                                            <img id="avatar-image" src="{{ Auth::user()->avatar }}"
+                                                                alt="avatar">
+                                                            <label for="avatar-input">Change avatar</label>
+                                                            <input type="file" name="avatar" id="avatar-input">
+                                                        </div>
                                                         <div class="mb-3 row">
                                                             <div class="col-md-6">
                                                                 <label for="first_name" class="form-label">First

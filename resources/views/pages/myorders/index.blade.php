@@ -12,7 +12,7 @@
                 <div class="my-orders-list">
                     @if ($orders->count() == 0)
                         <div class="empty-order-list">
-                            <img class="" src="{{ asset('storage/defaults/empty-cart.webp') }}" />
+                            <img class="" src="{{ asset('images/default/empty-cart.webp') }}" />
                             <p>You don't have any order.</p>
                             <a href="/shop">Go shop</a>
                         </div>
