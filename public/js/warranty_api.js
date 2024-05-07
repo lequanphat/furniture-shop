@@ -196,9 +196,9 @@ jQuery.noConflict();
             `;
             return `
 
-            
 
-           
+
+
                 <td>${warranty.warranty_id}</td>
                 <td>${warranty.order_id}</td>
                 <td class="text-muted">
@@ -317,6 +317,6 @@ jQuery.noConflict();
             filterWarranties({ page });
         });
 
-       
+
     });
 })(jQuery);

@@ -114,8 +114,8 @@
 
                         </div>
                         <div class="product-details-action-wrap">
-                            <button class="js-add-to-cart add-to-cart disable" disabled>Add to cart</button>
-                            <button class="js-buy-now buy-now disable " disabled>Buy now</button>
+                            <button class="js-add-to-cart add-to-cart disable" disabled>Để vô giỏ</button>
+                            <button class="js-buy-now buy-now disable " disabled>Mua ngay</button>
                         </div>
                         <div class="product-details-meta">
                             <ul>

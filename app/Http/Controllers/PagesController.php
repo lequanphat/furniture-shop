@@ -174,6 +174,7 @@ class PagesController extends Controller
         $tag = request()->query('tag');
         $search = request()->query('search');
         $sorted_by = request()->query('sorted_by');
+        $size = request()->query('size');
 
 
         $price_from = request()->query('price_from');
@@ -224,7 +225,14 @@ class PagesController extends Controller
         if ($search !== null) {
             $query->where('name', 'LIKE', '%' . $search . '%');
         }
-        // sorted 
+        if($size !== null){
+            //$query->where('size', 'LIKE', '%' . $size . '%');
+            //$sizes = explode(',', $size);
+            $query->whereHas('detailed_products', function ($query) use ($size) {
+                $query->where('size', 'LIKE', '%' . $size . '%');
+            });
+        }
+        // sorted
         if ($sorted_by === 'latest') {
             $query->orderBy('created_at', 'desc');
         }
@@ -296,6 +304,7 @@ class PagesController extends Controller
             'tags' => Tag::all(),
             'products' => $products,
             'search' => $search ?? '',
+            'size' => $size ?? '',
             'sorted_by' => $sorted_by ?? 'default',
         ];
 

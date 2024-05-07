@@ -208,7 +208,7 @@ jQuery(document).ready(function () {
                 </div>`
                         : ''
                 }
-                
+
                 <div class="product-action-wrap">
                     <a href="/products/${product.product_id}"
                         class="product-action-btn-1" title="View"><i
@@ -225,7 +225,7 @@ jQuery(document).ready(function () {
             </div>`
                         : ''
                 }
-                
+
             </div>
             <div class="product-content">
                 <h3><a
@@ -238,8 +238,8 @@ jQuery(document).ready(function () {
                         ${formatter.format(product.detailed_product.original_price)}đ
                         </span>`
                         : ''
-                } 
-                
+                }
+
                     <span class="new-price">
                         ${formatter.format(
                             product.detailed_product.original_price -
@@ -257,6 +257,7 @@ jQuery(document).ready(function () {
     function productFilter({ page = 1 }) {
         // search
         const search_text = $('#search-input').val();
+        const search_size = $('#search-size').val();
         // sort
         const sorted_by = $('#sort-product').val();
 
@@ -294,12 +295,12 @@ jQuery(document).ready(function () {
             null,
             `/shop?page=${page}&category=${category}&color=${colorIds.join(',')}&tag=${tagIds.join(
                 ',',
-            )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
+            )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}&size=${search_size}`,
         );
         $.ajax({
             url: `/products?page=${page}&category=${category}&color=${colorIds.join(',')}&tag=${tagIds.join(
                 ',',
-            )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
+            )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}&size=${search_size}`,
             type: 'GET',
             success: function (response) {
                 let html = '';
@@ -342,6 +343,14 @@ jQuery(document).ready(function () {
             productFilter({ page: 1 });
         }, 500),
     );
+    $('#search-size').on(
+        'input',
+        debounce(function () {
+            productFilter({ page: 1 });
+        }, 500),
+    );
+
+
 
     // sorted
     $('#sort-product').change(function () {

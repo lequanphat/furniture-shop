@@ -124,6 +124,17 @@
                             </div>
                         </div>
 
+                        <!---->
+                        <div class="sidebar-widget mb-40">
+                            <div class="search-wrap-2">
+                                <form class="search-2-form" action="#">
+                                    <input id="search-size" placeholder="Search by size" type="text"
+                                        value="{{ $size }}">
+                                    <button class="button-search"><i class=" ti-search "></i></button>
+                                </form>
+                            </div>
+                        </div>
+                        <!---->
 
                         <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
                             <div class="sidebar-widget-title mb-25">
