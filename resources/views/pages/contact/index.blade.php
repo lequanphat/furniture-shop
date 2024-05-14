@@ -9,7 +9,7 @@
                 <h2>Ask Us Anything Here</h2>
             </div>
             <div class="contact-form-wrap" data-aos="fade-up" data-aos-delay="200">
-                <form class="contact-form-style" id="contact-form" action="#" method="post">
+                <div class="contact-form-style" id="contact-form">
                     <div class="row">
                         <div class="col-lg-4">
                             <input name="name" type="text" placeholder="Name*">
@@ -24,7 +24,7 @@
                             <button class="submit" type="submit">Send Message</button>
                         </div>
                     </div>
-                </form>
+                </div>
                 <p class="form-messege"></p>
             </div>
         </div>

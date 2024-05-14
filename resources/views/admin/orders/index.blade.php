@@ -14,14 +14,8 @@
                         {{ $page }} Management
                     </h2>
                 </div>
-
-
-
-
                 <div class="col-auto ms-auto d-print-none">
-
                     <div class="row justify-content-end">
-
                         <div class="col-3">
                             <div class="input-icon ">
                                 <input id="search-orders" name="search" type="text" class="form-control"
@@ -112,74 +106,83 @@
                                     </tr>
                                 </thead>
                                 <tbody id ="order-table">
-
-                                    @foreach ($orders as $order)
+                                    @if ($orders->isEmpty())
                                         <tr>
-                                            <td>{{ $order->order_id }}</td>
-                                            <td>
-                                                <div class="d-flex py-1 align-items-center">
-                                                    <div class="flex-fill">
-                                                        <div class="font-weight-medium">
-                                                            {{ $order->receiver_name . ' - ' . $order->phone_number }}
-                                                            @if ($order->created_at->diffInDays() < 7)
-                                                                <span
-                                                                    class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                                            @endif
+                                            <td colspan="7" class="text-center text-muted">No data available</td>
+                                        </tr>
+                                    @else
+                                        @foreach ($orders as $order)
+                                            <tr>
+                                                <td>{{ $order->order_id }}</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">
+                                                                {{ $order->receiver_name . ' - ' . $order->phone_number }}
+                                                                @if ($order->created_at->diffInDays() < 7)
+                                                                    <span
+                                                                        class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="text-muted"><a href="#"
+                                                                    class="text-reset">{{ $order->address }}</a></div>
                                                         </div>
-                                                        <div class="text-muted"><a href="#"
-                                                                class="text-reset">{{ $order->address }}</a></div>
                                                     </div>
-                                                </div>
-                                            </td>
+                                                </td>
 
 
-                                            <td><span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span></td>
-                                            <td>{{ number_format($order->total_price, 0, '.', ',') }}đ</td>
-                                            <td>
-                                                @switch($order->is_paid)
-                                                    @case(0)
-                                                        <span class="badge bg-yellow-lt">Pending Payment</span>
-                                                    @break
+                                                <td class="text-muted">
+                                                    <span>{{ Carbon::parse($order->created_at)->diffForHumans() }}</span>
+                                                </td>
+                                                <td class="text-danger">
+                                                    {{ number_format($order->total_price, 0, '.', ',') }}đ
+                                                </td>
+                                                <td>
+                                                    @switch($order->is_paid)
+                                                        @case(0)
+                                                            <span class="badge bg-yellow-lt">Pending Payment</span>
+                                                        @break
 
-                                                    @case(1)
-                                                        <span class="badge bg-green-lt">Payment Received</span>
-                                                    @break
+                                                        @case(1)
+                                                            <span class="badge bg-green-lt">Payment Received</span>
+                                                        @break
 
-                                                    @default
-                                                @endswitch
-                                            </td>
-                                            <td>
-                                                @switch($order->status)
-                                                    @case(0)
-                                                        <span class="badge bg-yellow-lt">Unconfirmed</span>
-                                                    @break
+                                                        @default
+                                                    @endswitch
+                                                </td>
+                                                <td>
+                                                    @switch($order->status)
+                                                        @case(0)
+                                                            <span class="badge bg-yellow-lt">Unconfirmed</span>
+                                                        @break
 
-                                                    @case(1)
-                                                        <span class="badge bg-azure-lt">Confirmed</span>
-                                                    @break
+                                                        @case(1)
+                                                            <span class="badge bg-azure-lt">Confirmed</span>
+                                                        @break
 
-                                                    @case(2)
-                                                        <span class="badge bg-purple-lt">In transit</span>
-                                                    @break
+                                                        @case(2)
+                                                            <span class="badge bg-purple-lt">In transit</span>
+                                                        @break
 
-                                                    @case(3)
-                                                        <span class="badge bg-green-lt">Delivered</span>
-                                                    @break
+                                                        @case(3)
+                                                            <span class="badge bg-green-lt">Delivered</span>
+                                                        @break
 
-                                                    @case(4)
-                                                        <span class="badge bg-red-lt">Canceled</span>
-                                                    @break
+                                                        @case(4)
+                                                            <span class="badge bg-red-lt">Canceled</span>
+                                                        @break
 
-                                                    @default
-                                                @endswitch
-                                            </td>
-                                            <td>
-                                                @can('update order')
-                                                    <a href="{{ route('orders.details', $order->order_id) }}" class="btn p-2"
-                                                        title="Details">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        @default
+                                                    @endswitch
+                                                </td>
+                                                <td>
+
+                                                    <a href="{{ route('orders.details', $order->order_id) }}"
+                                                        class="btn p-2" title="Details">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round"
                                                             class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
@@ -187,38 +190,41 @@
                                                                 d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
                                                         </svg>
                                                     </a>
-                                                @endcan
 
-                                                @can('delete order')
-                                                    <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
-                                                        title="Update" data-bs-toggle="modal"
-                                                        data-bs-target="#update-order-modal"
-                                                        data-order-id="{{ $order->order_id }}"
-                                                        data-total-price="{{ $order->total_price }}"
-                                                        data-is-paid="{{ $order->is_paid }}"
-                                                        data-status="{{ $order->status }}"
-                                                        data-receiver-name="{{ $order->receiver_name }}"
-                                                        data-address="{{ $order->address }}"
-                                                        data-phone-number="{{ $order->phone_number }}"
-                                                        data-customer-id="{{ $order->customer_id }}"
-                                                        data-created-by="{{ $order->created_by }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                            class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                                                            <path d="M13.5 6.5l4 4" />
-                                                        </svg>
-                                                    </button>
-                                                @endcan
+                                                    @can('update order')
+                                                        <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
+                                                            title="Update" data-bs-toggle="modal"
+                                                            data-bs-target="#update-order-modal"
+                                                            data-order-id="{{ $order->order_id }}"
+                                                            data-total-price="{{ $order->total_price }}"
+                                                            data-is-paid="{{ $order->is_paid }}"
+                                                            data-status="{{ $order->status }}"
+                                                            data-receiver-name="{{ $order->receiver_name }}"
+                                                            data-address="{{ $order->address }}"
+                                                            data-phone-number="{{ $order->phone_number }}"
+                                                            data-customer-id="{{ $order->customer_id }}"
+                                                            data-created-by="{{ $order->created_by }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path
+                                                                    d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                                                <path d="M13.5 6.5l4 4" />
+                                                            </svg>
+                                                        </button>
+                                                    @endcan
 
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 </tbody>
                             </table>
-                            <div class="d-flex justify-content-end my-2">{{ $orders->render('common.ajax-pagination') }}
+                            <div class="js-orders-pagination d-flex justify-content-end my-2">
+                                {{ $orders->render('common.ajax-pagination') }}
                             </div>
                         </div>
                     </div>
@@ -232,6 +238,8 @@
     {{-- Modal --}}
     @include('admin.orders.create_order_modal')
     @include('admin.orders.update_order_modal')
+
+
     {{-- Script --}}
     <script src="{{ asset('js/order_api.js') }}" defer></script>
 @endsection

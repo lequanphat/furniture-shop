@@ -19,7 +19,7 @@
         </div>
         <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item d-none d-md-flex me-3">
-                <div class="btn-list">
+                {{-- <div class="btn-list">
                     <a href="https://github.com/lequanphat/furniture_shop" class="btn" target="_blank"
                         rel="noreferrer">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -41,7 +41,7 @@
                         </svg>
                         Sponsor
                     </a>
-                </div>
+                </div> --}}
             </div>
             <div class="d-none d-md-flex">
                 <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"

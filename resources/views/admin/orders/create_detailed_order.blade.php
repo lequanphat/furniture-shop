@@ -1,7 +1,7 @@
 <div class="modal fade" id="create-detailed-order-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <form id="create-order-form" action="#" method="dialog" class="w-full h-full">
+        <div method="dialog" class="w-full h-full">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -31,7 +31,7 @@
                                     <div class="table-responsive" style="min-height: 344px">
                                         <table class="js-user-table table table-vcenter card-table">
                                             <thead>
-                                                <tr>ord
+                                                <tr>
                                                     <th>Product</th>
                                                     <th>Color & Size</th>
                                                     <th>Quantities</th>
@@ -104,8 +104,17 @@
 
                                                                 <button class="js-add-product btn p-2"
                                                                     @if ($detailed_product->quantities == 0) disabled @endif>
-                                                                    <img src="{{ asset('svg/plus.svg') }}"
-                                                                        style="width: 18px;" />
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="24" height="24"
+                                                                        viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                                                                        <path stroke="none" d="M0 0h24v24H0z"
+                                                                            fill="none" />
+                                                                        <path d="M12 5l0 14" />
+                                                                        <path d="M5 12l14 0" />
+                                                                    </svg>
                                                                 </button>
                                                             </div>
                                                         </td>
@@ -116,7 +125,7 @@
                                         </table>
 
                                     </div>
-                                    <div class="d-flex justify-content-end my-2">
+                                    <div class="js-detailed-products-pagination d-flex justify-content-end my-2">
                                         {{ $detailed_products->render('common.ajax-pagination') }}
                                     </div>
                                 </div>
@@ -125,6 +134,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

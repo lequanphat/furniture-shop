@@ -25,7 +25,16 @@ class ProductController extends Controller
     public function index()
     {
         $search = request()->query('search');
-        $products = Product::with('category', 'brand', 'detailed_products.images')
+        $brand = request()->query('brand');
+        $category = request()->query('category');
+        $query = Product::with('category', 'brand', 'detailed_products.images');
+        if ($category !== null && $category !== 'all') {
+            $query = $query->where('category_id', $category);
+        }
+        if ($brand !== null && $brand !== 'all') {
+            $query = $query->where('brand_id', $brand);
+        }
+        $query = $query
             ->where('is_deleted', 0)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%' . $search . '%')
@@ -36,12 +45,18 @@ class ProductController extends Controller
                     ->orWhereHas('brand', function ($query) use ($search) {
                         $query->where('name', 'LIKE', '%' . $search . '%');
                     });
-            })
-            ->paginate(4); // 4 elements per page
+            });
+        $products = $query->paginate(4); // 4 elements per page
+        $brands = Brand::orderBy('index', 'asc')->get();
+        $categories = Category::orderBy('index', 'asc')->get();
         $data = [
             'page' => 'Products',
             'search' => $search,
             'products' => $products,
+            'selected_category' => $category,
+            'selected_brand' => $brand,
+            'categories' => $categories,
+            'brands' => $brands,
         ];
         return view('admin.products.index', $data);
     }
@@ -49,7 +64,16 @@ class ProductController extends Controller
     public function products_pagination()
     {
         $search = request()->query('search');
-        $products = Product::with('category', 'brand', 'detailed_products.images')
+        $brand = request()->query('brand');
+        $category = request()->query('category');
+        $query = Product::with('category', 'brand', 'detailed_products.images');
+        if ($category !== null && $category !== 'all') {
+            $query = $query->where('category_id', $category);
+        }
+        if ($brand !== null && $brand !== 'all') {
+            $query = $query->where('brand_id', $brand);
+        }
+        $query = $query
             ->where('is_deleted', 0)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%' . $search . '%')
@@ -60,8 +84,8 @@ class ProductController extends Controller
                     ->orWhereHas('brand', function ($query) use ($search) {
                         $query->where('name', 'LIKE', '%' . $search . '%');
                     });
-            })
-            ->paginate(4); // 4 elements per page
+            });
+        $products = $query->paginate(4); // 4 elements per page
 
         foreach ($products as $product) {
             $average_price = 0;
@@ -111,7 +135,7 @@ class ProductController extends Controller
             'category_id' => $request->input('category'),
             'brand_id' => $request->input('brand'),
             'description' => $request->input('description'),
-            'quantities' => 0,
+            'amount_sold' => 0,
         ]);
         // create tags
         $tags = json_decode($request->input('tags'));
@@ -296,8 +320,9 @@ class ProductController extends Controller
 
     public function get_products()
     {
-        $categories = request()->query('categories');
+        $category = request()->query('category');
         $color = request()->query('color');
+        $tag = request()->query('tag');
         $search = request()->query('search');
         $sorted_by = request()->query('sorted_by');
         $price_from = request()->query('price_from');
@@ -320,10 +345,9 @@ class ProductController extends Controller
                     ->whereBetween('original_price', [$price_from, $price_to]);
             });
         }
-        // If categories is not 'all', filter by category_id
-        if ($categories !== 'all' && $categories !== null) {
-            $categoryIds = explode(',', $categories);
-            $query->whereIn('category_id', $categoryIds);
+        // If category is not 'all', filter by category_id
+        if ($category !== 'all' && $category !== null) {
+            $query->where('category_id', $category);
         }
         // If color is not 'all', filter by color_id
         if ($color !== 'all' && $color !== null) {
@@ -332,6 +356,15 @@ class ProductController extends Controller
                 $query->whereIn('color_id', $colorIds);
             });
         }
+
+        // If tag is not 'all', filter by tag
+        if ($tag !== 'all' && $tag !== null) {
+            $tagIds = explode(',', $tag);
+            $query->whereHas('product_tags', function ($query) use ($tagIds) {
+                $query->whereIn('tag_id', $tagIds);
+            });
+        }
+
 
         // If search is not null, filter by name
         if ($search !== null) {
@@ -407,10 +440,22 @@ class ProductController extends Controller
     public function search_detailed_product()
     {
         $search = request()->query('search');
-        $detailed_products = ProductDetail::with('product_discounts.discount', 'images', 'color')
-            ->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('sku', 'LIKE', '%' . $search . '%')
-            ->paginate(4); // 4 elements per page
+        $detailed_products = ProductDetail::where('is_deleted', 0)
+            ->with('product_discounts.discount', 'images', 'color')
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            })
+            ->paginate(5);
+        foreach ($detailed_products as $detailed_product) {
+            $total_discount_percentage = 0;
+            foreach ($detailed_product->product_discounts as $product_discount) {
+                if ($product_discount->discount->is_currently_active()) {
+                    $total_discount_percentage += $product_discount->discount->percentage;
+                }
+            }
+            $detailed_product->total_discount_percentage = $total_discount_percentage;
+        }
         return response()->json(['detailed_products' => $detailed_products]);
     }
 }

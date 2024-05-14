@@ -2,7 +2,7 @@
 @section('content')
     {{-- @include('components.head-banner') --}}
 
-    <div class="shop-area shop-page-responsive  pb-100">
+    <div id="shop" class="shop-area shop-page-responsive  pb-100">
         <div class="container">
             <div class="row flex-row-reverse">
                 <div class="col-lg-9">
@@ -46,11 +46,10 @@
                                 <div id="product-list" class="row">
                                     @foreach ($products as $product)
                                         @php
-                                            $today = now();
                                             $detailed_product = $product->detailed_product;
                                         @endphp
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-12">
-                                            <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
+                                            <div class="product-wrap mb-35">
                                                 <div class="custom-product-img product-img img-zoom mb-25">
                                                     <a href="/products/{{ $product->product_id }}">
                                                         <img src="{{ $detailed_product->image }}" alt=""
@@ -66,17 +65,23 @@
                                                         </div>
                                                     @endif
                                                     <div class="product-action-wrap">
-                                                        <a class="product-action-btn-1" title="Wishlist"><i
+                                                        <a href="/products/{{ $product->product_id }}"
+                                                            class="product-action-btn-1" title="Wishlist"><i
                                                                 class="pe-7s-like"></i></a>
-                                                        <button class="product-action-btn-1" title="Quick View"
-                                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                        <a href="/products/{{ $product->product_id }}"
+                                                            class="product-action-btn-1" title="Quick View">
                                                             <i class="pe-7s-look"></i>
-                                                        </button>
+                                                        </a>
                                                     </div>
-                                                    <div class="product-action-2-wrap">
-                                                        <button class="product-action-btn-2" title="Add To Cart"><i
-                                                                class="pe-7s-cart"></i> Add to cart</button>
-                                                    </div>
+                                                    @if ($product->total_quantities > 0)
+                                                        <div class="product-action-2-wrap ">
+                                                            <button data-sku="{{ $detailed_product->sku }}"
+                                                                class="js-add-to-cart-shop product-action-btn-2"
+                                                                title="Add To Cart"><i class="pe-7s-cart"></i> Add to
+                                                                cart</button>
+                                                        </div>
+                                                    @endif
+
                                                 </div>
                                                 <div class="product-content">
                                                     <h3><a>{{ $product->name }}</a>
@@ -97,17 +102,8 @@
                                     @endforeach
 
                                 </div>
-                                <div class="pagination-style-1" data-aos="fade-up" data-aos-delay="200">
-                                    <ul>
-
-                                        @for ($i = 1; $i <= $products->lastPage(); $i++)
-                                            <li>
-                                                <a class="pagination-item
-                                                    {{ $retVal = $i == $products->currentPage() ? 'active' : '' }}"
-                                                    href="">{{ $i }}</a>
-                                            </li>
-                                        @endfor
-                                    </ul>
+                                <div class="pagination-style-1">
+                                    {{ $products->render('pages.shop.pagination') }}
                                 </div>
                             </div>
                             <div id="shop-2" class="tab-pane">
@@ -118,7 +114,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="sidebar-wrapper">
-                        <div class="sidebar-widget mb-40" data-aos="fade-up" data-aos-delay="200">
+                        <div class="sidebar-widget mb-40">
                             <div class="search-wrap-2">
                                 <form class="search-2-form" action="#">
                                     <input id="search-input" placeholder="Search products..." type="text"
@@ -127,8 +123,41 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
-                            data-aos-delay="200">
+
+
+                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
+                            <div class="sidebar-widget-title mb-25">
+                                <h3>Product Categories</h3>
+                            </div>
+                            <div class="sidebar-list-style">
+                                <div class="categories-select">
+                                    @if ($selected_category == 'all' || $selected_category == null)
+                                        <div class="category-selected" data-category-id="all">All</div>
+                                    @else
+                                        @foreach ($categories as $category)
+                                            @if ($selected_category == $category->category_id)
+                                                <div class="category-selected" data-category-id="{{ $selected_category }}">
+                                                    {{ $category->name }}</div>
+                                            @endif
+                                        @endforeach
+                                    @endif
+
+                                    <div class="categories-options">
+                                        <div class="option" data-category-id="all">All</div>
+
+                                        @foreach ($categories as $category)
+                                            <div class="option" data-category-id="{{ $category->category_id }}">
+                                                {{ $category->name }}
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
                             <div class="sidebar-widget-title mb-30">
                                 <h3>Filter By Price</h3>
                             </div>
@@ -139,7 +168,7 @@
                                     </div>
                                     <div class="separator">-</div>
                                     <div class="field">
-                                        <input type="text" class="input-max" value="100,000,000đ" data-value="100000000"
+                                        <input type="text" class="input-max" value="60,000,000đ" data-value="60000000"
                                             readonly>
                                     </div>
                                 </div>
@@ -148,71 +177,52 @@
                                 </div>
                                 <div class="range-input">
                                     <input type="range" name="" id="min" class="range-min"
-                                        min="0" max="100000000" value="0">
+                                        min="0" max="60000000" value="0">
                                     <input type="range" name="" id="max" class="range-max"
-                                        min="0" max="100000000" value="100000000">
+                                        min="0" max="60000000" value="60000000">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
-                            data-aos-delay="200">
-                            <div class="sidebar-widget-title mb-25">
-                                <h3>Product Categories</h3>
-                            </div>
-                            <div class="sidebar-list-style">
-                                <ul>
-                                    @foreach ($categories as $category)
-                                        <li>
-                                            <a><label for="category_{{ $loop->index }}">{{ $category->name }}
-                                                </label><span>
-                                                    <input id="category_{{ $loop->index }}"
-                                                        data-id="{{ $category->category_id }}" class="js-cate-checkbox"
-                                                        type="checkbox"
-                                                        @if (in_array($category->category_id, $selected_categories)) @checked(true) @endif>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35" data-aos="fade-up"
-                            data-aos-delay="200">
+                        <div class="sidebar-widget sidebar-widget-border mb-40 pb-35">
                             <div class="sidebar-widget-title mb-25">
                                 <h3>Choose Colour</h3>
                             </div>
                             <div class="sidebar-widget-color sidebar-list-style">
-                                <ul>
-
+                                <div class="row g-2">
                                     @foreach ($colors as $color)
-                                        <li><a class="black">
-                                                <div class="d-flex">
-                                                    <div class="color" style="background-color: {{ $color->code }}">
-                                                    </div>
-                                                    <label for="color_{{ $loop->index }}">{{ $color->name }}</label>
-                                                </div>
-                                                <span>
-                                                    <input id="color_{{ $loop->index }}"
-                                                        data-id="{{ $color->color_id }}" class="js-color-checkbox"
-                                                        type="checkbox"
-                                                        @if (in_array($color->color_id, $selected_colors)) @checked(true) @endif>
-                                                </span>
-                                            </a></li>
+                                        <div class="col-auto">
+                                            <label class="form-colorinput form-colorinput-light">
+                                                <input name="color" type="checkbox" value=""
+                                                    class="form-colorinput-input" data-id="{{ $color->color_id }}"
+                                                    @if (in_array($color->color_id, $selected_colors)) @checked(true) @endif />
+                                                <span class="form-colorinput-color "
+                                                    style="background-color: {{ $color->code }}"></span>
+                                            </label>
+                                        </div>
                                     @endforeach
 
-
-                                </ul>
+                                </div>
                             </div>
                         </div>
-                        <div class="sidebar-widget" data-aos="fade-up" data-aos-delay="200">
+                        <div class="sidebar-widget">
                             <div class="sidebar-widget-title mb-25">
                                 <h3>Tags</h3>
                             </div>
                             <div class="sidebar-widget-tag">
-                                @foreach ($tags as $tag)
-                                    <a>#{{ $tag->name }}</a>
-                                @endforeach
+                                <div class="row g-2">
+                                    @foreach ($tags as $tag)
+                                        <div class="col-auto">
+                                            <label class="form-taginput form-taginput-light">
+                                                <input name="color" type="checkbox" value="white"
+                                                    class="form-taginput-input" data-id="{{ $tag->tag_id }}"
+                                                    @if (in_array($tag->tag_id, $selected_tags)) @checked(true) @endif />
+                                                <span class="form-taginput-tag">#{{ $tag->name }}</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+
+                                </div>
                             </div>
                         </div>
                     </div>

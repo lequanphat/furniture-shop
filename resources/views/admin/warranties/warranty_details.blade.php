@@ -36,7 +36,8 @@
                         <div class="card-body">
                             <h3>Warranty Info</h3>
                             <address>
-                                <strong>Warranty ID: </strong><span id="" class="m-0">{{ $warranty->warranty_id }}</span><br>
+                                <strong>Warranty ID: </strong><span id=""
+                                    class="m-0">{{ $warranty->warranty_id }}</span><br>
                                 <strong>Start date: </strong>{{ $warranty->start_date }}<br>
                                 <strong>End date: </strong>{{ $warranty->end_date }}<br>
                                 <strong>Warranty Period: </strong>{{ $warranty->product_detail->warranty_month }}<br>
@@ -46,7 +47,6 @@
                                 @else
                                     <span class="badge bg-red-lt">Not Within</span>
                                 @endif <br>
-                                <strong>Description: </strong>{{ $warranty->description }}<br>
                             </address>
                         </div>
                     </div>
@@ -57,7 +57,8 @@
                         <div class="card-body">
                             <h3>Order Infor</h3>
                             <address>
-                                <strong>Order ID: </strong><span id="" class="m-0">{{ $warranty->order->order_id }}</span><br>
+                                <strong>Order ID: </strong><span id=""
+                                    class="m-0">{{ $warranty->order->order_id }}</span><br>
                                 <strong>Status: </strong>{{ $warranty->order->get_status() }}<br>
                                 <strong>Paid: </strong>{{ $warranty->order->get_is_paid() }}<br>
                                 <strong>Total price:</strong>
@@ -82,10 +83,10 @@
                         <div class="card-body">
                             <h3>Product Info</h3>
                             <address>
-                                <strong>Product ID: </strong><span id="" class="m-0">{{ $warranty->product_detail->product_id }}</span><br>
+                                <strong>Product ID: </strong><span id=""
+                                    class="m-0">{{ $warranty->product_detail->product_id }}</span><br>
                                 <strong>Product detail ID: </strong> {{ $warranty->sku }} <br>
                                 <strong>Name: </strong> {{ $warranty->product_detail->name }} <br>
-                                <strong>Description: </strong> {{ $warranty->product_detail->description }} <br>
                             </address>
                         </div>
                     </div>
@@ -100,7 +101,8 @@
                                 <strong>Address: </strong>{{ $warranty->order->address }}<br>
                                 <strong>Phone number: </strong>{{ $warranty->order->phone_number }}<br>
                                 @isset($warranty->order->customer->email)
-                                    <strong>Email: </strong><a href="mailto:{{ $warranty->order->customer->email }}">{{ $warranty->order->customer->email }}</a>
+                                    <strong>Email: </strong><a
+                                        href="mailto:{{ $warranty->order->customer->email }}">{{ $warranty->order->customer->email }}</a>
                                 @endisset
                             </address>
                         </div>
@@ -115,8 +117,10 @@
                                 <address>
                                     <strong>Name: </strong> {{ $warranty->order->employee->full_name() }}<br>
                                     @if (isset($warranty->order->employee->default_addres))
-                                        <strong>Address: </strong>{{ $warranty->order->employee->default_address->address }}<br>
-                                        <strong>Phone number: </strong>{{ $warranty->order->employee->default_address->phone_number }}<br>
+                                        <strong>Address:
+                                        </strong>{{ $warranty->order->employee->default_address->address }}<br>
+                                        <strong>Phone number:
+                                        </strong>{{ $warranty->order->employee->default_address->phone_number }}<br>
                                     @endif
                                     <strong>Email: </strong><a href="mailto:#">{{ $warranty->order->employee->email }}</a>
                                 </address>

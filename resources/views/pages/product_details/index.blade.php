@@ -68,8 +68,8 @@
                                         <span class="old-price">
                                             {{ number_format($detailed_product->original_price, 0, '.', ',') }}đ</span>
                                     @endif
-                                    <span
-                                        class="js-unit-price new-price">{{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ</span>
+                                    <span class="js-unit-price new-price"
+                                        data-unit-price="{{ $detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100 }}">{{ number_format($detailed_product->original_price - ($detailed_product->original_price * $discount_percentage) / 100, 0, '.', ',') }}đ</span>
                                 </div>
                             </div>
                         @endforeach
@@ -182,5 +182,4 @@
         </div>
     </div>
     {{-- Related products --}}
-    @include('pages.product_details.related-products')
 @endsection

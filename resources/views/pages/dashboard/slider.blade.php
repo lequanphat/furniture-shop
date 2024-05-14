@@ -3,7 +3,7 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide">
                 <div class="intro-section slider-height-1 slider-content-center bg-img single-animation-wrap slider-bg-color-3"
-                    style="background-image:url({{ asset('images/slider/slider-bg-3.jpg') }})">
+                    style="background-image:url({{ asset('images/slider/slider-1.jpg') }})">
                     <div class="container">
                         <div class="row">
                             <div class="col-12 hm2-slider-animation">
@@ -23,7 +23,7 @@
             </div>
             <div class="swiper-slide">
                 <div class="intro-section slider-height-1 slider-content-center bg-img single-animation-wrap slider-bg-color-3"
-                    style="background-image:url({{ asset('images/slider/slider-bg-3-2.jpg') }})">
+                    style="background-image:url({{ asset('images/slider/slider-2.jpg') }})">
                     <div class="container">
                         <div class="row">
                             <div class="col-12 hm2-slider-animation">
@@ -43,7 +43,7 @@
             </div>
             <div class="swiper-slide">
                 <div class="intro-section slider-height-1 slider-content-center bg-img single-animation-wrap slider-bg-color-3"
-                    style="background-image:url({{ asset('images/slider/slider-bg-2-2.jpg') }})">
+                    style="background-image:url({{ asset('images/slider/slider-3.jpg') }})">
                     <div class="container">
                         <div class="row">
                             <div class="col-12 hm2-slider-animation">
@@ -63,7 +63,7 @@
             </div>
             <div class="swiper-slide">
                 <div class="intro-section slider-height-1 slider-content-center bg-img single-animation-wrap slider-bg-color-3"
-                    style="background-image:url({{ asset('images/slider/slider-bg-5.jpg') }})">
+                    style="background-image:url({{ asset('images/slider/slider-4.jpg') }})">
                     <div class="container">
                         <div class="row">
                             <div class="col-12 hm2-slider-animation">
@@ -83,7 +83,7 @@
             </div>
             <div class="swiper-slide">
                 <div class="intro-section slider-height-1 slider-content-center bg-img single-animation-wrap slider-bg-color-3"
-                    style="background-image:url({{ asset('images/slider/slider-bg-5-2.jpg') }})">
+                    style="background-image:url({{ asset('images/slider/slider-5.jpg') }})">
                     <div class="container">
                         <div class="row">
                             <div class="col-12 hm2-slider-animation">

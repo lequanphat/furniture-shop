@@ -20,7 +20,7 @@ class UpdateEmployee extends FormRequest
             'email' => 'required|email',
             'address' => 'required',
             'birth_date' => 'required|date',
-            'phone_number' => 'required|string|regex:/^0\d{9}$/',
+            'phone_number' => ['required', 'regex:/^0[0-9]{9,10}$/'],
             'first_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
             'last_name' => ['required', 'min:2', 'max:20', new AlphaSpace()],
         ];
@@ -39,8 +39,8 @@ class UpdateEmployee extends FormRequest
             'last_name.max' => 'Last name must not exceed 20 characters.',
             'address.max' => 'The address field is required.',
             'birth_date.max' => 'The birth date field is required.',
-            'phone_number.max' => 'The phone number field is required.',
-            'phone_number.regex' => 'The phone number is invalid.',
+            'phone_number.required' => 'The phone number field is required.',
+            'phone_number.regex' => 'The phone number format is invalid.',
         ];
     }
 }

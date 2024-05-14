@@ -2,7 +2,6 @@
 @section('content')
     {{-- Head banner --}}
     @include('components.head-banner')
-
     <div class="cart-area pt-100 pb-100">
         <div class="container">
             <div class="row">
@@ -29,7 +28,7 @@
                         <p class="js-cart-order-total-price total-price">0đ</p>
                     </div>
                     <div class="separate"></div>
-                    <button class="js-cart-checkout-btn checkout">Checkout</button>
+                    <button class="js-cart-checkout-btn checkout disable">Checkout</button>
 
                     <a href="/shop" class="continue-shopping">Continue Shopping</a>
                 </div>

@@ -1,22 +1,25 @@
 jQuery.noConflict();
 
-(function($) {
-    $(document).ready(function() {
-        const data_asset = $('#asset').attr('data-asset'); //lấy asset hình cho hàm filterWarranties
+(function ($) {
+    $(document).ready(function () {
+        let formatter = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 0,
+        });
 
-        $('#create-discount-form').submit(function(e) {
+        $('#create-discount-form').submit(function (e) {
             e.preventDefault();
-            var formData = $(this).serialize();
+            let formData = $(this).serialize();
             $.ajax({
-                url: '/admin/discounts/create',
+                url: '/admin/discounts',
                 type: 'POST',
                 data: formData,
-                success: function(response) {
+                success: function (response) {
                     $('#create_discount_response').removeClass('alert-danger d-none');
                     $('#create_discount_response').addClass('alert-success');
                     $('#create_discount_response').html(response.message);
+                    window.location.reload();
                 },
-                error: function(error) {
+                error: function (error) {
                     $('#create_discount_response').removeClass('alert-success d-none');
                     $('#create_discount_response').addClass('alert-danger');
                     $('#create_discount_response').html(Object.values(error.responseJSON.errors)[0][0]);
@@ -24,61 +27,65 @@ jQuery.noConflict();
             });
         });
 
-
-        $('#delete-confirm-modal').on('show.bs.modal', function(event) {
+        $('#delete-confirm-modal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var discount_Id = button.data('discount-id');
-            $(this).find('.modal-description').html(`If deleted, this brand will no longer be visible to Discount.`);
+            $(this)
+                .find('.modal-description')
+                .html(`Are you sure to delete discount with id <strong>${discount_Id} </strong> ?`);
             $(this).find('#confirm-btn').data('discount-id', discount_Id);
-            $(this).find('#confirm-btn').text('Yes, delete this ');
+            $(this).find('#confirm-btn').text('Yes, delete this discount');
         });
 
-
-        $('#delete-confirm-modal').on('click', '#confirm-btn', function(e) {
+        $('#delete-confirm-modal').on('click', '#confirm-btn', function (e) {
             var discount_id = $(this).data('discount-id');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
-                url: `/admin/discounts/delete/${discount_id}`,
+                url: `/admin/discounts/${discount_id}`,
                 type: 'DELETE',
-                success: function(response) {
-                    // var row = $('#discounts-table tr').filter(function () {
-                    //     return $(this).find('td:first').text() == response.discount.discount_id;
-                    // });
-                    // if (row) {
-                    //     row.html(``);
-                    // }
-                    // show success modal
-                    $('#success-notify-modal').addClass('show');
-                    $('#success-notify-modal').attr('style', 'display: block;');
-                    $('#success-notify-modal').removeAttr('aria-hidden');
-                    $('body').append('<div class="modal-backdrop fade show"></div>');
-
-                    $('#success-title').html('Deleted Supplier Successfully');
-                    $('#success-desc').html('This Supplier can not be able to access.');
+                success: function (response) {
+                    window.location.reload();
                 },
-                error: function(error) {
-                    // console.log(Object.values(error.responseJSON.errors)[0][0]);
+                error: function (error) {
                     $('#error-delete-modal').addClass('show');
                     $('#error-delete-modal').attr('style', 'display: block;');
                     $('#error-delete-modal').removeAttr('aria-hidden');
-                    // $('body').append('<div class="modal-backdrop fade show"></div>');
-                    // $('#error-message').text(Object.values(error.responseJSON.errors)[0][0]);
                 },
             });
         });
-        //
-        // $('.js-update-discount-btn').on('click', function() {
-        //     $('#modal-discount-update #discount_id').val($(this).data('discount-id'));
-        //     $('#modal-discount-update #title').val($(this).data('title'));
-        //     $('#modal-discount-update #update_editor').val($(this).data('description'));
-        //     $('#modal-discount-update #amount').val($(this).data('amount'));
-        //     $('#modal-discount-update #startdate').val($(this).data('start-date'));
-        //     $('#modal-discount-update #enddate').val($(this).data('end-date'));
-        //     $('#modal-discount-update #percentage').val($(this).data('percentage'));
-        //     $('#modal-discount-update #active').val($(this).data('is-active'));
-        // });
+
+        // restore
+
+        $('#restore-confirm-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var discount_Id = button.data('discount-id');
+            $(this)
+                .find('.modal-description')
+                .html(`Are you sure to restore discount with id <strong>${discount_Id} </strong> ?`);
+            $(this).find('#confirm-btn').data('discount-id', discount_Id);
+            $(this).find('#confirm-btn').text('Yes, restore this discount');
+        });
+
+        $('#restore-confirm-modal').on('click', '#confirm-btn', function (e) {
+            var discount_id = $(this).data('discount-id');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: `/admin/discounts/${discount_id}`,
+                type: 'PATCH',
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (error) {
+                    $('#error-delete-modal').addClass('show');
+                    $('#error-delete-modal').attr('style', 'display: block;');
+                    $('#error-delete-modal').removeAttr('aria-hidden');
+                },
+            });
+        });
 
         $('#modal-discount-update').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
@@ -91,35 +98,24 @@ jQuery.noConflict();
             modal.find('#startdate').val(button.data('start-date'));
             modal.find('#enddate').val(button.data('end-date'));
             modal.find('#active').val(button.data('is-active'));
-
         });
 
-
-        $('#Update-discount-form').submit(function(e) {
+        $('#Update-discount-form').submit(function (e) {
             e.preventDefault();
-            var formData = $(this).serialize();
+            let formData = $(this).serialize();
+            const discount_id = $('#discount_id').val();
             $.ajax({
-                url: '/admin/discounts/update',
-                type: 'PATCH',
+                url: `/admin/discounts/${discount_id}`,
+                type: 'PUT',
                 data: formData,
-                success: function(response) {
+                success: function (response) {
                     $('#update_discount_response').removeClass('alert-danger d-none');
                     $('#update_discount_response').addClass('alert-success');
                     $('#update_discount_response').html(response.message);
 
-                    var row = $('#discounts-table tr').filter(function () {
-                        return $(this).find('td:first').text() == response.discount_item.discount_id;
-                    });
-                    if (row) {
-                        row.html(
-                            createDiscountElement({
-                                discount_item: response.discount_item,
-
-                            }),
-                        );
-                    }
+                    window.location.reload();
                 },
-                error: function(error) {
+                error: function (error) {
                     $('#update_discount_response').removeClass('alert-success d-none');
                     $('#update_discount_response').addClass('alert-danger');
                     $('#update_discount_response').html(Object.values(error.responseJSON.errors)[0][0]);
@@ -130,34 +126,48 @@ jQuery.noConflict();
         function filterDiscount({ page }) {
             const search = $('#search').val();
             const type = $('#status_type').val();
-const status =$('#status').val();
+            const status = $('#status').val();
             // const sort = $('#select-discount-sort').val();
-            history.pushState(null, null, `/admin/discounts?search=${search}&page=${page}&type=${type}&status=${status}`);
-            // call ajax
-            $.ajax({
-                url: `/admin/discount/search?search=${search}&page=${page}&type=${type}&status=${status}`,
-                type: 'GET',
-                success: function(response) {
-                    let html = ''; //khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ warranties
-                    response.discounts.data.forEach((discount_item) => {
-                        html += `<tr>${createDiscountElement({
-                            discount_item,
-
-                        })}</tr>`;
-                    });
-                    $('#discounts-table').html(html); //rồi đặt lại bảng bằng dữ liệu đã được filter ra
-
-                    // hàm phân trang render pagination here
-                    renderPagination({
-                        current_page: response.discounts.current_page,
-                        last_page: response.discounts.last_page,
-                    });
-                },
-                error: function(error) {
-                    console.log(error);
-                },
-            });
+            history.pushState(
+                null,
+                null,
+                `/admin/discounts?search=${search}&page=${page}&type=${type}&status=${status}`,
+            );
+            window.location.reload();
         }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // search with ajax
+        $('#search').on(
+            'input',
+            debounce(function () {
+                filterDiscount({ page: 1 });
+            }, 500),
+        );
+
+        $('#status_type').change(function () {
+            filterDiscount({ page: 1 });
+        });
+        $('#status').change(function () {
+            filterDiscount({ page: 1 });
+        });
+        // select sort
+        $('#select-roles-sort').change(function () {
+            rolesPagination({ page: 1 });
+        });
+
+        // add product to discount
 
         function renderPagination({ current_page, last_page }) {
             let pagination = `<li class="page-item ${current_page === 1 ? 'disabled' : ''}">
@@ -200,104 +210,6 @@ const status =$('#status').val();
         </li>`;
             $('.pagination').html(pagination);
         }
-        function ceateDiscountDetail({discount_datail})
-        {
-
-        }
-
-        function createDiscountElement({ discount_item }) {
-            // const newTag = discount.new ? '<span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>' : '';
-
-
-            let is_active = '';//tính giờ gian status còn bảo hành ko
-            switch (discount_item.is_active){
-                case 0:
-                    is_active = '  <span class="badge bg-danger me-1"></span> Blocked';
-                    break;
-                case 1:
-                    is_active = ' <span class="badge bg-success me-1"></span> Active';
-                    break;
-                default:
-                    is_active  = 'error';
-                    break;
-            }
-
-
-
-
-            const update_action = ` <button class="btn p-2 d-none d-sm-inline-block  js-update-discount-btn" data-bs-toggle="modal" data-bs-target="#modal-discount-update" data-discount-id="${discount_item.discount_id}" data-title="${discount_item.title}" data-description="${discount_item.description}"  data-start-date="${discount_item.start_date}" data-end-date="${discount_item.end_date}" data-is-active="${discount_item.is_active}" data-percentage="${discount_item.percentage}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                    height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-pencil">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path
-                        d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                    <path d="M13.5 6.5l4 4" />
-                </svg>
-            </button>`;
-
-            const delete_action = `
-                                                <button data-bs-toggle="modal" data-bs-target="#delete-confirm-modal"
-                                                      data-discount-id="${discount_item.discount_id}"  class="btn p-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                         height="24" viewBox="0 0 24 24" fill="none"
-                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                         stroke-linejoin="round"
-                                                         class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M4 7l16 0" />
-                                                        <path d="M10 11l0 6" />
-                                                        <path d="M14 11l0 6" />
-                                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                                    </svg>
-                                                </button>
-
-          `;
-            const view_action = `   <a href="/admin/discounts/viewDetail/${discount_item.discount_id}"class="btn p-2">
-
-<svg
-
-                                                        xmlns="http://www.w3.org/2000/svg" width="24"
-                                                        height="24" viewBox="0 0 24 24" fill="none"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-eye">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                                        <path
-                                                            d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                                                    </svg>
-
-          </a>`;
-
-            return `
-            <td>${discount_item.discount_id}</td>
-            <td>${discount_item.title}</td>
-            <td>${discount_item.percentage}</td>
-
-            <td>${discount_item.start_date}</td>
-            <td>${discount_item.end_date}</td>
-
-            <td>${is_active}</td>
-
-
-
-
-            <td>${update_action} ${delete_action} ${view_action}</td>
-
-
-
-        `;
-        }
-
-        $(document).on('click', '.js-discount-pagination .pagination .page-link', function(event) {
-            var button = $(event.target);
-            const page = button.data('page');
-            filterDiscount({ page });
-        });
 
         function debounce(func, wait) {
             let timeout;
@@ -311,23 +223,145 @@ const status =$('#status').val();
             };
         }
 
-        // search with ajax
-        $('#search').on(
+        $(document).on('click', '.js-add-product', function (event) {
+            event.preventDefault();
+            const sku = $(this).data('sku');
+            const discount_id = $('#discount_id').val();
+            console.log({ discount_id, sku });
+            $.ajax({
+                url: `/admin/discount/${discount_id}/${sku}`,
+                type: 'POST',
+                data: {},
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    console.log(response);
+                    window.location.reload();
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        });
+        const filterDetailedProducts = ({ page }) => {
+            const discount_id = $('#discount_id').val();
+            const search = $('#search-detailed-products').val();
+            if (!page) {
+                page = 1;
+            }
+            const url = `/admin/discount/${discount_id}/get_products_not_in_discount?search=${search}&page=${page}`;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    let html = '';
+                    for (let i = 0; i < response.products.data.length; i++) {
+                        const detailed_product = response.products.data[i];
+                        const image = detailed_product.images.length > 0 ? detailed_product.images[0].url : '';
+                        html += `<tr data-sku="${detailed_product.sku}">
+                        <td>
+                            <div class="d-flex py-1 align-items-center">
+                                <span class="avatar me-2 custom-product-image"
+                                    style="background-image: url(${image});">
+                                </span>
+                                <div class="flex-1">
+                                    <div class="font-weight-medium">
+                                        <h4 class="m-0">${detailed_product.name}</h4>
+                                    </div>
+                                    <div class="text-muted">
+                                        <a href="#"class="text-reset">#${detailed_product.sku}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div><p class="text-reset m-0">${detailed_product.color.name}</p></div>
+                            <div class="text-muted "><p class="text-reset m-0">${detailed_product.size}</p></div>
+                        </td>
+                        <td class="js-detailed-product-quantities">${detailed_product.quantities}</td>
+                        <td class="text-danger">
+                        ${formatter.format(detailed_product.original_price)}đ
+                        </td>
+                        <td>
+                        <div class="custom-table-action">
+                        <button class="js-add-product btn p-2" data-sku="${detailed_product.sku}">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24"
+                                viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                                <path stroke="none" d="M0 0h24v24H0z"
+                                    fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                        </button>
+                    </div>
+                        </td>
+                    </tr>`;
+                    }
+                    $('#detailed-products-table').html(html);
+                    $('.js-detailed-products-pagination .pagination').html(
+                        renderPagination({
+                            current_page: response.products.current_page,
+                            last_page: response.products.last_page,
+                        }),
+                    );
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        };
+        $('#search-detailed-products').on(
             'input',
-            debounce(function() {
-                filterDiscount({ page: 1 });
+            debounce(function () {
+                filterDetailedProducts({ page: 1 });
             }, 500),
         );
 
-        $('#status_type').change(function () {
-            filterDiscount({ page: 1 });
+        $(document).on('click', '.js-detailed-products-pagination .pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            filterDetailedProducts({ page });
         });
-        $('#status').change(function () {
-            filterDiscount({ page: 1 });
+
+        $('#delete-product-confirm-modal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget);
+            var sku = button.data('sku');
+            var discount_id = button.data('discount-id');
+            var name = button.data('name');
+            $(this)
+                .find('.modal-description')
+                .html(`Do you want to remove product <strong>${sku} - ${name}</strong> from this discount ?`);
+            $(this).find('#confirm-btn').text('Yes, remove this product');
+            $(this).find('#confirm-btn').data('sku', sku);
+            $(this).find('#confirm-btn').data('discount-id', discount_id);
         });
-        // select sort
-        $('#select-roles-sort').change(function() {
-            rolesPagination({ page: 1 });
+
+        $(document).on('click', '#delete-product-confirm-modal #confirm-btn', function (e) {
+            const sku = $(this).data('sku');
+            const discount_id = $(this).data('discount-id');
+            $.ajax({
+                url: `/admin/discount/${discount_id}/${sku}`,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (data) {
+                    $('#detail_discount_table tr td a.js-sku')
+                        .filter(function () {
+                            return $(this).text() == `#${sku}`;
+                        })
+                        .closest('tr')
+                        .remove();
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
         });
     });
 })(jQuery);

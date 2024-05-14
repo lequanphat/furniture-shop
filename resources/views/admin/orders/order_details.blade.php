@@ -20,17 +20,32 @@
                                 Back
                             </a>
                         </span>
-                        <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                            data-bs-target="#create-detailed-order-modal" data-order-id="{{ $order->order_id }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M12 5l0 14" />
-                                <path d="M5 12l14 0" />
-                            </svg>
-                            Add product
-                        </a>
+                        @if ($order->created_by != null)
+                            @can('create order')
+                                <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                                    data-bs-target="#create-detailed-order-modal" data-order-id="{{ $order->order_id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M12 5l0 14" />
+                                        <path d="M5 12l14 0" />
+                                    </svg>
+                                    Add product
+                                </a>
+                                <a data-bs-toggle="modal" data-bs-target="#create-detailed-order-modal"
+                                    class="btn btn-primary d-sm-none btn-icon" aria-label="Create new report">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M12 5l0 14" />
+                                        <path d="M5 12l14 0" />
+                                    </svg>
+                                </a>
+                            @endcan
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -106,7 +121,7 @@
                             <div class="card-body">
                                 <h3>Order note</h3>
                                 <address>
-                                    {{ $order->note }}
+                                    {!! $order->note !!}
                                 </address>
                             </div>
                         </div>
@@ -124,69 +139,89 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Color</th>
-                                            <th>Size</th>
-                                            <th>Unit Price</th>
-                                            <th>Quantities</th>
+                                            <th>Color & Size</th>
+                                            <th>Quantities x Unit Price</th>
                                             <th>Warranty</th>
                                             <th>Total price</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @foreach ($detailed_orders as $detailed_order)
+                                    <tbody id="detailed-order-table">
+                                        @if ($detailed_orders->isEmpty())
                                             <tr>
-                                                <td>
-                                                    <div class="d-flex py-1 align-items-center">
-                                                        <span class="avatar me-2"
-                                                            style="background-image: url(@if (isset($detailed_order->detailed_product->images->first()->url)) {{ $detailed_order->detailed_product->images->first()->url }} @endif); width: 80px; height: 80px;">
-                                                        </span>
-                                                        <div class="flex-fill">
-                                                            <div class="font-weight-medium">
-                                                                <h3 class="m-0">
-                                                                    {{ $detailed_order->detailed_product->name }}
-                                                                    @if ($detailed_order->detailed_product->created_at->diffInDays() < 7)
-                                                                        <span
-                                                                            class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
-                                                                        </span>
-                                                                    @endif
-                                                                </h3>
-                                                            </div>
-                                                            <div class="text-muted">
-                                                                <a href="#"
-                                                                    class="text-reset">#{{ $detailed_order->detailed_product->sku }}</a>
+                                                <td colspan="6" class="text-center text-muted">No data available</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($detailed_orders as $detailed_order)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex py-1 align-items-center">
+                                                            <span class="avatar me-2"
+                                                                style="background-image: url(@if (isset($detailed_order->detailed_product->images->first()->url)) {{ $detailed_order->detailed_product->images->first()->url }} @endif); width: 80px; height: 80px; flex-shrink: 0;">
+                                                            </span>
+                                                            <div class="flex-fill">
+                                                                <div class="font-weight-medium">
+                                                                    <h3 class="m-0">
+                                                                        {{ $detailed_order->detailed_product->name }}
+                                                                        @if ($detailed_order->detailed_product->created_at->diffInDays() < 7)
+                                                                            <span
+                                                                                class="badge badge-sm bg-green-lt text-uppercase ms-auto">New
+                                                                            </span>
+                                                                        @endif
+                                                                    </h3>
+                                                                </div>
+                                                                <div class="text-muted">
+                                                                    <a href="#"
+                                                                        class="text-reset js-sku">#{{ $detailed_order->detailed_product->sku }}</a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                </td>
-                                                <td>
-                                                    <div class="col-auto rounded"
-                                                        style="background: {{ $detailed_order->detailed_product->color->code }}; width: 20px; height: 20px;">
-                                                    </div>
-                                                </td>
-                                                <td>{{ $detailed_order->detailed_product->size }}</td>
-                                                <td>{{ number_format($detailed_order->unit_price) }}đ
-                                                </td>
-                                                <td>{{ $detailed_order->quantities }}</td>
-                                                <td>{{ $detailed_order->detailed_product->warranty_month }} Months</td>
-                                                <td class="text-success">
-                                                    {{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
-                                                <td>
-                                                    <!--nút sửa, order detail chỉ nên ửa được quantity-->
-                                                    <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-1"
-                                                        title="Update" data-bs-toggle="modal"
-                                                        data-bs-target="#UpdateOrderDetailModal"
-                                                        data-order-id="{{ $order->order_id }}"
-                                                        data-product-detail-id="{{ $detailed_order->detailed_product->sku }}"
-                                                        data-quantities="{{ $detailed_order->quantities }}"
-                                                        data-unit-price="{{ $detailed_order->unit_price }}">
-                                                        <img src="{{ asset('svg/edit.svg') }}" style="width: 18px;" />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                                    </td>
+                                                    <td>
+                                                        <p class="m-0">Color:
+                                                            {{ $detailed_order->detailed_product->color->name }}
+                                                        </p>
+                                                        <p class="my-1">Size:
+                                                            {{ $detailed_order->detailed_product->size }}</p>
+                                                    </td>
+                                                    <td>{{ $detailed_order->quantities }} x
+                                                        {{ number_format($detailed_order->unit_price) }}đ
+                                                    </td>
+                                                    <td>{{ $detailed_order->detailed_product->warranty_month }} Months</td>
+                                                    <td class="text-danger">
+                                                        {{ number_format($detailed_order->unit_price * $detailed_order->quantities, 0, '.', ',') }}đ
+                                                    <td>
+                                                        @if ($order->created_by != null)
+                                                            @can('delete order')
+                                                                <a href="#" class="btn p-2"
+                                                                    data-sku="{{ $detailed_order->detailed_product->sku }}"
+                                                                    data-order-id="{{ $detailed_order->order_id }}"
+                                                                    data-name="{{ $detailed_order->detailed_product->name }}"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#delete-confirm-modal">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                                                                        <path stroke="none" d="M0 0h24v24H0z"
+                                                                            fill="none" />
+                                                                        <path d="M4 7l16 0" />
+                                                                        <path d="M10 11l0 6" />
+                                                                        <path d="M14 11l0 6" />
+                                                                        <path
+                                                                            d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                                    </svg>
+                                                                </a>
+                                                            @endcan
+                                                        @endif
 
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                                 <div class="d-flex justify-content-end my-2">
@@ -196,11 +231,13 @@
                     </div>
                 </div>
             </div>
-
             @include('admin.components.footer')
         </div>
         {{-- Modal --}}
         @include('admin.orders.create_detailed_order')
+
+        <div>@include('admin.components.delete_confirm_modal')</div>
         {{-- Script --}}
         <script src="{{ asset('js/order_api.js') }}" defer></script>
+
     @endsection

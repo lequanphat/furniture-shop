@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('receiving_reports', function (Blueprint $table) {
             $table->increments('receiving_report_id');
-            $table->decimal('total_price', 10, 2);
+            $table->decimal('total_price', 14, 2);
             $table->unsignedInteger('supplier_id');
             $table->unsignedInteger('created_by');
             $table->timestamps();

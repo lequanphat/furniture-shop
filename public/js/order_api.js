@@ -1,9 +1,7 @@
 jQuery.noConflict();
 (function ($) {
     $(document).ready(function () {
-        const data_asset = $('#asset').attr('data-asset');
-
-        function createOrderElement({ order }) {
+        function createOrderElement({ order, can_update = false }) {
             const newTag = order.new
                 ? `<span
             class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>`
@@ -11,9 +9,11 @@ jQuery.noConflict();
             let is_paid = '';
             switch (order.is_paid) {
                 case 0:
+                case false:
                     is_paid = '<span class="badge bg-yellow-lt">Pending Payment</span>';
                     break;
                 case 1:
+                case true:
                     is_paid = '<span class="badge bg-green-lt">Payment Received</span>';
                     break;
                 default:
@@ -23,18 +23,23 @@ jQuery.noConflict();
             let status = '';
             switch (order.status) {
                 case 0:
+                case '0':
                     status = '<span class="badge bg-yellow-lt">Unconfirmed</span>';
                     break;
                 case 1:
+                case '1':
                     status = '<span class="badge bg-azure-lt">Confirmed</span>';
                     break;
                 case 2:
+                case '2':
                     status = '<span class="badge bg-purple-lt">In transit</span>';
                     break;
                 case 3:
+                case '3':
                     status = '<span class="badge bg-green-lt">Delivered</span>';
                     break;
                 case 4:
+                case '4':
                     status = '<span class="badge bg-red-lt">Canceled</span>';
                     break;
                 default:
@@ -52,7 +57,8 @@ jQuery.noConflict();
                         d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
                 </svg>
             </a>`;
-            const update_action = ` <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
+            const update_action = can_update
+                ? ` <button type="button" class="js-update-order-btn btn  mr-2 px-2 py-2"
                 title="Update" data-bs-toggle="modal"
                 data-bs-target="#update-order-modal"
                 data-order-id="${order.order_id}"
@@ -72,7 +78,8 @@ jQuery.noConflict();
                     <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
                     <path d="M13.5 6.5l4 4" />
                 </svg>
-            </button>`;
+            </button>`
+                : '';
             return `<td>${order.order_id}</td>
                 <td>
                     <div class="d-flex py-1 align-items-center">
@@ -85,8 +92,8 @@ jQuery.noConflict();
                         </div>
                     </div>
                 </td>
-                <td><span>${order.howmanydaysago}</span></td>
-                <td>${order.money}đ</td>
+                <td class="text-muted"><span>${order.howmanydaysago}</span></td>
+                <td class="text-danger">${order.money}đ</td>
                 <td>${is_paid}</td>
                 <td>${status}</td>
                 <td>
@@ -114,6 +121,7 @@ jQuery.noConflict();
                     $('#create_order_response').removeClass('alert-danger');
                     $('#create_order_response').addClass('alert-success');
                     $('#create_order_response').html(response.message);
+                    window.location.href = `/admin/orders/${response.order.order_id}`;
                 },
                 error: function (error) {
                     console.log(error);
@@ -139,11 +147,14 @@ jQuery.noConflict();
             modal.find('#totalPrice').val(button.data('total-price'));
             if (button.data('is-paid')) {
                 modal.find('#paid').attr('checked', true);
-            } else modal.find('#paid').attr('checked', false);
+            } else {
+                modal.find('#paid').attr('checked', false);
+            }
             modal.find('#status').val(button.data('status'));
             modal.find('#receiver_name').val(button.data('receiver-name'));
             modal.find('#address').val(button.data('address'));
             modal.find('#phone_number').val(button.data('phone-number'));
+
             if (button.data('customer-id') === '') {
                 modal.find('#customer_id').val(-1);
             } else {
@@ -163,10 +174,17 @@ jQuery.noConflict();
                 success: function (response) {
                     console.log({ response });
                     // Handle the success response
+
                     $('#update_order_response').removeClass('d-none');
                     $('#update_order_response').removeClass('alert-danger');
                     $('#update_order_response').addClass('alert-success');
                     $('#update_order_response').html(response.message);
+
+                    const tr = $('#order-table tr').filter(function () {
+                        return $(this).find('td:first').text() == order_id;
+                    });
+
+                    tr.html(createOrderElement({ order: response.order, can_update: true }));
                 },
                 error: function (error) {
                     console.log({ error });
@@ -230,7 +248,7 @@ jQuery.noConflict();
                 </svg>
             </a>
         </li>`;
-            $('.pagination').html(pagination);
+            return pagination;
         }
         /////////////////////////////////hàm filter cho trang order chính để phân trang và earch ajax
         const filterOrders = ({ page }) => {
@@ -259,17 +277,24 @@ jQuery.noConflict();
                 success: function (response) {
                     //console.log(response);
 
-                    let html = ''; //khi lấy dữ liệu thành công, bắt đầu đặt lại các dòng trong bảng theo kết quả từ orders
-                    for (let item of response.order_for_ajax.data) {
-                        html += `<tr>${createOrderElement({ order: item })}</tr>`;
+                    let html = '';
+                    if (response.orders.data.length == 0) {
+                        html = '<tr><td colspan="7" class="text-center text-muted">No data available</td></tr>';
+                    } else {
+                        html = '';
+                        for (let item of response.orders.data) {
+                            html += `<tr>${createOrderElement({ order: item, can_update: response.can_update })}</tr>`;
+                        }
                     }
-                    $('#order-table').html(html); //rồi đặt lại bảng bằng dữ liệu đã được filter ra
+                    $('#order-table').html(html);
 
                     // render pagination here
-                    renderPagination({
-                        current_page: response.order_for_ajax.current_page,
-                        last_page: response.order_for_ajax.last_page,
-                    });
+                    $('.js-orders-pagination .pagination').html(
+                        renderPagination({
+                            current_page: response.orders.current_page,
+                            last_page: response.orders.last_page,
+                        }),
+                    );
                 },
                 error: function (error) {
                     alert('error');
@@ -311,11 +336,16 @@ jQuery.noConflict();
             }, 500),
         );
 
+        $(document).on('click', '.js-orders-pagination .pagination .page-link', function (event) {
+            var button = $(event.target);
+            const page = button.data('page');
+            filterOrders({ page });
+        });
+
         //phần phân trang để chung ở dưới
 
-        ///////////////////////////////// filter cho bảng dữ liệu, liên quan tới tìm kiếm và phân trang của order detail
         const filterDetailedProducts = ({ page }) => {
-            const search = $('#search-detailed-products').val(); //lấy value từ ô tìm kiếm bên create_detailed_order
+            const search = $('#search-detailed-products').val();
             if (!page) {
                 page = 1;
             }
@@ -324,33 +354,17 @@ jQuery.noConflict();
                 url: url,
                 type: 'GET',
                 success: function (response) {
-                    console.log('====================================');
-                    console.log(response.detailed_products.data);
-                    console.log('====================================');
-                    const now = new Date();
-                    now.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
                     let formatter = new Intl.NumberFormat('en-US', {
                         minimumFractionDigits: 0,
                     });
-                    let html = ''; //khởi tạo biến html để hiển thị cho bảng thêm sản phẩm order
+                    let html = '';
                     for (let i = 0; i < response.detailed_products.data.length; i++) {
-                        //đối với mỗi dòng dữ liệu, tính giá tiền từ phần trăm discount
                         const detailed_product = response.detailed_products.data[i];
-                        let discount_percentage = 0;
-                        for (let j = 0; j < detailed_product.product_discounts.length; j++) {
-                            const startDate = new Date(detailed_product.product_discounts[j].discount.start_date);
-                            const endDate = new Date(detailed_product.product_discounts[j].discount.end_date);
-                            if (startDate.getTime() <= now.getTime() && now.getTime() <= endDate.getTime()) {
-                                discount_percentage += detailed_product.product_discounts[j].discount.percentage;
-                            }
-                        }
-                        let unit_price =
+                        const image = detailed_product.images.length > 0 ? detailed_product.images[0].url : '';
+                        const total_discount_percentage = detailed_product.total_discount_percentage;
+                        const unit_price =
                             detailed_product.original_price -
-                            (detailed_product.original_price * discount_percentage) / 100;
-                        let image = '';
-                        if (detailed_product.images.length > 0) {
-                            image = detailed_product.images[0].url;
-                        } //sau khi tính xong bắt đầu tạo dòng html để hiển thị lên bảng
+                            detailed_product.original_price * (total_discount_percentage / 100);
                         html += `<tr data-sku="${detailed_product.sku}">
                         <td>
                             <div class="d-flex py-1 align-items-center">
@@ -374,7 +388,7 @@ jQuery.noConflict();
                         <td class="js-detailed-product-quantities">${detailed_product.quantities}</td>
                         <td>
                         ${
-                            discount_percentage > 0
+                            total_discount_percentage > 0
                                 ? `<del>${formatter.format(detailed_product.original_price)}đ</del>`
                                 : ''
                         }
@@ -392,8 +406,17 @@ jQuery.noConflict();
                             }
                                 <button class="js-add-product btn p-2"
                                 ${detailed_product.quantities == 0 ? 'disabled' : ''} >
-                                    <img src="${data_asset}svg/plus.svg"
-                                        style="width: 18px;" />
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24"
+                                viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="action-btn-icon icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                                <path stroke="none" d="M0 0h24v24H0z"
+                                    fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
                                 </button>
                             </div>
                         </td>
@@ -401,54 +424,12 @@ jQuery.noConflict();
                     }
                     $('#detailed-products-table').html(html); //mớ trên đó là tạo dữ liệu, giờ thì set dòng html đó vào bảng
 
-                    // pagination, tạo dòng phân trang sau khi đã tạo các dòng dữ liệu
-                    let pagination = `<li class="page-item ${
-                        response.detailed_products.current_page === 1 ? 'disabled' : ''
-                    }">
-                    <a class="page-link" href="#" data-page="${response.detailed_products.current_page - 1}">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="icon"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M15 6l-6 6l6 6" />
-                        </svg>
-                        prev
-                    </a>
-                </li>`;
-
-                    for (let i = 0; i < response.detailed_products.last_page; i++) {
-                        pagination += `
-                            <li class="page-item ${
-                                response.detailed_products.current_page === i + 1 ? 'active mx-1' : ''
-                            }">
-                                <a class="page-link " href="#" rel="first" data-page="${i + 1}">${i + 1}</a>
-                            </li>`;
-                    }
-                    pagination += `<li class="page-item ${
-                        response.detailed_products.current_page === response.detailed_products.last_page
-                            ? 'disabled'
-                            : ''
-                    }">
-                    <a class="page-link" href="#" data-page="${response.detailed_products.current_page + 1}">
-                        next
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M9 6l6 6l-6 6" />
-                        </svg>
-                    </a>
-                </li>`;
-                    $('.pagination').html(pagination);
+                    $('.js-detailed-products-pagination .pagination').html(
+                        renderPagination({
+                            current_page: response.detailed_products.current_page,
+                            last_page: response.detailed_products.last_page,
+                        }),
+                    );
                 },
                 error: function (error) {
                     console.log(error);
@@ -463,12 +444,10 @@ jQuery.noConflict();
             }, 500),
         );
 
-        // pagination cho trang order và detail order luôn
-        $(document).on('click', '.pagination .page-link', function (event) {
+        $(document).on('click', ' .js-detailed-products-pagination .pagination .page-link', function (event) {
             var button = $(event.target);
             const page = button.data('page');
             filterDetailedProducts({ page });
-            filterOrders({ page });
         });
 
         $(document).on('input', '.quantities-input', function () {
@@ -479,12 +458,15 @@ jQuery.noConflict();
                 $(this).val(parseInt($(this).val()));
             }
         });
+
+        $(document).on('input', '.quantities-input', function (event) {
+            $(this).removeClass('danger');
+        });
+
         $(document).on('click', '.js-add-product', function (event) {
-            const _this = this;
             let quantities = $(this).closest('tr').find('.quantities-input').val();
             if (quantities === '' || quantities <= 0) {
-                alert('Please input quantities');
-                return;
+                $(this).closest('tr').find('.quantities-input').addClass('danger');
             }
             quantities = parseInt(quantities);
             const sku = $(this).closest('tr').data('sku');
@@ -504,10 +486,7 @@ jQuery.noConflict();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (response) {
-                    console.log(response);
-                    const quantities_instance = $(_this).closest('tr').find('.js-detailed-product-quantities');
-                    quantities_instance.text(parseInt(quantities_instance.text()) - quantities);
-                    $(_this).closest('tr').find('.quantities-input').val(0);
+                    window.location.reload();
                 },
                 error: function (error) {
                     console.log(error);
@@ -516,5 +495,41 @@ jQuery.noConflict();
         });
 
         // on modal show
+        $('#delete-confirm-modal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget);
+            var sku = button.data('sku');
+            var order_id = button.data('order-id');
+            var name = button.data('name');
+            console.log(sku, name);
+            $(this)
+                .find('.modal-description')
+                .html(`Do you want to remove product <strong>${sku} - ${name}</strong> from this order ?`);
+            $(this).find('#confirm-btn').text('Yes, remove this product');
+            $(this).find('#confirm-btn').data('sku', sku);
+            $(this).find('#confirm-btn').data('order-id', order_id);
+        });
+
+        $(document).on('click', '#delete-confirm-modal #confirm-btn', function (e) {
+            const sku = $(this).data('sku');
+            const order_id = $(this).data('order-id');
+            $.ajax({
+                url: `/admin/orders/${order_id}/delete/${sku}`,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (data) {
+                    $('#detailed-order-table tr td a.js-sku')
+                        .filter(function () {
+                            return $(this).text() == `#${sku}`;
+                        })
+                        .closest('tr')
+                        .remove();
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        });
     });
 })(jQuery);

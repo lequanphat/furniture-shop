@@ -10,7 +10,8 @@ class OrderDetail extends Model
     use HasFactory;
     protected $table = 'order_details';
     protected $fillable = ['order_id', 'sku', 'quantities', 'unit_price'];
-
+    protected $primaryKey = ['order_id', 'sku'];
+    public $incrementing = false;
 
     public function detailed_product()
     {

@@ -17,7 +17,7 @@ class CreateDetailedOrder extends FormRequest
         // validate here
         return [
             'sku' => 'required',
-            'quantities' => 'required',
+            'quantities' => 'required|numeric',
             'unit_price' => 'required',
         ];
     }
@@ -27,6 +27,7 @@ class CreateDetailedOrder extends FormRequest
         return [
             'sku.required' => 'The sku field is required.',
             'quantities.required' => 'The quantities field is required.',
+            'quantities.numeric' => 'The quantities field must be a number.',
             'unit_price.required' => 'The unit price field is required.',
         ];
     }

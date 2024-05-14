@@ -37,6 +37,14 @@ class WarrantyController extends Controller
                 $query->where('warranty_id', 'LIKE', '%' . $search . '%')
                     ->orwhere('order_id', 'LIKE', '%' . $search . '%')
                     ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('order', function ($query) use ($search) {
+                $query->where('phone_number', 'LIKE', '%' . $search . '%')
+                    ->orwhere('receiver_name', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('product_detail', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orwhere('sku', 'LIKE', '%' . $search . '%');
             });
 
         $today = date('Y-m-d');
@@ -60,7 +68,7 @@ class WarrantyController extends Controller
             $query = $query->orderBy('sku', 'asc');
         }
 
-        $warranties = $query->paginate(5);
+        $warranties = $query->paginate(8);
 
 
         $data = [
@@ -101,7 +109,6 @@ class WarrantyController extends Controller
 
 
 
-
     //sửa thông tin warranty
     public function warranty_update(Request $request)
     {
@@ -131,32 +138,6 @@ class WarrantyController extends Controller
         }
     }
 
-    //tìm kiếm warranty
-    // public function warranty_search_ui(Request $request)
-    // {
-    //     $search = $request->input('search');
-    //     $search_date = $request->input('start_date');
-
-    //     $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->paginate(5);
-    //     if (isset($search) && isset($search_date)){
-    //         $warranty = Warranty::where('order_id', 'LIKE', '%' . $search . '%')->whereDate('start_date',$search_date)->paginate(5);
-    //     } else {
-    //         if(isset($search_date)){
-    //             $warranty = Warranty::whereDate('start_date',$search_date)->paginate(5);
-    //         }
-    //     }
-
-    //     $data = [
-    //         'page' => 'Warranties',
-    //         'warranties' => $warranty,
-    //         'orders' => Order::all(),
-    //         'order_detail' => OrderDetail::all(),
-    //         'all_product_detail' => ProductDetail::all(),
-    //         'search' => $search,
-    //         'search_date' => $search_date,
-    //     ];
-    //     return view('admin.warranties.index', $data);
-    // }
 
     //hàm trả json về cho bên warranty_api lấy làm việc trong filterWarranties
     public function search_warranties_ajax()
@@ -177,12 +158,20 @@ class WarrantyController extends Controller
             $day_last = Carbon::tomorrow();
         }
 
-        //search theo khoảng thời gian tạo và thanh tìm kiếm
+        // search theo khoảng thời gian tạo và thanh tìm kiếm
         $query = Warranty::with('product_detail', 'order')->whereBetween('created_at', [$day_first, $day_last])
             ->where(function ($query) use ($search) {
                 $query->where('warranty_id', 'LIKE', '%' . $search . '%')
                     ->orwhere('order_id', 'LIKE', '%' . $search . '%')
                     ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('order', function ($query) use ($search) {
+                $query->where('phone_number', 'LIKE', '%' . $search . '%')
+                    ->orwhere('receiver_name', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('product_detail', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')
+                    ->orwhere('sku', 'LIKE', '%' . $search . '%');
             });
 
         //search theo còn trong bảo hành ko
@@ -208,7 +197,7 @@ class WarrantyController extends Controller
             $query = $query->orderBy('sku', 'asc');
         }
 
-        $warranties = $query->paginate(5);
+        $warranties = $query->paginate(8);
 
         foreach ($warranties as $warranty) {
             $warranty->is_active = $warranty->is_active();

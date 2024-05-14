@@ -10,6 +10,9 @@ use App\Http\Controllers\HotDealController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\FacebookController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReceiptsController;
@@ -45,12 +48,12 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('forgot-password-verification', [AuthController::class, 'forgot_password_verification_ui'])->where('id', '[0-9]+');;
 
     // google login
-    Route::get('auth/google', 'App\Http\Controllers\GoogleController@redirectToGoogle')->name('google.login');
-    Route::get('auth/google/callback', 'App\Http\Controllers\GoogleController@handleGoogleCallback');
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
     // facebook login
-    Route::get('auth/facebook', 'App\Http\Controllers\FacebookController@redirectToFacebook')->name('facebook.login');
-    Route::get('auth/facebook/callback', 'App\Http\Controllers\FacebookController@handleFacebookCallback');
+    Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->name('facebook.login');
+    Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
 });
 
 Route::get('logout', [AuthController::class, 'logout']);
@@ -69,9 +72,11 @@ Route::middleware([PublicMiddleware::class])->group(function () {
     Route::get('/checkout', [PagesController::class, 'checkout'])->name('checkout');;
 
     Route::get('/products', [ProductController::class, 'get_products']);
-    Route::get('/top5deal', [HotDealController::class, 'get_Deal_of_Date_product']);
     Route::get('/lastproducts', [HotDealController::class, 'get_LastestProduct']);
     Route::get('/bestseller', [HotDealController::class, 'get_BestSeller']);
+
+
+    Route::get('/cart/async', [PagesController::class, 'asyncCart']);
 });
 
 Route::middleware([PrivateMiddleware::class])->group(function () {
@@ -79,8 +84,8 @@ Route::middleware([PrivateMiddleware::class])->group(function () {
     Route::get('/change-password', [PagesController::class, 'change_password'])->name('change_password_ui');
     Route::post('/change-password', [AuthController::class, 'change_password'])->name('change_password');
     //account
-    Route::get('/account', [ProfileController::class, 'customer_ui'])->name('my_account');
-    Route::post('/account/profile/update', [ProfileController::class, 'update_customer']);
+    Route::get('/account', [PagesController::class, 'profile'])->name('my_account');
+    Route::post('/account/profile/update', [PagesController::class, 'update_profile']);
     //address_card
     Route::post('/account/profile/addresscard/update', [AddressController::class, 'update_address']);
     Route::post('/account/profile/addresscard/create', [AddressController::class, 'create_address']);
@@ -100,10 +105,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // admin api
     Route::get('/admin', [HomeController::class, 'index'])->name('admin');
 
-    // profile routes
-    Route::get('/admin/profile/{user_id}', [ProfileController::class, 'user_ui'])->name('profiles.profile_details');
-    Route::post('/admin/profile', [ProfileController::class, 'update_employee']);
-
+    Route::get('/admin/dashboard/orders-statistic', [HomeController::class, 'getOrdersStatistic']);
+    
 
     // users routes
     Route::middleware(['can:read users'])->group(function () {
@@ -150,9 +153,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     // categories routes
     Route::middleware(['can:read categories'])->group(function () {
         Route::get('/admin/categories', [CategoryController::class, 'category_ui']);
-
         Route::get('/admin/categories/getall', [CategoryController::class, 'getAll']);
-
         Route::get('/admin/categories/{category_id}', [CategoryController::class, 'getCategory']);
     });
     Route::post('/admin/categories', [CategoryController::class, 'create'])->name('categories.create');
@@ -196,19 +197,16 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::middleware(['can:create order'])->group(function () {
         Route::post('/admin/orders', [OrderController::class, 'create']);
         Route::post('/admin/orders/{order_id}', [OrderController::class, 'create_detailed_order']);
-
         Route::post('/admin/warranties/create', [WarrantyController::class, 'warranty_create']);
     });
     Route::middleware(['can:update order'])->group(function () {
         Route::put('/admin/orders/{order_id}', [OrderController::class, 'update']);
-
-
         Route::put('/admin/warranties/{warranty_id}', [WarrantyController::class, 'warranty_update']);
     });
 
-
-
-
+    Route::middleware(['can:delete order'])->group(function () {
+        Route::delete('/admin/orders/{order_id}/delete/{sku}', [OrderController::class, 'remove_detailed_order']);
+    });
 
     // colors and tags
     Route::middleware(['can:read colors'])->group(function () {
@@ -229,7 +227,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
 
     // product routes
-
+    Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
     Route::middleware(['can:create product'])->group(function () {
         Route::get('/admin/products/create', [ProductController::class, 'create_ui'])->name('products.create_ui');
         Route::post('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -254,54 +252,42 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     });
 
 
-    Route::get('/admin/products/detailed_products', [ProductController::class, 'search_detailed_product'])->name('products.detailed_products.search'); // => json
+
 
 
     // receipts routes
     Route::middleware(['can:read receipts'])->group(function () {
         Route::get('/admin/receipts', [ReceiptsController::class, 'index']);
-    });
-    Route::middleware(['can:create receipts'])->group(function () {
-        Route::post('/admin/receipts/create', [ReceiptsController::class, ' create_receiving']);
-    });
-
-
-    Route::middleware(['can:read receipts'])->group(function () {
+        Route::get('/admin/receipts/pagination', [ReceiptsController::class, 'receipt_pagination']); // => json
         Route::get('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'details'])->name('receipts.details');
     });
+    Route::middleware(['can:create receipt'])->group(function () {
+        Route::post('/admin/receipts/create', [ReceiptsController::class, 'create']);
+        Route::post('/admin/receipts/{receipt_id}', [ReceiptsController::class, 'create_detailed_receipt']);
+    });
 
-
-
+    Route::middleware(['can:delete receipt'])->group(function () {
+        Route::delete('/admin/receipts/{receipt_id}/delete/{sku}', [ReceiptsController::class, 'delete_detailed_receipt']);
+    });
 
 
 
     // discounts routes
     Route::middleware(['can:read discounts'])->group(function () {
         Route::get('/admin/discounts', [DiscountController::class, 'index']);
-        Route::get('/admin/discounts/viewDetail/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
+        Route::get('/admin/discounts/{discount_id}', [DiscountController::class, 'discount_detail'])->name('discount.detail');
+        Route::get('/admin/discount/{discount_id}/get_products_not_in_discount', [DiscountController::class, 'get_products_not_in_discount']);
     });
-    Route::middleware(['can:create discount'])->group(function () {
-        Route::post('/admin/discounts/create', [DiscountController::class, 'create']);
-    });
-    Route::middleware(['can:update discount'])->group(function () {
-        Route::patch('/admin/discounts/update', [DiscountController::class, 'update'])->name('discounts.update');
-    });
+
+    Route::post('/admin/discounts', [DiscountController::class, 'create'])->middleware('can:create discount');
+    Route::put('/admin/discounts/{discount_id}', [DiscountController::class, 'update'])->name('discounts.update')->middleware('can:update discount');
     Route::middleware(['can:delete discount'])->group(function () {
-        Route::delete('admin/discounts/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.delete');
+        Route::delete('admin/discounts/{discount_id}', [DiscountController::class, 'destroy'])->name('discount.delete');
+        Route::patch('admin/discounts/{discount_id}', [DiscountController::class, 'restore'])->name('discount.restore');
     });
 
-    Route::get('/admin/discount/search', [DiscountController::class, 'search_discount_ajax'])->name('discount.search');
-
-
-Route::get('admin/discount/pagination/fetch_data',  [DiscountController::class, 'fetch_data_paginate']);
-
-    Route::get('/admin/discount/liveSearch', [DiscountController::class, 'live_search'])->name('discount.liveSearch');
-
-    Route::post('/admin/discounts/update-product-discount', [DiscountController::class, 'updateProductDiscount'])->name("product.Discount.checkbox");
-    Route::post('/admin/discounts/deleteProductDiscount', [DiscountController::class, 'deleteProductDiscountCheck'])->name('delete.ProductDiscount.checkbox');
-
-
-    Route::post('/save-discount-changes', [DiscountController::class, 'saveChanges'])->name('save_discount_changes');
+    Route::post('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'add_product_to_discount'])->middleware('can:update discount');
+    Route::delete('/admin/discount/{discount_id}/{sku}', [DiscountController::class, 'remove_product_from_discount'])->middleware('can:delete discount');
 
 
     // statistic routes
@@ -309,6 +295,8 @@ Route::get('admin/discount/pagination/fetch_data',  [DiscountController::class, 
     Route::get('/admin/statistics/overviewLast7day', [StatisticController::class, 'overviewLast7day']);
     Route::post('/admin/statistics/getstatistic', [StatisticController::class, 'RevenueDateByDate']);
     Route::get('/admin/statistics/sellingproductpie', [StatisticController::class, 'SellingProductPie']);
+
+    Route::get('/admin/statistics/getBestSellerProducts', [StatisticController::class, 'getBestSellerProducts']);
 
 
 

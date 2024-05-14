@@ -14,34 +14,77 @@
                 </div>
                 <!-- Page actions -->
                 <div class="col-auto ms-auto d-print-none">
-                    <div class="btn-list">
-                        <div class="input-icon ">
-                            <input id="search-product-input" type="text" value="{{ $search }}" class="form-control"
-                                placeholder="Search…">
-                            <span class="input-icon-addon">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                                    <path d="M21 21l-6 -6" />
-                                </svg>
-                            </span>
+
+                    <div class="row justify-content-end">
+
+                        <div class="col-3">
+                            <div class="input-icon ">
+                                <input id="search-product-input" type="text" value="{{ $search }}"
+                                    class="form-control" placeholder="Search…">
+                                <span class="input-icon-addon">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                        <path d="M21 21l-6 -6" />
+                                    </svg>
+                                </span>
+                            </div>
                         </div>
+
+
+                        <div class="col-3">
+                            <select id="categories_select" name="type" class="form-select" title="Choose type">
+                                <option value="all" @if ($selected_category == 'all') selected @endif>All Categories
+                                </option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->category_id }}"
+                                        @if ($selected_category == $category->category_id) selected @endif>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-2">
+                            <select id="brands_select" name="type" class="form-select" title="Choose type">
+                                <option value="all" @if ($selected_brand == 'all') selected @endif>All Brands</option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->brand_id }}"
+                                        @if ($selected_brand == $brand->brand_id) selected @endif>{{ $brand->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         @can('create product')
-                            <a href="{{ route('products.create') }}" class="btn btn-primary d-none d-sm-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 5l0 14" />
-                                    <path d="M5 12l14 0" />
-                                </svg>
-                                Create new product
-                            </a>
+                            <div class="col-auto">
+                                <a href="{{ route('products.create') }}" class="btn btn-primary d-none d-sm-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M12 5l0 14" />
+                                        <path d="M5 12l14 0" />
+                                    </svg>
+                                    Create new product
+                                </a>
+                                <a href="{{ route('products.create') }}" class="btn btn-primary d-sm-none btn-icon"
+                                    aria-label="Create new report">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M12 5l0 14" />
+                                        <path d="M5 12l14 0" />
+                                    </svg>
+                                </a>
+                            </div>
                         @endcan
+
                     </div>
+
+
+
                 </div>
                 <!-- End Page actions -->
             </div>
@@ -106,7 +149,8 @@
                                                     </div>
                                                 </td>
 
-                                                <td>{{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
+                                                <td class="text-danger">
+                                                    {{ number_format($product->detailed_products->avg('original_price'), 0, '.', ',') }}đ
                                                 </td>
                                                 <td>{{ $product->detailed_products->sum('quantities') }}</td>
 

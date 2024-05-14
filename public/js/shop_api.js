@@ -5,27 +5,13 @@ jQuery(document).ready(function () {
     });
     // show toast function
     function showToast(message, type) {
-        let background = '#0097e6';
-        if (type === 'success') background = '#4cd137';
-        else if (type === 'error') background = '#e84118';
         Toastify({
+            className: `toastify-custom ${type}`,
             text: message,
             close: true,
-            style: {
-                background,
-            },
             duration: 3000,
         }).showToast();
     }
-
-    // product pagination
-    $('.pagination-item').click((e) => {
-        e.preventDefault();
-        $('.pagination-item.active').removeClass('active');
-        $(e.target).addClass('active');
-        const page = $(e.target).text();
-        productFilter({ page });
-    });
 
     // helper function
     function enableOrderActionButton(enable) {
@@ -98,15 +84,10 @@ jQuery(document).ready(function () {
         }
     });
 
-    $('.js-add-to-cart').on('click', function (e) {
-        const quantity_input = $('.js-quantity-input');
-        let quantities = parseInt(quantity_input.val());
-        const sku = $('.detailed-product-tag.active').data('sku');
-        const unit_price = $('.js-product-name-price:not(.d-none) .js-unit-price').text();
-        const name = $('.js-product-name-price:not(.d-none) .js-product-name').text();
-        const image = $('.detailed-product-tag.active img').attr('src');
-        console.log('add to cart', { quantities, sku, unit_price, name, image });
-
+    // btn on product shop
+    $(document).on('click', '.js-add-to-cart-shop', function (e) {
+        let quantities = 1;
+        const sku = $(this).data('sku');
         // save to local storage
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         for (let i = 0; i < cart.length; i++) {
@@ -114,21 +95,101 @@ jQuery(document).ready(function () {
                 cart[i].quantities += quantities;
                 localStorage.setItem('cart', JSON.stringify(cart));
                 // show toast
-                showToast('Add to cart successfully', 'success');
+                showToast('Add to cart successfully!', 'success');
                 return;
             }
         }
-        cart.push({ sku, quantities, unit_price, name, image });
+        cart.push({ sku, quantities });
         $('.js-total-cart').text(cart.length);
         $('.js-total-cart').addClass('bg-black');
         localStorage.setItem('cart', JSON.stringify(cart));
         // show toast
-        showToast('Add to cart successfully', 'success');
+        showToast('Add to cart successfully!', 'success');
     });
+
+    $('.js-add-to-cart').on('click', function (e) {
+        const quantity_input = $('.js-quantity-input');
+        let quantities = parseInt(quantity_input.val());
+        const sku = $('.detailed-product-tag.active').data('sku');
+        // save to local storage
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].sku === sku) {
+                cart[i].quantities += quantities;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                // show toast
+                showToast('Add to cart successfully!', 'success');
+                return;
+            }
+        }
+        cart.push({ sku, quantities });
+        $('.js-total-cart').text(cart.length);
+        $('.js-total-cart').addClass('bg-black');
+        localStorage.setItem('cart', JSON.stringify(cart));
+        // show toast
+        showToast('Add to cart successfully!', 'success');
+    });
+
+    // product pagination
+    $(document).on('click', '.pagination-item', function (e) {
+        if ($(this).hasClass('disabled')) return;
+
+        const page = $(this).data('page');
+        console.log('page', page);
+        productFilter({ page });
+    });
+
+    function ProductPagination({ currentPage, lastPage }) {
+        const prevBtn = `<li>
+            <a class="pagination-item ${currentPage == 1 ? 'disabled' : ''}" href="#shop"
+                data-page="${currentPage - 1}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg>
+            </a>
+        </li>`;
+        const nextBtn = `<li>
+            <a class="pagination-item ${currentPage == lastPage ? 'disabled' : ''}" href="#shop"
+                data-page="${currentPage + 1}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </a>
+        </li>`;
+
+        const firstBtn = currentPage > 3 ? '<li><a class="pagination-item" data-page="1" href="#shop">1</a></li>' : '';
+        const firstDot = currentPage > 4 ? '<li><a class="pagination-item disabled" href="#shop">...</a></li>' : '';
+
+        const lastBtn =
+            currentPage < lastPage - 2
+                ? `<li><a class="pagination-item" href="#shop" data-page="${lastPage}">${lastPage}</a></li>`
+                : '';
+
+        const lastDot =
+            currentPage < lastPage - 3 ? '<li><a class="pagination-item disabled" href="#shop">...</a></li>' : '';
+
+        let pageElements = '';
+        for (let i = currentPage - 2 >= 1 ? currentPage - 2 : 1; i <= currentPage + 2 && i <= lastPage; i++) {
+            pageElements += `<li> <a class="pagination-item ${
+                i == currentPage ? 'active disabled' : ''
+            }" href="#shop" data-page="${i}">${i}</a></li>`;
+        }
+        return `${prevBtn}
+            ${firstBtn}
+            ${firstDot}
+            ${pageElements}
+            ${lastDot}
+            ${lastBtn}
+            ${nextBtn}`;
+    }
 
     function createProductElement(product) {
         return `<div class="col-lg-4 col-md-4 col-sm-6 col-12">
-        <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
+        <div class="product-wrap mb-35" >
             <div class="custom-product-img product-img img-zoom mb-25">
                 <a href="/products/${product.product_id}">
                     <img src="${product.detailed_product.image}" alt="" style="height: 275px">
@@ -150,17 +211,21 @@ jQuery(document).ready(function () {
                 
                 <div class="product-action-wrap">
                     <a href="/products/${product.product_id}"
-                        class="product-action-btn-1" title="Wishlist"><i
+                        class="product-action-btn-1" title="View"><i
                             class="pe-7s-like"></i></a>
-                    <button class="product-action-btn-1" title="Quick View"
-                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <a href="/products/${product.product_id}" class="product-action-btn-1" title="View">
                         <i class="pe-7s-look"></i>
-                    </button>
+                    </a>
                 </div>
-                <div class="product-action-2-wrap">
-                    <button class="product-action-btn-2" title="Add To Cart"><i
-                            class="pe-7s-cart"></i> Add to cart</button>
-                </div>
+                ${
+                    product.total_quantities > 0
+                        ? `<div class="product-action-2-wrap">
+                <button data-sku="${product.detailed_product.sku}" class="js-add-to-cart-shop product-action-btn-2" title="Add To Cart"><i
+                        class="pe-7s-cart"></i> Add to cart</button>
+            </div>`
+                        : ''
+                }
+                
             </div>
             <div class="product-content">
                 <h3><a
@@ -176,7 +241,12 @@ jQuery(document).ready(function () {
                 } 
                 
                     <span class="new-price">
-                        ${formatter.format(product.detailed_product.original_price)}đ
+                        ${formatter.format(
+                            product.detailed_product.original_price -
+                                (product.detailed_product.original_price *
+                                    product.detailed_product.total_discount_percentage) /
+                                    100,
+                        )}đ
                     </span>
                 </div>
             </div>
@@ -191,26 +261,29 @@ jQuery(document).ready(function () {
         const sorted_by = $('#sort-product').val();
 
         // category
-        const categories = $('.js-cate-checkbox');
-        const categoryIds = [];
-        for (let category of categories) {
-            if (category.checked) {
-                categoryIds.push(category.dataset.id);
-            }
-        }
+        const category = $('.category-selected').data('category-id');
         // color
-        const colors = $('.js-color-checkbox');
+        const colors = $('.form-colorinput-input');
         const colorIds = [];
         for (let color of colors) {
             if (color.checked) {
                 colorIds.push(color.dataset.id);
             }
         }
+
         if (colorIds.length === 0) {
             colorIds.push('all');
         }
-        if (categoryIds.length === 0) {
-            categoryIds.push('all');
+        // tag
+        const tags = $('.form-taginput-input');
+        const tagIds = [];
+        for (let tag of tags) {
+            if (tag.checked) {
+                tagIds.push(tag.dataset.id);
+            }
+        }
+        if (tagIds.length === 0) {
+            tagIds.push('all');
         }
 
         // price
@@ -219,12 +292,12 @@ jQuery(document).ready(function () {
         history.pushState(
             null,
             null,
-            `/shop?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+            `/shop?page=${page}&category=${category}&color=${colorIds.join(',')}&tag=${tagIds.join(
                 ',',
             )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
         );
         $.ajax({
-            url: `/products?page=${page}&categories=${categoryIds.join(',')}&color=${colorIds.join(
+            url: `/products?page=${page}&category=${category}&color=${colorIds.join(',')}&tag=${tagIds.join(
                 ',',
             )}&search=${search_text}&price_from=${minPrice}&price_to=${maxPrice}&sorted_by=${sorted_by}`,
             type: 'GET',
@@ -236,6 +309,12 @@ jQuery(document).ready(function () {
                 }
 
                 $('#product-list').html(html);
+                $('#pagination').html(
+                    ProductPagination({
+                        currentPage: response.products.current_page,
+                        lastPage: response.products.last_page,
+                    }),
+                );
             },
             error: function (error) {
                 console.log(error);
@@ -269,12 +348,20 @@ jQuery(document).ready(function () {
         productFilter({ page: 1 });
     });
     // category filter
-    $('.js-cate-checkbox').change(function () {
+    $('.categories-options .option').click(function () {
+        const category_id = $(this).data('category-id');
+        $('.category-selected').text($(this).text());
+        $('.category-selected').data('category-id', category_id);
         productFilter({ page: 1 });
     });
 
     // color filter
-    $('.js-color-checkbox').change(function () {
+    $('.form-colorinput-input').change(function () {
+        productFilter({ page: 1 });
+    });
+
+    // tag filter
+    $('.form-taginput-input').change(function () {
         productFilter({ page: 1 });
     });
 
@@ -302,5 +389,12 @@ jQuery(document).ready(function () {
 
         // call ajax
         debouncedAjaxCall();
+    });
+
+    $('#cash-on-delivery').on('input', function () {
+        if ($(this)[0].checked == true) $('#bank-select-option').addClass('d-none');
+    });
+    $('#payment-with-vnpay').on('input', function () {
+        if ($(this)[0].checked == true) $('#bank-select-option').removeClass('d-none');
     });
 });

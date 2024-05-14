@@ -11,17 +11,9 @@
                     <div class="main-menu text-center">
                         <nav>
                             <ul>
-                                <li><a href="/">HOME</a>
-                                </li>
-                                <li><a href="/shop">SHOP</a>
-                                </li>
-                                <li><a href="#">PAGES</a>
-                                    <ul class="sub-menu-style">
-                                        <li><a href="#">about us </a></li>
-                                        <li><a href="#">cart page</a></li>
-                                        <li><a href="#">checkout </a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="/">HOME</a> </li>
+                                <li><a href="/shop">SHOP</a> </li>
+                                <li><a href="/myorders">MY ORDERS</a></li>
                                 <li><a href="/about">ABOUT</a></li>
                                 <li><a href="/contact">CONTACT US</a></li>
                             </ul>
@@ -36,7 +28,7 @@
                                 <i class="pe-7s-close s-close"></i>
                             </a>
                             <div class="search-wrap-1">
-                                <form action="#" method="GET">
+                                <form id="search-header-form" action="#" method="GET">
                                     <input placeholder="Search products…" type="text">
                                     <button type="submit" class="button-search"><i class="pe-7s-search"></i></button>
                                 </form>
@@ -51,7 +43,7 @@
                         @if (Auth::user())
                             <div class="header-action-style header-action-account">
                                 <a title="Account">
-                                    <i class="pe-7s-user"></i>
+                                    <img class="avatar-img" src="{{ Auth::user()->avatar }}" alt="avatar">
                                 </a>
                                 <ul>
                                     <li><a href="{{ route('my_account') }}">My Account</a></li>

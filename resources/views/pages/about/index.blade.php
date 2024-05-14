@@ -23,7 +23,7 @@
                             in culpa qui officia deserunt mollit anim id est laborum.
                         </p>
                         <div class="btn-style-3 btn-hover" data-aos="fade-up" data-aos-delay="600">
-                            <a class="btn border-radius-none" href="product-details.html">Shop Now</a>
+                            <a href="/shop" class="btn border-radius-none" href="product-details.html">Shop Now</a>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,6 @@
     {{-- Banner --}}
     @include('pages.about.banner')
     {{-- Testimonial --}}
-    @include('pages.about.testimonial')
     <div class="funfact-area bg-img pt-100 pb-70" style="background-image: url(assets/images/bg/bg-4.png)">
         <div class="container">
             <div class="row">
@@ -82,37 +81,4 @@
         </div>
     </div>
     {{-- Our staff --}}
-    @include('pages.about.our-staff')
-    <div class="subscribe-area pb-100">
-        <div class="container">
-            <div class="section-title-3 text-center mb-55" data-aos="fade-up" data-aos-delay="200">
-                <h2>Join With Us!</h2>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit seddo
-                    eiusmod tempor incididunt ut labore
-                </p>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 offset-lg-2">
-                    <div id="mc_embed_signup" class="subscribe-form" data-aos="fade-up" data-aos-delay="400">
-                        <form id="mc-embedded-subscribe-form" class="validate subscribe-form-style" novalidate=""
-                            target="_blank" name="mc-embedded-subscribe-form" method="post" action="#">
-                            <div id="mc_embed_signup_scroll" class="mc-form">
-                                <input class="email" type="email" required="" placeholder="Email address…"
-                                    name="EMAIL" value="" />
-                                <div class="mc-news" aria-hidden="true">
-                                    <input type="text" value="" tabindex="-1"
-                                        name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef" />
-                                </div>
-                                <div class="clear">
-                                    <input id="mc-embedded-subscribe" class="button" type="submit" name="subscribe"
-                                        value="Subscribe Now" />
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
